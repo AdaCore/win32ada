@@ -5,6 +5,11 @@
 -- 99/02/04 - Modified by ACT
 -- Add UnRegisterTypeLib API
 
+-- 99/05/03
+-- af_2596_GetFuncDesc: fix third argument (change FUNCDESC to LPFUNCDESC)
+--  (fixes 6430-003)
+-- CALLCONV: fix record and representation clause (fixes 6430-004)
+
 with Win32.Objbase;
 with Win32.Rpcdce;
 with Win32.Rpcdcep;
@@ -165,31 +170,31 @@ package Win32.Oleauto is
 
     type PTYPEKIND is access TYPEKIND;
 
-    type CALLCONV is (                                      -- oleauto.h:815
-        CC_CDECL,                                           -- oleauto.h:816
-        CC_MSCPASCAL,                                       -- oleauto.h:817
-        CC_PASCAL,                                          -- oleauto.h:818
-        CC_MACPASCAL,                                       -- oleauto.h:819
-        CC_STDCALL,                                         -- oleauto.h:820
-        CC_RESERVED,                                        -- oleauto.h:821
-        CC_SYSCALL,                                         -- oleauto.h:822
-        CC_MPWCDECL,                                        -- oleauto.h:823
-        CC_MPWPASCAL,                                       -- oleauto.h:824
-        CC_MAX                                              -- oleauto.h:826
+   type CALLCONV is (                                       --oleauto.h:815
+        CC_FASTCALL,
+        CC_CDECL,                                           --oleauto.h:816
+        CC_PASCAL,                                          --oleauto.h:818
+        CC_MACPASCAL,                                       --oleauto.h:819
+        CC_STDCALL,                                         --oleauto.h:820
+        CC_FPFASTCALL,                                      --oleauto.h:821
+        CC_SYSCALL,                                         --oleauto.h:822
+        CC_MPWCDECL,                                        --oleauto.h:823
+        CC_MPWPASCAL,                                       --oleauto.h:824
+        CC_MAX                                              --oleauto.h:826
     );
-    for CALLCONV use (                                      -- oleauto.h:815
-        CC_CDECL => 1,                                      -- oleauto.h:816
-        CC_MSCPASCAL => 2,                                  -- oleauto.h:817
-        CC_PASCAL => 3,                                     -- oleauto.h:818
-        CC_MACPASCAL => 4,                                  -- oleauto.h:819
-        CC_STDCALL => 5,                                    -- oleauto.h:820
-        CC_RESERVED => 6,                                   -- oleauto.h:821
-        CC_SYSCALL => 7,                                    -- oleauto.h:822
-        CC_MPWCDECL => 8,                                   -- oleauto.h:823
-        CC_MPWPASCAL => 9,                                  -- oleauto.h:824
-        CC_MAX => 10                                        -- oleauto.h:826
+    for CALLCONV use (                                      --oleauto.h:815
+        CC_FASTCALL => 0,
+        CC_CDECL => 1,                                      --oleauto.h:816
+        CC_PASCAL => 2,                                     --oleauto.h:818
+        CC_MACPASCAL => 3,                                  --oleauto.h:819
+        CC_STDCALL => 4,                                    --oleauto.h:820
+        CC_FPFASTCALL => 5,                                 --oleauto.h:821
+        CC_SYSCALL => 6,                                    --oleauto.h:822
+        CC_MPWCDECL => 7,                                   --oleauto.h:823
+        CC_MPWPASCAL => 8,                                  --oleauto.h:824
+        CC_MAX => 9                                         --oleauto.h:826
     );
-    for CALLCONV'size use 32;                               -- oleauto.h:815
+    for CALLCONV'size use 32;                               --oleauto.h:815
 
     type PCALLCONV is access CALLCONV;
 
@@ -843,7 +848,7 @@ package Win32.Oleauto is
     type af_2596_GetFuncDesc is access function (
                 This       : access ITypeInfo;
                 index      : Win32.UINT;
-                pppfuncdesc: access FUNCDESC)
+                pppfuncdesc: access LPFUNCDESC)
                return Win32.Objbase.HRESULT;                -- oleauto.h:2596
     pragma Convention(Stdcall, af_2596_GetFuncDesc);
 
