@@ -27,7 +27,7 @@ package body Win32.Objbase is
       use type Win32.DWORD;
       use type Win32.LONG;
    begin
-      if (v < 0) then
+      if v > DWORD'Last / 2 then
          li.HighPart := -1;
       else
          li.HighPart := 0;

@@ -21,8 +21,8 @@ package body Win32.crt.Largeint is
 
    --  Large integer add - 64-bits + 64-bits -> 64-bits
 
-   I :  Win32.Winnt.LARGE_INTEGER;
-   ULI : Win32.Winnt.ULARGE_INTEGER;
+--   I :  Win32.Winnt.LARGE_INTEGER;
+--   ULI : Win32.Winnt.ULARGE_INTEGER;
 --   UL :  Win32.ULONG;
 
    function LI is new Ada.Unchecked_Conversion
@@ -144,7 +144,7 @@ package body Win32.crt.Largeint is
 
    function ConvertLongToLargeInteger
      (SignedInteger : in Win32.LONG) return Win32.Winnt.LARGE_INTEGER is
-      Res : Op.LONGLONG := To_64 (To_Unsigned (SignedInteger));
+      Res : constant Op.LONGLONG := To_64 (To_Unsigned (SignedInteger));
    begin
       return LI (Res);
    end ConvertLongToLargeInteger;
@@ -153,7 +153,7 @@ package body Win32.crt.Largeint is
 
    function ConvertUlongToLargeInteger
      (UnsignedInteger : in Win32.ULONG) return Win32.Winnt.LARGE_INTEGER is
-      Res : Op.DWORDLONG := To_64 (UnsignedInteger);
+      Res : constant Op.DWORDLONG := To_64 (UnsignedInteger);
    begin
       return LI (To_Signed (Res));
    end ConvertUlongToLargeInteger;

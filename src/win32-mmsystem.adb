@@ -139,7 +139,6 @@ package body Win32.Mmsystem is
         Win32.Utils.MAKEWORD (seconds, 0));
    end MCI_MAKE_HMS;
 
-   function  DIBINDEX (n : Win32.WORD) return Win32.DWORD;
    function  DIBINDEX (n : Win32.WORD) return Win32.DWORD is
       --  mmsystem.h:3397
    begin

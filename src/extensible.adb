@@ -28,9 +28,8 @@ package body Extensible is
      Extensible_Elem'Size / System.Storage_Unit;
 
    function Allocate (Actual_Elems : Big_Range) return Extended_Ptr is
-      Result : Extended_Ptr := new Extended_Rec
-        (
-         1 .. Position_Of_Extensible_Array +
+      Result : constant Extended_Ptr := new Extended_Rec
+        (1 .. Position_Of_Extensible_Array +
          Natural (Actual_Elems) * Bytes_Per_Elem);
    begin
       --  ada.text_io.put_line ("allocated" & integer'image (result'length) &

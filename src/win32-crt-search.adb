@@ -88,7 +88,7 @@ package body Win32.crt.Search is
                       The_Array : in Array_of_Elem;
                       Result : out Index) is
       Local_Copy : aliased constant Elem := The_Key;
-      Res : AC_Elem := c_bsearch
+      Res : constant AC_Elem := c_bsearch
         (Local_Copy'Unchecked_Access,
         The_Array (The_Array'First)'Unchecked_Access,
         The_Array'Length,
@@ -135,7 +135,7 @@ package body Win32.crt.Search is
 
       Local_Copy : aliased constant Elem := The_Key;
       Len : aliased Unsigned := The_Array'Length;
-      Res : AC_Elem := c_lfind
+      Res : constant AC_Elem := c_lfind
         (Local_Copy'Unchecked_Access,
         The_Array (The_Array'First)'Unchecked_Access,
         Len'Access,

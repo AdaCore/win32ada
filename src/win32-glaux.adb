@@ -20,6 +20,8 @@ with Win32.Gl;
 
 package body Win32.Glaux is
 
+   pragma Warnings (Off);
+
    function AUX_WIND_IS_RGB (x : Win32.INT) return Win32.BOOL is
       --  glaux.h:91
    begin

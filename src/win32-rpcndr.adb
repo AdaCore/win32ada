@@ -31,7 +31,7 @@ package body Win32.Rpcndr is
    function To_PVOID is new Ada.Unchecked_Conversion
      (Integer, Win32.PVOID);
 
-   su : Integer := System.Storage_Unit;
+   su : constant Integer := System.Storage_Unit;
 
    procedure byte_from_ndr (source : in out Win32.Rpcdcep.PRPC_MESSAGE;
                            target : out    Win32.PBYTE) is  --  rpcndr.h: 264
@@ -137,9 +137,9 @@ package body Win32.Rpcndr is
    function "*"(l, r : Interfaces.C.unsigned_long)
                return Interfaces.C.unsigned_long
      renames Interfaces.C."*";
-   function "/"(l, r : Interfaces.C.unsigned_long)
-               return Interfaces.C.unsigned_long
-     renames Interfaces.C."/";
+   --  function "/"(l, r : Interfaces.C.unsigned_long)
+   --            return Interfaces.C.unsigned_long
+   --  renames Interfaces.C."/";
    --  function "and"(l,r: Interfaces.C.unsigned)
    --  return Interfaces.C.unsigned
    --  renames Interfaces.C."and";
@@ -176,7 +176,7 @@ package body Win32.Rpcndr is
       p := To_PVOID (To_ULONG (p) + n * Win32.ULONG (Win32.ULONG'Size / su));
    end midl_addp;
 
-   type PPULONG is access all Win32.PULONG;
+   --  type PPULONG is access all Win32.PULONG;
 
    procedure midl_unmarsh_up (p : in out Win32.PVOID) is     --  rpcndr.h:564
    begin

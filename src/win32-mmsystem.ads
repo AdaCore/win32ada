@@ -3535,6 +3535,8 @@ package Win32.Mmsystem is
                           seconds : Win32.BYTE)
                          return Win32.DWORD;               --  mmsystem.h: 2330
 
+   function  DIBINDEX (n : Win32.WORD) return Win32.DWORD; --  mmsystem.h:3397
+
 private
 
    pragma Convention (C, struct_anonymous0_t);              --  mmsystem.h:120

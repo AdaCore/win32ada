@@ -36,7 +36,7 @@ package body Win32.Winioctl is
 
       use type Win32.DWORD;
       use type Interfaces.C.unsigned_long;
-      Masked_Val : constant DWORD := (DWORD (PartitionType) and not 16#C0#);
+      Masked_Val : constant DWORD := PartitionType and not 16#C0#;
    begin
       return
         Masked_Val = PARTITION_FAT_12 or

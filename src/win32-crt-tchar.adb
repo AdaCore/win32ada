@@ -20,6 +20,8 @@ with Win32.Utils;
 
 package body Win32.crt.Tchar is
 
+   pragma Warnings (Off);
+
    use type Interfaces.C.unsigned_char;
    use type Interfaces.C.size_t;
    use type Interfaces.C.char_array;

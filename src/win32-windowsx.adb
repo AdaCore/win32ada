@@ -23,6 +23,8 @@ with Win32.Winuser;
 
 package body Win32.Windowsx is
 
+   pragma Warnings (Off);
+
    use type Interfaces.C.int;
    use type Interfaces.C.long;
    use type Interfaces.C.short;

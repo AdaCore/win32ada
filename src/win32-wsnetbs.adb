@@ -44,8 +44,8 @@ package body Win32.Wsnetbs is
       --  while (To_char(name_next.all) /= Ascii.nul and
       --  i < NETBIOS_NAME_LENGTH-1) loop
       --  snb.all.snb_name(i) := name_next.all;
-      while ((Interfaces.C.Strings.Value (Win32.To_Chars_Ptr (name))(i)
-        /= ASCII.NUL) and (i < NETBIOS_NAME_LENGTH - 1)) loop
+      while (Interfaces.C.Strings.Value (Win32.To_Chars_Ptr (name))(i)
+        /= ASCII.NUL) and (i < NETBIOS_NAME_LENGTH - 1) loop
          snb.all.snb_name (i) := Win32.CHAR (Interfaces.C.Strings.Value
            (Win32.To_Chars_Ptr (name))(i));
          i := i + 1;

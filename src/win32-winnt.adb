@@ -115,7 +115,7 @@ package body Win32.Winnt is
 
    function INCREF (X : BYTE) return BYTE is
       use Interfaces;
-      U8X : Unsigned_32 := Unsigned_32 (X);
+      U8X : constant Unsigned_32 := Unsigned_32 (X);
    begin
       return BYTE ((Shift_Left (U8X and not N_BTMASK, N_TSHIFT)) or
         (Shift_Left (Unsigned_32 (IMAGE_SYM_DTYPE_POINTER), N_BTSHFT))

@@ -70,6 +70,7 @@ package body Win32.Winuser is
    function ExitWindows (dwReserved : DWORD;
                          uReturnCode : UINT) return Win32.BOOL is
       use type Win32.DWORD;
+      pragma Unreferenced (DwReserved, uReturnCode);
    begin
       if ExitWindowsEx (EWX_LOGOFF, -1) = 0 then
          return 0;

@@ -20,6 +20,8 @@ with Ada.Unchecked_Conversion;
 
 package body Win32.Winsock is
 
+   pragma Warnings (Off);
+
    procedure FD_CLR (fd : SOCKET;
                      set : access FD_SET) is                 --  winsock.h:75
       i : Integer := 0;

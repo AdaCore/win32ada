@@ -9,6 +9,8 @@ with Interfaces;
 
 package body Win32.crt.Largeint.Ops is
 
+   pragma Warnings (Off);
+
    use type System.Bit_Order;
    High_Order_First : constant Boolean :=
      System.Default_Bit_Order = System.High_Order_First;
