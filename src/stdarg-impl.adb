@@ -31,6 +31,7 @@ package body Stdarg.Impl is
 
    function Address_of_Arg (Args : ArgList; Which : Which_Arg)
                            return Param_Access is
+   pragma Warnings (Off);
    begin
       if Args.Contents.CurrentArgs = 0 then
          return null;                           --  might not be an error

@@ -16,6 +16,7 @@
 
 with Ada.Finalization, Interfaces.C;
 
+pragma Warnings (Off);
 package Stdarg is
 
    --  *****************************************

@@ -22,6 +22,8 @@ with Ada.Unchecked_Deallocation,
 
 --  with Ada.Unchecked_Conversion, Text_IO;           --  debugging
 
+pragma Warnings (Off);
+
 package body Stdarg is
 
    use Stdarg.Machine;
