@@ -483,6 +483,8 @@ package Win32.Gl is
    procedure glBegin
      (mode : GLenum);                              --  gl.h:827
 
+   procedure glBindTexture( target: GLenum; texture: GLuint);
+
    procedure glBitmap
      (width : GLsizei;
       height : GLsizei;
@@ -1780,6 +1782,7 @@ private
    pragma Import (Stdcall, glAccum, "glAccum");                   --  gl.h:825
    pragma Import (Stdcall, glAlphaFunc, "glAlphaFunc");           --  gl.h:826
    pragma Import (Stdcall, glBegin, "glBegin");                   --  gl.h:827
+   pragma Import (Stdcall, glBindTexture, "glBindTexture");       --  new
    pragma Import (Stdcall, glBitmap, "glBitmap");                 --  gl.h:828
    pragma Import (Stdcall, glBlendFunc, "glBlendFunc");           --  gl.h:829
    pragma Import (Stdcall, glCallList, "glCallList");             --  gl.h:830
