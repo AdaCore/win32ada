@@ -838,6 +838,22 @@ package Win32.Winbase is
             wMilliseconds: Win32.WORD;                      -- winbase.h:221
         end record;
 
+    subtype GET_FILEEX_INFO_LEVELS is DWORD range 0 .. 0;
+
+    GetFileExInfoStandard : constant := 0;
+
+    type WIN32_FILE_ATTRIBUTE_DATA is
+        record
+            dwFileAttributes : DWORD;
+            ftCreationTime   : FILETIME;
+            ftLastAccessTime : FILETIME;
+            ftLastWriteTime  : FILETIME;
+            nFileSizeHigh    : DWORD;
+            nFileSizeLow     : DWORD;
+        end record;
+
+    type LPWIN32_FILE_ATTRIBUTE_DATA is access all WIN32_FILE_ATTRIBUTE_DATA;
+
     type PTHREAD_START_ROUTINE is
         access function (lpThreadParameter: Win32.LPVOID) return Win32.DWORD;
                                                             -- winbase.h:224
@@ -3690,6 +3706,24 @@ package Win32.Winbase is
 
     function GetFileAttributesW(lpFileName: Win32.LPCWSTR) return Win32.DWORD;
                                                             -- winbase.h:4801
+    function To_LPVOID is
+      new Ada.Unchecked_Conversion (LPWIN32_FILE_ATTRIBUTE_DATA, LPVOID);
+
+    function GetFileAttributesExA (lpFileName        : Win32.LPCSTR;
+                                   fInfoLevelId      : GET_FILEEX_INFO_LEVELS;
+                                   lpFileInformation : LPVOID)
+                                   Return Win32.BOOL;
+
+    function GetFileAttributesExW (lpFileName        : Win32.LPCWSTR;
+                                   fInfoLevelId      : GET_FILEEX_INFO_LEVELS;
+                                   lpFileInformation : LPVOID)
+                                   return Win32.BOOL;
+
+    function GetFileAttributesEx  (lpFileName        : Win32.LPCSTR;
+                                   fInfoLevelId      : GET_FILEEX_INFO_LEVELS;
+                                   lpFileInformation : LPVOID)
+                                   return Win32.BOOL
+                                   renames GetFileAttributesExA;
 
     function GetCompressedFileSizeA(lpFileName    : Win32.LPCSTR;
                                     lpFileSizeHigh: Win32.LPDWORD)
@@ -5105,6 +5139,7 @@ private
     pragma Convention(c_pass_by_copy, PROCESS_INFORMATION); -- winbase.h:193
     pragma Convention(c_pass_by_copy, FILETIME);            -- winbase.h:204
     pragma Convention(c_pass_by_copy, SYSTEMTIME);          -- winbase.h:213
+    pragma Convention(C, WIN32_FILE_ATTRIBUTE_DATA);
     pragma Convention(C, COMMPROP);                         -- winbase.h:347
     pragma Convention(C, COMMTIMEOUTS);                     -- winbase.h:433
     pragma Convention(C, COMMCONFIG);                       -- winbase.h:441
@@ -5701,6 +5736,10 @@ private
                                                             -- winbase.h:4795
     pragma Import(Stdcall, GetFileAttributesW, "GetFileAttributesW");
                                                             -- winbase.h:4801
+
+    pragma Import (Stdcall, GetFileAttributesExA, "GetFileAttributesExA");
+    pragma Import (Stdcall, GetFileAttributesExW, "GetFileAttributesExW");
+
     pragma Import(Stdcall, GetCompressedFileSizeA, "GetCompressedFileSizeA");
                                                             -- winbase.h:4813
     pragma Import(Stdcall, GetCompressedFileSizeW, "GetCompressedFileSizeW");
@@ -6007,3 +6046,5 @@ private
 
 end Win32.Winbase;
 
+--  ACT - December 22th, 1998
+--  add the GetFileAttributesEx functions calls
