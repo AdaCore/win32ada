@@ -19,7 +19,8 @@ CFILES	= dump.c stdlib_wrapper.c var.c wrappers.c
 OFILES	= $(CFILES:.c=.o)
 
 #CFLAGS	= -nostdinc -Ic:/winapps/msdev/include
-CFLAGS	= -nostdinc -I\\\\gouda\\c-drive\\progra~1\\devstudio\\vc\\include
+#CFLAGS	= -nostdinc -I\\\\gouda\\c-drive\\progra~1\\devstudio\\vc\\include
+CFLAGS	= -nostdinc -I/release/extra/ms-include
 
 .def.a:
 	dlltool -k --dllname `basename $@ .a`.dll --def $< --output-lib lib$@
