@@ -381,3 +381,20 @@ Win32CreateDirectory@8
 Win32DeleteFile@4
 Win32RemoveDirectory@4
 WriteCabinetState@4
+
+#if 0
+----------------------
+-- REVISION HISTORY --
+----------------------
+
+----------------------------
+revision 1.1
+date: 1998/12/22 22:00:40;  author: obry;  state: Exp;
+Initial revision
+----------------------------
+revision 1.2
+date: 1999/03/26 20:01:30;  author: obry;
+update symbols to macth Microsoft VC 5.0 libraries
+----------------------------
+New changes after this line and before endif
+#endif

@@ -446,3 +446,20 @@ short_from_ndr_temp@12
 tree_into_ndr@16
 tree_peek_ndr@16
 tree_size_ndr@16
+
+#if 0
+----------------------
+-- REVISION HISTORY --
+----------------------
+
+----------------------------
+revision 1.1
+date: 1998/12/22 22:00:40;  author: obry;  state: Exp;
+Initial revision
+----------------------------
+revision 1.2
+date: 1999/03/26 20:01:30;  author: obry;
+update symbols to macth Microsoft VC 5.0 libraries
+----------------------------
+New changes after this line and before endif
+#endif

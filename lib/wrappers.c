@@ -210,3 +210,16 @@ char *wrap_uImage
     return result;
 }
 
+
+#if 0
+----------------------
+-- REVISION HISTORY --
+----------------------
+
+----------------------------
+revision 1.1
+date: 1998/10/15 20:30:04;  author: obry;  state: Exp;
+Initial revision
+----------------------------
+New changes after this line and before endif
+#endif
