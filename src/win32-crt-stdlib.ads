@@ -72,12 +72,13 @@ package Win32.crt.Stdlib is
    pragma Import (C, mb_cur_max_addr, "__p___mb_cur_max");
 
    type SAP is access String_Array;
-   Sys_Errlist_Addr : constant SAP;
-   pragma Import (C, Sys_Errlist_Addr, "_sys_errlist");
+   sys_errlist_addr : constant SAP;
+   pragma Import (C, Sys_Errlist_Addr, "_imp___sys_errlist");
+   pragma Suppress (Index_Check, sys_errlist_addr);
 
    type AI is access Win32.INT;
    sys_nerr_addr : constant AI;
-   pragma Import (C, sys_nerr_addr, "_sys_nerr");
+   pragma Import (C, sys_nerr_addr, "_imp___sys_nerr");
 
    function argc_addr return AI;
    pragma Import (C, argc_addr, "__p___argc");
@@ -93,7 +94,7 @@ package Win32.crt.Stdlib is
    pragma Import (C, fmode_addr, "__p__fmode");
 
    fileinfo_addr : constant AI;
-   pragma Import (C, fileinfo_addr, "_fileinfo");
+   pragma Import (C, fileinfo_addr, "_imp___fileinfo");
 
    type SP is access Win32.PSTR;
    function pgmptr_addr return SP;
@@ -369,3 +370,17 @@ private
    pragma Import (C, exit_program_now, "_exit");
 
 end Win32.crt.Stdlib;
+
+
+
+----------------------
+-- REVISION HISTORY --
+----------------------
+
+--  ----------------------------
+--  New changes after this line.  Each line starts with: "--  "
+--  (sys_errlist_addr): Fix import name and casing. Suppress Index_Check
+--   otherwise this variable is unusable. Found while reading code.
+--  (sys_nerr_addr): Fix import name.
+--  (fileinfo_addr): Fix import name.
+--  Fixes B802-003.
