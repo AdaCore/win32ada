@@ -174,8 +174,8 @@ package body Win32 is
    end To_C;
 
    function To_Win (S : Interfaces.C.char_array) return CHAR_Array is
-      Low  : Integer := Integer (S'First);
-      High : Integer := Integer (S'Last);
+      Low  : constant Integer := Integer (S'First);
+      High : constant Integer := Integer (S'Last);
       Res  : CHAR_Array (Low .. High);
    begin
       Res := CHAR_Array (S);
@@ -183,8 +183,8 @@ package body Win32 is
    end To_Win;
 
    function To_Win (S : Interfaces.C.wchar_array) return WCHAR_Array is
-      Low  : Integer := Integer (S'First);
-      High : Integer := Integer (S'Last);
+      Low  : constant Integer := Integer (S'First);
+      High : constant Integer := Integer (S'Last);
       Res  : WCHAR_Array (Low .. High);
    begin
       Res := WCHAR_Array (S);
