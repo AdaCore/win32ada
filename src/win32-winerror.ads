@@ -1323,7 +1323,7 @@ package Win32.Winerror is
    RPC_E_UNEXPECTED                   : constant := 16#8001ffff#;
    --  winerror.h:8661
 
-   type HRESULT is new ULONG;                              -- winerror.h:6015
+   type HRESULT is new LONG;                              -- winerror.h:6015
 
    subtype SCODE is HRESULT;                               -- winerror.h:6015
 
