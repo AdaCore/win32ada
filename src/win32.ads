@@ -156,13 +156,7 @@ package Win32 is
    type PDWORDLONG is access all DWORDLONG;                --  winnt.h
    type PCDWORDLONG is access constant DWORDLONG;
 
-   --  ************************************************************
    --  True and False constants.
-   --  Warning : when you get a value back from Windows, comparing
-   --  Value /= FALSE is safe, comparing Value = TRUE is not safe,
-   --  since Windows sometimes returns any non-zero value for TRUE.
-   --  ************************************************************
-
    FALSE : constant Bool := Bool (Standard.False);
    TRUE  : constant Bool := Bool (Standard.True);          --  windef.h
 
