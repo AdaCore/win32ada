@@ -6,8 +6,6 @@ with System;
 
 package body Win32 is
 
-    pragma Linker_Options ("-lwin32ada");
-
     function Cat (Left, Right: String) return String is
             Nul: constant Character := Character'First;
     begin
@@ -208,3 +206,7 @@ package body Win32 is
 -------------------------------------------------------------------------------
 
 end Win32;
+
+--  Log
+--  05/04/1998 - remove Pragma Linker_Options ("-lwin32ada") - this option
+--  is already set in the spec.
