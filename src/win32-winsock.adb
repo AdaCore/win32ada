@@ -34,6 +34,8 @@ package body Win32.Winsock is
             end loop;
             set.all.fd_count := set.all.fd_count - 1;
             exit;
+         else
+            i := i + 1;
          end if;
       end loop;
    end FD_CLR;
