@@ -169,24 +169,3 @@ StartDocPrinterW@12
 StartPagePrinter@4
 WaitForPrinterChange@8
 WritePrinter@16
-
-#if 0
-----------------------
--- REVISION HISTORY --
-----------------------
-
-----------------------------
-revision 1.1
-date: 1998/12/22 22:00:40;  author: obry;  state: Exp;
-Initial revision
-----------------------------
-revision 1.2
-date: 1999/03/26 20:01:33;  author: obry;
-update symbols to macth Microsoft VC 5.0 libraries
-----------------------------
-revision 1.3
-date: 1999/03/26 20:07:30;  author: obry;
-remove duplicate symbol DeviceCapabilities@20
-----------------------------
-New changes after this line and before endif
-#endif
