@@ -436,6 +436,8 @@ package Win32.Commdlg is
          hPrintTemplate : Win32.Windef.HGLOBAL;      --  commdlg.h:446
          hSetupTemplate : Win32.Windef.HGLOBAL;      --  commdlg.h:447
       end record;
+   for PRINTDLGA'Alignment use 2;
+   pragma Pack (PRINTDLGA);
 
    subtype PRINTDLG is PRINTDLGA;                          --  commdlg.h:475
 
@@ -461,6 +463,8 @@ package Win32.Commdlg is
          hPrintTemplate : Win32.Windef.HGLOBAL;      --  commdlg.h:468
          hSetupTemplate : Win32.Windef.HGLOBAL;      --  commdlg.h:469
       end record;
+   for PRINTDLGW'Alignment use 2;
+   pragma Pack (PRINTDLGW);
 
    type DEVNAMES is                                        --  commdlg.h:515
       record
