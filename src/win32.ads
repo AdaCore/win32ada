@@ -101,7 +101,9 @@ package Win32 is
 
    --  "int" types, signed, 32 bits on Intel
    subtype INT       is Interfaces.C.int;                  --  windef.h
-   type    BOOL      is new INT;                           --  windef.h
+   type BOOL is new Boolean;                               --  windef.h
+   for Bool'Size use INT'Size;
+   pragma Convention (C, BOOL);
    type    PBOOL     is access all BOOL;                   --  windef.h
    subtype LPBOOL    is PBOOL;                             --  windef.h
    type    PINT      is access all INT;                    --  windef.h
@@ -161,8 +163,8 @@ package Win32 is
    --  since Windows sometimes returns any non-zero value for TRUE.
    --  ************************************************************
 
-   FALSE : constant := 0;                                  --  windef.h
-   TRUE  : constant := 1;                                  --  windef.h
+   FALSE : constant Bool := Bool (Standard.False);
+   TRUE  : constant Bool := Bool (Standard.True);          --  windef.h
 
    --  ********************************************************
    --  so Interfaces.C and Windows strings can be used together
@@ -348,6 +350,3 @@ private
    ----------------------------------------------------------------------------
 
 end Win32;
-
-
-
