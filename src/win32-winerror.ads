@@ -1,5 +1,5 @@
--- $Source$ 
--- $Revision$ $Date$ $Author$ 
+-- $Source$
+-- $Revision$ $Date$ $Author$
 -- See end of file for Copyright (c) information.
 
 package Win32.Winerror is
@@ -659,7 +659,7 @@ package Win32.Winerror is
     SEVERITY_ERROR                     : constant := 1;     -- winerror.h:6053
     FACILITY_NT_BIT                    : constant := 16#10000000#;
                                                             -- winerror.h:6113
-    NOERROR                            : constant := 16#0#; 
+    NOERROR                            : constant := 16#0#;
                                                             -- winerror.h:6150
     E_UNEXPECTED                       : constant := 16#8000ffff#;
                                                             -- winerror.h:6169
@@ -707,9 +707,9 @@ package Win32.Winerror is
                                                             -- winerror.h:6442
     CO_E_INIT_ONLY_SINGLE_THREADED     : constant := 16#80004012#;
                                                             -- winerror.h:6451
-    S_OK                               : constant := 16#0#; 
+    S_OK                               : constant := 16#0#;
                                                             -- winerror.h:6457
-    S_FALSE                            : constant := 16#1#; 
+    S_FALSE                            : constant := 16#1#;
                                                             -- winerror.h:6458
     OLE_E_FIRST                        : constant := 16#80040000#;
                                                             -- winerror.h:6474
@@ -1304,7 +1304,7 @@ package Win32.Winerror is
     RPC_E_UNEXPECTED                   : constant := 16#8001ffff#;
                                                             -- winerror.h:8661
 
-    type HRESULT is new LONG;                               -- winerror.h:6015
+    type HRESULT is new ULONG;                              -- winerror.h:6015
 
     subtype SCODE is HRESULT;                               -- winerror.h:6015
 
@@ -1315,7 +1315,7 @@ package Win32.Winerror is
         return Standard.Boolean;
 
     function IS_ERROR(Status: HRESULT)                      -- winerror.h:6074
-        return Standard.Boolean 
+        return Standard.Boolean
         renames FAILED;
 
     function HRESULT_CODE(H: HRESULT)                       -- winerror.h:6080
@@ -1365,7 +1365,7 @@ private
 -- FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the entire risk as to
 -- the accuracy and the use of this file.  This file may be used, copied,
 -- modified and distributed only by licensees of Microsoft Corporation's
--- WIN32 Software Development Kit in accordance with the terms of the 
+-- WIN32 Software Development Kit in accordance with the terms of the
 -- licensee's End-User License Agreement for Microsoft Software for the
 -- WIN32 Development Kit.
 --
