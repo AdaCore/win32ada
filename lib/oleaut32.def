@@ -79,6 +79,7 @@ SysReAllocString@8
 SysReAllocStringLen@12
 SysStringByteLen@4
 SysStringLen@4
+UnRegisterTypeLib@20
 VarBoolFromCy@12
 VarBoolFromDate@12
 VarBoolFromDisp@12

@@ -1,6 +1,9 @@
--- $Source$ 
--- $Revision$ $Date$ $Author$ 
+-- $Source$
+-- $Revision$ $Date$ $Author$
 -- See end of file for Copyright (c) information.
+
+-- 99/02/04 - Modified by ACT
+-- Add UnRegisterTypeLib API
 
 with Win32.Objbase;
 with Win32.Rpcdce;
@@ -198,7 +201,7 @@ package Win32.Oleauto is
         FUNC_DISPATCH                                       -- oleauto.h:840
     );
     for FUNCKIND'size use 32;                               -- oleauto.h:834
-  
+
     type PFUNCKIND is access FUNCKIND;
 
     type INVOKEKIND is (                                    -- oleauto.h:848
@@ -1369,7 +1372,7 @@ package Win32.Oleauto is
             end case;
         end record;
 
-	  pragma Convention(C_Pass_By_Copy, Union_Anonymous4_T);
+          pragma Convention(C_Pass_By_Copy, Union_Anonymous4_T);
 
     pragma Unchecked_Union(union_anonymous4_t);
 
@@ -1392,7 +1395,7 @@ package Win32.Oleauto is
             end case;
         end record;
 
-	  pragma Convention(C_Pass_By_Copy, Union_Anonymous5_T);
+          pragma Convention(C_Pass_By_Copy, Union_Anonymous5_T);
 
     pragma Unchecked_Union(union_anonymous5_t);
 
@@ -1450,12 +1453,12 @@ package Win32.Oleauto is
                 when oInst_kind =>
                     oInst: Win32.ULONG;                     -- oleauto.h:908
                 when lpvarValue_kind =>
-                    lpvarValue: LPVARIANT;   
+                    lpvarValue: LPVARIANT;
                                                             -- oleauto.h:909
             end case;
         end record;
 
-	  pragma Convention(C_Pass_By_Copy, Union_Anonymous6_T);
+          pragma Convention(C_Pass_By_Copy, Union_Anonymous6_T);
 
     pragma Unchecked_Union(union_anonymous6_t);
 
@@ -1549,7 +1552,7 @@ package Win32.Oleauto is
             end case;
         end record;
 
-	  pragma Convention(C_Pass_By_Copy, BINDPTR);
+          pragma Convention(C_Pass_By_Copy, BINDPTR);
 
     pragma Unchecked_Union(BINDPTR);
 
@@ -1768,51 +1771,51 @@ package Win32.Oleauto is
 
     type PPLONG is access Win32.PLONG;
 
-    procedure TYPEKIND_to_xmit(pEnum : in  PTYPEKIND; 
-                               ppLong: out Win32.Oleauto.PPLONG);   
-			                                    -- oleauto.h:643
+    procedure TYPEKIND_to_xmit(pEnum : in  PTYPEKIND;
+                               ppLong: out Win32.Oleauto.PPLONG);
+                                                            -- oleauto.h:643
 
     procedure TYPEKIND_from_xmit(pLong: in  Win32.PLONG;
                                  pEnum: out PTYPEKIND);     -- oleauto.h:644
 
-    procedure CALLCONV_to_xmit(pEnum : in  PCALLCONV; 
-                               ppLong: out Win32.Oleauto.PPLONG);   
-			                                    -- oleauto.h:828
+    procedure CALLCONV_to_xmit(pEnum : in  PCALLCONV;
+                               ppLong: out Win32.Oleauto.PPLONG);
+                                                            -- oleauto.h:828
 
     procedure CALLCONV_from_xmit(pLong: in  Win32.PLONG;
                                  pEnum: out PCALLCONV);     -- oleauto.h:829
 
-    procedure FUNCKIND_to_xmit(pEnum : in  PFUNCKIND; 
-                               ppLong: out Win32.Oleauto.PPLONG);   
-			                                    -- oleauto.h:842
+    procedure FUNCKIND_to_xmit(pEnum : in  PFUNCKIND;
+                               ppLong: out Win32.Oleauto.PPLONG);
+                                                            -- oleauto.h:842
 
     procedure FUNCKIND_from_xmit(pLong: in  Win32.PLONG;
                                  pEnum: out PFUNCKIND);     -- oleauto.h:843
 
-    procedure INVOKEKIND_to_xmit(pEnum : in  PINVOKEKIND; 
-                                 ppLong: out Win32.Oleauto.PPLONG); 
-				                            -- oleauto.h:855
+    procedure INVOKEKIND_to_xmit(pEnum : in  PINVOKEKIND;
+                                 ppLong: out Win32.Oleauto.PPLONG);
+                                                            -- oleauto.h:855
 
     procedure INVOKEKIND_from_xmit(pLong: in  Win32.PLONG;
                                    pEnum: out PINVOKEKIND); -- oleauto.h:856
 
-    procedure VARKIND_to_xmit(pEnum : in  PVARKIND; 
-                              ppLong: out Win32.Oleauto.PPLONG);    
-			                                    -- oleauto.h:888
+    procedure VARKIND_to_xmit(pEnum : in  PVARKIND;
+                              ppLong: out Win32.Oleauto.PPLONG);
+                                                            -- oleauto.h:888
 
     procedure VARKIND_from_xmit(pLong: in  Win32.PLONG;
                                 pEnum: out PVARKIND);       -- oleauto.h:889
 
-    procedure DESCKIND_to_xmit(pEnum : in  PDESCKIND; 
-                              ppLong: out Win32.Oleauto.PPLONG);    
-			                                    -- oleauto.h:2316
+    procedure DESCKIND_to_xmit(pEnum : in  PDESCKIND;
+                              ppLong: out Win32.Oleauto.PPLONG);
+                                                            -- oleauto.h:2316
 
     procedure DESCKIND_from_xmit(pLong: in  Win32.PLONG;
                                 pEnum: out PDESCKIND);      -- oleauto.h:2317
 
-    procedure SYSKIND_to_xmit(pEnum : in  PSYSKIND; 
-                              ppLong: out Win32.Oleauto.PPLONG);    
-			                                    -- oleauto.h:3066
+    procedure SYSKIND_to_xmit(pEnum : in  PSYSKIND;
+                              ppLong: out Win32.Oleauto.PPLONG);
+                                                            -- oleauto.h:3066
 
     procedure SYSKIND_from_xmit(pLong: in  Win32.PLONG;
                                 pEnum: out PSYSKIND);       -- oleauto.h:3067
@@ -3521,12 +3524,12 @@ package Win32.Oleauto is
                return Win32.ULONG;                          -- oleauto.h:4194
 
    function LHashValOfName(lcid  : Win32.Winnt.LCID;        -- oleauto.h:4196
-                           szName: Win32.PCWSTR) 
-                            return Win32.ULONG;             
+                           szName: Win32.PCWSTR)
+                            return Win32.ULONG;
 
-    function WHashValOfLHashVal(lhashval: Win32.ULONG) 
+    function WHashValOfLHashVal(lhashval: Win32.ULONG)
                                 return Win32.USHORT;        -- oleauto.h:4199
- 
+
     function IsHashValCompatible(lhashval1: Win32.ULONG;
                                  lhashval2: Win32.ULONG)
                                  return Win32.BOOL;         -- oleauto.h:4202
@@ -3557,6 +3560,14 @@ package Win32.Oleauto is
                 szFullPath: Win32.PWSTR;
                 szHelpDir : Win32.PWSTR)
                return Win32.Objbase.HRESULT;                -- oleauto.h:4233
+
+    function UnRegisterTypeLib(
+                libID    : Win32.Objbase.REFGUID;
+                wVerMajor: Win32.WORD;
+                wVerMinor: Win32.WORD;
+                lcid     : Win32.Winnt.LCID;
+                syskind  : Win32.Oleauto.SYSKIND)
+               return Win32.Objbase.HRESULT;                -- oleauto.h
 
     function DeregisterTypeLib(
                 rguid    : access Win32.Objbase.IID;
@@ -3665,35 +3676,35 @@ package Win32.Oleauto is
     function V_CYREF(X: access VARIANT) return PCY;         -- oleauto.h:4411
     function V_DATE(X: access VARIANT) return Win32.Oleauto.DATE;
                                                             -- oleauto.h:4413
-    function V_DATEREF(X: access VARIANT) return Win32.Oleauto.PDATE; 
+    function V_DATEREF(X: access VARIANT) return Win32.Oleauto.PDATE;
     function V_BSTR(X: access VARIANT) return BSTR;         -- oleauto.h:4416
                                                             -- oleauto.h:4414
     function V_BSTRREF(X: access VARIANT) return LPBSTR;    -- oleauto.h:4417
     function V_DISPATCH(X: access VARIANT) return LPDISPATCH;
                                                             -- oleauto.h:4419
-    function V_DISPATCHREF(X: access VARIANT) return a_LPDISPATCH_t;            
+    function V_DISPATCHREF(X: access VARIANT) return a_LPDISPATCH_t;
                                                             -- oleauto.h:4420
 
-    function V_ERROR(X: access VARIANT) return Win32.Objbase.SCODE;     
+    function V_ERROR(X: access VARIANT) return Win32.Objbase.SCODE;
                                                             -- oleauto.h:4422
-    function V_ERRORREF(X: access VARIANT) return Win32.Objbase.PSCODE;         
+    function V_ERRORREF(X: access VARIANT) return Win32.Objbase.PSCODE;
                                                             -- oleauto.h:4423
-    function V_BOOL(X: access VARIANT) return VARIANT_BOOL;     
+    function V_BOOL(X: access VARIANT) return VARIANT_BOOL;
                                                             -- oleauto.h:4425
     function V_BOOLREF(X: access VARIANT) return PVARIANT_BOOL;
                                                             -- oleauto.h:4426
-    function V_UNKNOWN(X: access VARIANT) return Win32.Objbase.LPUNKNOWN;     
+    function V_UNKNOWN(X: access VARIANT) return Win32.Objbase.LPUNKNOWN;
                                                             -- oleauto.h:4428
-    function V_UNKNOWNREF(X: access VARIANT) return a_a_IUnknown;            
+    function V_UNKNOWNREF(X: access VARIANT) return a_a_IUnknown;
                                                 -- oleauto.h:4429
-    function V_VARIANTREF(X: access VARIANT) return  LPVARIANT;         
+    function V_VARIANTREF(X: access VARIANT) return  LPVARIANT;
                                                 -- oleauto.h:4432
     function V_ARRAY(X: access VARIANT) return LPSAFEARRAY; -- oleauto.h:4448
 
-    function V_ARRAYREF(X: access VARIANT) return PLPSAFEARRAY;         
+    function V_ARRAYREF(X: access VARIANT) return PLPSAFEARRAY;
                                                             -- oleauto.h:4449
     function V_BYREF(X: access VARIANT) return Win32.PVOID; -- oleauto.h:4451
-     
+
 private
 
     pragma Convention(C_Pass_By_Copy, ICreateTypeInfo);                  -- oleauto.h:114
@@ -3742,171 +3753,171 @@ private
     pragma Import(Stdcall, RemVariant_v0_1_s_ifspec, "RemVariant_v0_1_s_ifspec");
                                                             -- oleauto.h:972
     pragma Import(Stdcall, IID_ICreateTypeInfo, "IID_ICreateTypeInfo");
-                                                            -- oleauto.h:990 
-    pragma Import(Stdcall, IID_ICreateTypeLib, "IID_ICreateTypeLib"); 
+                                                            -- oleauto.h:990
+    pragma Import(Stdcall, IID_ICreateTypeLib, "IID_ICreateTypeLib");
                                                             -- oleauto.h:1614
-    pragma Import(Stdcall, IID_IDispatch, "IID_IDispatch");       -- oleauto.h:1942 
+    pragma Import(Stdcall, IID_IDispatch, "IID_IDispatch");       -- oleauto.h:1942
     pragma Import(Stdcall, IID_IEnumVARIANT, "IID_IEnumVARIANT"); -- oleauto.h:2142
-    pragma Import(Stdcall, IID_ITypeComp, "IID_ITypeComp");       -- oleauto.h:2335 
+    pragma Import(Stdcall, IID_ITypeComp, "IID_ITypeComp");       -- oleauto.h:2335
     pragma Import(Stdcall, IID_ITypeInfo, "IID_ITypeInfo");       -- oleauto.h:2476
-    pragma Import(Stdcall, IID_ITypeLib, "IID_ITypeLib");         -- oleauto.h:3088 
+    pragma Import(Stdcall, IID_ITypeLib, "IID_ITypeLib");         -- oleauto.h:3088
     pragma Import(Stdcall, IID_IErrorInfo, "IID_IErrorInfo");     -- oleauto.h:3417
     pragma Import(Stdcall, IID_ICreateErrorInfo, "IID_ICreateErrorInfo");
                                                             -- oleauto.h:360 0
     pragma Import(Stdcall, IID_ISupportErrorInfo, "IID_ISupportErrorInfo");
                                                             -- oleauto.h:3 783
 
-    pragma Import(Stdcall, ICreateTypeInfo_SetGuid_Proxy, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetGuid_Proxy,
                      "ICreateTypeInfo_SetGuid_Proxy");      -- oleauto.h:1304
-    pragma Import(Stdcall, ICreateTypeInfo_SetGuid_Stub, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetGuid_Stub,
                      "ICreateTypeInfo_SetGuid_Stub");       -- oleauto.h:1309
-    pragma Import(Stdcall, ICreateTypeInfo_SetTypeFlags_Proxy, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetTypeFlags_Proxy,
                      "ICreateTypeInfo_SetTypeFlags_Proxy"); -- oleauto.h:1316
-    pragma Import(Stdcall, ICreateTypeInfo_SetTypeFlags_Stub, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetTypeFlags_Stub,
                      "ICreateTypeInfo_SetTypeFlags_Stub");  -- oleauto.h:1321
-    pragma Import(Stdcall, ICreateTypeInfo_SetDocString_Proxy, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetDocString_Proxy,
                      "ICreateTypeInfo_SetDocString_Proxy"); -- oleauto.h:1328
-    pragma Import(Stdcall, ICreateTypeInfo_SetDocString_Stub, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetDocString_Stub,
                      "ICreateTypeInfo_SetDocString_Stub");  -- oleauto.h:1333
-    pragma Import(Stdcall, ICreateTypeInfo_SetHelpContext_Proxy, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetHelpContext_Proxy,
                      "ICreateTypeInfo_SetHelpContext_Proxy");
                                                             -- oleauto.h:1340
-    pragma Import(Stdcall, ICreateTypeInfo_SetHelpContext_Stub, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetHelpContext_Stub,
                      "ICreateTypeInfo_SetHelpContext_Stub");-- oleauto.h:1345
-    pragma Import(Stdcall, ICreateTypeInfo_SetVersion_Proxy, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetVersion_Proxy,
                      "ICreateTypeInfo_SetVersion_Proxy");   -- oleauto.h:1352
-    pragma Import(Stdcall, ICreateTypeInfo_SetVersion_Stub, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetVersion_Stub,
                      "ICreateTypeInfo_SetVersion_Stub");    -- oleauto.h:1358
-    pragma Import(Stdcall, ICreateTypeInfo_AddRefTypeInfo_Proxy, 
+    pragma Import(Stdcall, ICreateTypeInfo_AddRefTypeInfo_Proxy,
                      "ICreateTypeInfo_AddRefTypeInfo_Proxy");
                                                             -- oleauto.h:1365
-    pragma Import(Stdcall, ICreateTypeInfo_AddRefTypeInfo_Stub, 
+    pragma Import(Stdcall, ICreateTypeInfo_AddRefTypeInfo_Stub,
                      "ICreateTypeInfo_AddRefTypeInfo_Stub");-- oleauto.h:1371
-    pragma Import(Stdcall, ICreateTypeInfo_AddFuncDesc_Proxy, 
+    pragma Import(Stdcall, ICreateTypeInfo_AddFuncDesc_Proxy,
                      "ICreateTypeInfo_AddFuncDesc_Proxy");  -- oleauto.h:1378
-    pragma Import(Stdcall, ICreateTypeInfo_AddFuncDesc_Stub, 
+    pragma Import(Stdcall, ICreateTypeInfo_AddFuncDesc_Stub,
                      "ICreateTypeInfo_AddFuncDesc_Stub");   -- oleauto.h:1384
-    pragma Import(Stdcall, ICreateTypeInfo_AddImplType_Proxy, 
+    pragma Import(Stdcall, ICreateTypeInfo_AddImplType_Proxy,
                      "ICreateTypeInfo_AddImplType_Proxy");  -- oleauto.h:1391
-    pragma Import(Stdcall, ICreateTypeInfo_AddImplType_Stub, 
+    pragma Import(Stdcall, ICreateTypeInfo_AddImplType_Stub,
                      "ICreateTypeInfo_AddImplType_Stub");   -- oleauto.h:1397
-    pragma Import(Stdcall, ICreateTypeInfo_SetImplTypeFlags_Proxy, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetImplTypeFlags_Proxy,
                      "ICreateTypeInfo_SetImplTypeFlags_Proxy");
                                                             -- oleauto.h:1404
-    pragma Import(Stdcall, ICreateTypeInfo_SetImplTypeFlags_Stub, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetImplTypeFlags_Stub,
                      "ICreateTypeInfo_SetImplTypeFlags_Stub");
                                                             -- oleauto.h:1410
-    pragma Import(Stdcall, ICreateTypeInfo_SetAlignment_Proxy, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetAlignment_Proxy,
                      "ICreateTypeInfo_SetAlignment_Proxy"); -- oleauto.h:1417
-    pragma Import(Stdcall, ICreateTypeInfo_SetAlignment_Stub, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetAlignment_Stub,
                      "ICreateTypeInfo_SetAlignment_Stub");  -- oleauto.h:1422
-    pragma Import(Stdcall, ICreateTypeInfo_SetSchema_Proxy, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetSchema_Proxy,
                      "ICreateTypeInfo_SetSchema_Proxy");    -- oleauto.h:1429
-    pragma Import(Stdcall, ICreateTypeInfo_SetSchema_Stub, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetSchema_Stub,
                      "ICreateTypeInfo_SetSchema_Stub");     -- oleauto.h:1434
-    pragma Import(Stdcall, ICreateTypeInfo_AddVarDesc_Proxy, 
+    pragma Import(Stdcall, ICreateTypeInfo_AddVarDesc_Proxy,
                      "ICreateTypeInfo_AddVarDesc_Proxy");   -- oleauto.h:1441
-    pragma Import(Stdcall, ICreateTypeInfo_AddVarDesc_Stub, 
+    pragma Import(Stdcall, ICreateTypeInfo_AddVarDesc_Stub,
                      "ICreateTypeInfo_AddVarDesc_Stub");    -- oleauto.h:1447
-    pragma Import(Stdcall, ICreateTypeInfo_SetFuncAndParamNames_Proxy, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetFuncAndParamNames_Proxy,
                      "ICreateTypeInfo_SetFuncAndParamNames_Proxy");
                                                             -- oleauto.h:1454
-    pragma Import(Stdcall, ICreateTypeInfo_SetFuncAndParamNames_Stub, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetFuncAndParamNames_Stub,
                      "ICreateTypeInfo_SetFuncAndParamNames_Stub");
                                                             -- oleauto.h:1461
-    pragma Import(Stdcall, ICreateTypeInfo_SetVarName_Proxy, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetVarName_Proxy,
                      "ICreateTypeInfo_SetVarName_Proxy");   -- oleauto.h:1468
-    pragma Import(Stdcall, ICreateTypeInfo_SetVarName_Stub, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetVarName_Stub,
                      "ICreateTypeInfo_SetVarName_Stub");    -- oleauto.h:1474
-    pragma Import(Stdcall, ICreateTypeInfo_SetTypeDescAlias_Proxy, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetTypeDescAlias_Proxy,
                      "ICreateTypeInfo_SetTypeDescAlias_Proxy");
                                                             -- oleauto.h:1481
-    pragma Import(Stdcall, ICreateTypeInfo_SetTypeDescAlias_Stub, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetTypeDescAlias_Stub,
                      "ICreateTypeInfo_SetTypeDescAlias_Stub");
                                                             -- oleauto.h:1486
-    pragma Import(Stdcall, ICreateTypeInfo_DefineFuncAsDllEntry_Proxy, 
+    pragma Import(Stdcall, ICreateTypeInfo_DefineFuncAsDllEntry_Proxy,
                      "ICreateTypeInfo_DefineFuncAsDllEntry_Proxy");
                                                             -- oleauto.h:1493
-    pragma Import(Stdcall, ICreateTypeInfo_DefineFuncAsDllEntry_Stub, 
+    pragma Import(Stdcall, ICreateTypeInfo_DefineFuncAsDllEntry_Stub,
                      "ICreateTypeInfo_DefineFuncAsDllEntry_Stub");
                                                             -- oleauto.h:1500
-    pragma Import(Stdcall, ICreateTypeInfo_SetFuncDocString_Proxy, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetFuncDocString_Proxy,
                      "ICreateTypeInfo_SetFuncDocString_Proxy");
                                                             -- oleauto.h:1507
-    pragma Import(Stdcall, ICreateTypeInfo_SetFuncDocString_Stub, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetFuncDocString_Stub,
                      "ICreateTypeInfo_SetFuncDocString_Stub");
                                                             -- oleauto.h:1513
-    pragma Import(Stdcall, ICreateTypeInfo_SetVarDocString_Proxy, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetVarDocString_Proxy,
                      "ICreateTypeInfo_SetVarDocString_Proxy");
                                                             -- oleauto.h:1520
-    pragma Import(Stdcall, ICreateTypeInfo_SetVarDocString_Stub, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetVarDocString_Stub,
                      "ICreateTypeInfo_SetVarDocString_Stub");
                                                             -- oleauto.h:1526
-    pragma Import(Stdcall, ICreateTypeInfo_SetFuncHelpContext_Proxy, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetFuncHelpContext_Proxy,
                      "ICreateTypeInfo_SetFuncHelpContext_Proxy");
                                                             -- oleauto.h:1533
-    pragma Import(Stdcall, ICreateTypeInfo_SetFuncHelpContext_Stub, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetFuncHelpContext_Stub,
                      "ICreateTypeInfo_SetFuncHelpContext_Stub");
                                                             -- oleauto.h:1539
-    pragma Import(Stdcall, ICreateTypeInfo_SetVarHelpContext_Proxy, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetVarHelpContext_Proxy,
                      "ICreateTypeInfo_SetVarHelpContext_Proxy");
                                                             -- oleauto.h:1546
-    pragma Import(Stdcall, ICreateTypeInfo_SetVarHelpContext_Stub, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetVarHelpContext_Stub,
                      "ICreateTypeInfo_SetVarHelpContext_Stub");
                                                             -- oleauto.h:1552
-    pragma Import(Stdcall, ICreateTypeInfo_SetMops_Proxy, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetMops_Proxy,
                      "ICreateTypeInfo_SetMops_Proxy");      -- oleauto.h:1559
-    pragma Import(Stdcall, ICreateTypeInfo_SetMops_Stub, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetMops_Stub,
                      "ICreateTypeInfo_SetMops_Stub");       -- oleauto.h:1565
-    pragma Import(Stdcall, ICreateTypeInfo_SetTypeIdldesc_Proxy, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetTypeIdldesc_Proxy,
                      "ICreateTypeInfo_SetTypeIdldesc_Proxy");
                                                             -- oleauto.h:1572
-    pragma Import(Stdcall, ICreateTypeInfo_SetTypeIdldesc_Stub, 
+    pragma Import(Stdcall, ICreateTypeInfo_SetTypeIdldesc_Stub,
                      "ICreateTypeInfo_SetTypeIdldesc_Stub");-- oleauto.h:1577
-    pragma Import(Stdcall, ICreateTypeInfo_LayOut_Proxy, 
+    pragma Import(Stdcall, ICreateTypeInfo_LayOut_Proxy,
                      "ICreateTypeInfo_LayOut_Proxy");       -- oleauto.h:1584
-    pragma Import(Stdcall, ICreateTypeInfo_LayOut_Stub, 
+    pragma Import(Stdcall, ICreateTypeInfo_LayOut_Stub,
                      "ICreateTypeInfo_LayOut_Stub");        -- oleauto.h:1588
-    pragma Import(Stdcall, ICreateTypeLib_CreateTypeInfo_Proxy, 
+    pragma Import(Stdcall, ICreateTypeLib_CreateTypeInfo_Proxy,
                      "ICreateTypeLib_CreateTypeInfo_Proxy");-- oleauto.h:1772
-    pragma Import(Stdcall, ICreateTypeLib_CreateTypeInfo_Stub, 
+    pragma Import(Stdcall, ICreateTypeLib_CreateTypeInfo_Stub,
                      "ICreateTypeLib_CreateTypeInfo_Stub"); -- oleauto.h:1779
-    pragma Import(Stdcall, ICreateTypeLib_SetName_Proxy, 
+    pragma Import(Stdcall, ICreateTypeLib_SetName_Proxy,
                      "ICreateTypeLib_SetName_Proxy");       -- oleauto.h:1786
-    pragma Import(Stdcall, ICreateTypeLib_SetName_Stub, 
+    pragma Import(Stdcall, ICreateTypeLib_SetName_Stub,
                      "ICreateTypeLib_SetName_Stub");        -- oleauto.h:1791
-    pragma Import(Stdcall, ICreateTypeLib_SetVersion_Proxy, 
+    pragma Import(Stdcall, ICreateTypeLib_SetVersion_Proxy,
                      "ICreateTypeLib_SetVersion_Proxy");    -- oleauto.h:1798
-    pragma Import(Stdcall, ICreateTypeLib_SetVersion_Stub, 
+    pragma Import(Stdcall, ICreateTypeLib_SetVersion_Stub,
                      "ICreateTypeLib_SetVersion_Stub");     -- oleauto.h:1804
-    pragma Import(Stdcall, ICreateTypeLib_SetGuid_Proxy, 
+    pragma Import(Stdcall, ICreateTypeLib_SetGuid_Proxy,
                      "ICreateTypeLib_SetGuid_Proxy");       -- oleauto.h:1811
-    pragma Import(Stdcall, ICreateTypeLib_SetGuid_Stub, 
+    pragma Import(Stdcall, ICreateTypeLib_SetGuid_Stub,
                      "ICreateTypeLib_SetGuid_Stub");        -- oleauto.h:1816
-    pragma Import(Stdcall, ICreateTypeLib_SetDocString_Proxy, 
+    pragma Import(Stdcall, ICreateTypeLib_SetDocString_Proxy,
                      "ICreateTypeLib_SetDocString_Proxy");  -- oleauto.h:1823
-    pragma Import(Stdcall, ICreateTypeLib_SetDocString_Stub, 
+    pragma Import(Stdcall, ICreateTypeLib_SetDocString_Stub,
                      "ICreateTypeLib_SetDocString_Stub");   -- oleauto.h:1828
-    pragma Import(Stdcall, ICreateTypeLib_SetHelpFileName_Proxy, 
+    pragma Import(Stdcall, ICreateTypeLib_SetHelpFileName_Proxy,
                      "ICreateTypeLib_SetHelpFileName_Proxy");
                                                             -- oleauto.h:1835
-    pragma Import(Stdcall, ICreateTypeLib_SetHelpFileName_Stub, 
+    pragma Import(Stdcall, ICreateTypeLib_SetHelpFileName_Stub,
                      "ICreateTypeLib_SetHelpFileName_Stub");-- oleauto.h:1840
-    pragma Import(Stdcall, ICreateTypeLib_SetHelpContext_Proxy, 
+    pragma Import(Stdcall, ICreateTypeLib_SetHelpContext_Proxy,
                      "ICreateTypeLib_SetHelpContext_Proxy");-- oleauto.h:1847
-    pragma Import(Stdcall, ICreateTypeLib_SetHelpContext_Stub, 
+    pragma Import(Stdcall, ICreateTypeLib_SetHelpContext_Stub,
                      "ICreateTypeLib_SetHelpContext_Stub"); -- oleauto.h:1852
-    pragma Import(Stdcall, ICreateTypeLib_SetLcid_Proxy, 
+    pragma Import(Stdcall, ICreateTypeLib_SetLcid_Proxy,
                      "ICreateTypeLib_SetLcid_Proxy");       -- oleauto.h:1859
-    pragma Import(Stdcall, ICreateTypeLib_SetLcid_Stub, 
+    pragma Import(Stdcall, ICreateTypeLib_SetLcid_Stub,
                      "ICreateTypeLib_SetLcid_Stub");        -- oleauto.h:1864
-    pragma Import(Stdcall, ICreateTypeLib_SetLibFlags_Proxy, 
+    pragma Import(Stdcall, ICreateTypeLib_SetLibFlags_Proxy,
                      "ICreateTypeLib_SetLibFlags_Proxy");   -- oleauto.h:1871
-    pragma Import(Stdcall, ICreateTypeLib_SetLibFlags_Stub, 
+    pragma Import(Stdcall, ICreateTypeLib_SetLibFlags_Stub,
                      "ICreateTypeLib_SetLibFlags_Stub");    -- oleauto.h:1876
-    pragma Import(Stdcall, ICreateTypeLib_SaveAllChanges_Proxy, 
+    pragma Import(Stdcall, ICreateTypeLib_SaveAllChanges_Proxy,
                      "ICreateTypeLib_SaveAllChanges_Proxy");-- oleauto.h:1883
-    pragma Import(Stdcall, ICreateTypeLib_SaveAllChanges_Stub, 
+    pragma Import(Stdcall, ICreateTypeLib_SaveAllChanges_Stub,
                      "ICreateTypeLib_SaveAllChanges_Stub"); -- oleauto.h:1887
     pragma Import(Stdcall, IDispatch_GetTypeInfoCount_Proxy,
                      "IDispatch_GetTypeInfoCount_Proxy");   -- oleauto.h:2062
@@ -4262,6 +4273,7 @@ private
     pragma Import(Stdcall, QueryPathOfRegTypeLib, "QueryPathOfRegTypeLib");
                                                             -- oleauto.h:4223
     pragma Import(Stdcall, RegisterTypeLib, "RegisterTypeLib");   -- oleauto.h:4233
+    pragma Import(Stdcall, UnRegisterTypeLib, "UnRegisterTypeLib"); -- oleauto.h
     pragma Import(Stdcall, DeregisterTypeLib, "DeregisterTypeLib");
                                                             -- oleauto.h:4239
     pragma Import(Stdcall, CreateTypeLib, "CreateTypeLib");       -- oleauto.h:4242
@@ -4291,7 +4303,7 @@ private
 -- FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the entire risk as to
 -- the accuracy and the use of this file.  This file may be used, copied,
 -- modified and distributed only by licensees of Microsoft Corporation's
--- WIN32 Software Development Kit in accordance with the terms of the 
+-- WIN32 Software Development Kit in accordance with the terms of the
 -- licensee's End-User License Agreement for Microsoft Software for the
 -- WIN32 Development Kit.
 --
