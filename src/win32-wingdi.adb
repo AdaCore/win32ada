@@ -19,7 +19,7 @@ with Win32.Utils;
 
 package body Win32.Wingdi is
 
-   function MAKEROP4 (Fore, Back : DWORD) return DWORD is
+   function MAKEROP4 (fore, back : DWORD) return DWORD is
       use Interfaces;
    begin
       return DWORD (((Shift_Left (Unsigned_32 (back), 8)) and 16#ff00_0000#) or
@@ -81,5 +81,3 @@ package body Win32.Wingdi is
    end GetBValue;
 
 end Win32.Wingdi;
-
-
