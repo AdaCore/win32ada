@@ -43,16 +43,12 @@ package body Win32.crt.Stdlib is
    --  instead of getting it.  I don't know if this is useful.
 
    function errno return Win32.INT is
-      function To_PINT is new Ada.Unchecked_Conversion
-        (System.Address, Win32.PINT);
    begin
       return To_PINT (Win32.crt.PerThread.Get_Address
         (Win32.crt.PerThread.Errno)).all;
    end errno;
 
    function doserrno return Win32.ULONG is
-      function To_PULONG is new Ada.Unchecked_Conversion
-        (System.Address, Win32.PULONG);
    begin
       return To_PULONG (Win32.crt.PerThread.Get_Address
         (Win32.crt.PerThread.Doserrno)).all;

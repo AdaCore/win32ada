@@ -1299,6 +1299,8 @@ package Win32.Winnt is
    type PIMAGE_OS2_HEADER is access all IMAGE_OS2_HEADER;  --  winnt.h :2969
    type PIMAGE_FILE_HEADER is access all IMAGE_FILE_HEADER; --  winnt.h :2983
    type PIMAGE_DATA_DIRECTORY is access all IMAGE_DATA_DIRECTORY;
+   function To_PIMAGE is new Ada.Unchecked_Conversion
+     (Long, PIMAGE_DATA_DIRECTORY);
    --  winnt.h :3012
    type PIMAGE_OPTIONAL_HEADER is access all IMAGE_OPTIONAL_HEADER;
    --  winnt.h :3061
@@ -1307,6 +1309,7 @@ package Win32.Winnt is
    type PIMAGE_NT_HEADERS is access all IMAGE_NT_HEADERS;  --  winnt.h :3090
    type PIMAGE_ROM_HEADERS is access all IMAGE_ROM_HEADERS; --  winnt.h :3095
    type PIMAGE_SECTION_HEADER is access all IMAGE_SECTION_HEADER;
+   function To_Long is new Ada.Unchecked_Conversion (PIMAGE_NT_HEADERS, Long);
    --  winnt.h :3144
    type PIMAGE_SYMBOL is access all IMAGE_SYMBOL;          --  winnt.h :3194
    type PIMAGE_AUX_SYMBOL is access all IMAGE_AUX_SYMBOL;  --  winnt.h :3350

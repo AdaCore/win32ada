@@ -68,10 +68,6 @@ package body Win32.Winnt is
 
       subtype Long is Interfaces.C.long;
       use type Interfaces.C.long;
-      function To_Long is new Ada.Unchecked_Conversion
-        (PIMAGE_NT_HEADERS, Long);
-      function To_PIMAGE is new Ada.Unchecked_Conversion
-        (Long, PIMAGE_DATA_DIRECTORY);
    begin
       return To_PIMAGE (To_Long (NTHeader) +
         Dummy.OptionalHeader'Position +

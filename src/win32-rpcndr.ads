@@ -43,6 +43,8 @@ package Win32.Rpcndr is
    subtype small is Win32.CHAR;                            --  rpcndr.h:121
    type psmall is access small;
 
+   function To_Psmall is new Ada.Unchecked_Conversion (PVOID, psmall);
+
    subtype byte is Win32.BYTE;                             --  rpcndr.h:122
    type boolean is new Win32.UCHAR;                        --  rpcndr.h:123
    subtype hyper is Win32.DWORDLONG;                       --  rpcndr.h:129
@@ -77,6 +79,9 @@ package Win32.Rpcndr is
    type PFORMAT_STRING is new Win32.PCUCHAR;               --  rpcndr.h:610
    type PMIDL_XMIT_TYPE is new Win32.PVOID;                --  rpcndr.h:890
    subtype RPC_SS_THREAD_HANDLE is Win32.Winnt.HANDLE;    --  rpcndr.h:1954
+
+   function To_BUFPTR is new Ada.Unchecked_Conversion (ULONG, RPC_BUFPTR);
+   function To_ULONG is new Ada.Unchecked_Conversion (RPC_BUFPTR, ULONG);
 
    type struct_anonymous1_t;                               --  rpcndr.h:209
    type SCONTEXT_QUEUE;                                    --  rpcndr.h:217

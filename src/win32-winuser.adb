@@ -29,7 +29,6 @@ package body Win32.Winuser is
 
    function MAKEINTRESOURCEW (wInteger : WORD) return LPWSTR is
       --  winuser.h:103
-      function To_LPWSTR is new Ada.Unchecked_Conversion (DWORD, LPWSTR);
    begin
       return To_LPWSTR (Win32.Utils.MAKELONG (wInteger, 0));
    end MAKEINTRESOURCEW;

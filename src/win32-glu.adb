@@ -14,22 +14,15 @@
 --
 -------------------------------------------------------------------------------
 
-
 with Ada.Unchecked_Conversion;
 
 package body Win32.Glu is
 
-   function gluErrorStringWIN (errCode : Win32.Gl.GLenum)
-                              return Win32.LPCWSTR is       --  glu.h:56
-
-      function To_LPCWSTR is new Ada.Unchecked_Conversion (Win32.PCBYTE,
-        Win32.LPCWSTR);
+   function gluErrorStringWIN
+     (errCode : Win32.Gl.GLenum)
+      return Win32.LPCWSTR is       --  glu.h:56
    begin
       return To_LPCWSTR (gluErrorString (errCode));
    end gluErrorStringWIN;
 
 end Win32.Glu;
-
-
-
-

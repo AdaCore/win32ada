@@ -34,8 +34,6 @@ package body Win32.Winbase is
    end LocalDiscard;
 
    function MAKEINTATOM (wInteger : WORD) return Win32.Winnt.LPTSTR is
-      function To_LPTSTR is new Ada.Unchecked_Conversion
-        (DWORD, Win32.Winnt.LPTSTR);
    begin
       return To_LPTSTR (Win32.Utils.MAKELONG (Low => wInteger, High => 0));
    end MAKEINTATOM;

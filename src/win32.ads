@@ -11,6 +11,7 @@
 --  will not be replicated in many other packages.
 --  **************************************************************
 
+with Ada.Unchecked_Conversion;
 with Interfaces;
 with Interfaces.C;
 with Interfaces.C.Strings;
@@ -57,6 +58,8 @@ package Win32 is
    Nul     : constant CHAR := CHAR'First;
    type    TCHAR      is new CHAR;                         --  tchar.h :409
 
+   function To_PCSTR is new Ada.Unchecked_Conversion (System.Address, PCSTR);
+
    --  8 bit unsigned chars
    subtype UCHAR       is Interfaces.C.unsigned_char;      --  windef.h
    type    BYTE        is new Interfaces.C.unsigned_char;  --  windef.h
@@ -67,6 +70,9 @@ package Win32 is
    type    PUCHAR      is access all UCHAR;                --  windef.h
    type    BYTE_Array  is array (Natural range <>) of aliased BYTE;
    type    UCHAR_Array is array (Natural range <>) of aliased UCHAR;
+
+   function To_PUCHAR is new Ada.Unchecked_Conversion (PVOID, PUCHAR);
+   function To_PBYTE is new Ada.Unchecked_Conversion (PVOID, PBYTE);
 
    --  16 bit wide chars
    subtype Wchar_T     is Interfaces.C.wchar_t;            --  ctype.h
@@ -83,6 +89,10 @@ package Win32 is
    subtype LPCWSTR     is PCWCH;                           --  winnt.h
    type    WCHAR_Array is array (Natural range <>) of aliased WCHAR;
    Wide_Nul : constant WCHAR := WCHAR'First;
+
+   function To_LPCWSTR is new Ada.Unchecked_Conversion (PCBYTE, LPCWSTR);
+   function To_PWSTR is new Ada.Unchecked_Conversion (System.Address, PWSTR);
+   function To_PCWSTR is new Ada.Unchecked_Conversion (System.Address, PCWSTR);
 
    --  16 bit signed integers
    subtype SHORT       is Interfaces.C.short;              --  winnt.h
@@ -108,6 +118,9 @@ package Win32 is
    subtype LPINT     is PINT;                              --  windef.h
    type    PCINT     is access constant INT;
    type    INT_Array is array (Natural range <>) of aliased INT;
+
+   function To_PINT is new Ada.Unchecked_Conversion (System.Address, PINT);
+   function To_PBOOL is new Ada.Unchecked_Conversion(PVOID, PBOOL);
 
    --  "unsigned" or "unsigned int" types, unsigned, 32 bits on Intel
    subtype UINT       is Interfaces.C.unsigned;            --  windef.h
@@ -135,6 +148,10 @@ package Win32 is
    type    PCDWORD     is access constant DWORD;
    type    ULONG_Array is array (Natural range <>) of aliased ULONG;
    subtype DWORD_Array is ULONG_Array;
+
+   function To_PULONG is new Ada.Unchecked_Conversion (System.Address, PULONG);
+   function To_LPTSTR is new Ada.Unchecked_Conversion (DWORD, PSTR);
+   function To_LPWSTR is new Ada.Unchecked_Conversion (DWORD, LPWSTR);
 
    --  builtin C "float", 32 bits on Intel
    subtype FLOAT  is Interfaces.C.C_float;                 --  windef.h

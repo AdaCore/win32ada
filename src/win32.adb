@@ -88,22 +88,16 @@ package body Win32 is
    end Addr;
 
    function Addr (S : String) return PCSTR is
-      function To_PCSTR is new
-        Ada.Unchecked_Conversion (System.Address, PCSTR);
    begin
       return To_PCSTR (S (S'First)'Address);
    end Addr;
 
    function Addr (S : Wide_String) return PWSTR is
-      function To_PWSTR is new
-        Ada.Unchecked_Conversion (System.Address, PWSTR);
    begin
       return To_PWSTR (S (S'First)'Address);
    end Addr;
 
    function Addr (S : Wide_String) return PCWSTR is
-      function To_PCWSTR is new
-        Ada.Unchecked_Conversion (System.Address, PCWSTR);
    begin
       return To_PCWSTR (S (S'First)'Address);
    end Addr;
@@ -116,22 +110,16 @@ package body Win32 is
    end Addr;
 
    function Addr (S : CHAR_Array) return PCSTR is
-      function To_PCSTR is new
-        Ada.Unchecked_Conversion (System.Address, PCSTR);
    begin
       return To_PCSTR (S (S'First)'Address);
    end Addr;
 
    function Addr (S : WCHAR_Array) return PWSTR is
-      function To_PWSTR is new
-        Ada.Unchecked_Conversion (System.Address, PWSTR);
    begin
       return To_PWSTR (S (S'First)'Address);
    end Addr;
 
    function Addr (S : WCHAR_Array) return PCWSTR is
-      function To_PCWSTR is new
-        Ada.Unchecked_Conversion (System.Address, PCWSTR);
    begin
       return To_PCWSTR (S (S'First)'Address);
    end Addr;

@@ -35,9 +35,6 @@ package body Win32.Rpcndr is
 
    procedure byte_from_ndr (source : in out Win32.Rpcdcep.PRPC_MESSAGE;
                            target : out    Win32.PBYTE) is  --  rpcndr.h: 264
-
-      function To_PBYTE is new Ada.Unchecked_Conversion (Win32.PVOID,
-                                                        Win32.PBYTE);
    begin
       target := To_PBYTE (source.Buffer);
       source.all.Buffer := To_PVOID (To_Int (source.all.Buffer) +
@@ -70,10 +67,6 @@ package body Win32.Rpcndr is
    procedure boolean_from_ndr
      (source : in out Win32.Rpcdcep.PRPC_MESSAGE;
       target : out    Win32.PBOOL) is              --  rpcndr.h:278
-
-      function To_PBOOL is new Ada.Unchecked_Conversion
-        (Win32.PVOID,
-         Win32.PBOOL);
    begin
       target := To_PBOOL (source.all.Buffer);
       source.all.Buffer := To_PVOID (To_Int (source.all.Buffer) +
@@ -98,8 +91,6 @@ package body Win32.Rpcndr is
 
    procedure small_from_ndr (source : in out Win32.Rpcdcep.PRPC_MESSAGE;
                              target : out    psmall) is      --  rpcndr.h:292
-      function to_psmall is new Ada.Unchecked_Conversion
-        (Win32.PVOID, psmall);
    begin
       target := to_psmall (source.all.Buffer);
       source.all.Buffer := To_PVOID (To_Int (source.all.Buffer) +
@@ -146,11 +137,6 @@ package body Win32.Rpcndr is
    function "and"(l, r : Interfaces.C.unsigned_long)
                  return Interfaces.C.unsigned_long
      renames Interfaces.C."and";
-
-   function To_BUFPTR is new Ada.Unchecked_Conversion (Win32.ULONG,
-                                                       RPC_BUFPTR);
-   function To_ULONG is new Ada.Unchecked_Conversion (RPC_BUFPTR,
-                                                      Win32.ULONG);
 
    procedure midl_fa2 (p : in out RPC_BUFPTR) is            --  rpcndr.h:556
    begin
@@ -212,8 +198,6 @@ package body Win32.Rpcndr is
                                       s : out Win32.PUCHAR;
                                       l : out Win32.ULONG) is
       --  rpcndr.h:578
-      function To_PUCHAR is new Ada.Unchecked_Conversion (Win32.PVOID,
-                                                          Win32.PUCHAR);
    begin
       s := To_PUCHAR (midl_ma4_ulong (p));
       midl_addp (p, 4);
@@ -296,5 +280,3 @@ package body Win32.Rpcndr is
    --  end NdrClientCall;
 
 end Win32.Rpcndr;
-
-
