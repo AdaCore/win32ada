@@ -2606,7 +2606,7 @@ package Win32.Mmsystem is
    function waveOutOpen
      (lphwo : LPHWAVEOUT;
       uDeviceID : Win32.UINT;
-      lpFormat : LPCWAVEFORMAT;
+      lpFormat : LPCWAVEFORMATEX;
       dwCallback : Win32.DWORD;
       dwInstance : Win32.DWORD;
       dwFlags : Win32.DWORD)
@@ -2731,7 +2731,7 @@ package Win32.Mmsystem is
    function waveInOpen
      (lphwi : LPHWAVEIN;
       uDeviceID : Win32.UINT;
-      lpwf : LPCWAVEFORMAT;
+      lpwf : LPCWAVEFORMATEX;
       dwCallback : Win32.DWORD;
       dwInstance : Win32.DWORD;
       fdwOpen : Win32.DWORD)
