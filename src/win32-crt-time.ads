@@ -1,5 +1,5 @@
--- $Source$ 
--- $Revision$ $Date$ $Author$ 
+-- $Source$
+-- $Revision$ $Date$ $Author$
 -- See end of file for Copyright (c) information.
 
 with Win32.crt.Strings;
@@ -10,11 +10,11 @@ package Win32.crt.Time is
     CLOCKS_PER_SEC                         : constant := 1000;
                                                             -- time.h:92
 
-    type clock_t is new Win32.INT;                          -- time.h:53
+    type clock_t is new Win32.LONG;                         -- time.h:53
 
     type tm;                                                -- time.h:75
 
-    type ac_time_t is access constant win32.crt.types.time_t;   
+    type ac_time_t is access constant win32.crt.types.time_t;
     type ac_tm_t is access constant tm;                     -- time.h:137
     type a_tm_t is access all tm;                           -- time.h:141
 
@@ -36,15 +36,15 @@ package Win32.crt.Time is
     -- auxiliary declarations
     type AI is access Win32.INT;
     function daylight_Addr return AI;
-    pragma Import(C, daylight_Addr, "__daylight_addr");
+    pragma Import(C, daylight_Addr, "__p__daylight");
 
     type AL is access Win32.LONG;
     function timezone_Addr return AL;
-    pragma Import(C, timezone_Addr, "__timezone_addr");
+    pragma Import(C, timezone_Addr, "__p__timezone");
 
     type ATZ is access all TZ_Array;
     function tzname_Addr return ATZ;
-    pragma Import(C, tzname_Addr, "__tzname_addr");
+    pragma Import(C, tzname_Addr, "__p__tzname");
     -- end of auxiliary declarations
 
     daylight: Win32.INT renames daylight_Addr.all;          -- time.h:101
@@ -70,7 +70,7 @@ package Win32.crt.Time is
 
     function localtime(timer: ac_time_t) return a_tm_t;     -- time.h:142
 
-    function mktime(timeptr: access tm) return Win32.crt.Types.time_t; 
+    function mktime(timeptr: access tm) return Win32.crt.Types.time_t;
                                                             -- time.h:143
 
     function strftime(string1: Win32.PSTR;
@@ -83,7 +83,7 @@ package Win32.crt.Time is
 
     function strtime(timestr: Win32.PSTR) return Win32.PSTR;-- time.h:146
 
-    function time(timer: access Win32.crt.Types.time_t) 
+    function time(timer: access Win32.crt.Types.time_t)
         return Win32.crt.Types.time_t;                      -- time.h:147
 
     procedure tzset;                                        -- time.h:151
@@ -122,7 +122,7 @@ private
 -- FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the entire risk as to
 -- the accuracy and the use of this file.  This file may be used, copied,
 -- modified and distributed only by licensees of Microsoft Corporation's
--- WIN32 Software Development Kit in accordance with the terms of the 
+-- WIN32 Software Development Kit in accordance with the terms of the
 -- licensee's End-User License Agreement for Microsoft Software for the
 -- WIN32 Development Kit.
 --
@@ -134,3 +134,7 @@ private
 -------------------------------------------------------------------------------
 
 end Win32.crt.Time;
+
+--  ACT - 98/10/15
+--  change import pragma for MSVCRT
+--  change clock_t from INT to LONG

@@ -1,17 +1,20 @@
--- $Source$ 
--- $Revision$ $Date$ $Author$ 
+-- $Source$
+-- $Revision$ $Date$ $Author$
 
 -- See end of file for Copyright (c) information.
 
 package body Win32.crt.Math is
 
     type AD is access Win32.DOUBLE;
-    function huge_Addr return AD;
-    pragma Import(C, huge_Addr, "__huge_addr");
+
+    package HUGE_Constant is
+       huge_addr : constant AD;
+       pragma Import (C, huge_addr, "__imp__HUGE");
+    end HUGE_Constant;
 
     function HUGE return Win32.DOUBLE is
     begin
-	return huge_Addr.all;
+        return HUGE_Constant.huge_Addr.all;
     end HUGE;
 
 -------------------------------------------------------------------------------
@@ -29,3 +32,6 @@ package body Win32.crt.Math is
 -------------------------------------------------------------------------------
 
 end Win32.crt.Math;
+
+--  ACT - 98/10/15
+--  change import pragma for MSVCRT

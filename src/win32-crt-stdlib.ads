@@ -1,5 +1,5 @@
--- $Source$ 
--- $Revision$ $Date$ $Author$ 
+-- $Source$
+-- $Revision$ $Date$ $Author$
 -- See end of file for Copyright (c) information.
 
 with Win32;
@@ -51,57 +51,58 @@ package Win32.crt.Stdlib is
 
     -- auxiliary declarations
 
-     type USA is access Win32.USHORT;
-     function mb_cur_max_addr return USA;
-     pragma Import(C, mb_cur_max_addr, "__mb_cur_max_addr");
+    type USA is access Win32.USHORT;
+    function mb_cur_max_addr return USA;
+    pragma Import(C, mb_cur_max_addr, "__p___mb_cur_max");
 
     type SAP is access String_Array;
-    function sys_errlist_addr return SAP;
-    pragma Import(C, sys_errlist_addr, "__sys_errlist_addr");
+    Sys_Errlist_Addr : constant SAP;
+    pragma Import (C, Sys_Errlist_Addr, "__imp__sys_errlist");
 
     type AI is access Win32.INT;
-    function sys_nerr_addr return AI;
-    pragma Import(C, sys_nerr_addr, "__sys_nerr_addr");
+    sys_nerr_addr : constant AI;
+    pragma Import (C, sys_nerr_addr, "__imp__sys_nerr");
 
     function argc_addr return AI;
-    pragma Import(C, argc_addr, "__argc_addr");
+    pragma Import(C, argc_addr, "__p___argc");
 
     type SAPP is access SAP;
     function argv_addr return SAPP;
-    pragma Import(C, argv_addr, "__argv_addr");
+    pragma Import(C, argv_addr, "__p___argv");
 
     function environ_addr return SAPP;
-    pragma Import(C, environ_addr, "__environ_addr");
+    pragma Import(C, environ_addr, "__p__environ");
 
     function fmode_addr return AI;
-    pragma Import(C, fmode_addr, "__fmode_addr");
+    pragma Import(C, fmode_addr, "__p__fmode");
 
-    function fileinfo_addr return AI;
-    pragma Import(C, fileinfo_addr, "__fileinfo_addr");
+    fileinfo_addr : constant AI;
+    pragma Import(C, fileinfo_addr, "__imp__fileinfo");
 
     type SP is access Win32.PSTR;
     function pgmptr_addr return SP;
-    pragma Import(C, pgmptr_addr, "__pgmptr_addr");
+    pragma Import(C, pgmptr_addr, "__p__pgmptr");
 
     function osver_addr return AI;
-    pragma Import(C, osver_addr, "__osver_addr");
+    pragma Import(C, osver_addr, "__p__osver");
 
     function winver_addr return AI;
-    pragma Import(C, winver_addr, "__winver_addr");
+    pragma Import(C, winver_addr, "__p__winver");
 
     function winmajor_addr return AI;
-    pragma Import(C, winmajor_addr, "__winmajor_addr");
+    pragma Import(C, winmajor_addr, "__p__winmajor");
 
     function winminor_addr return AI;
-    pragma Import(C, winminor_addr, "__winminor_addr");
+    pragma Import(C, winminor_addr, "__p__winminor");
 
     -- end of auxiliary declarations
 
-    MB_CUR_MAX: Win32.USHORT 
+    MB_CUR_MAX: Win32.USHORT
         renames mb_cur_max_addr.all;           -- max mb-len for current locale
 
     sys_errlist: String_Array
         renames sys_errlist_addr.all;           -- perror error message table
+    pragma Suppress (All_Checks, On => sys_errlist);
 
     sys_nerr: Win32.INT
         renames sys_nerr_addr.all;              -- # of entries in sys_errlist table
@@ -151,7 +152,7 @@ package Win32.crt.Stdlib is
                  denom: Win32.INT)
                      return div_t;                          -- stdlib.h:284
 
-    function getenv(varname: Win32.PCSTR) return Win32.PSTR;  
+    function getenv(varname: Win32.PCSTR) return Win32.PSTR;
                                                             -- stdlib.h:287
 
     function itoa(value  : Win32.INT;
@@ -359,7 +360,7 @@ private
 -- FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the entire risk as to
 -- the accuracy and the use of this file.  This file may be used, copied,
 -- modified and distributed only by licensees of Microsoft Corporation's
--- WIN32 Software Development Kit in accordance with the terms of the 
+-- WIN32 Software Development Kit in accordance with the terms of the
 -- licensee's End-User License Agreement for Microsoft Software for the
 -- WIN32 Development Kit.
 --
@@ -371,3 +372,6 @@ private
 -------------------------------------------------------------------------------
 
 end Win32.crt.Stdlib;
+
+--  ACT - 98/10/15
+--  change import pragma for MSVCRT
