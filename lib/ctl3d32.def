@@ -1,0 +1,57 @@
+; 
+;   ctl3d32.def
+;
+;   Exports for CTL3D32 DLL
+;
+;   Copyright (C) 1996 Free Software Foundation, Inc.
+;
+;   Author:  Scott Christley <scottc@net-community.com>
+;   Date: 1996
+;   
+;   This file is part of the Windows32 API Library.
+;
+;   This library is free software; you can redistribute it and/or
+;   modify it under the terms of the GNU Library General Public
+;   License as published by the Free Software Foundation; either
+;   version 2 of the License, or (at your option) any later version.
+;   
+;   This library is distributed in the hope that it will be useful,
+;   but WITHOUT ANY WARRANTY; without even the implied warranty of
+;   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;   Library General Public License for more details.
+;
+;   If you are interested in a warranty or support for this source code,
+;   contact Scott Christley <scottc@net-community.com> for more information.
+;   
+;   You should have received a copy of the GNU Library General Public
+;   License along with this library; see the file COPYING.LIB.
+;   If not, write to the Free Software Foundation, 
+;   59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+;
+LIBRARY CTL3D32
+EXPORTS
+BtnWndProc3d@16
+ComboWndProc3d@16
+Ctl3dAutoSubclass@4
+Ctl3dAutoSubclassEx@8
+Ctl3dColorChange@0
+Ctl3dCtlColor@8
+Ctl3dCtlColorEx@12
+Ctl3dDlgFramePaint@16
+Ctl3dDlgProc@16
+Ctl3dEnabled@0
+Ctl3dGetVer@0
+Ctl3dIsAutoSubclass@0
+Ctl3dRegister@4
+Ctl3dSetStyle@12
+Ctl3dSubclassCtl@4
+Ctl3dSubclassCtlEx@8
+Ctl3dSubclassDlg@8
+Ctl3dSubclassDlgEx@8
+Ctl3dUnAutoSubclass@0
+Ctl3dUnregister@4
+Ctl3dUnsubclassCtl@4
+Ctl3dWinIniChange@0
+EditWndProc3d@16
+ListWndProc3d@16
+StaticWndProc3d@16

@@ -1,0 +1,63 @@
+; 
+;   rasapi32.def
+;
+;   Exports for RASAPI32 DLL
+;
+;   Copyright (C) 1996 Free Software Foundation, Inc.
+;
+;   Author:  Scott Christley <scottc@net-community.com>
+;   Date: 1996
+;   
+;   This file is part of the Windows32 API Library.
+;
+;   This library is free software; you can redistribute it and/or
+;   modify it under the terms of the GNU Library General Public
+;   License as published by the Free Software Foundation; either
+;   version 2 of the License, or (at your option) any later version.
+;   
+;   This library is distributed in the hope that it will be useful,
+;   but WITHOUT ANY WARRANTY; without even the implied warranty of
+;   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;   Library General Public License for more details.
+;
+;   If you are interested in a warranty or support for this source code,
+;   contact Scott Christley <scottc@net-community.com> for more information.
+;   
+;   You should have received a copy of the GNU Library General Public
+;   License along with this library; see the file COPYING.LIB.
+;   If not, write to the Free Software Foundation, 
+;   59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+;
+LIBRARY RASAPI32
+EXPORTS
+RasCreatePhonebookEntryA@8
+RasCreatePhonebookEntryW@8
+RasDialA@24
+RasDialW@24
+RasDialWow@20
+RasEditPhonebookEntryA@12
+RasEditPhonebookEntryW@12
+RasEnumConnectionsA@12
+RasEnumConnectionsW@12
+RasEnumConnectionsWow@12
+RasEnumEntriesA@20
+RasEnumEntriesW@20
+RasEnumEntriesWow@20
+RasGetConnectResponse@8
+RasGetConnectStatusA@8
+RasGetConnectStatusW@8
+RasGetConnectStatusWow@8
+RasGetEntryDialParamsA@12
+RasGetEntryDialParamsW@12
+RasGetErrorStringA@12
+RasGetErrorStringW@12
+RasGetErrorStringWow@12
+RasGetHport@4
+RasGetProjectionInfoA@16
+RasGetProjectionInfoW@16
+RasHangUpA@4
+RasHangUpW@4
+RasHangUpWow@4
+RasSetEntryDialParamsA@12
+RasSetEntryDialParamsW@12
+RasSetOldPassword@8

@@ -1,0 +1,102 @@
+; 
+;   mpr.def
+;
+;   Exports for MPR DLL
+;
+;   Copyright (C) 1996 Free Software Foundation, Inc.
+;
+;   Author:  Scott Christley <scottc@net-community.com>
+;   Date: 1996
+;   
+;   This file is part of the Windows32 API Library.
+;
+;   This library is free software; you can redistribute it and/or
+;   modify it under the terms of the GNU Library General Public
+;   License as published by the Free Software Foundation; either
+;   version 2 of the License, or (at your option) any later version.
+;   
+;   This library is distributed in the hope that it will be useful,
+;   but WITHOUT ANY WARRANTY; without even the implied warranty of
+;   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;   Library General Public License for more details.
+;
+;   If you are interested in a warranty or support for this source code,
+;   contact Scott Christley <scottc@net-community.com> for more information.
+;   
+;   You should have received a copy of the GNU Library General Public
+;   License along with this library; see the file COPYING.LIB.
+;   If not, write to the Free Software Foundation, 
+;   59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+;
+LIBRARY MPR
+EXPORTS
+MultinetGetConnectionPerformanceA@8
+MultinetGetConnectionPerformanceW@8
+RestoreConnectionA0@8
+WNetAddConnection2A@16
+WNetAddConnection2W@16
+WNetAddConnection3A@20
+WNetAddConnection3W@20
+WNetAddConnectionA@12
+WNetAddConnectionW@12
+WNetCancelConnection2A@12
+WNetCancelConnection2W@12
+WNetCancelConnectionA@8
+WNetCancelConnectionW@8
+WNetClearConnections@4
+WNetCloseEnum@4
+WNetConnectionDialog1A@4
+WNetConnectionDialog1W@4
+WNetConnectionDialog2@16
+WNetConnectionDialog@8
+WNetDirectoryNotifyA@12
+WNetDirectoryNotifyW@12
+WNetDisconnectDialog1A@4
+WNetDisconnectDialog1W@4
+WNetDisconnectDialog2@16
+WNetDisconnectDialog@8
+WNetEnumResourceA@16
+WNetEnumResourceW@16
+WNetFMXEditPerm@12
+WNetFMXGetPermCaps@4
+WNetFMXGetPermHelp@24
+WNetFormatNetworkNameA@24
+WNetFormatNetworkNameW@24
+WNetGetConnection2A@12
+WNetGetConnection2W@12
+WNetGetConnectionA@12
+WNetGetConnectionW@12
+WNetGetDirectoryTypeA@12
+WNetGetDirectoryTypeW@12
+WNetGetFormatNameProc@4
+WNetGetLastErrorA@20
+WNetGetLastErrorW@20
+WNetGetNetworkInformationA@8
+WNetGetNetworkInformationW@8
+WNetGetPropertyTextA@24
+WNetGetPropertyTextW@24
+WNetGetProviderNameA@12
+WNetGetProviderNameW@12
+WNetGetResourceInformationA@16
+WNetGetResourceInformationW@16
+WNetGetResourceParentA@12
+WNetGetResourceParentW@12
+WNetGetSearchDialog@4
+WNetGetUniversalNameA@16
+WNetGetUniversalNameW@16
+WNetGetUserA@12
+WNetGetUserW@12
+WNetLogonNotify@36
+WNetOpenEnumA@20
+WNetOpenEnumW@20
+WNetPasswordChangeNotify@32
+WNetPropertyDialogA@20
+WNetPropertyDialogW@20
+WNetRestoreConnection@8
+WNetSetConnectionA@12
+WNetSetConnectionW@12
+WNetSetLastErrorA@12
+WNetSetLastErrorW@12
+WNetSupportGlobalEnum@4
+WNetUseConnectionA@32
+WNetUseConnectionW@32

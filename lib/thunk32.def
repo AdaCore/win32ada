@@ -1,0 +1,98 @@
+; 
+;   thunk32.def
+;
+;   Exports for THUNK32 DLL
+;
+;   Copyright (C) 1996 Free Software Foundation, Inc.
+;
+;   Author:  Scott Christley <scottc@net-community.com>
+;   Date: 1996
+;   
+;   This file is part of the Windows32 API Library.
+;
+;   This library is free software; you can redistribute it and/or
+;   modify it under the terms of the GNU Library General Public
+;   License as published by the Free Software Foundation; either
+;   version 2 of the License, or (at your option) any later version.
+;   
+;   This library is distributed in the hope that it will be useful,
+;   but WITHOUT ANY WARRANTY; without even the implied warranty of
+;   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;   Library General Public License for more details.
+;
+;   If you are interested in a warranty or support for this source code,
+;   contact Scott Christley <scottc@net-community.com> for more information.
+;   
+;   You should have received a copy of the GNU Library General Public
+;   License along with this library; see the file COPYING.LIB.
+;   If not, write to the Free Software Foundation, 
+;   59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+;
+LIBRARY THUNK32
+EXPORTS
+Callback12@12
+Callback16@16
+Callback20@20
+Callback24@24
+Callback28@28
+Callback32@32
+Callback36@36
+Callback40@40
+Callback44@44
+Callback48@48
+Callback4@4
+Callback52@52
+Callback56@56
+Callback60@60
+Callback64@64
+Callback8@8
+FT_Exit0
+FT_Exit12
+FT_Exit16
+FT_Exit20
+FT_Exit24
+FT_Exit28
+FT_Exit32
+FT_Exit36
+FT_Exit4
+FT_Exit40
+FT_Exit44
+FT_Exit48
+FT_Exit52
+FT_Exit56
+FT_Exit8
+FT_Prolog
+FT_Thunk
+K32Thk1632Epilog@0
+K32Thk1632Prolog@0
+MapHInstLS
+MapHInstLS_PN
+MapHInstSL
+MapHInstSL_PN
+MapLS@4
+MapSL@4
+MapSLFix@4
+QT_Thunk
+SMapLS
+SMapLS_IP_EBP_12
+SMapLS_IP_EBP_16
+SMapLS_IP_EBP_20
+SMapLS_IP_EBP_24
+SMapLS_IP_EBP_28
+SMapLS_IP_EBP_32
+SMapLS_IP_EBP_36
+SMapLS_IP_EBP_40
+SMapLS_IP_EBP_8
+SUnMapLS
+SUnMapLS_IP_EBP_12
+SUnMapLS_IP_EBP_16
+SUnMapLS_IP_EBP_20
+SUnMapLS_IP_EBP_24
+SUnMapLS_IP_EBP_28
+SUnMapLS_IP_EBP_32
+SUnMapLS_IP_EBP_36
+SUnMapLS_IP_EBP_40
+SUnMapLS_IP_EBP_8
+ThunkConnect32@24
+UnMapLS@4
+UnMapSLFixArray@8

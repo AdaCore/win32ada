@@ -1,0 +1,56 @@
+; 
+;   rpcdce4.def
+;
+;   Exports for RPCDCE4 DLL
+;
+;   Copyright (C) 1996 Free Software Foundation, Inc.
+;
+;   Author:  Scott Christley <scottc@net-community.com>
+;   Date: 1996
+;   
+;   This file is part of the Windows32 API Library.
+;
+;   This library is free software; you can redistribute it and/or
+;   modify it under the terms of the GNU Library General Public
+;   License as published by the Free Software Foundation; either
+;   version 2 of the License, or (at your option) any later version.
+;   
+;   This library is distributed in the hope that it will be useful,
+;   but WITHOUT ANY WARRANTY; without even the implied warranty of
+;   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;   Library General Public License for more details.
+;
+;   If you are interested in a warranty or support for this source code,
+;   contact Scott Christley <scottc@net-community.com> for more information.
+;   
+;   You should have received a copy of the GNU Library General Public
+;   License along with this library; see the file COPYING.LIB.
+;   If not, write to the Free Software Foundation, 
+;   59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+;
+LIBRARY RPCDCE4
+EXPORTS
+DceErrorInqTextA@8
+DceErrorInqTextW@8
+MIDL_user_allocate@4
+MIDL_user_free@4
+RpcBindingToStringBindingA@8
+RpcBindingToStringBindingW@8
+RpcMgmtEpEltInqBegin@24
+RpcMgmtEpEltInqDone@4
+RpcMgmtEpEltInqNextA@20
+RpcMgmtEpEltInqNextW@20
+RpcMgmtEpUnregister@16
+RpcMgmtInqIfIds@8
+RpcMgmtInqServerPrincNameA@12
+RpcMgmtInqServerPrincNameW@12
+RpcMgmtInqStats@8
+RpcMgmtIsServerListening@4
+RpcMgmtSetAuthorizationFn@4
+RpcMgmtStopServerListening@4
+RpcServerListen@12
+UuidCompare@12
+UuidCreateNil@4
+UuidEqual@12
+UuidHash@8
+UuidIsNil@8

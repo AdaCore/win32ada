@@ -1,0 +1,90 @@
+; 
+;   rpcns4.def
+;
+;   Exports for RPCNS4 DLL
+;
+;   Copyright (C) 1996 Free Software Foundation, Inc.
+;
+;   Author:  Scott Christley <scottc@net-community.com>
+;   Date: 1996
+;   
+;   This file is part of the Windows32 API Library.
+;
+;   This library is free software; you can redistribute it and/or
+;   modify it under the terms of the GNU Library General Public
+;   License as published by the Free Software Foundation; either
+;   version 2 of the License, or (at your option) any later version.
+;   
+;   This library is distributed in the hope that it will be useful,
+;   but WITHOUT ANY WARRANTY; without even the implied warranty of
+;   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;   Library General Public License for more details.
+;
+;   If you are interested in a warranty or support for this source code,
+;   contact Scott Christley <scottc@net-community.com> for more information.
+;   
+;   You should have received a copy of the GNU Library General Public
+;   License along with this library; see the file COPYING.LIB.
+;   If not, write to the Free Software Foundation, 
+;   59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+;
+LIBRARY RPCNS4
+EXPORTS
+I_GetDefaultEntrySyntax@0
+I_RpcNsGetBuffer@4
+I_RpcNsRaiseException@8
+I_RpcNsSendReceive@8
+I_RpcReBindBuffer@4
+RpcIfIdVectorFree@4
+RpcNsBindingExportA@20
+RpcNsBindingExportW@20
+RpcNsBindingImportBeginA@20
+RpcNsBindingImportBeginW@20
+RpcNsBindingImportDone@4
+RpcNsBindingImportNext@8
+RpcNsBindingLookupBeginA@24
+RpcNsBindingLookupBeginW@24
+RpcNsBindingLookupDone@4
+RpcNsBindingLookupNext@8
+RpcNsBindingSelect@8
+RpcNsBindingUnexportA@16
+RpcNsBindingUnexportW@16
+RpcNsEntryExpandNameA@12
+RpcNsEntryExpandNameW@12
+RpcNsEntryObjectInqBeginA@12
+RpcNsEntryObjectInqBeginW@12
+RpcNsEntryObjectInqDone@4
+RpcNsEntryObjectInqNext@8
+RpcNsGroupDeleteA@8
+RpcNsGroupDeleteW@8
+RpcNsGroupMbrAddA@16
+RpcNsGroupMbrAddW@16
+RpcNsGroupMbrInqBeginA@16
+RpcNsGroupMbrInqBeginW@16
+RpcNsGroupMbrInqDone@4
+RpcNsGroupMbrInqNextA@8
+RpcNsGroupMbrInqNextW@8
+RpcNsGroupMbrRemoveA@16
+RpcNsGroupMbrRemoveW@16
+RpcNsMgmtBindingUnexportA@20
+RpcNsMgmtBindingUnexportW@20
+RpcNsMgmtEntryCreateA@8
+RpcNsMgmtEntryCreateW@8
+RpcNsMgmtEntryDeleteA@8
+RpcNsMgmtEntryDeleteW@8
+RpcNsMgmtEntryInqIfIdsA@12
+RpcNsMgmtEntryInqIfIdsW@12
+RpcNsMgmtHandleSetExpAge@8
+RpcNsMgmtInqExpAge@4
+RpcNsMgmtSetExpAge@4
+RpcNsProfileDeleteA@8
+RpcNsProfileDeleteW@8
+RpcNsProfileEltAddA@28
+RpcNsProfileEltAddW@28
+RpcNsProfileEltInqBeginA@32
+RpcNsProfileEltInqBeginW@32
+RpcNsProfileEltInqDone@4
+RpcNsProfileEltInqNextA@20
+RpcNsProfileEltInqNextW@20
+RpcNsProfileEltRemoveA@20
+RpcNsProfileEltRemoveW@20

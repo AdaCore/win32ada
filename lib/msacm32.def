@@ -1,0 +1,76 @@
+; 
+;   msacm32.def
+;
+;   Exports for MSACM32 DLL
+;
+;   Copyright (C) 1996 Free Software Foundation, Inc.
+;
+;   Author:  Scott Christley <scottc@net-community.com>
+;   Date: 1996
+;   
+;   This file is part of the Windows32 API Library.
+;
+;   This library is free software; you can redistribute it and/or
+;   modify it under the terms of the GNU Library General Public
+;   License as published by the Free Software Foundation; either
+;   version 2 of the License, or (at your option) any later version.
+;   
+;   This library is distributed in the hope that it will be useful,
+;   but WITHOUT ANY WARRANTY; without even the implied warranty of
+;   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;   Library General Public License for more details.
+;
+;   If you are interested in a warranty or support for this source code,
+;   contact Scott Christley <scottc@net-community.com> for more information.
+;   
+;   You should have received a copy of the GNU Library General Public
+;   License along with this library; see the file COPYING.LIB.
+;   If not, write to the Free Software Foundation, 
+;   59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+;
+LIBRARY MSACM32
+EXPORTS
+XRegThunkEntry@36
+acmDriverAddA@20
+acmDriverAddW@20
+acmDriverClose@8
+acmDriverDetailsA@12
+acmDriverDetailsW@12
+acmDriverEnum@12
+acmDriverID@12
+acmDriverMessage@16
+acmDriverOpen@12
+acmDriverPriority@12
+acmDriverRemove@8
+acmFilterChooseA@4
+acmFilterChooseW@4
+acmFilterDetailsA@12
+acmFilterDetailsW@12
+acmFilterEnumA@20
+acmFilterEnumW@20
+acmFilterTagDetailsA@12
+acmFilterTagDetailsW@12
+acmFilterTagEnumA@20
+acmFilterTagEnumW@20
+acmFormatChooseA@4
+acmFormatChooseW@4
+acmFormatDetailsA@12
+acmFormatDetailsW@12
+acmFormatEnumA@20
+acmFormatEnumW@20
+acmFormatSuggest@20
+acmFormatTagDetailsA@12
+acmFormatTagDetailsW@12
+acmFormatTagEnumA@20
+acmFormatTagEnumW@20
+acmGetVersion@0
+acmMessage32@24
+acmMetrics@12
+acmStreamClose@8
+acmStreamConvert@12
+acmStreamMessage@16
+acmStreamOpen@32
+acmStreamPrepareHeader@12
+acmStreamReset@8
+acmStreamSize@16
+acmStreamUnprepareHeader@12
