@@ -57,11 +57,11 @@ package Win32.crt.Stdlib is
 
     type SAP is access String_Array;
     Sys_Errlist_Addr : constant SAP;
-    pragma Import (C, Sys_Errlist_Addr, "__imp__sys_errlist");
+    pragma Import (C, Sys_Errlist_Addr, "_sys_errlist");
 
     type AI is access Win32.INT;
     sys_nerr_addr : constant AI;
-    pragma Import (C, sys_nerr_addr, "__imp__sys_nerr");
+    pragma Import (C, sys_nerr_addr, "_sys_nerr");
 
     function argc_addr return AI;
     pragma Import(C, argc_addr, "__p___argc");
@@ -77,7 +77,7 @@ package Win32.crt.Stdlib is
     pragma Import(C, fmode_addr, "__p__fmode");
 
     fileinfo_addr : constant AI;
-    pragma Import(C, fileinfo_addr, "__imp__fileinfo");
+    pragma Import(C, fileinfo_addr, "_fileinfo");
 
     type SP is access Win32.PSTR;
     function pgmptr_addr return SP;
