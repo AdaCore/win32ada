@@ -27,12 +27,13 @@ package Win32.Winreg is
 
    subtype HKEY is Win32.Winnt.HANDLE;                    --  winreg.h:37
 
-   HKEY_CLASSES_ROOT : constant  HKEY;              --  winreg.h:44
-   HKEY_CURRENT_USER : constant  HKEY;              --  winreg.h:45
-   HKEY_LOCAL_MACHINE : constant  HKEY;              --  winreg.h:46
-   HKEY_USERS : constant  HKEY;              --  winreg.h:47
-   HKEY_PERFORMANCE_DATA : constant  HKEY;              --  winreg.h:48
-   HKEY_PERFORMANCE_TEXT : constant  HKEY;              --  winreg.h:49
+   HKEY_CLASSES_ROOT        : constant  HKEY;              --  winreg.h:44
+   HKEY_CURRENT_CONFIG      : constant  HKEY;              --  winreg.h
+   HKEY_CURRENT_USER        : constant  HKEY;              --  winreg.h:45
+   HKEY_LOCAL_MACHINE       : constant  HKEY;              --  winreg.h:46
+   HKEY_USERS               : constant  HKEY;              --  winreg.h:47
+   HKEY_PERFORMANCE_DATA    : constant  HKEY;              --  winreg.h:48
+   HKEY_PERFORMANCE_TEXT    : constant  HKEY;              --  winreg.h:49
    HKEY_PERFORMANCE_NLSTEXT : constant  HKEY;              --  winreg.h:50
    WIN31_CLASS : constant  Win32.LPSTR := null;
    --  winreg.h:57
@@ -557,6 +558,8 @@ private
 
    HKEY_CLASSES_ROOT : constant  HKEY := To_Hkey (16#80000000#);
    --  winreg.h:44
+   HKEY_CURRENT_CONFIG : constant  HKEY := To_Hkey (16#80000005#);
+   --  winreg.h
    HKEY_CURRENT_USER : constant  HKEY := To_Hkey (16#80000001#);
    --  winreg.h:45
    HKEY_LOCAL_MACHINE : constant  HKEY := To_Hkey (16#80000002#);
@@ -640,3 +643,12 @@ private
 end Win32.Winreg;
 
 
+----------------------
+-- REVISION HISTORY --
+----------------------
+
+--  ----------------------------
+--  New changes after this line.  Each line starts with: "--  "
+--  (HKEY_CURRENT_CONFIG): new constant.
+--  Fixes 8618-001
+--  Minor reformating.
