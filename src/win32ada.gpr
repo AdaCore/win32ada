@@ -1,0 +1,10 @@
+project Win32Ada is
+
+   for Languages use ("ada");
+   for Source_Dirs use (".");
+   for Object_Dir use ".";
+
+   package Builder is
+      for Default_Switches ("Ada") use ("-O2");
+   end Builder;
+end Win32Ada;
