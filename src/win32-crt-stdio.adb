@@ -1,16 +1,16 @@
--- $Source$ 
--- $Revision$ $Date$ $Author$ 
+--  $Source$
+--  $Revision$ $Date$ $Author$
 -------------------------------------------------------------------------------
 --
--- THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS FURNISHED "AS IS" WITHOUT 
--- WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED 
--- TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR 
--- PURPOSE.  The user assumes the entire risk as to the accuracy and the 
--- use of this file.
+--  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS FURNISHED "AS IS"
+--  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
+--  BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY
+--  AND/OR FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the
+--  entire risk as to the accuracy and the use of this file.
 --
--- Copyright (c) Intermetrics, Inc. 1995
--- Royalty-free, unlimited, worldwide, non-exclusive use, modification, 
--- reproduction and further distribution of this file is permitted.
+--  Copyright (c) Intermetrics, Inc. 1995
+--  Royalty-free, unlimited, worldwide, non-exclusive use, modification,
+--  reproduction and further distribution of this file is permitted.
 --
 -------------------------------------------------------------------------------
 
@@ -21,220 +21,222 @@ with Stdarg.Inst;
 
 package body Win32.crt.Stdio is
 
-    use Stdarg, Stdarg.Impl, Stdarg.Inst;
+   use Stdarg, Stdarg.Impl, Stdarg.Inst;
 
-    function feof (Stream: FILE_Access) return Boolean is
-        use Interfaces.C;
-    begin
-        return((Unsigned(Stream.Flag) and IOEOF) /= 0);
-    end Feof;
-
-    function Ferror (Stream: FILE_Access) return Boolean is
+   function feof (Stream : FILE_Access) return Boolean is
       use Interfaces.C;
-    begin
-        return((Unsigned(Stream.Flag) and IOERR) /= 0);
-    end Ferror;
+   begin
+      return ((unsigned (Stream.flag) and IOEOF) /= 0);
+   end feof;
 
-    function Fileno (Stream: FILE_Access) return Interfaces.C.Int is
-    begin
-      return Stream.File;
-    end Fileno;
- 
-    function "&" is new Stdarg.Concat(FILE_Access);
-    function "&" is new Stdarg.Concat(Win32.PCHAR);
-    function "&" is new Stdarg.Concat(Win32.PCSTR);
+   function Ferror (Stream : FILE_Access) return Boolean is
+      use Interfaces.C;
+   begin
+      return ((unsigned (Stream.flag) and IOERR) /= 0);
+   end Ferror;
 
-    function fprintf (
-        stream : FILE_Access;
-        format : Win32.PCSTR;
-        args   : Stdarg.ArgList := Stdarg.Empty) return Win32.INT is
+   function Fileno (Stream : FILE_Access) return Interfaces.C.int is
+   begin
+      return Stream.file;
+   end Fileno;
 
-        Complete_Args: Stdarg.Arglist :=
-            Stdarg.Empty & Stream & Format & Args;
+   function "&" is new Stdarg.Concat (FILE_Access);
+   function "&" is new Stdarg.Concat (Win32.PCHAR);
+   function "&" is new Stdarg.Concat (Win32.PCSTR);
 
-        function C_Fprintf return Win32.INT;
-        pragma Import(C, C_Fprintf, "fprintf");
+   function fprintf
+     (stream : FILE_Access;
+      format : Win32.PCSTR;
+      args : Stdarg.ArgList := Stdarg.Empty) return Win32.INT is
 
-        function To_INT is new Ada.Unchecked_Conversion(
-                         Stdarg.C_Param, Win32.INT);
-    begin
-        return To_INT(F_Varargs(
-            C_Fprintf'Address,
-            ArgCount(Complete_Args),
-            Address_of_First_Arg(Complete_Args)));
-    end fprintf;
+      Complete_Args : Stdarg.ArgList :=
+        Stdarg.Empty & stream & format & args;
 
-    function fscanf (
-        stream : FILE_Access;
-        format : Win32.PCSTR;
-        args   : Stdarg.ArgList := Stdarg.Empty) return Win32.INT is
+      function C_Fprintf return Win32.INT;
+      pragma Import (C, C_Fprintf, "fprintf");
 
-        Complete_Args: Stdarg.Arglist :=
-            Stdarg.Empty & Stream & Format & Args;
+      function To_INT is new Ada.Unchecked_Conversion
+        (Stdarg.C_Param, Win32.INT);
+   begin
+      return To_INT (F_Varargs
+        (C_Fprintf'Address,
+        ArgCount (Complete_Args),
+        Address_of_First_Arg (Complete_Args)));
+   end fprintf;
 
-        function C_fscanf return Win32.INT;
-        pragma Import(C, C_fscanf, "fscanf");
+   function fscanf
+     (stream : FILE_Access;
+      format : Win32.PCSTR;
+      args : Stdarg.ArgList := Stdarg.Empty) return Win32.INT is
 
-        function To_INT is new Ada.Unchecked_Conversion(
-                         Stdarg.C_Param, Win32.INT);
-    begin
-        return To_INT(F_Varargs(
-            C_fscanf'Address,
-            ArgCount(Complete_Args),
-            Address_of_First_Arg(Complete_Args)));
-    end fscanf;
+      Complete_Args : Stdarg.ArgList :=
+        Stdarg.Empty & stream & format & args;
 
-    function printf (
-        format : Win32.PCSTR;
-        args   : Stdarg.ArgList := Stdarg.Empty) return Win32.INT is
+      function C_fscanf return Win32.INT;
+      pragma Import (C, C_fscanf, "fscanf");
 
-        Complete_Args: Stdarg.Arglist :=
-            Stdarg.Empty & Format & Args;
+      function To_INT is new Ada.Unchecked_Conversion
+        (Stdarg.C_Param, Win32.INT);
+   begin
+      return To_INT (F_Varargs
+        (C_fscanf'Address,
+        ArgCount (Complete_Args),
+        Address_of_First_Arg (Complete_Args)));
+   end fscanf;
 
-        function C_printf return Win32.INT;
-        pragma Import(C, C_printf, "printf");
+   function printf
+     (format : Win32.PCSTR;
+      args : Stdarg.ArgList := Stdarg.Empty) return Win32.INT is
 
-        function To_INT is new Ada.Unchecked_Conversion(
-                         Stdarg.C_Param, Win32.INT);
-    begin
-        -- Dump(Address_of_First_Arg(Complete_Args), ArgCount(Complete_Args));
-        return To_INT(F_Varargs(
-            C_printf'Address,
-            ArgCount(Complete_Args),
-            Address_of_First_Arg(Complete_Args)));
-    end printf;
+      Complete_Args : Stdarg.ArgList :=
+        Stdarg.Empty & format & args;
 
-    function scanf (
-        format : Win32.PCSTR;
-        args   : Stdarg.ArgList := Stdarg.Empty) return Win32.INT is
+      function C_printf return Win32.INT;
+      pragma Import (C, C_printf, "printf");
 
-        Complete_Args: Stdarg.Arglist :=
-            Stdarg.Empty & Format & Args;
+      function To_INT is new Ada.Unchecked_Conversion
+        (Stdarg.C_Param, Win32.INT);
+   begin
+      --  Dump(Address_of_First_Arg(Complete_Args), ArgCount(Complete_Args));
+      return To_INT (F_Varargs
+        (C_printf'Address,
+        ArgCount (Complete_Args),
+        Address_of_First_Arg (Complete_Args)));
+   end printf;
 
-        function C_scanf return Win32.INT;
-        pragma Import(C, C_scanf, "scanf");
+   function scanf
+     (format : Win32.PCSTR;
+      args : Stdarg.ArgList := Stdarg.Empty) return Win32.INT is
 
-        function To_INT is new Ada.Unchecked_Conversion(
-                         Stdarg.C_Param, Win32.INT);
-    begin
-        return To_INT(F_Varargs(
-            C_scanf'Address,
-            ArgCount(Complete_Args),
-            Address_of_First_Arg(Complete_Args)));
-    end scanf;
+      Complete_Args : Stdarg.ArgList :=
+        Stdarg.Empty & format & args;
 
-    function snprintf (
-        buffer : Win32.PSTR;
-        count  : size_t;
-        format : Win32.PCSTR;
-        args   : Stdarg.ArgList := Stdarg.Empty) return Win32.INT is
+      function C_scanf return Win32.INT;
+      pragma Import (C, C_scanf, "scanf");
 
-        Complete_Args: Stdarg.Arglist :=
-            Stdarg.Empty & Buffer & Int(Count) & Format & Args;
+      function To_INT is new Ada.Unchecked_Conversion
+        (Stdarg.C_Param, Win32.INT);
+   begin
+      return To_INT (F_Varargs
+        (C_scanf'Address,
+        ArgCount (Complete_Args),
+        Address_of_First_Arg (Complete_Args)));
+   end scanf;
 
-        function C_snprintf return Win32.INT;
-        pragma Import(C, C_snprintf, "_snprintf");
+   function snprintf
+     (buffer : Win32.PSTR;
+      count : size_t;
+      format : Win32.PCSTR;
+      args : Stdarg.ArgList := Stdarg.Empty) return Win32.INT is
 
-        function To_INT is new Ada.Unchecked_Conversion(
-                         Stdarg.C_Param, Win32.INT);
-    begin
-        return To_INT(F_Varargs(
-            C_snprintf'Address,
-            ArgCount(Complete_Args),
-            Address_of_First_Arg(Complete_Args)));
-    end snprintf;
+      Complete_Args : Stdarg.ArgList :=
+        Stdarg.Empty & buffer & INT (count) & format & args;
 
-    function sprintf (
-        buffer : Win32.PSTR;
-        format : Win32.PCSTR;
-        args   : Stdarg.ArgList := Stdarg.Empty) return Win32.INT is
+      function C_snprintf return Win32.INT;
+      pragma Import (C, C_snprintf, "_snprintf");
 
-        Complete_Args: Stdarg.Arglist :=
-            Stdarg.Empty & Buffer & Format & Args;
+      function To_INT is new Ada.Unchecked_Conversion
+        (Stdarg.C_Param, Win32.INT);
+   begin
+      return To_INT (F_Varargs
+        (C_snprintf'Address,
+        ArgCount (Complete_Args),
+        Address_of_First_Arg (Complete_Args)));
+   end snprintf;
 
-        function C_sprintf return Win32.INT;
-        pragma Import(C, C_sprintf, "sprintf");
+   function sprintf
+     (buffer : Win32.PSTR;
+      format : Win32.PCSTR;
+      args : Stdarg.ArgList := Stdarg.Empty) return Win32.INT is
 
-        function To_INT is new Ada.Unchecked_Conversion(
-                         Stdarg.C_Param, Win32.INT);
-    begin
-        return To_INT(F_Varargs(
-            C_sprintf'Address,
-            ArgCount(Complete_Args),
-            Address_of_First_Arg(Complete_Args)));
-    end sprintf;
+      Complete_Args : Stdarg.ArgList :=
+        Stdarg.Empty & buffer & format & args;
 
-    function sscanf (
-        buffer : Win32.PSTR;
-        format : Win32.PCSTR;
-        args   : Stdarg.ArgList := Stdarg.Empty) return Win32.INT is
+      function C_sprintf return Win32.INT;
+      pragma Import (C, C_sprintf, "sprintf");
 
-        Complete_Args: Stdarg.Arglist :=
-            Stdarg.Empty & Buffer & Format & Args;
+      function To_INT is new Ada.Unchecked_Conversion
+        (Stdarg.C_Param, Win32.INT);
+   begin
+      return To_INT (F_Varargs
+        (C_sprintf'Address,
+        ArgCount (Complete_Args),
+        Address_of_First_Arg (Complete_Args)));
+   end sprintf;
 
-        function C_sscanf return Win32.INT;
-        pragma Import(C, C_sscanf, "sscanf");
+   function sscanf
+     (buffer : Win32.PSTR;
+      format : Win32.PCSTR;
+      args : Stdarg.ArgList := Stdarg.Empty) return Win32.INT is
 
-        function To_INT is new Ada.Unchecked_Conversion(
-                         Stdarg.C_Param, Win32.INT);
-    begin
-        return To_INT(F_Varargs(
-            C_sscanf'Address,
-            ArgCount(Complete_Args),
-            Address_of_First_Arg(Complete_Args)));
-    end sscanf;
+      Complete_Args : Stdarg.ArgList :=
+        Stdarg.Empty & buffer & format & args;
 
-    function vfprintf (
-        stream : FILE_Access;
-        format : Win32.PCSTR;
-        args   : Stdarg.ArgList := Stdarg.Empty) return Win32.INT is
+      function C_sscanf return Win32.INT;
+      pragma Import (C, C_sscanf, "sscanf");
 
-        function C_Vfprintf(Stream : FILE_Access;
-                            Format : Win32.PCSTR;
-                            AP     : Param_Access) return Win32.INT;
-        pragma Import(C, C_Vfprintf, "vfprintf");
-    begin
-        return C_Vfprintf(Stream, Format, Address_of_Vararg_List (Args));
-    end vfprintf;
+      function To_INT is new Ada.Unchecked_Conversion
+        (Stdarg.C_Param, Win32.INT);
+   begin
+      return To_INT (F_Varargs
+        (C_sscanf'Address,
+        ArgCount (Complete_Args),
+        Address_of_First_Arg (Complete_Args)));
+   end sscanf;
 
-    function vprintf (
-        format : Win32.PCSTR;
-        args   : Stdarg.ArgList := Stdarg.Empty) return Win32.INT is
+   function vfprintf
+     (stream : FILE_Access;
+      format : Win32.PCSTR;
+      args : Stdarg.ArgList := Stdarg.Empty) return Win32.INT is
 
-        function C_Vprintf(Format  : Win32.PCSTR;
-                            AP     : Param_Access) return Win32.INT;
-        pragma Import(C, C_Vprintf, "vprintf");
-    begin
-        return C_Vprintf(Format, Address_of_Vararg_List (Args));
-    end vprintf;
+      function C_Vfprintf (Stream : FILE_Access;
+                           format : Win32.PCSTR;
+                           AP : Param_Access) return Win32.INT;
+      pragma Import (C, C_Vfprintf, "vfprintf");
+   begin
+      return C_Vfprintf (stream, format, Address_of_Vararg_List (args));
+   end vfprintf;
 
-    function vsnprintf (
-        buffer : Win32.PSTR;
-        count  : size_t;
-        format : Win32.PCSTR;
-        args   : Stdarg.ArgList := Stdarg.Empty) return Win32.INT is
+   function vprintf
+     (format : Win32.PCSTR;
+      args : Stdarg.ArgList := Stdarg.Empty) return Win32.INT is
 
-        function C_Vsnprintf(Buffer  : Win32.PSTR;
-                              Count  : size_t;
-                              Format : Win32.PCSTR;
-                              AP     : Param_Access) return Win32.INT;
-        pragma Import(C, C_Vsnprintf, "_vsnprintf");
-    begin
-        return C_Vsnprintf(Buffer, Count, Format, 
-			   Address_of_Vararg_List (Args));
-    end vsnprintf;
+      function C_Vprintf (format : Win32.PCSTR;
+                          AP : Param_Access) return Win32.INT;
+      pragma Import (C, C_Vprintf, "vprintf");
+   begin
+      return C_Vprintf (format, Address_of_Vararg_List (args));
+   end vprintf;
 
-    function vsprintf (
-        buffer : Win32.PSTR;
-        format : Win32.PCSTR;
-        args   : Stdarg.ArgList := Stdarg.Empty) return Win32.INT is
+   function vsnprintf
+     (buffer : Win32.PSTR;
+      count : size_t;
+      format : Win32.PCSTR;
+      args : Stdarg.ArgList := Stdarg.Empty) return Win32.INT is
 
-        function C_Vsprintf(Buffer  : Win32.PSTR;
-                             Format : Win32.PCSTR;
-                             AP     : Param_Access) return Win32.INT;
-        pragma Import(C, C_Vsprintf, "vsprintf");
-    begin
-        return C_Vsprintf(Buffer, Format, Address_of_Vararg_List (Args));
-    end vsprintf;
- 
+      function C_Vsnprintf (Buffer : Win32.PSTR;
+                            Count : size_t;
+                            format : Win32.PCSTR;
+                            AP : Param_Access) return Win32.INT;
+      pragma Import (C, C_Vsnprintf, "_vsnprintf");
+   begin
+      return C_Vsnprintf (buffer, count, format,
+        Address_of_Vararg_List (args));
+   end vsnprintf;
+
+   function vsprintf
+     (buffer : Win32.PSTR;
+      format : Win32.PCSTR;
+      args : Stdarg.ArgList := Stdarg.Empty) return Win32.INT is
+
+      function C_Vsprintf (Buffer : Win32.PSTR;
+                           format : Win32.PCSTR;
+                           AP : Param_Access) return Win32.INT;
+      pragma Import (C, C_Vsprintf, "vsprintf");
+   begin
+      return C_Vsprintf (buffer, format, Address_of_Vararg_List (args));
+   end vsprintf;
+
 end Win32.crt.Stdio;
+
+
