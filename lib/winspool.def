@@ -86,7 +86,6 @@ DeletePrinterIC@4
 DevQueryPrint@12
 DevQueryPrintEx@4
 DeviceCapabilities@20
-DeviceCapabilities@20
 DeviceCapabilitiesA@20
 DeviceCapabilitiesW@20
 DeviceMode@16
