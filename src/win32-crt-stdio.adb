@@ -29,16 +29,16 @@ package body Win32.crt.Stdio is
       return ((unsigned (Stream.flag) and IOEOF) /= 0);
    end feof;
 
-   function Ferror (Stream : FILE_Access) return Boolean is
+   function ferror (Stream : FILE_Access) return Boolean is
       use Interfaces.C;
    begin
       return ((unsigned (Stream.flag) and IOERR) /= 0);
-   end Ferror;
+   end ferror;
 
-   function Fileno (Stream : FILE_Access) return Interfaces.C.int is
+   function fileno (Stream : FILE_Access) return Interfaces.C.int is
    begin
       return Stream.file;
-   end Fileno;
+   end fileno;
 
    function "&" is new Stdarg.Concat (FILE_Access);
    function "&" is new Stdarg.Concat (Win32.PCHAR);
@@ -238,5 +238,3 @@ package body Win32.crt.Stdio is
    end vsprintf;
 
 end Win32.crt.Stdio;
-
-

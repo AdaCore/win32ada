@@ -15,7 +15,7 @@
 -------------------------------------------------------------------------------
 
 
-package body Win32.wsnetbs is
+package body Win32.Wsnetbs is
 
    use type Interfaces.C.size_t;
 
@@ -54,6 +54,4 @@ package body Win32.wsnetbs is
       snb.all.snb_name (NETBIOS_NAME_LENGTH - 1) := port;
    end SET_NETBIOS_SOCKADDR;
 
-end Win32.wsnetbs;
-
-
+end Win32.Wsnetbs;

@@ -2262,11 +2262,11 @@ package body Win32.Windowsx is
    function To_DWORD is new Ada.Unchecked_Conversion (Win32.LRESULT,
      Win32.DWORD);
 
-   function FORWARD_WM_MENUCHAR (hwnd : Win32.Windef.HWND;
-                                 ch : Win32.UINT;
+   function FORWARD_WM_MENUCHAR (hwnd  : Win32.Windef.HWND;
+                                 ch    : Win32.UINT;
                                  flags : Win32.UINT;
-                                 hMenu : Win32.Windef.HMENU;
-                                 fn : LPDEFFN)
+                                 hmenu : Win32.Windef.HMENU;
+                                 fn    : LPDEFFN)
                                 return Win32.DWORD is      --  windowsx.h:602
    begin
       return To_DWORD

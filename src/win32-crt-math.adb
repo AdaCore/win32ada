@@ -30,8 +30,3 @@ package body Win32.crt.Math is
    end HUGE;
 
 end Win32.crt.Math;
-
---  ACT - 98/10/15
---  change import pragma for MSVCRT
-
-

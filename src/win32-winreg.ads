@@ -641,14 +641,3 @@ private
    --  winreg.h:659
 
 end Win32.Winreg;
-
-
-----------------------
--- REVISION HISTORY --
-----------------------
-
---  ----------------------------
---  New changes after this line.  Each line starts with: "--  "
---  (HKEY_CURRENT_CONFIG): new constant.
---  Fixes 8618-001
---  Minor reformating.

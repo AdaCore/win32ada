@@ -369,8 +369,3 @@ private
    pragma Import (C, exit_program_now, "_exit");
 
 end Win32.crt.Stdlib;
-
---  ACT - 98/10/15
---  change import pragma for MSVCRT
-
-

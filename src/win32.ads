@@ -348,14 +348,3 @@ private
    ----------------------------------------------------------------------------
 
 end Win32;
-
-
-----------------------
--- REVISION HISTORY --
-----------------------
-
---  ----------------------------
---  New changes after this line.  Each line starts with: "--  "
---  Fix style errors.
---  Put in DOS format.
---  Work inspired by 9918-015.

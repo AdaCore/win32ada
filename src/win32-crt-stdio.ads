@@ -369,8 +369,3 @@ private
    pragma Import (C, unlink, "_unlink");
 
 end Win32.crt.Stdio;
-
---  ACT - 98/10/15
---  change import pragma for MSVCRT
-
-

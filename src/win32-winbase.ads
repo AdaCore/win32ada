@@ -6198,8 +6198,3 @@ private
    pragma Import (Stdcall, GetVersionExW, "GetVersionExW"); --  winbase.h :6692
 
 end Win32.Winbase;
-
---  ACT - December 22th, 1998
---  add the GetFileAttributesEx functions calls
-
-

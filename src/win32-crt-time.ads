@@ -133,9 +133,3 @@ private
    pragma Import (C, setsystime, "_setsystime");            --  time.h:154
 
 end Win32.crt.Time;
-
---  ACT - 98/10/15
---  change import pragma for MSVCRT
---  change clock_t from INT to LONG
-
-
