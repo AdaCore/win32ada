@@ -37,6 +37,7 @@ ChooseFontW@4
 CommDlgExtendedError@0
 FindTextA@4
 FindTextW@4
+FormatCharDlgProc@16
 GetFileTitleA@12
 GetFileTitleW@12
 GetOpenFileNameA@4

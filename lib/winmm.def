@@ -35,6 +35,9 @@ DefDriverProc@20
 DriverCallback@28
 DrvGetModuleHandle@4
 GetDriverModuleHandle@4
+MigrateAllDrivers@0
+MigrateMidiUser@0
+MigrateSoundEvents@0
 NotifyCallbackData@20
 OpenDriver@12
 PlaySound@12
@@ -142,6 +145,7 @@ mixerMessage@16
 mixerOpen@20
 mixerSetControlDetails@12
 mmDrvInstall@12
+mmDrvInstall@16
 mmGetCurrentTask@0
 mmTaskBlock@4
 mmTaskCreate@12

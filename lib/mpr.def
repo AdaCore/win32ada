@@ -32,6 +32,8 @@ LIBRARY MPR
 EXPORTS
 MultinetGetConnectionPerformanceA@8
 MultinetGetConnectionPerformanceW@8
+MultinetGetErrorTextA@16
+MultinetGetErrorTextW@16
 RestoreConnectionA0@8
 WNetAddConnection2A@16
 WNetAddConnection2W@16
@@ -64,11 +66,14 @@ WNetFormatNetworkNameA@24
 WNetFormatNetworkNameW@24
 WNetGetConnection2A@12
 WNetGetConnection2W@12
+WNetGetConnection3A@20
+WNetGetConnection3W@20
 WNetGetConnectionA@12
 WNetGetConnectionW@12
 WNetGetDirectoryTypeA@12
 WNetGetDirectoryTypeW@12
 WNetGetFormatNameProc@4
+WNetGetHomeDirectoryW@12
 WNetGetLastErrorA@20
 WNetGetLastErrorW@20
 WNetGetNetworkInformationA@8
@@ -77,6 +82,8 @@ WNetGetPropertyTextA@24
 WNetGetPropertyTextW@24
 WNetGetProviderNameA@12
 WNetGetProviderNameW@12
+WNetGetProviderTypeA@8
+WNetGetProviderTypeW@8
 WNetGetResourceInformationA@16
 WNetGetResourceInformationW@16
 WNetGetResourceParentA@12
@@ -93,6 +100,7 @@ WNetPasswordChangeNotify@32
 WNetPropertyDialogA@20
 WNetPropertyDialogW@20
 WNetRestoreConnection@8
+WNetRestoreConnectionW@8
 WNetSetConnectionA@12
 WNetSetConnectionW@12
 WNetSetLastErrorA@12

@@ -31,15 +31,12 @@
 LIBRARY IMM32
 EXPORTS
 ImmAssociateContext@8
-_imp__ImmAssociateContext@8
 ImmConfigureIMEA@16
 ImmConfigureIMEW@16
 ImmCreateContext@0
-_imp__ImmCreateContext@0
 ImmCreateIMCC@4
 ImmCreateSoftKeyboard@16
 ImmDestroyContext@4
-_imp__ImmDestroyContext@4
 ImmDestroyIMCC@4
 ImmDestroySoftKeyboard@4
 ImmEnumRegisterWordA@24
@@ -58,7 +55,6 @@ ImmGetCompositionStringA@16
 ImmGetCompositionStringW@16
 ImmGetCompositionWindow@8
 ImmGetContext@4
-_imp__ImmGetContext@4
 ImmGetConversionListA@24
 ImmGetConversionListW@24
 ImmGetConversionStatus@12
@@ -91,7 +87,6 @@ ImmReSizeIMCC@8
 ImmRegisterWordA@16
 ImmRegisterWordW@16
 ImmReleaseContext@8
-_imp__ImmReleaseContext@8
 ImmSetCandidateWindow@8
 ImmSetCompositionFontA@8
 ImmSetCompositionFontW@8

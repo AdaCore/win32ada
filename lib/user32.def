@@ -42,6 +42,8 @@ BeginDeferWindowPos@4
 BeginPaint@8
 BringWindowToTop@4
 BroadcastSystemMessage@20
+BroadcastSystemMessageA@20
+BroadcastSystemMessageW@20
 CalcChildScroll@8
 CallMsgFilter@8
 CallMsgFilterA@8
@@ -53,6 +55,8 @@ CascadeChildWindows@8
 CascadeWindows@20
 ChangeClipboardChain@8
 ChangeDisplaySettingsA@8
+ChangeDisplaySettingsExA@20
+ChangeDisplaySettingsExW@20
 ChangeDisplaySettingsW@8
 ChangeMenuA@20
 ChangeMenuW@20
@@ -280,7 +284,6 @@ GetLastActivePopup@4
 GetMenu@4
 GetMenuCheckMarkDimensions@0
 GetMenuContextHelpId@4
-_imp__GetMenuContextHelpId@4
 GetMenuDefaultItem@12
 GetMenuItemCount@4
 GetMenuItemID@8
@@ -324,7 +327,6 @@ GetUserObjectInformationW@20
 GetUserObjectSecurity@20
 GetWindow@8
 GetWindowContextHelpId@4
-_imp__GetWindowContextHelpId@4
 GetWindowDC@4
 GetWindowLongA@8
 GetWindowLongW@8
@@ -417,6 +419,7 @@ ModifyMenuA@20
 ModifyMenuW@20
 MoveWindow@24
 MsgWaitForMultipleObjects@20
+MsgWaitForMultipleObjectsEx@20
 OemKeyScan@4
 OemToCharA@8
 OemToCharBuffA@12
@@ -495,7 +498,6 @@ SetKeyboardState@4
 SetLastErrorEx@8
 SetMenu@8
 SetMenuContextHelpId@8
-_imp__SetMenuContextHelpId@8
 SetMenuDefaultItem@12
 SetMenuItemBitmaps@20
 SetMenuItemInfoA@16
@@ -522,7 +524,6 @@ SetUserObjectInformationA@16
 SetUserObjectInformationW@16
 SetUserObjectSecurity@12
 SetWindowContextHelpId@8
-_imp__SetWindowContextHelpId@8
 SetWindowLongA@12
 SetWindowLongW@12
 SetWindowPlacement@8
@@ -554,6 +555,7 @@ ToAscii@20
 ToAsciiEx@24
 ToUnicode@24
 ToUnicodeEx@28
+TrackMouseEvent@4
 TrackPopupMenu@28
 TrackPopupMenuEx@24
 TranslateAccelerator@12

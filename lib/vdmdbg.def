@@ -34,11 +34,11 @@ VDMBreakThread@8
 VDMDetectWOW@0
 VDMEnumProcessWOW@8
 VDMEnumTaskWOW@12
+VDMEnumTaskWOWEx@12
 VDMGetModuleSelector@20
 VDMGetPointer@20
 VDMGetSelectorModule@32
 VDMGetThreadContext@8
-_imp__VDMGetThreadContext@8
 VDMGetThreadSelectorEntry@16
 VDMGlobalFirst@24
 VDMGlobalNext@24
@@ -47,4 +47,5 @@ VDMModuleFirst@20
 VDMModuleNext@20
 VDMProcessException@4
 VDMSetThreadContext@8
-_imp__VDMSetThreadContext@8
+VDMStartTaskInWOW@12
+VDMTerminateTaskWOW@8

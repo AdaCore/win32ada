@@ -30,10 +30,11 @@
 ;
 LIBRARY URL
 EXPORTS
-URLAssociationDialogW@24
-URLAssociationDialogA@24
-TranslateURLW@12
-TranslateURLA@12
-MIMEAssociationDialogW@24
-MIMEAssociationDialogA@24
+AddMIMEFileTypesPS@8
 InetIsOffline@4
+MIMEAssociationDialogA@24
+MIMEAssociationDialogW@24
+TranslateURLA@12
+TranslateURLW@12
+URLAssociationDialogA@24
+URLAssociationDialogW@24
