@@ -370,17 +370,3 @@ private
    pragma Import (C, exit_program_now, "_exit");
 
 end Win32.crt.Stdlib;
-
-
-
-----------------------
--- REVISION HISTORY --
-----------------------
-
---  ----------------------------
---  New changes after this line.  Each line starts with: "--  "
---  (sys_errlist_addr): Fix import name and casing. Suppress Index_Check
---   otherwise this variable is unusable. Found while reading code.
---  (sys_nerr_addr): Fix import name.
---  (fileinfo_addr): Fix import name.
---  Fixes B802-003.
