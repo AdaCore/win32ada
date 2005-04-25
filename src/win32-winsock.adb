@@ -95,92 +95,64 @@ package body Win32.Winsock is
    function To_BYTE is new Ada.Unchecked_Conversion (Interfaces.C.char,
      Win32.BYTE);
 
-   function FIONREAD return Win32.LONG is                  --  winsock.h:141
-      x : Interfaces.C.char := 'f';
-      y : Win32.BYTE := 127;
-      w : Win32.WORD := Win32.Utils.MAKEWORD (To_BYTE (x), y);
+   function IORW (IOC : Win32.ULONG;
+                  x   : Win32.CHAR;
+                  y   : Win32.BYTE)
+                  return Win32.LONG
+   is
+      w : constant Win32.ULONG :=
+        Win32.ULONG (Win32.Utils.MAKEWORD (y, To_BYTE (x)));
+      r : Win32.ULONG;
    begin
-      return Win32.LONG
-        (Win32.ULONG ((IOC_OUT or Win32.ULONG (u_long'Size)) and
-        Win32.ULONG (IOCPARM_MASK * 2 ** 16)) or
-        Win32.Utils.MAKELONG (w, 0));
+      r := (IOC
+              or ((Win32.ULONG (u_long'Size / 8)
+                     and Win32.ULONG (IOCPARM_MASK)) * (2 ** 16))
+              or Win32.ULONG (w));
+      if (r and 16#8000_0000#) = 0 then
+         return Win32.LONG (r);
+      else
+         return - Win32.LONG (- (r and 16#EFFF_FFFF#));
+      end if;
+   end IORW;
+
+   function FIONREAD return Win32.LONG is                  --  winsock.h:141
+   begin
+      return IORW (IOC_OUT, 'f', 127);
    end FIONREAD;
 
    function FIONBIO return Win32.LONG is                   --  winsock.h:142
-      x : Interfaces.C.char := 'f';
-      y : Win32.BYTE := 126;
-      w : Win32.WORD := Win32.Utils.MAKEWORD (To_BYTE (x), y);
    begin
-      return Win32.LONG
-        (Win32.ULONG ((IOC_IN or Win32.ULONG (u_long'Size)) and
-        Win32.ULONG (IOCPARM_MASK * 2 ** 16)) or
-        Win32.Utils.MAKELONG (w, 0));
+      return IORW (IOC_IN, 'f', 126);
    end FIONBIO;
 
    function FIOASYNC return Win32.LONG is                  --  winsock.h:143
-      x : Interfaces.C.char := 'f';
-      y : Win32.BYTE := 125;
-      w : Win32.WORD := Win32.Utils.MAKEWORD (To_BYTE (x), y);
    begin
-      return Win32.LONG
-        (Win32.ULONG ((IOC_IN or Win32.ULONG (u_long'Size)) and
-        Win32.ULONG (IOCPARM_MASK * 2 ** 16)) or
-        Win32.Utils.MAKELONG (w, 0));
+      return IORW (IOC_IN, 'f', 125);
    end FIOASYNC;
 
    function SIOCSHIWAT return Win32.LONG is                --  winsock.h:146
-      x : Interfaces.C.char := 's';
-      y : Win32.BYTE := 0;
-      w : Win32.WORD := Win32.Utils.MAKEWORD (To_BYTE (x), y);
    begin
-      return Win32.LONG
-        (Win32.ULONG ((IOC_IN or Win32.ULONG (u_long'Size)) and
-        Win32.ULONG (IOCPARM_MASK * 2 ** 16)) or
-        Win32.Utils.MAKELONG (w, 0));
+      return IORW (IOC_IN, 's', 0);
    end SIOCSHIWAT;
 
    function SIOCGHIWAT return Win32.LONG is                --  winsock.h:147
-      x : Interfaces.C.char := 's';
-      y : Win32.BYTE := 1;
-      w : Win32.WORD := Win32.Utils.MAKEWORD (To_BYTE (x), y);
    begin
-      return Win32.LONG
-        (Win32.ULONG ((IOC_OUT or Win32.ULONG (u_long'Size)) and
-        Win32.ULONG (IOCPARM_MASK * 2 ** 16)) or
-        Win32.Utils.MAKELONG (w, 0));
+      return IORW (IOC_OUT, 's', 1);
    end SIOCGHIWAT;
 
    function  SIOCSLOWAT return Win32.LONG is               --  winsock.h:148
-      x : Interfaces.C.char := 's';
-      y : Win32.BYTE := 2;
-      w : Win32.WORD := Win32.Utils.MAKEWORD (To_BYTE (x), y);
    begin
-      return Win32.LONG
-        (Win32.ULONG ((IOC_IN or Win32.ULONG (u_long'Size)) and
-        Win32.ULONG (IOCPARM_MASK * 2 ** 16)) or
-        Win32.Utils.MAKELONG (w, 0));
+      return IORW (IOC_IN, 's', 2);
    end SIOCSLOWAT;
 
    function SIOCGLOWAT return Win32.LONG is                --  winsock.h:149
-      x : Interfaces.C.char := 's';
-      y : Win32.BYTE := 3;
-      w : Win32.WORD := Win32.Utils.MAKEWORD (To_BYTE (x), y);
    begin
-      return Win32.LONG
-        (Win32.ULONG ((IOC_OUT or Win32.ULONG (u_long'Size)) and
-        Win32.ULONG (IOCPARM_MASK * 2 ** 16)) or
-        Win32.Utils.MAKELONG (w, 0));
+      return IORW (IOC_OUT, 's', 3);
    end SIOCGLOWAT;
 
    function  SIOCATMARK return Win32.LONG is               --  winsock.h:150
-      x : Interfaces.C.char := 's';
-      y : Win32.BYTE := 7;
-      w : Win32.WORD := Win32.Utils.MAKEWORD (To_BYTE (x), y);
    begin
-      return Win32.LONG
-        (Win32.ULONG ((IOC_OUT or Win32.ULONG (u_long'Size)) and
-        Win32.ULONG (IOCPARM_MASK * 2 ** 16)) or
-        Win32.Utils.MAKELONG (w, 0));
+      return IORW (IOC_OUT, 's', 7);
    end SIOCATMARK;
 
    function IN_CLASSA (i : Win32.LONG) return Win32.BOOL is  --  winsock.h:293
