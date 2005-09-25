@@ -3,6 +3,8 @@ project Win32Ada_Bld is
    for Languages use ("ada");
    for Source_Dirs use (".");
    for Object_Dir use ".";
+   for Library_Dir use "lib";
+   for Library_Name use "win32ada";
 
    package Builder is
       for Default_Switches ("Ada") use ("-O2");
