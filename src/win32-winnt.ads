@@ -23,6 +23,8 @@ with Interfaces.C; use Interfaces.C;
 
 package Win32.Winnt is
 
+   pragma Elaborate_Body;
+
    APPLICATION_ERROR_MASK : constant :=  16#20000000#; --  winnt.h :153
    ERROR_SEVERITY_SUCCESS : constant :=  16#0#;        --  winnt.h :154
    ERROR_SEVERITY_INFORMATIONAL : constant :=  16#40000000#; --  winnt.h :155
@@ -2789,6 +2791,3 @@ private
    pragma Inline (IMAGE_ORDINAL);
 
 end Win32.Winnt;
-
-
-
