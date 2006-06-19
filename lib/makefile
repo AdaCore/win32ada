@@ -24,7 +24,7 @@ OFILES	= $(CFILES:.c=.o)
 all: build_win32ada
 
 build_win32ada: $(OFILES)
-	ar cr libwin32ada.a $(OFILES)
+	ar r ../src/libwin32ada.a $(OFILES)
 
 clean:
 	rm *.o *.a
