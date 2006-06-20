@@ -1,0 +1,10 @@
+with "win32ada";
+
+project Ddemo is
+   for Source_Dirs use (".");
+   for Main use ("ddemo");
+
+   package Builder is
+      for Default_Switches ("Ada") use ("-O2");
+   end Builder; 
+end Ddemo;

@@ -1,0 +1,10 @@
+with "win32ada";
+
+project Gdidemo is
+   for Source_Dirs use (".");
+   for Main use ("gdidemo");
+
+   package Builder is
+      for Default_Switches ("Ada") use ("-O2");
+   end Builder; 
+end Gdidemo;
