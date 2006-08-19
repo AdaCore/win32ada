@@ -2048,9 +2048,6 @@ package Win32.Wingdi is
    pragma Convention (Stdcall, LINEDDAPROC);
    --  wingdi.h:1790
 
-   type FONTENUMPROC is access function  return Win32.INT; --  wingdi.h:1797
-   pragma Convention (Stdcall, FONTENUMPROC);
-
    type LPFNDEVMODE is access function (p1 : Win32.Windef.HWND;
                                         p2 : Win32.Windef.HMODULE;
                                         p3 : access DEVMODE;
@@ -2792,12 +2789,18 @@ package Win32.Wingdi is
    type ac_POLYTEXTA_t is access all POLYTEXTA;       --  wingdi.h:2450
    type ac_POLYTEXTW_t is access all POLYTEXTW;       --  wingdi.h:2451
 
-   type OLDFONTENUMPROC is access function (lplf : ac_LOGFONT_t;
-                                            lptm : ac_TEXTMETRIC_t;
+   type FONTENUMPROC is access function (lplf : ac_LOGFONT_t;
+                                         lptm : ac_TEXTMETRIC_t;
+                                         dwType : Win32.DWORD;
+                                         lpData : Win32.LPARAM)
+                                         return Win32.INT;
+   pragma Convention (Stdcall, FONTENUMPROC);
+   type FONTENUMFAMPROC is access function (lplf : LPENUMLOGFONT;
+                                            lptm : LPNEWTEXTMETRIC;
                                             dwType : Win32.DWORD;
                                             lpData : Win32.LPARAM)
-                                           return Win32.INT;
-   pragma Convention (Stdcall, OLDFONTENUMPROC);
+                                            return Win32.INT;
+   pragma Convention (Stdcall, FONTENUMFAMPROC);
    --  wingdi.h:1785
    type ENHMFENUMPROC is access function
      (hDC : Win32.Windef.HDC;
@@ -3198,20 +3201,20 @@ package Win32.Wingdi is
 
    function EnumFontFamiliesA (hdc : Win32.Windef.HDC;
                                lpszFamily : Win32.LPCSTR;
-                               fntenmprc : FONTENUMPROC;
+                               fntenmprc : FONTENUMFAMPROC;
                                lParam : Win32.LPARAM)
                               return Win32.INT;        --  wingdi.h:1954
 
    function EnumFontFamilies (hdc : Win32.Windef.HDC;
                               lpszFamily : Win32.LPCSTR;
-                              fntenmprc : FONTENUMPROC;
+                              fntenmprc : FONTENUMFAMPROC;
                               lParam : Win32.LPARAM)
                              return Win32.INT
      renames EnumFontFamiliesA; --  wingdi.h:1954
 
    function EnumFontFamiliesW (hdc : Win32.Windef.HDC;
                                lpszFamily : Win32.LPCWSTR;
-                               fntenmprc : FONTENUMPROC;
+                               fntenmprc : FONTENUMFAMPROC;
                                lParam : Win32.LPARAM)
                               return Win32.INT;        --  wingdi.h:1955
 
@@ -5359,5 +5362,3 @@ private
    --  wingdi.h:3241
 
 end Win32.Wingdi;
-
-
