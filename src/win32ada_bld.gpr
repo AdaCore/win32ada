@@ -1,3 +1,7 @@
+
+--  This is the project file used to develop the Win32Ada binding.
+--  The distributed project is win32ada.gpr.
+
 project Win32Ada_Bld is
 
    for Languages use ("ada");
@@ -6,7 +10,20 @@ project Win32Ada_Bld is
    for Library_Dir use "lib";
    for Library_Name use "win32ada";
 
+   -------------
+   -- Builder --
+   -------------
+
    package Builder is
       for Default_Switches ("Ada") use ("-O2");
    end Builder;
+
+   ---------
+   -- Ide --
+   ---------
+
+   package Ide is
+      for Vcs_Kind use "CVS";
+   end Ide;
+
 end Win32Ada_Bld;
