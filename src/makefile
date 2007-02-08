@@ -7,7 +7,7 @@ I_INC	= $(INSTALL)/include/win32ada
 I_LIB	= $(INSTALL)/lib/win32ada
 I_GPR	= $(INSTALL)/lib/gnat
 
-C_FILES = ../lib/dump.c ../lib/stdlib_wrapper.c ../lib/var.c ../lib/wrappers.c
+C_FILES = dump.c stdlib_wrapper.c var.c wrappers.c
 O_FILES = ${C_FILES:%.c=%.o}
 
 GCC	= gcc

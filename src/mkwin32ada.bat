@@ -3,7 +3,7 @@ rem -----------------------------------------------
 set I_INC=%1\include\win32ada
 set I_LIB=%1\lib\win32ada
 set I_GPR=%1\lib\gnat
-set I_EXP=%1\share\examples
+set I_EXP=%1\share\examples\win32ada
 rem -----------------------------------------------
 if .%1==. goto error
 if exist %I_INC% rmdir /S /Q %I_INC%
@@ -23,9 +23,14 @@ rem -----------------------------------------------
 echo Building Win32Ada for GNAT installation in %1
 path %1\bin;%path%
 mkdir lib
+gcc -c dump.c
+gcc -c stdlib_wrapper.c
+gcc -c var.c
+gcc -c wrappers.c
 gnatmake -q -d -Pwin32ada_bld -gnatws
 if errorlevel 1 goto error
 move *.ad? %I_INC%
+move *.c %I_INC%
 attrib -R %I_LIB%\*.ali
 move *.ali %I_LIB%
 attrib +R %I_LIB%\*.ali
