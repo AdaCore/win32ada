@@ -10,6 +10,7 @@ if exist %I_INC% rmdir /S /Q %I_INC%
 mkdir %I_INC% 2> nul
 if exist %I_LIB% rmdir /S /Q %I_LIB%
 mkdir %I_LIB% 2> nul
+mkdir %I_GPR% 2> nul
 if exist %I_EXP% rmdir /S /Q %I_EXP%
 move ..\win32ada %I_EXP% 2> nul
 if not .%2==.nobuild goto build

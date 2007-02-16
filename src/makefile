@@ -23,6 +23,7 @@ install:
 	rm -fr $(I_INC) $(I_LIB)
 	mkdir -p $(I_INC)
 	mkdir -p $(I_LIB)
+	mkdir -p $(I_GPR)
 	cp *.ad* $(I_INC)
 	cp *.ali $(I_LIB)
 	chmod uog-w $(I_LIB)/*.ali
