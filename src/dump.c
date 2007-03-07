@@ -3,6 +3,8 @@
 
 /* for debugging stdarg.ad* */
 
+#include <stdio.h>
+
 dump(addr, nb_int)
     int *addr, nb_int;
 {
@@ -14,16 +16,3 @@ dump(addr, nb_int)
 	printf("%08x ", *addr++);
     printf("\n\n");
 }
-
-#if 0
-----------------------
--- REVISION HISTORY --
-----------------------
-
-----------------------------
-revision 1.1
-date: 1998/10/15 20:30:04;  author: obry;  state: Exp;
-Initial revision
-----------------------------
-New changes after this line and before endif
-#endif
