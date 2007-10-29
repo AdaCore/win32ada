@@ -1,6 +1,4 @@
 
-#  $Id$
-
 INSTALL = /usr/local
 
 I_INC	= $(INSTALL)/include/win32ada
@@ -15,6 +13,7 @@ GCC	= gcc
 build: $(O_FILES)
 	mkdir -p lib
 	gnatmake -Pwin32ada_bld
+	ar r lib/libwin32ada.a $(O_FILES)
 
 $(O_FILES): $(C_FILES)
 	- $(GCC) -c -o $(notdir $@) $(basename $@).c
