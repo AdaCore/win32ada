@@ -29,6 +29,7 @@ gcc -c stdlib_wrapper.c
 gcc -c var.c
 gcc -c wrappers.c
 gnatmake -q -d -Pwin32ada_bld -gnatws
+ar r lib\libwin32ada.a dump.o stdlib_wrapper.o var.o wrappers.o
 if errorlevel 1 goto error
 move *.ad? %I_INC%
 move *.c %I_INC%
