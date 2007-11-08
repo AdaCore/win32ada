@@ -61,6 +61,7 @@ package Win32.crt.Stdlib is
       end record;
 
    type atexit_t is access procedure;                      --  stdlib.h :276
+   pragma Convention (C, atexit_t);
 
    --  use extensible arrays
    type String_Array is array (0 .. Win32.ANYSIZE_ARRAY) of aliased Win32.PSTR;
