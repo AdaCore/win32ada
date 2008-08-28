@@ -1,5 +1,3 @@
---  $Source : /nile.c/cvs/Dev/NT/Win32Ada/src/win32-crt-largeint-ops.adb,v $
---  $Revision : 1.2 $ $Date : 2000/11/11 22 :03 :22 $ $Author : obry $
 with System;
 
 --  GNAT body.

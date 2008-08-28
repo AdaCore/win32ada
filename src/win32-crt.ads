@@ -1,5 +1,3 @@
---  $Source : /nile.c/cvs/Dev/NT/Win32Ada/src/win32-crt.ads, v $
---  $Revision : 1.0 $ $Date : 1998/02/09 15 :50 :09 $ $Author : obry $
 
 --  **************************************************************
 --  Parent package for Win32.crt packages,

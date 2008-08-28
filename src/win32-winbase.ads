@@ -1,5 +1,3 @@
---  $Source : /nile.c/cvs/Dev/NT/Win32Ada/src/win32-winbase.ads, v $
---  $Revision : 1.1 $ $Date : 1998/12/22 22 :48 :53 $ $Author : obry $
 -------------------------------------------------------------------------------
 --
 --  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS PROVIDED WITHOUT CHARGE

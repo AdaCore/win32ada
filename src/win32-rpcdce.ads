@@ -1,5 +1,3 @@
---  $Source : /nile.c/cvs/Dev/NT/Win32Ada/src/win32-rpcdce.ads, v $
---  $Revision : 1.0 $ $Date : 1998/02/09 15 :50 :09 $ $Author : obry $
 -------------------------------------------------------------------------------
 --
 --  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS PROVIDED WITHOUT CHARGE

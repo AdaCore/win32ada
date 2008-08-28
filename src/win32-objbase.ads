@@ -1,5 +1,3 @@
---  $Source : /nile.c/cvs/Dev/NT/Win32Ada/src/win32-objbase.ads, v $
---  $Revision : 1.0 $ $Date : 1998/02/09 15 :50 :09 $ $Author : obry $
 --  See end of file for Copyright (c) information.
 
 with Win32.Rpcdce;

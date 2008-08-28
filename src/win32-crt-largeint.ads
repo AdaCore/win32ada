@@ -1,5 +1,3 @@
---  $Source$
---  $Revision$ $Date$ $Author$
 --  See end of file for Copyright (c) information.
 
 with Win32.Winnt;

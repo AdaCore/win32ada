@@ -1,5 +1,3 @@
---  $Source$
---  $Revision$ $Date$ $Author$
 
 --  Win32 requires 64 bit integers for some types.
 --  This package encapsulates these types and their operations,

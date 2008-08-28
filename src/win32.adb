@@ -1,6 +1,3 @@
---  $Source : /nile.c/cvs/Dev/NT/Win32Ada/src/win32.adb, v $
---  $Revision : 1.1 $ $Date : 1998/04/07 21 :53 :55 $ $Author : obry $
-
 with Ada.Unchecked_Conversion;
 with System;
 

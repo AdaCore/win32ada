@@ -1,5 +1,3 @@
---  $Source : /nile.c/cvs/Dev/NT/Win32Ada/src/win32-crt-largeint.adb,v $
---  $Revision : 1.2 $ $Date : 2000/11/11 22 :01 :23 $ $Author : obry $
 -------------------------------------------------------------------------------
 --
 --  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS FURNISHED "AS IS" WITHOUT

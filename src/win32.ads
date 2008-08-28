@@ -1,6 +1,3 @@
---  $Source : /nile.c/cvs/Dev/NT/Win32Ada/src/win32.ads, v $
---  $Revision : 1.0 $ $Date : 1998/02/09 15 :50 :09 $ $Author : obry $
-
 --  **************************************************************
 --  Parent package for other Win32 interfaces.
 --  The packages are organized into one library package with child

@@ -1,6 +1,3 @@
---  $Source$
---  $Revision$ $Date$ $Author$
-
 with Interfaces.C;
 
 generic

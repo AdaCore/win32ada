@@ -1,5 +1,3 @@
---  $Source : /nile.c/cvs/Dev/NT/Win32Ada/src/win32-crt-stdlib.ads, v $
---  $Revision : 1.2 $ $Date : 2000/04/14 11 :32 :26 $ $Author : dijk $
 -------------------------------------------------------------------------------
 --
 --  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS PROVIDED WITHOUT CHARGE

@@ -1,6 +1,3 @@
---  $Source$
---  $Revision$ $Date$ $Author$
-
 -------------------------------------------------------------------------------
 --
 --  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS PROVIDED WITHOUT CHARGE
@@ -19,7 +16,6 @@
 --  trademarks of Microsoft Corporation.
 --
 -------------------------------------------------------------------------------
-
 
 package Win32.Winerror is
 
