@@ -875,5 +875,3 @@ private
    --  digitalv.h:1069
 
 end Win32.Digitalv;
-
-

@@ -19,5 +19,3 @@ package Win32.Wtypes is
    --  the types in this C header file are defined in win32-objbase.ads
 
 end Win32.Wtypes;
-
-

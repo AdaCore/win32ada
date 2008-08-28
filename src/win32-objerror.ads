@@ -22,5 +22,3 @@ with Win32.Winerror;
 -------------------------------------------------------------------------------
 
 package Win32.Objerror renames Win32.Winerror;
-
-

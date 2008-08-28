@@ -69,5 +69,3 @@ private
    pragma Convention (C, SOCKADDR_TP);                      --  wshisotp.h:61
 
 end Win32.Wshisotp;
-
-

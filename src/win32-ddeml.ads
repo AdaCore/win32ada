@@ -616,6 +616,3 @@ private
    --  ddeml.h:360
 
 end Win32.Ddeml;
-
-
-

@@ -1308,6 +1308,3 @@ private
    --  lmserver.h:156
 
 end Win32.Lmserver;
-
-
-

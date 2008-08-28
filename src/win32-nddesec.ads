@@ -57,5 +57,3 @@ package Win32.Nddesec is
    NDDE_GUI_FULL_CONTROL      : constant := 16#f03ff#; --  nddesec.h:99
 
 end Win32.Nddesec;
-
-

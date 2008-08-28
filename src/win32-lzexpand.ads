@@ -112,5 +112,3 @@ private
    pragma Import (Stdcall, LZClose, "LZClose");         --  lzexpand.h :118
 
 end Win32.Lzexpand;
-
-

@@ -378,5 +378,3 @@ private
    pragma Import (C, wcsicoll, "_wcsicoll");
 
 end Win32.crt.WcharPkg;
-
-

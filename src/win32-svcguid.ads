@@ -23,5 +23,3 @@ package Win32.Svcguid is
 
 
 end Win32.Svcguid;
-
-

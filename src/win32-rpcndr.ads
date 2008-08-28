@@ -1963,6 +1963,3 @@ private
    pragma Inline (small_array_from_ndr);
 
 end Win32.Rpcndr;
-
-
-

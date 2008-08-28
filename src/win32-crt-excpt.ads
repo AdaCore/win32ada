@@ -46,5 +46,3 @@ private
    pragma Import (C, except_handler, "_except_handler");    --  excpt.h :66
 
 end Win32.crt.Excpt;
-
-

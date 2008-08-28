@@ -92,5 +92,3 @@ package Win32.Lmcons is
    subtype API_RET_TYPE is NET_API_STATUS;                 --  lmcons.h:214
 
 end Win32.Lmcons;
-
-

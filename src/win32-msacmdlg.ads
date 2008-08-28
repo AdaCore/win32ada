@@ -37,5 +37,3 @@ package Win32.Msacmdlg is
    IDD_ACMFILTERCHOOSE_BTN_DELNAME    : constant := 104;   -- msacmdlg.h:30
 
 end Win32.Msacmdlg;
-
-

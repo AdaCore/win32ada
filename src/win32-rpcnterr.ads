@@ -38,5 +38,3 @@ package Win32.Rpcnterr is
    RPC_X_INVALID_BUFFER        : constant := 1784; --  rpcnterr.h:31
 
 end Win32.Rpcnterr;
-
-

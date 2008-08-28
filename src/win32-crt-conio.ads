@@ -60,5 +60,3 @@ private
    pragma Import (C, kbhit, "_kbhit");                      --  conio.h :56
 
 end Win32.crt.Conio;
-
-

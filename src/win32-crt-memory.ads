@@ -62,5 +62,3 @@ package Win32.crt.Memory is
      renames Win32.crt.Strings.memset;   --  memory.h:58
 
 end Win32.crt.Memory;
-
-

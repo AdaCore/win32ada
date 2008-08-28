@@ -71,5 +71,3 @@ private
 
 
 end Win32.crt.Locale;
-
-

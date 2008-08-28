@@ -449,5 +449,3 @@ private
    --  nddeapi.h:359
 
 end Win32.Nddeapi;
-
-

@@ -56,5 +56,3 @@ private
    pragma Convention (C, SOCKADDR_NB);                      --  wsnetbs.h:20
 
 end Win32.Wsnetbs;
-
-

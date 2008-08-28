@@ -66,5 +66,3 @@ package Win32.crt.Search is
    procedure Qsort (The_Array : in out Array_of_Elem);
 
 end Win32.crt.Search;
-
-

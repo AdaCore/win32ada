@@ -59,5 +59,3 @@ private
    pragma Import (C, F_Varargs, "do_varargs");
 
 end Stdarg.Impl;
-
-

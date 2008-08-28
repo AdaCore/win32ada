@@ -100,5 +100,3 @@ private
    --  lmmsg.h:77
 
 end Win32.Lmmsg;
-
-

@@ -260,5 +260,3 @@ private
    pragma Import (Stdcall, Netbios, "Netbios");             --  nb30.h:297
 
 end Win32.Nb30;
-
-

@@ -574,5 +574,3 @@ private
    --  ras.h:418
 
 end Win32.Ras;
-
-

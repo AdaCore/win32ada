@@ -252,5 +252,3 @@ private
    pragma Import (Stdcall, MAPIResolveName, "MAPIResolveName"); --  mapi.h:158
 
 end Win32.Mapi;
-
-

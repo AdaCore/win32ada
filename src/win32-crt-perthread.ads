@@ -34,5 +34,3 @@ private
    pragma Inline (Get_Address);
 
 end Win32.crt.PerThread;
-
-

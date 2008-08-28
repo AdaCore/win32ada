@@ -1089,5 +1089,3 @@ private
    pragma Import (Stdcall, SQLSetScrollOptions, "SQLSetScrollOptions");
    --  sqlext.h:1234
 end Win32.Sqlext;
-
-

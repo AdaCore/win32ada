@@ -472,5 +472,3 @@ private
    pragma Import (Stdcall, gluNurbsCallback, "gluNurbsCallback"); --  glu.h:114
 
 end Win32.Glu;
-
-

@@ -180,5 +180,3 @@ private
    pragma Import (C, yn, "_yn");                            --  math.h:147
 
 end Win32.crt.Math;
-
-

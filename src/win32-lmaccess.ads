@@ -1413,5 +1413,3 @@ private
    --  lmaccess.h:1251
 
 end Win32.Lmaccess;
-
-

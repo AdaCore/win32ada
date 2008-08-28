@@ -74,5 +74,3 @@ private
    pragma Import (C, getdrives, "_getdrives");              --  direct.h :75
 
 end Win32.crt.Direct;
-
-

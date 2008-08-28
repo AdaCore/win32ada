@@ -4678,5 +4678,3 @@ private
                     "OleConvertOLESTREAMToIStorageEx");    --  ole2.h:5038
 
 end Win32.Ole2;
-
-

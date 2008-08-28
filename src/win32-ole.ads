@@ -1235,5 +1235,3 @@ private
    --  ole.h:430
 
 end Win32.Ole;
-
-

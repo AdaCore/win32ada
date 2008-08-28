@@ -2095,5 +2095,3 @@ private
    pragma Import (Stdcall, glViewport, "glViewport");             --  gl.h:1130
 
 end Win32.Gl;
-
-

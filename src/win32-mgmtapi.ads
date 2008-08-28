@@ -113,5 +113,3 @@ private
    --  mgmtapi.h:95
 
 end Win32.Mgmtapi;
-
-

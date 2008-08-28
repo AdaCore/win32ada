@@ -68,5 +68,3 @@ package Win32.crt.Errno is
      renames Win32.crt.Stdlib.errno;                     --  errno.h :49
 
 end Win32.crt.Errno;
-
-

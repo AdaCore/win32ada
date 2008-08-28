@@ -87,5 +87,3 @@ private
    pragma Import (C, msize, "_msize");                      --  malloc.h:86
 
 end Win32.crt.Malloc;
-
-

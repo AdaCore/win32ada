@@ -336,5 +336,3 @@ private
    pragma Import (C, wcsicoll, "_wcsicoll");   --  string.h :135
 
 end Win32.crt.Strings;
-
-

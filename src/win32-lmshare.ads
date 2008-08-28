@@ -398,5 +398,3 @@ private
    pragma Import (Stdcall, NetFileGetInfo, "NetFileGetInfo"); --  lmshare.h:410
 
 end Win32.Lmshare;
-
-

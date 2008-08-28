@@ -221,5 +221,3 @@ private
    --  lmchdev.h:243
 
 end Win32.Lmchdev;
-
-

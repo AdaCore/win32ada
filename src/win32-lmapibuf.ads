@@ -60,5 +60,3 @@ private
    --  lmapibuf.h:77
 
 end Win32.Lmapibuf;
-
-

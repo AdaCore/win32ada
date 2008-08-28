@@ -647,5 +647,3 @@ private
    pragma Inline (strspnp);
 
 end Win32.crt.Tchar;
-
-

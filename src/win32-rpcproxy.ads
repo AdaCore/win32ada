@@ -422,5 +422,3 @@ private
    --  rpcproxy.h:317
 
 end Win32.Rpcproxy;
-
-

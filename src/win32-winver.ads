@@ -288,5 +288,3 @@ private
    --  winver.h:276
 
 end Win32.Winver;
-
-

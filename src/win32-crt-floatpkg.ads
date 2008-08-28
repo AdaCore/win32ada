@@ -182,5 +182,3 @@ private
    pragma Import (C, fpclass, "_fpclass");                  -- float.h:213
 
 end Win32.crt.FloatPkg;
-
-

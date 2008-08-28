@@ -417,5 +417,3 @@ private
    pragma Import (Stdcall, NetAuditWrite, "NetAuditWrite");    --  lmaudit.h:95
 
 end Win32.Lmaudit;
-
-

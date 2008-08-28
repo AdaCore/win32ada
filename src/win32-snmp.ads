@@ -401,6 +401,3 @@ private
    --  snmp.h:334
 
 end Win32.Snmp;
-
-
-

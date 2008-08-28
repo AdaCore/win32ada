@@ -249,5 +249,3 @@ private
    pragma Import (C, fpieee_flt, "_fpieee_flt");
 
 end Win32.crt.Fpieee;
-
-

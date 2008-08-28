@@ -34,5 +34,3 @@ package Win32.Winmain is
    function Get_nCmdShow return Win32.INT;
 
 end Win32.Winmain;
-
-

@@ -846,5 +846,3 @@ private
    pragma Import (Stdcall, WSARecvEx, "WSARecvEx");           --  winsock.h:822
 
 end Win32.Winsock;
-
-

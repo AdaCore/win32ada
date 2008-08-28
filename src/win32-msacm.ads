@@ -1145,5 +1145,3 @@ private
    --  msacm.h:1949
 
 end Win32.Msacm;
-
-

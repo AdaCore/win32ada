@@ -29,5 +29,3 @@ package Win32.crt.Assert is
    pragma Inline (Assert);
 
 end Win32.crt.Assert;
-
-

@@ -932,5 +932,3 @@ private
    --  winnls.h:1103
 
 end Win32.Winnls;
-
-

@@ -511,5 +511,3 @@ private
    --  glaux.h:368
 
 end Win32.Glaux;
-
-

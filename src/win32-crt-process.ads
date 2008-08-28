@@ -200,5 +200,3 @@ private
    pragma Import (C, getdllprocaddr, "_getdllprocaddr");    --  process.h:108
 
 end Win32.crt.Process;
-
-

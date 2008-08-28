@@ -67,5 +67,3 @@ private
    pragma Import (Stdcall, NetConfigSet, "NetConfigSet");     --  lmconfig.h:81
 
 end Win32.Lmconfig;
-
-

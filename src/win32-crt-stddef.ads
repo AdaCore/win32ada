@@ -44,5 +44,3 @@ private
    pragma Import (C, threadhandle, "__threadhandle");
 
 end Win32.crt.Stddef;
-
-

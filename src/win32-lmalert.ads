@@ -135,5 +135,3 @@ private
    --  lmalert.h:74
 
 end Win32.Lmalert;
-
-

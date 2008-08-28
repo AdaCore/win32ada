@@ -54,5 +54,3 @@ package Win32.Colordlg is
    NUM_CUSTOM_COLORS : constant := 16;  --  colordlg.h :36
 
 end Win32.Colordlg;
-
-

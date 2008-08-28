@@ -175,5 +175,3 @@ private
    pragma Convention (C, CCINFOW);                          --  custcntl.h:149
 
 end Win32.Custcntl;
-
-

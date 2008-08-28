@@ -46,5 +46,3 @@ package Stdarg.Inst is
                                      T_Is_Float => True);
 
 end Stdarg.Inst;
-
-

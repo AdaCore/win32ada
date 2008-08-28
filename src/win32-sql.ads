@@ -264,5 +264,3 @@ private
    pragma Import (Stdcall, SQLSetParam, "SQLSetParam");           --  sql.h:304
 
 end Win32.Sql;
-
-

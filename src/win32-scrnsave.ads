@@ -116,5 +116,3 @@ private
    --  scrnsave.h:122
 
 end Win32.Scrnsave;
-
-

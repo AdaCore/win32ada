@@ -373,5 +373,3 @@ private
    pragma Inline (IsRecognizedPartition);
 
 end Win32.Winioctl;
-
-

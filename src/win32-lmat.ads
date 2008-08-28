@@ -99,5 +99,3 @@ private
    --  lmat.h:131
 
 end Win32.Lmat;
-
-

@@ -40,5 +40,3 @@ private
    pragma Import (C, ftime, "_ftime");                      --  timeb.h:70
 
 end Win32.crt.Timeb;
-
-

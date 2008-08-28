@@ -77,5 +77,3 @@ package Win32.Vfw.Constants is
      MAKE_AVIERR (199);           --  vfw.h:2415
 
 end Win32.Vfw.Constants;
-
-

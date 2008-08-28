@@ -651,5 +651,3 @@ private
    --  rpcnsi.h:456
 
 end Win32.Rpcnsi;
-
-

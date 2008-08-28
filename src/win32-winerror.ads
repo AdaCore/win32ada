@@ -1377,5 +1377,3 @@ private
    pragma Inline (HRESULT_FROM_NT);
 
 end Win32.Winerror;
-
-

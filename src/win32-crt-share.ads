@@ -27,5 +27,3 @@ package Win32.crt.Share is
    SH_DENYNO : constant := 16#40#;                         --  share.h:18
 
 end Win32.crt.Share;
-
-

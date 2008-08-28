@@ -70,5 +70,3 @@ private
    pragma Import (C, c_raise, "raise");                     --  signal.h:86
 
 end Win32.crt.Signal;
-
-

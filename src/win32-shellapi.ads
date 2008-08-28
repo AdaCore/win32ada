@@ -212,5 +212,3 @@ private
    --  shellapi.h:76
 
 end Win32.Shellapi;
-
-

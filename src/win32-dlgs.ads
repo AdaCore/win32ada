@@ -199,5 +199,3 @@ private
    pragma Convention (C_Pass_By_Copy, CRGB);                     --  dlgs.h:193
 
 end Win32.Dlgs;
-
-

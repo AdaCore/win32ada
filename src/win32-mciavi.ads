@@ -44,5 +44,3 @@ package Win32.Mciavi is
    MCIERR_AVI_BADPALETTE         : constant := 620; --  mciavi.h :81
 
 end Win32.Mciavi;
-
-

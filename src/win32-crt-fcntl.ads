@@ -38,5 +38,3 @@ package Win32.crt.Fcntl is
    O_RANDOM      : constant := 16#10#;   --  fcntl.h:52
 
 end Win32.crt.Fcntl;
-
-

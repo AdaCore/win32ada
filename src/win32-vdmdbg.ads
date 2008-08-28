@@ -319,5 +319,3 @@ private
    --  vdmdbg.h:464
 
 end Win32.Vdmdbg;
-
-

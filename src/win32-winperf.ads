@@ -182,5 +182,3 @@ private
    pragma Convention (C_Pass_By_Copy, PERF_COUNTER_BLOCK);  --  winperf.h:520
 
 end Win32.Winperf;
-
-

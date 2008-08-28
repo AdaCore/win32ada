@@ -180,5 +180,3 @@ private
    pragma Convention (C, WSH_PAP_GET_SERVER_STATUS);        --  atalkwsh.h :194
 
 end Win32.Atalkwsh;
-
-

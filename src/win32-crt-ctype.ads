@@ -156,5 +156,3 @@ private
    pragma Import (C, isctype, "_isctype");                  --  ctype.h :147
 
 end Win32.crt.Ctype;
-
-

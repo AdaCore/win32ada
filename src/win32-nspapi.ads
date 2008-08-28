@@ -642,5 +642,3 @@ private
    pragma Import (Stdcall, GetServiceW, "GetServiceW");        --  nspapi.h:674
 
 end Win32.Nspapi;
-
-

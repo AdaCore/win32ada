@@ -210,5 +210,3 @@ private
    pragma Import (Stdcall, ReuseDDElParam, "ReuseDDElParam");     --  dde.h:150
 
 end Win32.Dde;
-
-

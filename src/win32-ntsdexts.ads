@@ -80,5 +80,3 @@ private
    pragma Convention (C, NTSD_EXTENSION_APIS);              --  ntsdexts.h:68
 
 end Win32.Ntsdexts;
-
-

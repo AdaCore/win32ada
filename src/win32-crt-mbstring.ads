@@ -298,5 +298,3 @@ private
    pragma Import (C, mbctokata, "_mbctokata");              --  mbstring.h:159
 
 end Win32.crt.Mbstring;
-
-

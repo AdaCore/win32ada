@@ -203,6 +203,3 @@ private
    --  lmsvc.h:123
 
 end Win32.Lmsvc;
-
-
-

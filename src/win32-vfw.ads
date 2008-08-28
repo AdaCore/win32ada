@@ -3290,5 +3290,3 @@ private
    pragma Inline (TWOCCFromFOURCC);                         --  vfw.h:1480
 
 end Win32.Vfw;
-
-

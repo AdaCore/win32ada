@@ -3902,5 +3902,3 @@ private
    --  mmsystem.h:2107
 
 end Win32.Mmsystem;
-
-

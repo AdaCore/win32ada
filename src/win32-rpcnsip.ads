@@ -86,5 +86,3 @@ private
    --  rpcnsip.h:65
 
 end Win32.Rpcnsip;
-
-

@@ -83,5 +83,3 @@ private
    procedure Finalize (A : in out ArgList);
 
 end Stdarg;
-
-

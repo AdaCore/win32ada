@@ -202,5 +202,3 @@ private
    pragma Inline (Min);
 
 end Win32.Windef;
-
-

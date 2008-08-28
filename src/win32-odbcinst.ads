@@ -158,5 +158,3 @@ private
    --  odbcinst.h:113
 
 end Win32.Odbcinst;
-
-

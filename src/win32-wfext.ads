@@ -210,5 +210,3 @@ private
    --  wfext.h:177
 
 end Win32.Wfext;
-
-

@@ -29,8 +29,3 @@ package Win32.crt.Types is
    type off_t is new Win32.LONG;                           --  types.h:41
 
 end Win32.crt.Types;
-
---  Log
---  11/03/1998 - change dev_t definition for mingw32 with MSVCRT.
-
-

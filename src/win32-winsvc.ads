@@ -676,5 +676,3 @@ private
    --  winsvc.h:756
 
 end Win32.Winsvc;
-
-

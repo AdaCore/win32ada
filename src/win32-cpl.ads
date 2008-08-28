@@ -95,5 +95,3 @@ private
    pragma Convention (C, NEWCPLINFOW);                      --  cpl.h:93
 
 end Win32.Cpl;
-
-

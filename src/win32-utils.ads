@@ -43,5 +43,3 @@ private
    pragma Inline (HIBYTE);
 
 end Win32.Utils;
-
-

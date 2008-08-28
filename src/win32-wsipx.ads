@@ -43,5 +43,3 @@ private
    pragma Convention (C_Pass_By_Copy, SOCKADDR_IPX);          --  wsipx.h:38
 
 end Win32.Wsipx;
-
-

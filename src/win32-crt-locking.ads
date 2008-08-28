@@ -28,5 +28,3 @@ package Win32.crt.Locking is
    LK_NBRLCK : constant := 4; --  locking.h :20
 
 end Win32.crt.Locking;
-
-

@@ -37,5 +37,3 @@ package Win32.Odbcver is
    --  odbcver.h:32
 
 end Win32.Odbcver;
-
-

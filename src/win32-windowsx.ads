@@ -3192,5 +3192,3 @@ package Win32.Windowsx is
    --  renames Win32.Strings.memcpy;       -- windowsx.h:1273
 
 end Win32.Windowsx;
-
-

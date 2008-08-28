@@ -107,5 +107,3 @@ private
    pragma Convention (C, VIDEOCONFIGPARMS);                 -- msviddrv.h:102
 
 end Win32.Msviddrv;
-
-

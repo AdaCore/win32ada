@@ -245,5 +245,3 @@ private
 
 
 end Win32.Cguid;
-
-

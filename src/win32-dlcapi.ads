@@ -1236,6 +1236,3 @@ private
    pragma Import (Stdcall, AcsLan, "AcsLan");               --  dlcapi.h:889
 
 end Win32.Dlcapi;
-
-
-

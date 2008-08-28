@@ -39,5 +39,3 @@ package Win32.crt.Limits is
    ULONG_MAX : constant := 16#ffffffff#;                  --  limits.h:39
 
 end Win32.crt.Limits;
-
-

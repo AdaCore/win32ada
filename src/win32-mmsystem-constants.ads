@@ -55,5 +55,3 @@ package Win32.Mmsystem.Constants is
    --  mmsystem.h:1931
 
 end Win32.Mmsystem.Constants;
-
-

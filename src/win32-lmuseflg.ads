@@ -26,5 +26,3 @@ package Win32.Lmuseflg is
    USE_LOTS_OF_FORCE : constant := 2; --  lmuseflg.h :41
 
 end Win32.Lmuseflg;
-
-

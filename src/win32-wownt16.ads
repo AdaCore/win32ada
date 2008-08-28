@@ -64,5 +64,3 @@ private
    --  wownt16.h:50
 
 end Win32.Wownt16;
-
-

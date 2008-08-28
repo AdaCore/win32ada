@@ -2016,5 +2016,3 @@ private
    --  winspool.h:1679
 
 end Win32.Winspool;
-
-

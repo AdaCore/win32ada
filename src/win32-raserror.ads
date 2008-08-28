@@ -171,5 +171,3 @@ package Win32.Raserror is
    RASBASEEND                          : constant := 744; --  raserror.h :164
 
 end Win32.Raserror;
-
-

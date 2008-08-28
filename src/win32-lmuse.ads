@@ -124,5 +124,3 @@ private
    pragma Import (Stdcall, NetUseGetInfo, "NetUseGetInfo");      --  lmuse.h:86
 
 end Win32.Lmuse;
-
-

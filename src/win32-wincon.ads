@@ -788,5 +788,3 @@ private
    --  wincon.h:718
 
 end Win32.Wincon;
-
-

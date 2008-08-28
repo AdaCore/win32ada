@@ -25,5 +25,3 @@ package Win32.Ole2ver is
    rup : constant := 639;                                  --  ole2ver.h:15
 
 end Win32.Ole2ver;
-
-

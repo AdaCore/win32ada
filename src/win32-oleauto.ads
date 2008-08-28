@@ -4480,5 +4480,3 @@ private
    --  oleauto.h:4372
 
 end Win32.Oleauto;
-
-

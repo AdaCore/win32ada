@@ -60,5 +60,3 @@ package Win32.Cderr is
    CCERR_CHOOSECOLORCODES : constant :=  16#5000#; --  cderr.h  :46
 
 end Win32.Cderr;
-
-

@@ -24,4 +24,3 @@
 package Win32.Basetyps is
 
 end Win32.Basetyps;
-

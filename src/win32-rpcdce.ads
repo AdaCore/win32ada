@@ -1155,5 +1155,3 @@ private
    --  rpcdce.h :1351
 
 end Win32.Rpcdce;
-
-

@@ -227,5 +227,3 @@ private
    --  midles.h:202
 
 end Win32.Midles;
-
-

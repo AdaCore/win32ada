@@ -570,5 +570,3 @@ private
    --  commctrl.h:1090
 
 end Win32.Commctrl;
-
-

@@ -87,5 +87,3 @@ package Stdarg.Machine is
    Param_Size           : constant Positive := C_Param'Size / SU;
 
 end Stdarg.Machine;
-
-

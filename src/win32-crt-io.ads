@@ -195,5 +195,3 @@ private
    pragma Import (C, open_osfhandle, "_open_osfhandle");    --  io.h :113
 
 end Win32.crt.Io;
-
-

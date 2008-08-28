@@ -636,5 +636,3 @@ private
    --  commdlg.h:526
 
 end Win32.Commdlg;
-
-

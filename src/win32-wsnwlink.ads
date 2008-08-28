@@ -101,5 +101,3 @@ private
    pragma Convention (C, IPX_SPXCONNSTATUS_DATA);           --  wsnwlink.h:175
 
 end Win32.Wsnwlink;
-
-

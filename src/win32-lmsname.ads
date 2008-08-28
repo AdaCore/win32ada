@@ -102,5 +102,3 @@ package Win32.Lmsname is
    NWSAP_DISPLAY_NAME : constant TEXT := "NW Sap Agent" & Nul;
 
 end Win32.Lmsname;
-
-

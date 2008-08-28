@@ -296,5 +296,3 @@ package Win32.Lmerr is
    MAX_NERR                       : constant := 2999; --  lmerr.h:544
 
 end Win32.Lmerr;
-
-

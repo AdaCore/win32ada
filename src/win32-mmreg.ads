@@ -1250,5 +1250,3 @@ private
    pragma Convention (C, JPEGINFOHEADER);                   --  mmreg.h:1548
 
 end Win32.Mmreg;
-
-

@@ -203,5 +203,3 @@ private
                     "I_BrowserServerEnumForXactsrv");      --  lmbrowsr.h:161
 
 end Win32.Lmbrowsr;
-
-
