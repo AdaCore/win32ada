@@ -2,15 +2,11 @@
 /* $Revision: 11231 $ $Date: 2000-08-10 11:10:30 +0200 (Thu, 10 Aug 2000) $ $Author: dijk $ */
 /* Define wrapper routines for win32-largeint-ops.adb, ObjectAda version */
 
-/* #include <windows.h> */
-/* #include <largeint.h> */
+#include <windows.h>
+#include <winnt.h>
 
-/* so we don't have to include any windows files */
-typedef char * PLARGE_INTEGER;
-typedef long LONG;
-typedef unsigned long ULONG;
-typedef ULONG * PULONG;
-typedef char CCHAR;
+#define LARGEINT_PROTOS
+#include <largeint.h>
 
 /***************
 function wrap_add(Left, Right : Ptr_64) return Integer_64;
