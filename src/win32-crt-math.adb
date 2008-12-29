@@ -19,7 +19,7 @@ package body Win32.crt.Math is
 
    package HUGE_Constant is
       huge_addr : constant AD;
-      pragma Import (C, huge_addr, "__imp__HUGE");
+      pragma Import (C, huge_addr, "_imp___HUGE");
    end HUGE_Constant;
 
    function HUGE return Win32.DOUBLE is
