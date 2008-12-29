@@ -1,5 +1,6 @@
 @echo off
 rem -----------------------------------------------
+set I_BIN=%1\bin
 set I_INC=%1\include\win32ada
 set I_LIB=%1\lib\win32ada
 set I_GPR=%1\lib\gnat
@@ -10,41 +11,37 @@ if exist %I_INC% rmdir /S /Q %I_INC%
 mkdir %I_INC% 2> nul
 if exist %I_LIB% rmdir /S /Q %I_LIB%
 mkdir %I_LIB% 2> nul
+mkdir %I_LIB%\relocatable 2> nul
+mkdir %I_LIB%\static 2> nul
 mkdir %I_GPR% 2> nul
 if exist %I_EXP% rmdir /S /Q %I_EXP%
-move ..\win32ada %I_EXP% 2> nul
+move win32ada %I_EXP% > nul
 if not .%2==.nobuild goto build
 echo Copying Win32Ada to GNAT installation in %1
-move *.ad? %I_INC%
+move src\*.ad? %I_INC% > nul
 if exist %I_GPR%\win32ada.gpr del /F %I_GPR%\win32ada.gpr
-move win32ada.gpr %I_GPR%
+move config\projects\win32ada.gpr %I_GPR%
 goto exit
 rem -----------------------------------------------
 :build
 echo Building Win32Ada for GNAT installation in %1
 path %1\bin;%path%
-mkdir lib
-gcc -c dump.c
-gcc -c stdlib_wrapper.c
-gcc -c var.c
-gcc -c wrappers.c
-gnatmake -q -d -Pwin32ada_bld -gnatws
-ar r lib\libwin32ada.a dump.o stdlib_wrapper.o var.o wrappers.o
+gprbuild -q -p -d -Pwin32ada -XLIBRARY_TYPE=static -XPRJ_BUILD=Release
 if errorlevel 1 goto error
-move *.ad? %I_INC%
-move *.c %I_INC%
-attrib -R %I_LIB%\*.ali
-move *.ali %I_LIB%
-attrib +R %I_LIB%\*.ali
-move lib\*.a %I_LIB%
+gprbuild -q -p -d -Pwin32ada -XLIBRARY_TYPE=relocatable -XPRJ_BUILD=Release
+if errorlevel 1 goto error
+move src\*.ad? %I_INC% > nul
+copy .build\release\relocatable\lib\libwin32ada.dll %I_BIN% > nul
+move .build\release\relocatable\lib\* %I_LIB%\relocatable > nul
+move .build\release\static\lib\* %I_LIB%\static > nul
 if exist %I_GPR%\win32ada.gpr del /F %I_GPR%\win32ada.gpr
-move win32ada.gpr %I_GPR%
+move config\projects\win32ada.gpr %I_GPR% > nul
 goto exit
 rem -----------------------------------------------
 :error
-move *.ad? %I_INC%
+move src\*.ad? %I_INC% > nul
 if exist %I_GPR%\win32ada.gpr del /F %I_GPR%\win32ada.gpr
-move win32ada.gpr %I_GPR%\gnat
+move config\projects\win32ada.gpr %I_GPR% > nul
 echo Couldn't build Win32Ada
 pause
 cd c:\
