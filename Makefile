@@ -72,6 +72,7 @@ ifeq (${ENABLE_SHARED}, true)
 endif
 	$(MKDIR) -p $(prefix)/include/win32ada
 	$(CP) -pr src/*.ad* $(prefix)/include/win32ada/
+	$(MKDIR) -p $(prefix)/lib/gnat
 	$(CP) config/projects/win32ada.gpr $(prefix)/lib/gnat/
 
 build:
