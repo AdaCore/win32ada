@@ -1,7 +1,7 @@
 ############################################################################
 #                                 Win32Ada                                 #
 #                                                                          #
-#                       Copyright (C) 2008, AdaCore                        #
+#                    Copyright (C) 2008-2010, AdaCore                      #
 #                                                                          #
 #  This library is free software; you can redistribute it and/or modify    #
 #  it under the terms of the GNU General Public License as published by    #
@@ -41,6 +41,7 @@ BUILD   	= .build
 MKDIR		= mkdir
 CP		= cp -p
 GPRBUILD	= gprbuild
+GPRCLEAN	= gprclean
 RM		= rm -f
 
 GMOPTS		= -j$(PROCESSORS)
