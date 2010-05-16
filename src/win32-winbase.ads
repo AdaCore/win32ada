@@ -1344,7 +1344,6 @@ package Win32.Winbase is
    function FreeModule (hLibModule : Win32.Windef.HINSTANCE) return BOOL
      renames FreeLibrary;                                --  winbase.h :466
 
-
    procedure FreeLibraryAndExitThread (hLibModule : Win32.Windef.HMODULE;
                                        dwExitCode : Win32.DWORD);
    --  winbase.h :982
