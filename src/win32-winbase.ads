@@ -1435,6 +1435,7 @@ package Win32.Winbase is
    --  winbase.h :1160
 
    function LocalFree (hMem : Win32.Windef.HLOCAL) return Win32.Windef.HLOCAL;
+   function LocalFree (hMem : Win32.PSTR) return Win32.Windef.HLOCAL;
    --  winbase.h :1167
 
    function LocalShrink (hMem : Win32.Windef.HLOCAL;
