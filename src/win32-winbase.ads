@@ -4475,6 +4475,10 @@ package Win32.Winbase is
    function IsValidSid (pSid : Win32.Winnt.PSID) return Win32.BOOL;
    --  winbase.h :5682
 
+   function IsWellKnownSid
+     (pSid : Win32.Winnt.PSID;
+      WellKnownSidType : Win32.Winnt.WELL_KNOWN_SID_TYPE) return Win32.BOOL;
+
    function EqualSid (pSid1 : Win32.Winnt.PSID;
                       pSid2 : Win32.Winnt.PSID)
                      return Win32.BOOL;             --  winbase.h :5690
@@ -6004,6 +6008,7 @@ private
                     "PrivilegedServiceAuditAlarmW");        --  winbase.h :5665
 
    pragma Import (Stdcall, IsValidSid, "IsValidSid");       --  winbase.h :5682
+   pragma Import (Stdcall, IsWellKnownSid, "IsWellKnownSid");
    pragma Import (Stdcall, EqualSid, "EqualSid");           --  winbase.h :5690
    pragma Import (Stdcall, EqualPrefixSid, "EqualPrefixSid");
    --  winbase.h :5699
