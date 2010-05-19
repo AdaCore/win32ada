@@ -37,7 +37,7 @@ function AllocWindowInfo (hWnd_p : Win32.WinDef.HWND;
   hsd : Win32.Winnt.HANDLE;
 begin
   hsd := Win32.Winnt.HANDLE
-           (Win32.WinBase.LocalAlloc (Win32.WinBase.LHND, Win32.UINT (wSize)));
+           (Win32.WinBase.LocalAlloc (Win32.WinBase.LHND, Win32.SIZE_T (wSize)));
   --     if(hsd = LocalAlloc(LHND,(WORD)wSize))
   if hsd /= System.Null_Address then 
     lResult := Win32.WinUser.SetWindowLong(hWnd_p, 0, 
