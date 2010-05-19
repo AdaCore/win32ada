@@ -813,8 +813,8 @@ package Win32.Winbase is
 
    type OVERLAPPED is                                      --  winbase.h :179
       record
-         Internal : Win32.DWORD;                      --  winbase.h :180
-         InternalHigh : Win32.DWORD;                      --  winbase.h :181
+         Internal : Win32.ULONG_PTR;                       --  winbase.h :180
+         InternalHigh : Win32.ULONG_PTR;                   --  winbase.h :181
          Offset : Win32.DWORD;                      --  winbase.h :182
          OffsetHigh : Win32.DWORD;                      --  winbase.h :183
          hEvent : Win32.Winnt.HANDLE;               --  winbase.h :184
@@ -1407,11 +1407,11 @@ package Win32.Winbase is
    --  winbase.h :1108
 
    function LocalAlloc (uFlags : Win32.UINT;
-                        uBytes : Win32.UINT)
+                        uBytes : Win32.Size_T)
                        return Win32.Windef.HLOCAL; --  winbase.h :1115
 
    function LocalReAlloc (hMem : Win32.Windef.HLOCAL;
-                          uBytes : Win32.UINT;
+                          uBytes : Win32.Size_T;
                           uFlags : Win32.UINT)
                          return Win32.Windef.HLOCAL;
    --  winbase.h :1123
@@ -1439,7 +1439,7 @@ package Win32.Winbase is
    --  winbase.h :1167
 
    function LocalShrink (hMem : Win32.Windef.HLOCAL;
-                         cbNewSize : Win32.UINT)
+                         cbNewSize : Win32.Size_T)
                         return Win32.UINT;      --  winbase.h :1174
 
    function LocalCompact (uMinFree : Win32.UINT) return Win32.UINT;
@@ -1447,24 +1447,24 @@ package Win32.Winbase is
 
    function FlushInstructionCache (hProcess : Win32.Winnt.HANDLE;
                                    lpBaseAddress : Win32.LPCVOID;
-                                   dwSize : Win32.DWORD)
+                                   dwSize : Win32.Size_T)
                                   return Win32.BOOL;
    --  winbase.h :1189
 
    function VirtualAlloc (lpAddress : Win32.LPVOID;
-                          dwSize : Win32.DWORD;
+                          dwSize : Win32.Size_T;
                           flAllocationType : Win32.DWORD;
                           flProtect : Win32.DWORD)
                          return Win32.LPVOID;
    --  winbase.h :1198
 
    function VirtualFree (lpAddress : Win32.LPVOID;
-                         dwSize : Win32.DWORD;
+                         dwSize : Win32.Size_T;
                          dwFreeType : Win32.DWORD)
                         return Win32.BOOL;     --  winbase.h :1208
 
    function VirtualProtect (lpAddress : Win32.LPVOID;
-                            dwSize : Win32.DWORD;
+                            dwSize : Win32.Size_T;
                             flNewProtect : Win32.DWORD;
                             lpflOldProtect : access Win32.DWORD)
                            return Win32.BOOL;
@@ -1472,12 +1472,12 @@ package Win32.Winbase is
 
    function VirtualQuery (lpAddress : Win32.LPCVOID;
                           lpBuffer : Win32.Winnt.PMEMORY_BASIC_INFORMATION;
-                          dwLength : Win32.DWORD)
+                          dwLength : WIn32.Size_T)
                          return Win32.DWORD;    --  winbase.h :1227
 
    function VirtualProtectEx (hProcess : Win32.Winnt.HANDLE;
                               lpAddress : Win32.LPVOID;
-                              dwSize : Win32.DWORD;
+                              dwSize : Win32.Size_T;
                               flNewProtect : Win32.DWORD;
                               lpflOldProtect : access Win32.DWORD)
                              return Win32.BOOL;
@@ -1486,12 +1486,12 @@ package Win32.Winbase is
    function VirtualQueryEx (hProcess : Win32.Winnt.HANDLE;
                             lpAddress : Win32.LPCVOID;
                             lpBuffer : Win32.Winnt.PMEMORY_BASIC_INFORMATION;
-                            dwLength : Win32.DWORD)
+                            dwLength : Win32.Size_T)
                            return Win32.DWORD;  --  winbase.h :1247
 
    function HeapCreate (flOptions : Win32.DWORD;
-                        dwInitialSize : Win32.DWORD;
-                        dwMaximumSize : Win32.DWORD)
+                        dwInitialSize : Win32.Size_T;
+                        dwMaximumSize : Win32.Size_T)
                        return Win32.Winnt.HANDLE;
    --  winbase.h :1257
 
@@ -1500,13 +1500,13 @@ package Win32.Winbase is
 
    function HeapAlloc (hHeap : Win32.Winnt.HANDLE;
                        dwFlags : Win32.DWORD;
-                       dwBytes : Win32.DWORD)
+                       dwBytes : Win32.Size_T)
                       return Win32.LPVOID;        --  winbase.h :1273
 
    function HeapReAlloc (hHeap : Win32.Winnt.HANDLE;
                          dwFlags : Win32.DWORD;
                          lpMem : Win32.LPVOID;
-                         dwBytes : Win32.DWORD)
+                         dwBytes : Win32.Size_T)
                         return Win32.LPVOID;      --  winbase.h :1282
 
    function HeapFree (hHeap : Win32.Winnt.HANDLE;
@@ -1595,13 +1595,13 @@ package Win32.Winbase is
    --  winbase.h :1448
 
    function GetProcessWorkingSetSize (hProcess : Win32.Winnt.HANDLE;
-                                      lpMinimumWorkingSetSize : Win32.LPDWORD;
-                                      lpMaximumWorkingSetSize : Win32.LPDWORD)
+                                      lpMinimumWorkingSetSize : Win32.Psize_T;
+                                      lpMaximumWorkingSetSize : Win32.Psize_T)
                                      return Win32.BOOL;    --  winbase.h :1459
 
    function SetProcessWorkingSetSize (hProcess : Win32.Winnt.HANDLE;
-                                      dwMinimumWorkingSetSize : Win32.DWORD;
-                                      dwMaximumWorkingSetSize : Win32.DWORD)
+                                      dwMinimumWorkingSetSize : Win32.Size_T;
+                                      dwMaximumWorkingSetSize : Win32.Size_T)
                                      return Win32.BOOL;    --  winbase.h :1468
 
    function OpenProcess (dwDesiredAccess : Win32.DWORD;
@@ -1802,6 +1802,9 @@ package Win32.Winbase is
 
    procedure EnterCriticalSection (lpCriticalSection : LPCRITICAL_SECTION);
    --  winbase.h :1850
+
+   function TryEnterCriticalSection (lpCriticalSection : LPCRITICAL_SECTION)
+      return Win32.BOOL;
 
    procedure LeaveCriticalSection (lpCriticalSection : LPCRITICAL_SECTION);
    --  winbase.h :1857
@@ -2405,7 +2408,7 @@ package Win32.Winbase is
                            dwDesiredAccess : Win32.DWORD;
                            dwFileOffsetHigh : Win32.DWORD;
                            dwFileOffsetLow : Win32.DWORD;
-                           dwNumberOfBytesToMap : Win32.DWORD)
+                           dwNumberOfBytesToMap : Size_T)
                           return Win32.LPVOID;
    --  winbase.h :2920
 
@@ -4827,18 +4830,18 @@ package Win32.Winbase is
                                         return Win32.BOOL; --  winbase.h :6217
 
    function VirtualLock (lpAddress : Win32.LPVOID;
-                         dwSize : Win32.DWORD)
+                         dwSize : Win32.Size_T)
                         return Win32.BOOL;      --  winbase.h :6224
 
    function VirtualUnlock (lpAddress : Win32.LPVOID;
-                           dwSize : Win32.DWORD)
+                           dwSize : Win32.Size_T)
                           return Win32.BOOL;    --  winbase.h :6232
 
    function MapViewOfFileEx (hFileMappingObject : Win32.Winnt.HANDLE;
                              dwDesiredAccess : Win32.DWORD;
                              dwFileOffsetHigh : Win32.DWORD;
                              dwFileOffsetLow : Win32.DWORD;
-                             dwNumberOfBytesToMap : Win32.DWORD;
+                             dwNumberOfBytesToMap : Win32.Size_T;
                              lpBaseAddress : Win32.LPVOID)
                             return Win32.LPVOID;
    --  winbase.h :6240
@@ -5210,10 +5213,11 @@ private
    pragma Convention (C, OSVERSIONINFOA);                   --  winbase.h :6649
    pragma Convention (C, OSVERSIONINFOW);                   --  winbase.h :6657
 
+   type Uns is mod 2 ** Standard'Address_Size;
    function To_Handle is new Ada.Unchecked_Conversion
-     (Integer, Win32.Winnt.HANDLE);
+     (Uns, Win32.Winnt.HANDLE);
 
-   INVALID_HANDLE_VALUE : constant Win32.Winnt.HANDLE :=   To_Handle (-1);
+   INVALID_HANDLE_VALUE : constant Win32.Winnt.HANDLE := To_Handle (Uns'Last);
    --  winbase.h :57
 
    pragma Inline (GlobalDiscard);
@@ -5389,6 +5393,7 @@ private
                     "InitializeCriticalSection");
    --  winbase.h :1843
    pragma Import (Stdcall, EnterCriticalSection, "EnterCriticalSection");
+   pragma Import (Stdcall, TryEnterCriticalSection, "TryEnterCriticalSection");
    --  winbase.h :1850
    pragma Import (Stdcall, LeaveCriticalSection, "LeaveCriticalSection");
    --  winbase.h :1857

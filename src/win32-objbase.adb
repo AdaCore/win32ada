@@ -12,7 +12,6 @@
 --
 -------------------------------------------------------------------------------
 
-
 with Ada.Unchecked_Conversion;
 
 package body Win32.Objbase is
@@ -21,8 +20,7 @@ package body Win32.Objbase is
    use type Interfaces.C.int;
 
    procedure LISet32 (li : in out Win32.Winnt.anonymous1_t;
-                      v : in Win32.DWORD) is            --  objbase.h: 245
-      use type Win32.DWORD;
+                      v  : Win32.DWORD) is            --  objbase.h: 245
       use type Win32.LONG;
    begin
       if v > DWORD'Last / 2 then
@@ -34,7 +32,7 @@ package body Win32.Objbase is
    end LISet32;
 
    procedure ULISet32 (li : in out Win32.Winnt.anonymous1_t;
-                       v : in Win32.DWORD) is           --  objbase.h: 247
+                       v  : Win32.DWORD) is           --  objbase.h: 247
    begin
       li.HighPart := 0;
       li.LowPart := v;
@@ -79,7 +77,4 @@ package body Win32.Objbase is
       return IsEqualGUID (REFGUID (rclsid1), REFGUID (rclsid2));
    end IsEqualCLSID;
 
-
 end Win32.Objbase;
-
-

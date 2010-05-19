@@ -15,6 +15,7 @@
 
 with Ada.Unchecked_Conversion;
 with Interfaces;
+with System.Storage_Elements; use System.Storage_Elements;
 
 package body Win32.Winnt is
 
@@ -64,12 +65,11 @@ package body Win32.Winnt is
       Dummy : IMAGE_NT_HEADERS;
       pragma Warnings (ON);
 
-      subtype Long is Interfaces.C.long;
-      use type Interfaces.C.long;
    begin
-      return To_PIMAGE (To_Long (NTHeader) +
-        Dummy.OptionalHeader'Position +
-        Long (NTHeader.FileHeader.SizeOfOptionalHeader));
+      return To_PIMAGE
+        (NTHeader.all'Address +
+           Storage_Offset (Dummy.OptionalHeader'Position) +
+           Storage_Offset (NTHeader.FileHeader.SizeOfOptionalHeader));
    end IMAGE_FIRST_SECTION;
 
    function BTYPE (X : BYTE) return BYTE is
@@ -125,9 +125,9 @@ package body Win32.Winnt is
    end DECREF;
 
    function IMAGE_SNAP_BY_ORDINAL (Ordinal : DWORD) return Standard.Boolean is
-      use Interfaces;
+      function To_Int is new Ada.Unchecked_Conversion (DWORD, Integer);
    begin
-      return Interfaces.Integer_32 (Ordinal) < 0;
+      return To_Int (Ordinal) < 0;
    end IMAGE_SNAP_BY_ORDINAL;
 
    function IMAGE_ORDINAL (Ordinal : DWORD) return WORD is

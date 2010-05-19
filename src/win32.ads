@@ -40,6 +40,7 @@ package Win32 is
    --  8 bit signed chars
    subtype CHAR       is Interfaces.C.char;                --  winnt.h
    type    PCHAR      is access all CHAR;                  --  winnt.h
+   pragma No_Strict_Aliasing (PCHAR);
    subtype LPCH       is PCHAR;                            --  winnt.h
    subtype PCH        is PCHAR;                            --  winnt.h
    subtype NPSTR      is PCHAR;                            --  winnt.h
@@ -126,6 +127,7 @@ package Win32 is
    type    PCUINT     is access constant UINT;
    type    UINT_Array is array (Natural range <>) of aliased UINT;
    subtype Size_T     is Interfaces.C.size_t;
+   type    Psize_T    is access all Size_T;
 
    --  "long" 32 bit signed integers
    subtype LONG       is Interfaces.C.long;                --  winnt.h
@@ -147,8 +149,11 @@ package Win32 is
    subtype DWORD_Array is ULONG_Array;
 
    function To_PULONG is new Ada.Unchecked_Conversion (System.Address, PULONG);
-   function To_LPTSTR is new Ada.Unchecked_Conversion (DWORD, PSTR);
-   function To_LPWSTR is new Ada.Unchecked_Conversion (DWORD, LPWSTR);
+--     function To_LPTSTR is new Ada.Unchecked_Conversion (DWORD, PSTR);
+--     function To_LPWSTR is new Ada.Unchecked_Conversion (DWORD, LPWSTR);
+
+   --  This type is 32 bit on x86 and 64 bit on x64
+   type ULONG_PTR is mod 2 ** Standard'Address_Size;
 
    --  builtin C "float", 32 bits on Intel
    subtype FLOAT  is Interfaces.C.C_float;                 --  windef.h
@@ -327,7 +332,6 @@ private
 
    pragma Inline (To_C);
    pragma Inline (To_Win);
-   pragma Inline (To_Chars_Ptr);
    pragma Inline (To_Chars_Ptr);
    pragma Inline (To_PSTR);
    pragma Inline (To_PCSTR);

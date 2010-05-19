@@ -19,11 +19,11 @@
 
 with Ada.Unchecked_Conversion;
 with Stdarg;
-with Win32.Utils;
 with Win32.Winbase;
 with Win32.Windef;
 with Win32.Wingdi;
 with Win32.Winnt;
+with System.Storage_Elements; use System.Storage_Elements;
 
 package Win32.Winuser is
 
@@ -4934,86 +4934,85 @@ private
    pragma Convention (C, SOUNDSENTRYW);                     --  winuser.h:6446
    pragma Convention (C_Pass_By_Copy, TOGGLEKEYS);          --  winuser.h:6476
 
-   function L is new Ada.Unchecked_Conversion (DWORD, LPSTR);
+   function L is new Ada.Unchecked_Conversion (ULONG_PTR, LPSTR);
 
    RT_CURSOR_NB : constant := 1;
    RT_ICON_NB : constant := 3;
 
-   RT_CURSOR : constant LPSTR := L (Win32.Utils.MAKELONG (RT_CURSOR_NB, 0));
+   RT_CURSOR : constant LPSTR := L (RT_CURSOR_NB);
    --  winuser.h:115
-   RT_BITMAP : constant LPSTR := L (Win32.Utils.MAKELONG (2, 0));
+   RT_BITMAP : constant LPSTR := L (2);
    --  winuser.h:116
-   RT_ICON : constant LPSTR := L (Win32.Utils.MAKELONG (RT_ICON_NB, 0));
+   RT_ICON : constant LPSTR := L (RT_ICON_NB);
    --  winuser.h:117
-   RT_MENU : constant LPSTR := L (Win32.Utils.MAKELONG (4, 0));
+   RT_MENU : constant LPSTR := L (4);
    --  winuser.h:118
-   RT_DIALOG : constant LPSTR := L (Win32.Utils.MAKELONG (5, 0));
+   RT_DIALOG : constant LPSTR := L (5);
    --  winuser.h:119
-   RT_STRING : constant LPSTR := L (Win32.Utils.MAKELONG (6, 0));
+   RT_STRING : constant LPSTR := L (6);
    --  winuser.h:120
-   RT_FONTDIR : constant LPSTR := L (Win32.Utils.MAKELONG (7, 0));
+   RT_FONTDIR : constant LPSTR := L (7);
    --  winuser.h:121
-   RT_FONT : constant LPSTR := L (Win32.Utils.MAKELONG (8, 0));
+   RT_FONT : constant LPSTR := L (8);
    --  winuser.h:122
-   RT_ACCELERATOR : constant LPSTR := L (Win32.Utils.MAKELONG (9, 0));
+   RT_ACCELERATOR : constant LPSTR := L (9);
    --  winuser.h:123
-   RT_RCDATA : constant LPSTR := L (Win32.Utils.MAKELONG (10, 0));
+   RT_RCDATA : constant LPSTR := L (10);
    --  winuser.h:124
-   RT_MESSAGETABLE : constant LPSTR := L (Win32.Utils.MAKELONG (11, 0));
+   RT_MESSAGETABLE : constant LPSTR := L (11);
    --  winuser.h:125
    DIFFERENCE : constant := 11;                        --  winuser.h:127
    use type Win32.WORD;
-   RT_GROUP_CURSOR : constant LPSTR := L (Win32.Utils.MAKELONG
-     (RT_CURSOR_NB + DIFFERENCE, 0));
+   RT_GROUP_CURSOR : constant LPSTR := L (RT_CURSOR_NB + DIFFERENCE);
    --  winuser.h:128
-   RT_GROUP_ICON : constant LPSTR := L (Win32.Utils.MAKELONG
-     (RT_ICON_NB + DIFFERENCE, 0));
+   RT_GROUP_ICON : constant LPSTR := L (RT_ICON_NB + DIFFERENCE);
    --  winuser.h:129
-   RT_VERSION : constant LPSTR := L (Win32.Utils.MAKELONG (20, 0));
+   RT_VERSION : constant LPSTR := L (20);
    --  winuser.h:130
-   RT_DLGINCLUDE : constant LPSTR := L (Win32.Utils.MAKELONG (17, 0));
+   RT_DLGINCLUDE : constant LPSTR := L (17);
    --  winuser.h:131
-   IDC_ARROW : constant LPSTR := L (Win32.Utils.MAKELONG (32512, 0));
+   IDC_ARROW : constant LPSTR := L (32512);
    --  winuser.h:5213
-   IDC_IBEAM : constant LPSTR := L (Win32.Utils.MAKELONG (32513, 0));
+   IDC_IBEAM : constant LPSTR := L (32513);
    --  winuser.h:5214
-   IDC_WAIT : constant LPSTR := L (Win32.Utils.MAKELONG (32514, 0));
+   IDC_WAIT : constant LPSTR := L (32514);
    --  winuser.h:5215
-   IDC_CROSS : constant LPSTR := L (Win32.Utils.MAKELONG (32515, 0));
+   IDC_CROSS : constant LPSTR := L (32515);
    --  winuser.h:5216
-   IDC_UPARROW : constant LPSTR := L (Win32.Utils.MAKELONG (32516, 0));
+   IDC_UPARROW : constant LPSTR := L (32516);
    --  winuser.h:5217
-   IDC_SIZE : constant LPSTR := L (Win32.Utils.MAKELONG (32640, 0));
+   IDC_SIZE : constant LPSTR := L (32640);
    --  winuser.h:5218
-   IDC_ICON : constant LPSTR := L (Win32.Utils.MAKELONG (32641, 0));
+   IDC_ICON : constant LPSTR := L (32641);
    --  winuser.h:5219
-   IDC_SIZENWSE : constant LPSTR := L (Win32.Utils.MAKELONG (32642, 0));
+   IDC_SIZENWSE : constant LPSTR := L (32642);
    --  winuser.h:5220
-   IDC_SIZENESW : constant LPSTR := L (Win32.Utils.MAKELONG (32643, 0));
+   IDC_SIZENESW : constant LPSTR := L (32643);
    --  winuser.h:5221
-   IDC_SIZEWE : constant LPSTR := L (Win32.Utils.MAKELONG (32644, 0));
+   IDC_SIZEWE : constant LPSTR := L (32644);
    --  winuser.h:5222
-   IDC_SIZENS : constant LPSTR := L (Win32.Utils.MAKELONG (32645, 0));
+   IDC_SIZENS : constant LPSTR := L (32645);
    --  winuser.h:5223
    --  the following are not in win3.1
-   IDC_SIZEALL : constant LPSTR := L (Win32.Utils.MAKELONG (32646, 0));
+   IDC_SIZEALL : constant LPSTR := L (32646);
    --  winuser.h:5224
-   IDC_NO : constant LPSTR := L (Win32.Utils.MAKELONG (32648, 0));
+   IDC_NO : constant LPSTR := L (32648);
    --  winuser.h:5225
-   IDC_APPSTARTING : constant LPSTR := L (Win32.Utils.MAKELONG (32650, 0));
+   IDC_APPSTARTING : constant LPSTR := L (32650);
    --  winuser.h:5226
-   IDI_APPLICATION : constant LPSTR := L (Win32.Utils.MAKELONG (32512, 0));
+   IDI_APPLICATION : constant LPSTR := L (32512);
    --  winuser.h:5394
-   IDI_HAND : constant LPSTR := L (Win32.Utils.MAKELONG (32513, 0));
+   IDI_HAND : constant LPSTR := L (32513);
    --  winuser.h:5395
-   IDI_QUESTION : constant LPSTR := L (Win32.Utils.MAKELONG (32514, 0));
+   IDI_QUESTION : constant LPSTR := L (32514);
    --  winuser.h:5396
-   IDI_EXCLAMATION : constant LPSTR := L (Win32.Utils.MAKELONG (32515, 0));
+   IDI_EXCLAMATION : constant LPSTR := L (32515);
    --  winuser.h:5397
-   IDI_ASTERISK : constant LPSTR := L (Win32.Utils.MAKELONG (32516, 0));
+   IDI_ASTERISK : constant LPSTR := L (32516);
    --  winuser.h:5398
 
-   function To_Hwnd is new Ada.Unchecked_Conversion (LONG, Win32.Windef.HWND);
+   function To_Hwnd is new
+      Ada.Unchecked_Conversion (Storage_Offset, Win32.Windef.HWND);
 
    HWND_BROADCAST : constant Win32.Windef.HWND := To_Hwnd (16#ffff#);
    --  winuser.h:1696

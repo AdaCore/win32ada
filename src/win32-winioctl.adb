@@ -33,7 +33,6 @@ package body Win32.Winioctl is
                                   return Boolean is
 
       use type Win32.DWORD;
-      use type Interfaces.C.unsigned_long;
       Masked_Val : constant DWORD := PartitionType and not 16#C0#;
    begin
       return

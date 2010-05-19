@@ -12,10 +12,7 @@
 --
 -------------------------------------------------------------------------------
 
-
-with Ada.Unchecked_Conversion;
 with Stdarg.Impl;
-with Win32.Utils;
 
 package body Win32.Winbase is
 
@@ -32,8 +29,12 @@ package body Win32.Winbase is
    end LocalDiscard;
 
    function MAKEINTATOM (wInteger : WORD) return Win32.Winnt.LPTSTR is
+      type Int is range -(2 ** (Standard'Address_Size - 1)) ..
+                        +(2 ** (Standard'Address_Size - 1) - 1);
+      function To_LPTSTR is new
+         Ada.Unchecked_Conversion (Int, Win32.Winnt.LPTSTR);
    begin
-      return To_LPTSTR (Win32.Utils.MAKELONG (Low => wInteger, High => 0));
+      return To_LPTSTR (Int (wInteger));
    end MAKEINTATOM;
 
    function FormatMessageA (dwFlags : Win32.DWORD;

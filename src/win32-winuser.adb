@@ -12,7 +12,6 @@
 --
 -------------------------------------------------------------------------------
 
-
 with Ada.Unchecked_Conversion;
 with Stdarg.Impl;
 
@@ -20,15 +19,18 @@ package body Win32.Winuser is
 
    function MAKEINTRESOURCEA (wInteger : WORD) return LPSTR is
       --  winuser.h:102
-      function To_LPSTR is new Ada.Unchecked_Conversion (DWORD, LPSTR);
+      type Uns is mod 2 ** Standard'Address_Size;
+      function To_LPSTR is new Ada.Unchecked_Conversion (Uns, LPSTR);
    begin
-      return To_LPSTR (Win32.Utils.MAKELONG (wInteger, 0));
+      return To_LPSTR (Uns (wInteger));
    end MAKEINTRESOURCEA;
 
    function MAKEINTRESOURCEW (wInteger : WORD) return LPWSTR is
       --  winuser.h:103
+      type Uns is mod 2 ** Standard'Address_Size;
+      function To_LPWSTR is new Ada.Unchecked_Conversion (Uns, LPWSTR);
    begin
-      return To_LPWSTR (Win32.Utils.MAKELONG (wInteger, 0));
+      return To_LPWSTR (Uns (wInteger));
    end MAKEINTRESOURCEW;
 
    procedure POINTSTOPOINT (PT : out Win32.Windef.POINT;
@@ -196,10 +198,10 @@ package body Win32.Winuser is
    function GetWindowTask (H : Win32.Windef.HWND) return Win32.Winnt.HANDLE is
       Res : DWORD;
       function To_Handle is new Ada.Unchecked_Conversion
-        (DWORD, Win32.Winnt.HANDLE);
+        (Storage_Offset, Win32.Winnt.HANDLE);
    begin
       Res := GetWindowThreadProcessId (H, null);
-      return To_Handle (Res);
+      return To_Handle (Storage_Offset (Res));
    end GetWindowTask;
 
    function DefHookProc (nCode : Win32.INT;

@@ -552,7 +552,7 @@ package Win32.Winreg is
 
 private
 
-   function To_Hkey is new Ada.Unchecked_Conversion (Win32.DWORD, HKEY);
+   function To_Hkey is new Ada.Unchecked_Conversion (ULONG_PTR, HKEY);
 
    HKEY_CLASSES_ROOT : constant  HKEY := To_Hkey (16#80000000#);
    --  winreg.h:44

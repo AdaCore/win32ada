@@ -4752,9 +4752,9 @@ private
    pragma Convention (C, EMRFORMAT);                        --  wingdi.h:3207
 
    function To_Handle is new Ada.Unchecked_Conversion
-     (DWORD, Win32.Winnt.HANDLE);
+     (ULONG_PTR, Win32.Winnt.HANDLE);
 
-   HGDI_ERROR : constant Win32.Winnt.HANDLE := To_Handle (16#ffff_ffff#);
+   HGDI_ERROR : constant Win32.Winnt.HANDLE := To_Handle (ULONG_PTR'Last);
    --  wingdi.h:84
 
    pragma Inline (MAKEROP4);
