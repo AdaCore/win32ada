@@ -46,7 +46,7 @@ project Shared is
    -- Build directories --
    -----------------------
 
-   for Exec_Dir use ".build";
+   for Exec_Dir use ".build/" & Host;
 
    case Build is
       when "Debug" =>

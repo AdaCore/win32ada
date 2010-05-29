@@ -36,8 +36,6 @@ DEBUG		= false
 
 -include makefile.setup
 
-BUILD   	= .build
-
 MKDIR		= mkdir
 CP		= cp -p
 GPRBUILD	= gprbuild
@@ -47,6 +45,8 @@ RM		= rm -f
 HOST		= $(shell gcc -dumpmachine)
 
 GMOPTS		= -j$(PROCESSORS) -XPRJ_HOST=$(HOST)
+
+BUILD   	= .build/$(HOST)
 
 ifeq ($(DEBUG), true)
 BDIR		= $(BUILD)/debug
