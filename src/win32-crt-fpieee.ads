@@ -15,6 +15,11 @@
 --  Microsoft is a registered trademark and Windows and Windows NT are
 --  trademarks of Microsoft Corporation.
 --
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (c) AdaCore 2000-2010, AdaCore
+--
 -------------------------------------------------------------------------------
 
 with Win32;
@@ -31,8 +36,7 @@ package Win32.crt.Fpieee is
      FpCompareLess,
      FpCompareUnordered);
 
-
-   --  Define floating point format and result precision values.
+   --  Define floating point format and result precision values
 
    type FPIEEE_FORMAT is
      (FpFormatFp32,
@@ -52,8 +56,7 @@ package Win32.crt.Fpieee is
    pragma Convention (C, FPIEEE_FORMAT);
    for FPIEEE_FORMAT'Size use 4;
 
-
-   --  Define operation code values.
+   --  Define operation code values
 
    type FP_OPERATION_CODE is
      (FpCodeUnspecified,
@@ -97,8 +100,7 @@ package Win32.crt.Fpieee is
      FpCodeNextafter,
      FpCodeNegate);
 
-
-   --  Define rounding modes.
+   --  Define rounding modes
 
    type FPIEEE_ROUNDING_MODE is
      (FpRoundNearest,
@@ -106,10 +108,8 @@ package Win32.crt.Fpieee is
      FpRoundPlusInfinity,
      FpRoundChopped);
 
-
    type FPIEEE_PRECISION is
      (FpPrecisionFull, FpPrecision53, FpPrecision24);
-
 
    --  Define floating point context record
 
@@ -124,7 +124,6 @@ package Win32.crt.Fpieee is
    subtype U16 is Win32.USHORT;
 
    subtype U32 is Win32.ULONG;
-
 
    type FP80 is array (0 .. 4) of aliased Win32.USHORT;
 

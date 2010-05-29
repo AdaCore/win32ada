@@ -1,6 +1,11 @@
-/* $Source$ */
-/* $Revision: 11231 $ $Date: 2000-08-10 11:10:30 +0200 (Thu, 10 Aug 2000) $ $Author: dijk $ */
+/*************************************************************************/
 /* Define wrapper routines for win32-largeint-ops.adb, ObjectAda version */
+/*                                                                       */
+/* This file is now maintained and made available by AdaCore under       */
+/* the same terms.                                                       */
+/*                                                                       */
+/* Copyright (c) AdaCore 2000-2010, AdaCore                              */
+/*************************************************************************/
 
 #include <windows.h>
 #include <winnt.h>
@@ -46,7 +51,6 @@ PLARGE_INTEGER wrap_imul
   *result = EnlargedIntegerMultiply(left, right);
   return result;
 }
-
 
 /***************
 function wrap_umul(Left, Right : Unsigned_32) return Unsigned_64;
@@ -121,7 +125,7 @@ PLARGE_INTEGER wrap_ExtendedLargeIntegerDivide
 function wrap_LargeIntegerDivide
     (Dividend : Ptr_64;
      Divisor  : Ptr_64;
-     Remainder: access Integer_64) 
+     Remainder: access Integer_64)
     return Integer_64;
 ****************/
 
@@ -178,7 +182,7 @@ PLARGE_INTEGER wrap_Shift_Right_Arithmetic
 }
 
 /***************
-function wrap_sImage (Value: Ptr_64;  Hex: Boolean := Standard.False) 
+function wrap_sImage (Value: Ptr_64;  Hex: Boolean := Standard.False)
     return Image_Result;
 ****************/
 
@@ -187,12 +191,12 @@ char *wrap_sImage
  PLARGE_INTEGER Value,
  long Hex)
 {
-  *result = 0;        /* Cause caller to raise execption */
+  *result = 0;        /* Cause caller to raise exception */
   return result;
 }
 
 /***************
-function wrap_uImage (Value: Ptr_64;  Hex: Boolean := Standard.False) 
+function wrap_uImage (Value: Ptr_64;  Hex: Boolean := Standard.False)
     return Image_Result;
 
 ****************/
@@ -202,6 +206,6 @@ char *wrap_uImage
  PLARGE_INTEGER Value,
  long Hex)
 {
-  *result = 0;        /* Cause caller to raise execption */
+  *result = 0;        /* Cause caller to raise exception */
   return result;
 }

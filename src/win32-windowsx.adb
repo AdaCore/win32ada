@@ -10,6 +10,11 @@
 --  Royalty-free, unlimited, worldwide, non-exclusive use, modification,
 --  reproduction and further distribution of this file is permitted.
 --
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (c) AdaCore 2000-2010, AdaCore
+--
 -------------------------------------------------------------------------------
 
 with Ada.Unchecked_Conversion;
@@ -171,7 +176,6 @@ package body Win32.Windowsx is
         Win32.Wingdi.RGN_DIFF);
    end SubtractRgn;
 
-
    function  UnionRgn (hrgnResult : Win32.Windef.HRGN;
                        hrgnA : Win32.Windef.HRGN;
                        hrgnB : Win32.Windef.HRGN)
@@ -319,7 +323,6 @@ package body Win32.Windowsx is
         Win32.Winuser.GWL_WNDPROC,
         To_LPARAM (lpfn)));
    end SubclassWindow;
-
 
    function IsRestored (hwnd : Win32.Windef.HWND) return Win32.BOOL is
       --  windowsx.h:91
@@ -486,7 +489,6 @@ package body Win32.Windowsx is
    --  function To_LPARAM is new Ada.Unchecked_Conversion(
    --  Win32.Winnt.LPCTSTR, Win32.LPARAM);
 
-
    procedure FORWARD_WM_WININICHANGE (hwnd : Win32.Windef.HWND;
                                       lpszSectionName : Win32.Winnt.LPCTSTR;
                                       fn : LPDEFFN) is
@@ -537,7 +539,6 @@ package body Win32.Windowsx is
    function To_DWORD is new Ada.Unchecked_Conversion
      (Win32.Windef.HWND, Win32.DWORD);
 
-
    function HANDLE_WM_PALETTEISCHANGING (hwnd : Win32.Windef.HWND;
                                          wParam : Win32.WPARAM;
                                          lParam : Win32.LPARAM;
@@ -548,7 +549,6 @@ package body Win32.Windowsx is
       fn (hwnd, To_HWND (wParam));
       return 0;
    end HANDLE_WM_PALETTEISCHANGING;
-
 
    procedure FORWARD_WM_PALETTEISCHANGING
      (hwnd : Win32.Windef.HWND;
@@ -735,7 +735,6 @@ package body Win32.Windowsx is
       garbage := fn (hwnd, Win32.Winuser.WM_QUIT, Win32.WPARAM (exitCode), 0);
    end FORWARD_WM_QUIT;
 
-
    function To_LPCREATESTRUCT is new Ada.Unchecked_Conversion
      (Win32.LPARAM, Win32.Winuser.LPCREATESTRUCT);
 
@@ -878,7 +877,6 @@ package body Win32.Windowsx is
    begin
       garbage := fn (hwnd, Win32.Winuser.WM_ENABLE, Win32.WPARAM (fEnable), 0);
    end FORWARD_WM_ENABLE;
-
 
    function To_LPTSTR is new Ada.Unchecked_Conversion (Win32.LPARAM,
      Win32.Winnt.LPTSTR);
@@ -1548,7 +1546,6 @@ package body Win32.Windowsx is
         Win32.Winuser.MAKELPARAM (Win32.WORD (cRepeat),
         Win32.WORD (flags)));
    end FORWARD_WM_SYSKEYUP;
-
 
    function HANDLE_WM_SYSCHAR (hwnd : Win32.Windef.HWND;
                                wParam : Win32.WPARAM;
@@ -2258,7 +2255,6 @@ package body Win32.Windowsx is
         To_HMENU (lParam))));
    end HANDLE_WM_MENUCHAR;
 
-
    function To_DWORD is new Ada.Unchecked_Conversion (Win32.LRESULT,
      Win32.DWORD);
 
@@ -2945,7 +2941,6 @@ package body Win32.Windowsx is
         (fn (hwnd, Win32.Winuser.WM_MDIGETACTIVE, 0, 0))));
    end FORWARD_WM_MDIGETACTIVE;
 
-
    function HANDLE_WM_MDISETMENU (hwnd : Win32.Windef.HWND;
                                   wParam : Win32.WPARAM;
                                   lParam : Win32.LPARAM;
@@ -3206,7 +3201,6 @@ package body Win32.Windowsx is
         Win32.Winuser.CTLCOLOR_LISTBOX))));
    end HANDLE_WM_CTLCOLORLISTBOX;
 
-
    function FORWARD_WM_CTLCOLORLISTBOX (hwnd : Win32.Windef.HWND;
                                         hdc : Win32.Windef.HDC;
                                         hwndChild : Win32.Windef.HWND;
@@ -3314,7 +3308,6 @@ package body Win32.Windowsx is
         Win32.WPARAM (Win32.Utils.LOWORD (HDC_To_DWORD (hdc))),
         To_LPARAM (hwndChild)))));
    end FORWARD_WM_CTLCOLORSCROLLBAR;
-
 
    function HANDLE_WM_CTLCOLORSTATIC (hwnd : Win32.Windef.HWND;
                                       wParam : Win32.WPARAM;
@@ -3624,7 +3617,6 @@ package body Win32.Windowsx is
         Win32.Winuser.MAKELPARAM (Win32.WORD (flags), 0));
    end FORWARD_WM_COMMNOTIFY;
 
-
    function To_HICON is new Ada.Unchecked_Conversion (Win32.UINT,
      Win32.Windef.HICON);
 
@@ -3681,7 +3673,6 @@ package body Win32.Windowsx is
         0, 0)));
    end Button_GetState;
 
-
    function Button_SetState (hwndCtl : Win32.Windef.HWND;
                              state : Win32.WPARAM)
                             return Win32.UINT is           --  winuser.h:947
@@ -3710,7 +3701,6 @@ package body Win32.Windowsx is
         Win32.WPARAM (Win32.Utils.LOWORD (style)),
         wRedraw);
    end Button_SetStyle;
-
 
    procedure Edit_LimitText (hwndCtl : Win32.Windef.HWND;    --  xwindows.h:959
                              cchMax : Win32.INT) is
@@ -3797,7 +3787,6 @@ package body Win32.Windowsx is
         0,
         To_LPARAM (lprc));
    end Edit_SetRectNoPaint;
-
 
    function Edit_GetSel (hwndCtl : Win32.Windef.HWND) return Win32.DWORD is
       --  xwindows.h:968
@@ -3964,7 +3953,6 @@ package body Win32.Windowsx is
         Win32.WPARAM (cTabs),
         To_LPARAM (To_LPCINT (lpTabs)));
    end Edit_SetTabStops;
-
 
    function Edit_FmtLines (hwndCtl : Win32.Windef.HWND;
                            fAddEOL : Win32.BOOL)
@@ -4525,7 +4513,6 @@ package body Win32.Windowsx is
         Win32.WPARAM (attrs), To_LPARAM (lpszFileSpec))));
    end ListBox_Dir;
 
-
    function ComboBox_LimitText (hwndCtl : Win32.Windef.HWND;
                                 cchLimit : Win32.INT)
                                return Win32.INT is         --  windowsx.h:1088
@@ -4889,7 +4876,6 @@ package body Win32.Windowsx is
       return Win32.BOOL (Win32.Utils.HIWORD (Win32.DWORD (wp)));
    end GET_WM_ACTIVATE_FMINIMIZED;
 
-
    function GET_WM_ACTIVATE_HWND (wp : Win32.WPARAM;
                                   lp : Win32.LPARAM)
                                  return Win32.Windef.HWND is
@@ -4909,7 +4895,6 @@ package body Win32.Windowsx is
       return To_LONG (hwnd);
    end GET_WM_ACTIVATE_MPS;
 
-
    function GET_WM_CHARTOITEM_CHAR (wp : Win32.WPARAM;
                                     lp : Win32.LPARAM)
                                    return Win32.TCHAR is
@@ -4924,7 +4909,6 @@ package body Win32.Windowsx is
    begin
       return Win32.WORD (wp);
    end GET_WM_CHARTOITEM_POS;
-
 
    function GET_WM_CHARTOITEM_HWND (wp : Win32.WPARAM;
                                     lp : Win32.LPARAM)
@@ -5047,7 +5031,6 @@ package body Win32.Windowsx is
       return To_LONG (hmenu);
    end GET_WM_MENUSELECT_MPS;
 
-
    function GET_WM_MDIACTIVATE_FACTIVATE (hwnd : Win32.Windef.HWND;
                                           wp : Win32.WPARAM;
                                           lp : Win32.LPARAM)
@@ -5115,7 +5098,6 @@ package body Win32.Windowsx is
    begin
       return Win32.BOOL (Win32.Utils.HIWORD (Win32.DWORD (wp)));
    end GET_WM_MENUCHAR_FMENU;
-
 
    function GET_WM_MENUCHAR_MPS (ch : Win32.TCHAR;
                                  hmenu : Win32.Windef.HMENU;
@@ -5214,7 +5196,6 @@ package body Win32.Windowsx is
       return To_LONG (hwnd);
    end GET_WM_VKEYTOITEM_MPS;
 
-
    function GET_EM_SETSEL_START (wp : Win32.WPARAM;
                                  lp : Win32.LPARAM)
                                 return Win32.INT is        --  windowsx.h:1209
@@ -5312,5 +5293,3 @@ package body Win32.Windowsx is
    end GET_WM_VSCROLL_MPS;
 
 end Win32.Windowsx;
-
-

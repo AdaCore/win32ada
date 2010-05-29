@@ -15,6 +15,11 @@
 --  Microsoft is a registered trademark and Windows and Windows NT are
 --  trademarks of Microsoft Corporation.
 --
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (c) AdaCore 2000-2010, AdaCore
+--
 -------------------------------------------------------------------------------
 
 with Win32.Objbase;
@@ -269,8 +274,6 @@ package Win32.Rpcndr is
          Reserved6              at 168 range 3 .. 34;
          Reserved7              at 172 range 3 .. 34;
       end record;
-
-
 
    type EXPR_EVAL is access procedure
      (pStubMsg : PMIDL_STUB_MESSAGE);              --  rpcndr.h:608
@@ -703,13 +706,11 @@ package Win32.Rpcndr is
                                  p : Win32.PVOID;
                                  drep : Win32.ULONG);        --  rpcndr.h:587
 
-
    procedure NdrMarshSCtxtHdl (pc : NDR_SCONTEXT;
                                p : Win32.PVOID;
                                rd : NDR_RUNDOWN);            --  rpcndr.h:590
 
    function NdrFcShort (s : Win32.USHORT) return Win32.UCHAR; --  rpcndr.h:595
-
 
    procedure NdrSimpleTypeMarshall
      (pStubMsg : PMIDL_STUB_MESSAGE;

@@ -1,6 +1,34 @@
--- $Source$ 
--- $Revision$ $Date$ $Author$ 
-
+-------------------------------------------------------------------------------
+--
+-- This program has been derived by Intermetrics, Inc. from the
+-- keylook.c program in "Programming Windows 3.1", third edition,
+-- by Charles Petzold, Microsoft Press.
+-- The program is derived from source code which is restricted
+-- by the license and under the following copyrights:
+--
+--      Copyright (c) 1992 by Charles Petzold
+--
+--
+-- THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS PROVIDED "AS IS" WITHOUT
+-- WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT
+-- LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR
+-- A PARTICULAR PURPOSE.  The user assumes the entire risk as to the accuracy
+-- and the use of this file.  This file may be used only by licensees of
+-- Microsoft Corporation's WIN32 Software Development Kit in accordance with
+-- the terms of the licensee's End-User License Agreement for Microsoft
+-- Software for the WIN32 Development Kit.
+--
+-- Copyright (c) Intermetrics, Inc. 1995
+-- Portions (c) 1985-1994 Microsoft Corporation with permission.
+-- Microsoft is a registered trademark and Windows and Windows NT are
+-- trademarks of Microsoft Corporation.
+--
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (c) AdaCore 2000-2010, AdaCore
+--
+-------------------------------------------------------------------------------
 
 with Ada.Unchecked_Conversion;
 with Interfaces.C;
@@ -13,7 +41,6 @@ package body Keylook_Pkg is
     ps       : aliased Win32.Winuser.PAINTSTRUCT;
     tm       : aliased Win32.Wingdi.TEXTMETRIC;
 
-
     function CP(C_Str : Win32.CHAR_Array) return Win32.LPCSTR is
         function UC is new Ada.Unchecked_Conversion
                                (System.Address, Win32.LPCSTR);
@@ -22,9 +49,9 @@ package body Keylook_Pkg is
     end CP;
 
     function To_DWORD is new Ada.Unchecked_Conversion(
-	Win32.lParam, Win32.DWORD);
+        Win32.lParam, Win32.DWORD);
 
-    use type Win32.Char_Array;			-- to get "&"
+    use type Win32.Char_Array;                  -- to get "&"
     Nul: Win32.Char renames Win32.Nul;
 
     procedure ShowKey (
@@ -137,118 +164,89 @@ package body Keylook_Pkg is
 	IgnoredI := Win32.Winuser.ReleaseDC(hwnd, hdc);
 	IgnoredB := Win32.Winuser.ValidateRect(hwnd, null);
     end ShowKey;
-    
 
-    szTop   : constant Win32.CHAR_Array := 
-	      "Message        Key Char Repeat Scan Ext ALT Prev Tran" & Nul;
-    szUnd   : constant Win32.CHAR_Array := 
-	      "Message        ___ ____ ______ ____ ___ ___ ____ ____" & Nul;
+    szTop   : constant Win32.CHAR_Array :=
+              "Message        Key Char Repeat Scan Ext ALT Prev Tran" & Nul;
+    szUnd   : constant Win32.CHAR_Array :=
+              "Message        ___ ____ ______ ____ ___ ___ ____ ____" & Nul;
 
     function WndProc (hwnd:   Win32.Windef.HWND;
-		      msg:    Win32.UINT;
-		      wParam: Win32.WPARAM;
-		      lParam: Win32.LPARAM) return Win32.LRESULT is
+                      msg:    Win32.UINT;
+                      wParam: Win32.WPARAM;
+                      lParam: Win32.LPARAM) return Win32.LRESULT is
 
-	use type Interfaces.C.int;	-- to get '*'
-	use type Interfaces.C.long;	-- to get '*'
+        use type Interfaces.C.int;      -- to get '*'
+        use type Interfaces.C.long;     -- to get '*'
 
-	hdc     : Win32.Windef.HDC;
-	-- dwLparam: constant Win32.DWORD := Win32.DWORD(lParam);
-	dwLparam: constant Win32.DWORD := To_DWORD(lParam);
+        hdc     : Win32.Windef.HDC;
+        -- dwLparam: constant Win32.DWORD := Win32.DWORD(lParam);
+        dwLparam: constant Win32.DWORD := To_DWORD(lParam);
 
     begin
-	case msg is
-	    when Win32.Winuser.WM_CREATE =>
-		hdc      := Win32.Winuser.GetDC(hwnd);
-		IgnoredH := Win32.Wingdi.SelectObject(hdc,
-				     Win32.Wingdi.GetStockObject(
-				     Win32.Wingdi.SYSTEM_FIXED_FONT));
-		IgnoredB := Win32.Wingdi.GetTextMetrics(hdc, tm'access);
-		cxChar   := Win32.INT(tm.tmAveCharWidth);
-		cyChar   := Win32.INT(tm.tmHeight);
-		IgnoredI := Win32.Winuser.ReleaseDC(hwnd, hdc);
-		rect.top := 3 * Win32.LONG(cyChar)/2;
+        case msg is
+            when Win32.Winuser.WM_CREATE =>
+                hdc      := Win32.Winuser.GetDC(hwnd);
+                IgnoredH := Win32.Wingdi.SelectObject(hdc,
+                                     Win32.Wingdi.GetStockObject(
+                                     Win32.Wingdi.SYSTEM_FIXED_FONT));
+                IgnoredB := Win32.Wingdi.GetTextMetrics(hdc, tm'access);
+                cxChar   := Win32.INT(tm.tmAveCharWidth);
+                cyChar   := Win32.INT(tm.tmHeight);
+                IgnoredI := Win32.Winuser.ReleaseDC(hwnd, hdc);
+                rect.top := 3 * Win32.LONG(cyChar)/2;
 
-	    when Win32.Winuser.WM_SIZE =>
-		rect.right  := Win32.LONG(Win32.Windef.LOWORD(dwlParam));
-		rect.bottom := Win32.LONG(Win32.Windef.HIWORD(dwLparam));
-		IgnoredB    := Win32.Winuser.UpdateWindow(hwnd);
+            when Win32.Winuser.WM_SIZE =>
+                rect.right  := Win32.LONG(Win32.Windef.LOWORD(dwlParam));
+                rect.bottom := Win32.LONG(Win32.Windef.HIWORD(dwLparam));
+                IgnoredB    := Win32.Winuser.UpdateWindow(hwnd);
 
-	    when Win32.Winuser.WM_PAINT =>
-		IgnoredB := Win32.Winuser.InvalidateRect(hwnd, null,
-					Win32.TRUE);
-		hdc      := Win32.Winuser.BeginPaint(hwnd, ps'access);
-		IgnoredH := Win32.Wingdi.SelectObject(hdc,
-				     Win32.Wingdi.GetStockObject(
-				     Win32.Wingdi.SYSTEM_FIXED_FONT));
-		IgnoredI := Win32.Wingdi.SetBkMode(hdc,
-						   Win32.Wingdi.TRANSPARENT);
-		IgnoredB := Win32.Wingdi.TextOut(hdc, cxChar, cyChar/2,
-					CP(szTop), szTop'Length-1);
-		IgnoredB := Win32.Wingdi.TextOut(hdc, cxChar, cyChar/2,
-					 CP(szUnd), szUnd'Length-1);
-		IgnoredB := Win32.Winuser.EndPaint(hwnd, ps'access);
+            when Win32.Winuser.WM_PAINT =>
+                IgnoredB := Win32.Winuser.InvalidateRect(hwnd, null,
+                                        Win32.TRUE);
+                hdc      := Win32.Winuser.BeginPaint(hwnd, ps'access);
+                IgnoredH := Win32.Wingdi.SelectObject(hdc,
+                                     Win32.Wingdi.GetStockObject(
+                                     Win32.Wingdi.SYSTEM_FIXED_FONT));
+                IgnoredI := Win32.Wingdi.SetBkMode(hdc,
+                                                   Win32.Wingdi.TRANSPARENT);
+                IgnoredB := Win32.Wingdi.TextOut(hdc, cxChar, cyChar/2,
+                                        CP(szTop), szTop'Length-1);
+                IgnoredB := Win32.Wingdi.TextOut(hdc, cxChar, cyChar/2,
+                                         CP(szUnd), szUnd'Length-1);
+                IgnoredB := Win32.Winuser.EndPaint(hwnd, ps'access);
 
-	    when Win32.Winuser.WM_KEYDOWN =>
-		ShowKey(hwnd, 0, "WM_KEYDOWN" & Nul,     wParam, lParam);
+            when Win32.Winuser.WM_KEYDOWN =>
+                ShowKey(hwnd, 0, "WM_KEYDOWN" & Nul,     wParam, lParam);
 
-	    when Win32.Winuser.WM_KEYUP =>
-		ShowKey(hwnd, 0, "WM_KEYUP" & Nul,       wParam, lParam);
+            when Win32.Winuser.WM_KEYUP =>
+                ShowKey(hwnd, 0, "WM_KEYUP" & Nul,       wParam, lParam);
 
-	    when Win32.Winuser.WM_CHAR =>
-		ShowKey(hwnd, 1, "WM_CHAR" & Nul,        wParam, lParam);
+            when Win32.Winuser.WM_CHAR =>
+                ShowKey(hwnd, 1, "WM_CHAR" & Nul,        wParam, lParam);
 
-	    when Win32.Winuser.WM_DEADCHAR =>
-		ShowKey(hwnd, 1, "WM_DEADCHAR" & Nul,    wParam, lParam);
+            when Win32.Winuser.WM_DEADCHAR =>
+                ShowKey(hwnd, 1, "WM_DEADCHAR" & Nul,    wParam, lParam);
 
-	    when Win32.Winuser.WM_SYSKEYDOWN =>
-		ShowKey(hwnd, 0, "WM_SYSKEYDOWN" & Nul,  wParam, lParam);
+            when Win32.Winuser.WM_SYSKEYDOWN =>
+                ShowKey(hwnd, 0, "WM_SYSKEYDOWN" & Nul,  wParam, lParam);
 
-	    when Win32.Winuser.WM_SYSKEYUP =>
-		ShowKey(hwnd, 0, "WM_SYSKEYUP" & Nul,    wParam, lParam);
+            when Win32.Winuser.WM_SYSKEYUP =>
+                ShowKey(hwnd, 0, "WM_SYSKEYUP" & Nul,    wParam, lParam);
 
-	    when Win32.Winuser.WM_SYSCHAR =>
-		ShowKey(hwnd, 1, "WM_SYSCHAR" & Nul,     wParam, lParam);
+            when Win32.Winuser.WM_SYSCHAR =>
+                ShowKey(hwnd, 1, "WM_SYSCHAR" & Nul,     wParam, lParam);
 
-	    when Win32.Winuser.WM_SYSDEADCHAR =>
-		ShowKey(hwnd, 1, "WM_SYSDEADCHAR" & Nul, wParam, lParam);
+            when Win32.Winuser.WM_SYSDEADCHAR =>
+                ShowKey(hwnd, 1, "WM_SYSDEADCHAR" & Nul, wParam, lParam);
 
-	    when Win32.Winuser.WM_DESTROY =>
-		Win32.Winuser.PostQuitMessage(0);
+            when Win32.Winuser.WM_DESTROY =>
+                Win32.Winuser.PostQuitMessage(0);
 
-	    when others =>
-		return Win32.Winuser.DefWIndowProc(hwnd, msg, wParam, lParam);
-	end case;
+            when others =>
+                return Win32.Winuser.DefWIndowProc(hwnd, msg, wParam, lParam);
+        end case;
 
-
-	return 0;	-- all cases except "others" end up here
+        return 0;       -- all cases except "others" end up here
     end WndProc;
-
--------------------------------------------------------------------------------
---
--- This program has been derived by Intermetrics, Inc. from the 
--- keylook.c program in "Programming Windows 3.1", third edition, 
--- by Charles Petzold, Microsoft Press.
--- The program is derived from source code which is restricted 
--- by the license and under the following copyrights:
---
---      Copyright (c) 1992 by Charles Petzold
---
---
--- THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS PROVIDED "AS IS" WITHOUT 
--- WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT 
--- LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR 
--- A PARTICULAR PURPOSE.  The user assumes the entire risk as to the accuracy 
--- and the use of this file.  This file may be used only by licensees of 
--- Microsoft Corporation's WIN32 Software Development Kit in accordance with 
--- the terms of the licensee's End-User License Agreement for Microsoft 
--- Software for the WIN32 Development Kit.
---
--- Copyright (c) Intermetrics, Inc. 1995
--- Portions (c) 1985-1994 Microsoft Corporation with permission.
--- Microsoft is a registered trademark and Windows and Windows NT are 
--- trademarks of Microsoft Corporation.
---
--------------------------------------------------------------------------------
 
 end Keylook_Pkg;

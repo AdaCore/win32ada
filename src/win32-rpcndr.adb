@@ -10,8 +10,12 @@
 --  Royalty-free, unlimited, worldwide, non-exclusive use, modification,
 --  reproduction and further distribution of this file is permitted.
 --
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (c) AdaCore 2000-2010, AdaCore
+--
 -------------------------------------------------------------------------------
-
 
 with Ada.Unchecked_Conversion;
 with Interfaces.C;
@@ -48,7 +52,7 @@ package body Win32.Rpcndr is
       Source : in out Win32.Rpcdcep.PRPC_MESSAGE;
       LowerIndex : in Win32.UINT;
       UpperIndex : in Win32.UINT;
-      Target : Win32.PBYTE) is                 --  rpcndr.h:269
+      Target     : Win32.PBYTE) is                 --  rpcndr.h:269
 
       function To_Int is new Ada.Unchecked_Conversion (Win32.PBYTE, Integer);
    begin
@@ -60,7 +64,6 @@ package body Win32.Rpcndr is
                                     (Integer (UpperIndex - LowerIndex) *
                                      Win32.PULONG'Size / su));
    end byte_array_from_ndr;
-
 
    procedure boolean_from_ndr
      (source : in out Win32.Rpcdcep.PRPC_MESSAGE;
@@ -167,7 +170,6 @@ package body Win32.Rpcndr is
       p := To_PVOID (To_ULONG (p) + Win32.ULONG (Win32.ULONG'Size / su));
    end midl_unmarsh_up;
 
-
    function midl_ma4_ulong (p : Win32.PVOID) return Win32.PVOID;
    function midl_ma4_ulong (p : Win32.PVOID) return Win32.PVOID is
       pcopy : Win32.PVOID := p;
@@ -233,7 +235,6 @@ package body Win32.Rpcndr is
    begin
       NDRSContextMarshall (pc, p, rd);
    end NdrMarshSCtxtHdl;
-
 
    function NdrFcShort (s : Win32.USHORT) return Win32.UCHAR is
       --  rpcndr.h:595

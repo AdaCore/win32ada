@@ -1,3 +1,22 @@
+-------------------------------------------------------------------------------
+--
+--  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS FURNISHED "AS IS"
+--  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
+--  BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY
+--  AND/OR FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the
+--  entire risk as to the accuracy and the use of this file.
+--
+--  Copyright (c) Intermetrics, Inc. 1995
+--  Royalty-free, unlimited, worldwide, non-exclusive use, modification,
+--  reproduction and further distribution of this file is permitted.
+--
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (c) AdaCore 2000-2010, AdaCore
+--
+-------------------------------------------------------------------------------
+--
 --  **************************************************************
 --  Parent package for other Win32 interfaces.
 --  The packages are organized into one library package with child
@@ -118,7 +137,7 @@ package Win32 is
    type    INT_Array is array (Natural range <>) of aliased INT;
 
    function To_PINT is new Ada.Unchecked_Conversion (System.Address, PINT);
-   function To_PBOOL is new Ada.Unchecked_Conversion(PVOID, PBOOL);
+   function To_PBOOL is new Ada.Unchecked_Conversion (PVOID, PBOOL);
 
    --  "unsigned" or "unsigned int" types, unsigned, 32 bits on Intel
    subtype UINT       is Interfaces.C.unsigned;            --  windef.h
@@ -258,7 +277,6 @@ package Win32 is
    type String_Vector is array (0 .. Win32.ANYSIZE_ARRAY) of aliased
      Win32.PSTR;
    type String_Vector_Access is access all String_Vector;
-
 
    --  *******************************************
    --  Bit fields inside C structs and Ada records

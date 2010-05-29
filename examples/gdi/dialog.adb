@@ -1,10 +1,29 @@
--- $Source$ 
--- $Revision$ $Date$ $Author$ 
--- $Id$
+-------------------------------------------------------------------------------
 --
+-- THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS PROVIDED "AS IS" WITHOUT
+-- WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT
+-- LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR
+-- A PARTICULAR PURPOSE.  The user assumes the entire risk as to the accuracy
+-- and the use of this file.  This file may be used only by licensees of
+-- Microsoft Corporation's WIN32 Software Development Kit in accordance with
+-- the terms of the licensee's End-User License Agreement for Microsoft
+-- Software for the WIN32 Development Kit.
+--
+-- Copyright (c) Intermetrics, Inc. 1995
+-- Portions (c) 1985-1994 Microsoft Corporation with permission.
+-- Microsoft is a registered trademark and Windows and Windows NT are
+-- trademarks of Microsoft Corporation.
+--
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (c) AdaCore 2000-2010, AdaCore
+--
+-------------------------------------------------------------------------------
+
 --  package Dialog body
 --
---  This package body is a translation of dialog.c which is part of the 
+--  This package body is a translation of dialog.c which is part of the
 --  Microsoft gdidemo sample application
 --
 
@@ -33,8 +52,8 @@ package body Dialog is
   iResult : Win32.INT;
   hResult : Win32.Windef.HWND;
 
-  function LPVOID_TO_LOGPALETTE_P is new Ada.Unchecked_Conversion 
-		     (Win32.LPVOID, Win32.WinGdi.PLOGPALETTE); 
+  function LPVOID_TO_LOGPALETTE_P is new Ada.Unchecked_Conversion
+                     (Win32.LPVOID, Win32.WinGdi.PLOGPALETTE);
 
 -- | DISPLAY DIALOG BOX
 -- |   This is a routine to display a generic modal-dialog box.
@@ -47,7 +66,7 @@ function DisplayDialogBox (hWnd_p       : Win32.WinDef.HWND;
   nRet  : Win32.INT;
 begin
   nRet  := -1;
-  hInst := Gdidemo_Util.GETINSTANCE (hWnd_p); 
+  hInst := Gdidemo_Util.GETINSTANCE (hWnd_p);
   nRet  := Win32.WinUser.DialogBoxParam (
              hInstance      => Win32.Windef.HINSTANCE (hInst),
              lpTemplateName => lpszTemplate,
@@ -56,7 +75,6 @@ begin
              dwInitParam    => lExtra);
   return nRet;
 end DisplayDialogBox;
-
 
 -- | ABOUT DIALOG PROCEDURE
 -- |   This is the main dialog box routine for the HELPABOUT template.
@@ -74,7 +92,7 @@ begin
     when Win32.WinUser.WM_INITDIALOG =>
       hResult := Win32.WinUser.SetFocus (
                    Win32.WinUser.GetDlgItem (hDlg,Win32.WinUser.IDOK));
- 
+
     -- /*
     -- ** Look for an ESC or RETURN event.
     -- */
@@ -83,12 +101,12 @@ begin
       case wParam_p is
         when Win32.WinUser.IDOK | Win32.WinUser.IDCANCEL =>
           bResult := Win32.WinUser.EndDialog (hDlg, Win32.TRUE);
- 
+
         when others =>
           return Win32.FALSE;
 
       end case;
- 
+
     -- /*
     -- ** Wash the background of the aboutbox to give it a nice blue-scaling
     -- ** effect.  Invalidate the OK button to force it to the top.  This
@@ -106,7 +124,7 @@ begin
                    Win32.TRUE);
     end;
 
-    -- ** Default handler.
+    -- ** Default handler
     when others =>
       return Win32.FALSE;
 
@@ -114,7 +132,6 @@ begin
 
   return Win32.TRUE;
 end AboutDlgProc;
-
 
 -- | PAINT WND BACKGROUND
 -- |   This routine is used to wash the background of a window.
@@ -133,32 +150,32 @@ begin
   bResult := Win32.WinUser.GetClientRect (hWnd_p,rect_p'Access);
   nMapMode := Win32.WinGdi.SetMapMode (hDC_p, Win32.WinGdi.MM_ANISOTROPIC);
 
-  if (Interfaces.C.Unsigned (Win32.Wingdi.GetDeviceCaps 
-                      (hDC_p, Win32.WinGdi.RASTERCAPS)) and 
+  if (Interfaces.C.Unsigned (Win32.Wingdi.GetDeviceCaps
+                      (hDC_p, Win32.WinGdi.RASTERCAPS)) and
       Win32.WinGdi.RC_PALETTE) > 0 then
     nReserved := Win32.WinGdi.GetDeviceCaps (hDC_p, Win32.WinGdi.NUMRESERVED);
-    nSize     := Win32.WinGdi.GetDeviceCaps (hDC_p, Win32.WinGdi.SIZEPALETTE) 
+    nSize     := Win32.WinGdi.GetDeviceCaps (hDC_p, Win32.WinGdi.SIZEPALETTE)
                  - nReserved;
 
     hPal := CreateColorScalePalette (hDC_p, nColor);
 
-    if hPal /= System.Null_Address then 
+    if hPal /= System.Null_Address then
       hPal := Win32.WinGdi.SelectPalette (hDC_p,hPal,Win32.FALSE);
       uResult := Win32.WinGdi.RealizePalette (hDC_p);
- 
+
       bResult := Win32.WinGdi.SetWindowExtEx (hDC_p,nSize,nSize,null_size);
-      bResult := Win32.WinGdi.SetViewportExtEx 
+      bResult := Win32.WinGdi.SetViewportExtEx
                  (hDC_p,Interfaces.C.Int (rect_p.right),
                   (-1)*Interfaces.C.Int (rect_p.bottom),
                   null_size);
-      bResult := Win32.WinGdi.SetViewportOrgEx 
+      bResult := Win32.WinGdi.SetViewportOrgEx
                  (hDC_p, 0, Interfaces.C.Int (rect_p.bottom), null_point);
       nLoop := nSize / 2;
       for idx in 0 .. nLoop - 1 loop
         hBrush_p := Win32.WinGdi.CreateSolidBrush (
                       Win32.WinGdi.PALETTEINDEX (
                       Win32.WORD (idx + nLoop)));
-        bResult := Win32.WinUser.SetRect 
+        bResult := Win32.WinUser.SetRect
                    (rect_p'Access, idx, idx, (nSize - idx), (nSize - idx));
         iResult := Win32.WinUser.FillRect (hDC_p, rect_p'Access, hBrush_p);
         bResult := Win32.WinGdi.DeleteObject (Win32.Windef.HGDIOBJ (hBrush_p));
@@ -175,14 +192,14 @@ begin
                              (-1)*Interfaces.C.Int (rect_p.bottom),null_size);
     bResult := Win32.WinGdi.SetViewportOrgEx(hDC_p,0,
                      Interfaces.C.Int (rect_p.bottom),null_point);
- 
+
     for idx in 0 .. 255 loop
       hBrush_p := Win32.WinGdi.CreateSolidBrush(
                   Win32.WinGdi.RGB(0,0,Win32.BYTE(idx)));
       bResult := Win32.WinUser.SetRect
                  (rect_p'Access,Interfaces.C.Int (idx),
                   Interfaces.C.Int (idx),
-                  Interfaces.C.Int (512-idx), 
+                  Interfaces.C.Int (512-idx),
                   Interfaces.C.Int (512-idx));
       iResult := Win32.WinUser.FillRect(hDC_p,rect_p'Access,hBrush_p);
       bResult := Win32.WinGdi.DeleteObject (Win32.Windef.HGDIOBJ (hBrush_p));
@@ -194,13 +211,12 @@ begin
 
 end PaintWindow;
 
-
 -- | CREATE COLOR SCALE PALETTE
 -- |   This routine creates a palette representing the scale values of a
 -- |   particular RGB color.  A gray-scale palette can also be created.
 -- |
 function CreateColorScalePalette (hDC_p  : Win32.WinDef.HDC;
-                                  nColor : Win32.INT) 
+                                  nColor : Win32.INT)
                                            return Win32.WinDef.HPALETTE is
   hPalette_p : Win32.WinDef.HPALETTE;
   hMem     : Win32.WinDef.HGLOBAL;
@@ -212,26 +228,26 @@ function CreateColorScalePalette (hDC_p  : Win32.WinDef.HDC;
 begin
 
   if (Interfaces.C.Unsigned (
-        Win32.WinGdi.GetDeviceCaps (hDC_p, Win32.WinGdi.RASTERCAPS)) and 
+        Win32.WinGdi.GetDeviceCaps (hDC_p, Win32.WinGdi.RASTERCAPS)) and
       Win32.WinGdi.RC_PALETTE) > 0
   then
     nReserved := Win32.WinGdi.GetDeviceCaps(hDC_p,Win32.WinGdi.NUMRESERVED);
-    nSize     := Win32.WinGdi.GetDeviceCaps(hDC_p,Win32.WinGdi.SIZEPALETTE) 
+    nSize     := Win32.WinGdi.GetDeviceCaps(hDC_p,Win32.WinGdi.SIZEPALETTE)
                  - nReserved;
     --  remember to divide by 8 to get the size in bytes
     hMem      := Win32.WinBase.GlobalAlloc (Win32.WinBase.GHND,
-                 Win32.DWORD ((Win32.WinGdi.LOGPALETTE'size + 
+                 Win32.DWORD ((Win32.WinGdi.LOGPALETTE'size +
                               (Win32.WinGdi.PALETTEENTRY'size * nSize)) / 8));
 
-    if hMem /= System.Null_Address then 
+    if hMem /= System.Null_Address then
       void_result := Win32.WinBase.GlobalLock (hMem);
-      if void_result /= System.Null_Address then 
+      if void_result /= System.Null_Address then
         lpMem := LPVOID_TO_LOGPALETTE_P (void_result);
         lpMem.palNumEntries := Win32.WORD (nSize);
         lpMem.palVersion    := Win32.WORD (16#0300#);
 
         case nColor is
-              
+
           when Gdidemo_Util.COLOR_SCALE_RED =>
             for idx_index in 0 .. (nSize - 1) loop
               idx := integer (idx_index);
@@ -249,7 +265,7 @@ begin
               lpMem.palPalEntry(idx).peBlue  := 0;
               lpMem.palPalEntry(idx).peFlags := Win32.WinGdi.PC_RESERVED;
             end loop;
- 
+
           when Gdidemo_Util.COLOR_SCALE_BLUE =>
             for idx_index in 0 .. (nSize - 1) loop
               idx := integer (idx_index);
@@ -258,7 +274,7 @@ begin
               lpMem.palPalEntry(idx).peBlue  := Win32.BYTE (idx);
               lpMem.palPalEntry(idx).peFlags := Win32.WinGdi.PC_RESERVED;
             end loop;
- 
+
           when others =>   -- COLOR_SCALE_GRAY
             for idx_index in 0 .. (nSize - 1) loop
               idx := integer (idx_index);
@@ -278,23 +294,5 @@ begin
   return hPalette_p;
 
 end CreateColorScalePalette;
-
--------------------------------------------------------------------------------
---
--- THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS PROVIDED "AS IS" WITHOUT 
--- WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT 
--- LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR 
--- A PARTICULAR PURPOSE.  The user assumes the entire risk as to the accuracy 
--- and the use of this file.  This file may be used only by licensees of 
--- Microsoft Corporation's WIN32 Software Development Kit in accordance with 
--- the terms of the licensee's End-User License Agreement for Microsoft 
--- Software for the WIN32 Development Kit.
---
--- Copyright (c) Intermetrics, Inc. 1995
--- Portions (c) 1985-1994 Microsoft Corporation with permission.
--- Microsoft is a registered trademark and Windows and Windows NT are 
--- trademarks of Microsoft Corporation.
---
--------------------------------------------------------------------------------
 
 end Dialog;
