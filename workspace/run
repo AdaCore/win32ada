@@ -1,0 +1,8 @@
+#!/bin/sh
+gnatmake driver
+./driver -e types.lst
+gcc -c csupport.c
+
+HOST=$(gcc -dumpmachine)
+gnatmake -j6 -XPRJ_HOST=$HOST -P runcheck.gpr -largs csupport.o
+./runcheck
