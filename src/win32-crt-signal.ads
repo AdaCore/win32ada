@@ -54,13 +54,13 @@ package Win32.crt.Signal is
 
 private
 
-   function To_Handler is new Ada.Unchecked_Conversion (Win32.DWORD, Handler);
+   function To_Handler is new Ada.Unchecked_Conversion (LONG_PTR, Handler);
 
    SIG_DFL : constant Handler := To_Handler (0);             --  signal.h:64
    SIG_IGN : constant Handler := To_Handler (1);             --  signal.h:65
    SIG_SGE : constant Handler := To_Handler (3);             --  signal.h:66
    SIG_ACK : constant Handler := To_Handler (4);             --  signal.h:67
-   SIG_ERR : constant Handler := To_Handler (Win32.DWORD'Last); --  signal.h:72
+   SIG_ERR : constant Handler := To_Handler (LONG_PTR'Last); --  signal.h:72
 
    --  pragma Inline(pxcptinfoptrs);
 

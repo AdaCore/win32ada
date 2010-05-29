@@ -313,13 +313,13 @@ package body Win32.Windowsx is
                             lpfn : Win32.Windef.FARPROC)
                            return Win32.Winuser.WNDPROC is --  windowsx.h:86
 
-      function To_WNDPROC is new Ada.Unchecked_Conversion (Win32.LONG,
+      function To_WNDPROC is new Ada.Unchecked_Conversion (Win32.LONG_PTR,
         Win32.Winuser.WNDPROC);
       function To_LPARAM is new Ada.Unchecked_Conversion
         (Win32.Windef.FARPROC, Win32.LPARAM);
    begin
       return To_WNDPROC
-        (Win32.Winuser.SetWindowLong (hwnd,
+        (Win32.Winuser.SetWindowLongPtr (hwnd,
         Win32.Winuser.GWL_WNDPROC,
         To_LPARAM (lpfn)));
    end SubclassWindow;
@@ -379,11 +379,11 @@ package body Win32.Windowsx is
 
       function To_LPARAM is new Ada.Unchecked_Conversion
         (Win32.Winuser.DLGPROC, Win32.LPARAM);
-      function To_DLGPROC is new Ada.Unchecked_Conversion (Win32.LONG,
+      function To_DLGPROC is new Ada.Unchecked_Conversion (Win32.LONG_PTR,
         Win32.Winuser.DLGPROC);
    begin
       return To_DLGPROC
-        (Win32.Winuser.SetWindowLong (hwndDlg,
+        (Win32.Winuser.SetWindowLongPtr (hwndDlg,
         Win32.Winuser.DWL_DLGPROC,
         To_LPARAM (lpfn)));
    end SubclassDialog;
@@ -393,7 +393,7 @@ package body Win32.Windowsx is
                              result : Win32.LRESULT) return Win32.BOOL is
       --  windowsx.h:107
       use Win32.Winuser;
-      garbage : Win32.LONG;
+      garbage : Win32.LONG_PTR;
    begin
       case msg is
          when      WM_CTLCOLORMSGBOX      |
@@ -410,7 +410,7 @@ package body Win32.Windowsx is
            WM_INITDIALOG           =>
             return Win32.BOOL (result);
          when others =>
-            garbage := SetWindowLong (hwnd,
+            garbage := SetWindowLongPtr (hwnd,
               DWL_MSGRESULT,
               Win32.LPARAM (Win32.LRESULT (result)));
             return Win32.TRUE;
@@ -2747,10 +2747,9 @@ package body Win32.Windowsx is
         Win32.LPARAM);
    begin
       return To_HWND
-        (Win32.UINT
         (Win32.DWORD
         (fn (hwnd, Win32.Winuser.WM_MDICREATE, 0,
-        To_LPARAM (lpmcs)))));
+        To_LPARAM (lpmcs))));
    end FORWARD_WM_MDICREATE;
 
    function HANDLE_WM_MDIDESTROY (hwnd : Win32.Windef.HWND;
@@ -2838,11 +2837,11 @@ package body Win32.Windowsx is
                                 fn : LPDEFFN)
                                return Win32.Windef.HWND is --  windowsx.h:753
    begin
-      return To_HWND (Win32.UINT
+      return To_HWND
         (Win32.DWORD
         (fn (hwnd, Win32.Winuser.WM_MDINEXT,
         Win32.WPARAM (To_DWORD (hwndCur)),
-        Win32.LPARAM (fPrev)))));
+        Win32.LPARAM (fPrev))));
    end FORWARD_WM_MDINEXT;
 
    function HANDLE_WM_MDIMAXIMIZE (hwnd : Win32.Windef.HWND;
@@ -2936,9 +2935,8 @@ package body Win32.Windowsx is
       --  windowsx.h:783
    begin
       return To_HWND
-        (Win32.UINT
         (Win32.DWORD
-        (fn (hwnd, Win32.Winuser.WM_MDIGETACTIVE, 0, 0))));
+        (fn (hwnd, Win32.Winuser.WM_MDIGETACTIVE, 0, 0)));
    end FORWARD_WM_MDIGETACTIVE;
 
    function HANDLE_WM_MDISETMENU (hwnd : Win32.Windef.HWND;
@@ -2971,8 +2969,8 @@ package body Win32.Windowsx is
       if (fRefresh /= Win32.FALSE) then
          wParam := Win32.WPARAM (To_DWORD (hmenuFrame));
       end if;
-      return To_HMENU (fn (hwnd, Win32.Winuser.WM_MDISETMENU,
-        wParam, HMENU_To_LPARAM (hmenuWindow)));
+      return To_HMENU (UINT_PTR (Fn (hwnd, Win32.Winuser.WM_MDISETMENU,
+        wParam, HMENU_To_LPARAM (hmenuWindow))));
    end FORWARD_WM_MDISETMENU;
 
    function HANDLE_WM_CHILDACTIVATE (hwnd : Win32.Windef.HWND;
@@ -3036,11 +3034,10 @@ package body Win32.Windowsx is
       --  windowsx.h:807
    begin
       return To_HWND
-        (Win32.UINT
         (Win32.DWORD
         (fn (hwnd, Win32.Winuser.WM_NEXTDLGCTL,
         Win32.WPARAM (To_DWORD (hwndSetFocus)),
-        Win32.LPARAM (fNext)))));
+        Win32.LPARAM (fNext))));
    end FORWARD_WM_NEXTDLGCTL;
 
    function HANDLE_WM_PARENTNOTIFY (hwnd : Win32.Windef.HWND;
@@ -5036,8 +5033,9 @@ package body Win32.Windowsx is
                                           lp : Win32.LPARAM)
                                          return Win32.BOOL is
       --  windowsx.h:1178
+      use type Win32.Windef.HWND;
    begin
-      if (lp = To_LONG (hwnd)) then
+      if To_HWND (Lp) = hwnd then
          return Win32.TRUE;
       else
          return Win32.FALSE;

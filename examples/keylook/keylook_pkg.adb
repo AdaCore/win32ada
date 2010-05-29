@@ -55,114 +55,115 @@ package body Keylook_Pkg is
     Nul: Win32.Char renames Win32.Nul;
 
     procedure ShowKey (
-	hwnd   : Win32.Windef.HWND;
-	iType  : Win32.INT;
-	Message: Win32.CHAR_Array;
-	wParam : Win32.UINT;
-	lParam : Win32.LONG) is
+        hwnd   : Win32.Windef.HWND;
+        iType  : Win32.INT;
+        Message: Win32.CHAR_Array;
+        wParam : Win32.WPARAM;
+        lParam : Win32.LPARAM) is
 
-	use type Interfaces.C.Int;		-- to get "-"
-	use type Interfaces.C.Unsigned_Short;	-- to get "and"
-	use type Interfaces.C.Unsigned_Long;	-- to get "and"
+        use type Interfaces.C.Int;              -- to get "-"
+        use type Interfaces.C.Unsigned_Short;   -- to get "and"
+        use type Interfaces.C.Unsigned_Long;    -- to get "and"
+        use type Win32.LPARAM;
 
-	F0: constant Win32.CHAR_Array := 
-	    "%-14s %3d    %c %6u %4d %3s %3s %4s %4s" & Nul;
-	F1: constant Win32.CHAR_Array := 
-	    "%-14s %3d    %c %6u %4d %3s %3s %4s %4s" & Nul;
+        F0: constant Win32.CHAR_Array :=
+            "%-14s %3d    %c %6u %4d %3s %3s %4s %4s" & Nul;
+        F1: constant Win32.CHAR_Array :=
+            "%-14s %3d    %c %6u %4d %3s %3s %4s %4s" & Nul;
 
-	type Sarray is array (Win32.INT range 0..1) of Win32.LPCSTR;
-	szFormat: constant Sarray := (CP(F0), CP(F1));
+        type Sarray is array (Win32.INT range 0..1) of Win32.LPCSTR;
+        szFormat: constant Sarray := (CP(F0), CP(F1));
 
-	szBuffer: Win32.CHAR_Array(0..79);
-	hdc     : Win32.Windef.HDC;
-	-- dwLparam: constant Win32.DWORD := Win32.DWORD(lParam);
-	dwLparam: constant Win32.DWORD := To_DWORD(lParam);
+        szBuffer: Win32.CHAR_Array(0..79);
+        hdc     : Win32.Windef.HDC;
+        -- dwLparam: constant Win32.DWORD := Win32.DWORD(lParam);
+        dwLparam: constant Win32.DWORD := Win32.DWORD (lParam);
 
-	-- Functions that replace the x?y:z expressions in the C version
-	function charparam return Win32.CHAR is
-	begin
-	    if Itype /= 0 then
-		return Win32.CHAR'Val(
-		   Win32.Windef.LOWORD(Win32.DWORD(wParam)) and 16#ff#);
-	    else
-		return ' ';
-	    end if;
-	end;
+        -- Functions that replace the x?y:z expressions in the C version
+        function charparam return Win32.CHAR is
+        begin
+            if Itype /= 0 then
+                return Win32.CHAR'Val(
+                   Win32.Windef.LOWORD(Win32.DWORD(wParam)) and 16#ff#);
+            else
+                return ' ';
+            end if;
+        end;
 
-	function bit25 return Win32.CHAR_Array is
-	begin
-	    if (dwLparam and 16#100_0000#) /= 0 then
-		    return "Yes" & Nul;
-	    else
-		    return "No" & Nul;
-	    end if;
-	end;
-	
-	function bit30 return Win32.CHAR_Array is
-	begin
-	    if (dwLparam and 16#2000_0000#) /= 0 then
-		return "Yes" & Nul;
-	    else
-		return "No" & Nul;
-	    end if;
-	end;
-	
-	function bit31 return Win32.CHAR_Array is
-	begin
-	    if (dwLparam and 16#4000_0000#) /= 0 then
-		return "Down" & Nul;
-	    else
-		return "Up" & Nul;
-	    end if;
-	end;
-	
-	function bit32 return Win32.CHAR_Array is
-	    use type Interfaces.C.LONG;
-	begin
-	    if lParam < 0 then 
-	        return "Up" & Nul; 
-	    else 
-	        return "Down" & Nul; 
-	    end if;
-	end;
+        function bit25 return Win32.CHAR_Array is
+        begin
+            if (dwLparam and 16#100_0000#) /= 0 then
+                    return "Yes" & Nul;
+            else
+                    return "No" & Nul;
+            end if;
+        end;
 
+        function bit30 return Win32.CHAR_Array is
+        begin
+            if (dwLparam and 16#2000_0000#) /= 0 then
+                return "Yes" & Nul;
+            else
+                return "No" & Nul;
+            end if;
+        end;
 
-	-- use name "+" to avoid conflict with Standard."&" for strings.
-	function "+" (Args: Stdarg.ArgList; Arg: Win32.Char_Array)
-	    return Stdarg.ArgList is
-	    function "&" is new Stdarg.Concat(Win32.LPCSTR);
-	begin
-	    return Args & CP(Arg);
-	end "+";
+        function bit31 return Win32.CHAR_Array is
+        begin
+            if (dwLparam and 16#4000_0000#) /= 0 then
+                return "Down" & Nul;
+            else
+                return "Up" & Nul;
+            end if;
+        end;
 
-	function "&" is new Stdarg.Concat(Win32.BYTE);
-	function "&" is new Stdarg.Concat(Win32.CHAR);
-	function "&" is new Stdarg.Concat(Win32.WORD);
-	function "&" is new Stdarg.Concat(Win32.UINT);
+        function bit32 return Win32.CHAR_Array is
+            use type Interfaces.C.LONG;
+        begin
+            if lParam < 0 then
+                return "Up" & Nul;
+            else
+                return "Down" & Nul;
+            end if;
+        end;
 
-    begin	-- ShowKey
-	IgnoredB := Win32.Winuser.ScrollWindow(
-			hwnd, 0, -cyChar, rect'access, rect'access);
-	hdc := Win32.Winuser.GetDC(hwnd);
-	IgnoredH := Win32.Wingdi.SelectObject(hdc,
-	    Win32.Wingdi.GetStockObject(Win32.Wingdi.SYSTEM_FIXED_FONT));
-	IgnoredB := Win32.Wingdi.TextOut(
-	    hdc, cxChar, Win32.INT(rect.bottom) - cyChar, 
-	    CP(szBuffer),
-	    Win32.Winuser.wsprintf(
-	        szBuffer(0)'unchecked_access,	        -- buffer
-	        szFormat(iType),	                -- format
-	        (Stdarg.Empty +
-	          Message) &		                -- message name
-	          wParam &		                -- key
-	          charparam &		                -- char
-	          Win32.Windef.LOWORD(dwlParam) &	-- repeat count
-	          Win32.Windef.LOBYTE(Win32.Windef.HIWORD(dwlParam)) +
-		  					-- scan code
-	          bit25 + bit30 + bit31 + bit32));	-- 4 bit fields
+        -- use name "+" to avoid conflict with Standard."&" for strings
+        function "+" (Args: Stdarg.ArgList; Arg: Win32.Char_Array)
+            return Stdarg.ArgList is
+            function "&" is new Stdarg.Concat(Win32.LPCSTR);
+        begin
+            return Args & CP(Arg);
+        end "+";
 
-	IgnoredI := Win32.Winuser.ReleaseDC(hwnd, hdc);
-	IgnoredB := Win32.Winuser.ValidateRect(hwnd, null);
+        function "&" is new Stdarg.Concat(Win32.BYTE);
+        function "&" is new Stdarg.Concat(Win32.CHAR);
+        function "&" is new Stdarg.Concat(Win32.WORD);
+        function "&" is new Stdarg.Concat(Win32.UINT);
+        function "&" is new Stdarg.Concat(Win32.UINT_PTR);
+
+    begin       -- ShowKey
+        IgnoredB := Win32.Winuser.ScrollWindow(
+                        hwnd, 0, -cyChar, rect'access, rect'access);
+        hdc := Win32.Winuser.GetDC(hwnd);
+        IgnoredH := Win32.Wingdi.SelectObject(hdc,
+            Win32.Wingdi.GetStockObject(Win32.Wingdi.SYSTEM_FIXED_FONT));
+        IgnoredB := Win32.Wingdi.TextOut(
+            hdc, cxChar, Win32.INT(rect.bottom) - cyChar,
+            CP(szBuffer),
+            Win32.Winuser.wsprintf(
+                szBuffer(0)'unchecked_access,           -- buffer
+                szFormat(iType),                        -- format
+                (Stdarg.Empty +
+                  Message) &                            -- message name
+                  wParam &                              -- key
+                  charparam &                           -- char
+                  Win32.Windef.LOWORD(dwlParam) &       -- repeat count
+                  Win32.Windef.LOBYTE(Win32.Windef.HIWORD(dwlParam)) +
+                                                        -- scan code
+                  bit25 + bit30 + bit31 + bit32));      -- 4 bit fields
+
+        IgnoredI := Win32.Winuser.ReleaseDC(hwnd, hdc);
+        IgnoredB := Win32.Winuser.ValidateRect(hwnd, null);
     end ShowKey;
 
     szTop   : constant Win32.CHAR_Array :=

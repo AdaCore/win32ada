@@ -232,8 +232,7 @@ private
    pragma Convention (C, MapiRecipDesc);                    --  mapi.h:66
    pragma Convention (C, MapiMessage);                      --  mapi.h:89
 
-   function To_LHANDLE is new Ada.Unchecked_Conversion (Win32.DWORD, LHANDLE);
-   lhSessionNull : constant LHANDLE := To_LHANDLE (0);      --  mapi.h:36
+   lhSessionNull : constant LHANDLE := System.Null_Address;      --  mapi.h:36
 
    pragma Import (Stdcall, MAPILogon, "MAPILogon");             --  mapi.h:115
    pragma Import (Stdcall, MAPILogoff, "MAPILogoff");           --  mapi.h:119

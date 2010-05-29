@@ -83,8 +83,8 @@ package Win32.Rpcndr is
    type PMIDL_XMIT_TYPE is new Win32.PVOID;                --  rpcndr.h:890
    subtype RPC_SS_THREAD_HANDLE is Win32.Winnt.HANDLE;    --  rpcndr.h:1954
 
-   function To_BUFPTR is new Ada.Unchecked_Conversion (ULONG, RPC_BUFPTR);
-   function To_ULONG is new Ada.Unchecked_Conversion (RPC_BUFPTR, ULONG);
+   function To_BUFPTR is new Ada.Unchecked_Conversion (LONG_PTR, RPC_BUFPTR);
+   function To_ULONG is new Ada.Unchecked_Conversion (RPC_BUFPTR, LONG_PTR);
 
    type struct_anonymous1_t;                               --  rpcndr.h:209
    type SCONTEXT_QUEUE;                                    --  rpcndr.h:217
@@ -166,8 +166,7 @@ package Win32.Rpcndr is
 
    type MIDL_STUB_MESSAGE is                               --  rpcndr.h:600
       record
-         RpcMsg : Win32.Rpcdcep.PRPC_MESSAGE;
-         --  rpcndr.h:645
+         RpcMsg : Win32.Rpcdcep.PRPC_MESSAGE;     --  rpcndr.h:645
          Buffer : Win32.PUCHAR;           --  rpcndr.h:648
          BufferStart : Win32.PUCHAR;           --  rpcndr.h:654
          BufferEnd : Win32.PUCHAR;           --  rpcndr.h:655
@@ -177,13 +176,14 @@ package Win32.Rpcndr is
          Memory : Win32.PUCHAR;           --  rpcndr.h:673
          IsClient : Win32.INT;              --  rpcndr.h:676
          ReuseBuffer : Win32.INT;              --  rpcndr.h:679
-         AllocAllNodesMemory : Win32.PUCHAR;           --  rpcndr.h:682
-         AllocAllNodesMemoryEnd : Win32.PUCHAR;           --  rpcndr.h:685
+         pAllocAllNodesContext : Win32.PUCHAR;           --  rpcndr.h:682
+         pPointerQueueState : Win32.PUCHAR;           --  rpcndr.h:685
          IgnoreEmbeddedPointers : Win32.INT;              --  rpcndr.h:692
          PointerBufferMark : Win32.PUCHAR;           --  rpcndr.h:698
          fBufferValid : Win32.UCHAR;            --  rpcndr.h:703
-         MaxContextHandleNumber : Win32.UCHAR;            --  rpcndr.h:708
-         MaxCount : Win32.ULONG;            --  rpcndr.h:714
+         uFlags : Win32.UCHAR;            --  rpcndr.h:708
+         Unused2 : Win32.USHORT;
+         MaxCount : Win32.ULONG_PTR;      --  rpcndr.h:714
          Offset : Win32.ULONG;            --  rpcndr.h:720
          ActualCount : Win32.ULONG;            --  rpcndr.h:726
          pfnAllocate : Allocate_Func;          --  rpcndr.h:729
@@ -199,6 +199,10 @@ package Win32.Rpcndr is
          fInDontFree : Win32.Bits1;            --  rpcndr.h:775
          fDontCallFreeInst : Win32.Bits1;            --  rpcndr.h:776
          fInOnlyParam : Win32.Bits1;            --  rpcndr.h:777
+         fHasReturn : Win32.Bits1;
+         fHasExtensions : Win32.Bits1;
+         fHasNewCorrDesc : Win32.Bits1;
+         fUnused : Win32.CHAR;
          dwDestContext : Win32.ULONG;            --  rpcndr.h:779
          pvDestContext : Win32.PVOID;            --  rpcndr.h:780
          pSavedHContext : PSCONTEXT_QUEUE;        --  rpcndr.h:782
@@ -208,72 +212,94 @@ package Win32.Rpcndr is
          SizePtrCountArray : Win32.PULONG;           --  rpcndr.h:794
          SizePtrOffsetArray : Win32.PULONG;           --  rpcndr.h:795
          SizePtrLengthArray : Win32.PULONG;           --  rpcndr.h:796
---  Reserved              : Win32.ULONG_Array(0..6);  -- rpcndr.h:802
---  @@ with GNAT the type ULONG_Array must be aligned at a storage
---  unit boundary. So I decided for now to declare Reserved<1..7>
---  instead.
-         Reserved1 : Win32.ULONG;
-         Reserved2 : Win32.ULONG;
-         Reserved3 : Win32.ULONG;
-         Reserved4 : Win32.ULONG;
-         Reserved5 : Win32.ULONG;
-         Reserved6 : Win32.ULONG;
-         Reserved7 : Win32.ULONG;
+         pArgQueue : Win32.PVOID;
+         dwStubPhase : Win32.ULONG;
+         LowStackMark : Win32.PVOID;
+         pAsyncMsg : Win32.PVOID;
+         pCorrInfo : Win32.PVOID;
+         pCorrMemory : Win32.PUCHAR;
+         pMemoryList : Win32.PVOID;
+         pCSInfo : Win32.PVOID;
+         ConformanceMark : Win32.PUCHAR;
+         VarianceMark : Win32.PUCHAR;
+         BackingStoreLowMark : Win32.PVOID;
+         Unused : Win32.INT_PTR;
+         pContext : Win32.PVOID;
+         Reserved51_1 : Win32.INT_PTR;
+         Reserved51_2 : Win32.INT_PTR;
+         Reserved51_3 : Win32.INT_PTR;
+         Reserved51_4 : Win32.INT_PTR;
+         Reserved51_5 : Win32.INT_PTR;
       end record;
 
-   --  @@ The Reserved component could be wrong.
-   for  MIDL_STUB_MESSAGE use                                --  rpcndr.h:600
-      record
-         RpcMsg                 at 0 range 0 .. 31;          --  rpcndr.h:645
-         Buffer                 at 4 range 0 .. 31;          --  rpcndr.h:648
-         BufferStart            at 8 range 0 .. 31;          --  rpcndr.h:654
-         BufferEnd              at 12 range 0 .. 31;         --  rpcndr.h:655
-         BufferMark             at 16 range 0 .. 31;         --  rpcndr.h:664
-         BufferLength           at 20 range 0 .. 31;         --  rpcndr.h:667
-         MemorySize             at 24 range 0 .. 31;         --  rpcndr.h:670
-         Memory                 at 28 range 0 .. 31;         --  rpcndr.h:673
-         IsClient               at 32 range 0 .. 31;         --  rpcndr.h:676
-         ReuseBuffer            at 36 range 0 .. 31;         --  rpcndr.h:679
-         AllocAllNodesMemory    at 40 range 0 .. 31;         --  rpcndr.h:682
-         AllocAllNodesMemoryEnd at 44 range 0 .. 31;         --  rpcndr.h:685
-         IgnoreEmbeddedPointers at 48 range 0 .. 31;         --  rpcndr.h:692
-         PointerBufferMark      at 52 range 0 .. 31;         --  rpcndr.h:698
-         fBufferValid           at 56 range 0 .. 7;          --  rpcndr.h:703
-         MaxContextHandleNumber at 57 range 0 .. 7;          --  rpcndr.h:708
-         MaxCount               at 58 range 0 .. 31;         --  rpcndr.h:714
-         Offset                 at 62 range 0 .. 31;         --  rpcndr.h:720
-         ActualCount            at 66 range 0 .. 31;         --  rpcndr.h:726
-         pfnAllocate            at 70 range 0 .. 31;         --  rpcndr.h:729
-         pfnFree                at 74 range 0 .. 31;         --  rpcndr.h:730
-         StackTop               at 78 range 0 .. 31;         --  rpcndr.h:738
-         pPresentedType         at 82 range 0 .. 31;         --  rpcndr.h:744
-         pTransmitType          at 86 range 0 .. 31;         --  rpcndr.h:745
-         SavedHandle            at 90 range 0 .. 31;         --  rpcndr.h:755
-         StubDesc               at 94 range 0 .. 31;         --  rpcndr.h:760
-         FullPtrXlatTables      at 98 range 0 .. 31;         --  rpcndr.h:765
-         FullPtrRefId           at 102 range 0 .. 31;        --  rpcndr.h:767
-         fCheckBounds           at 106 range 0 .. 31;        --  rpcndr.h:773
-         fInDontFree            at 110 range 0 .. 0;         --  rpcndr.h:775
-         fDontCallFreeInst      at 110 range 1 .. 1;         --  rpcndr.h:776
-         fInOnlyParam           at 110 range 2 .. 2;         --  rpcndr.h:777
-         dwDestContext          at 110 range 3 .. 34;        --  rpcndr.h:779
-         pvDestContext          at 114 range 3 .. 34;        --  rpcndr.h:780
-         pSavedHContext         at 118 range 3 .. 34;        --  rpcndr.h:782
-         ParamNumber            at 122 range 3 .. 34;        --  rpcndr.h:784
-         pRpcChannelBuffer      at 126 range 3 .. 34;        --  rpcndr.h:786
-         pArrayInfo             at 130 range 3 .. 34;        --  rpcndr.h:788
-         SizePtrCountArray      at 136 range 3 .. 34;        --  rpcndr.h:794
-         SizePtrOffsetArray     at 140 range 3 .. 34;        --  rpcndr.h:795
-         SizePtrLengthArray     at 144 range 3 .. 34;        --  rpcndr.h:796
---  Reserved               at 148 range 3..226;       -- rpcndr.h:802
-         Reserved1              at 148 range 3 .. 34;
-         Reserved2              at 152 range 3 .. 34;
-         Reserved3              at 156 range 3 .. 34;
-         Reserved4              at 160 range 3 .. 34;
-         Reserved5              at 164 range 3 .. 34;
-         Reserved6              at 168 range 3 .. 34;
-         Reserved7              at 172 range 3 .. 34;
-      end record;
+   AS : constant := LONG_PTR'Size - 1;
+   WS : constant := LONG_PTR'Size / 8;
+
+   for  MIDL_STUB_MESSAGE use record
+      RpcMsg                 at  0 * WS          range 0 .. AS;
+      Buffer                 at  1 * WS          range 0 .. AS;
+      BufferStart            at  2 * WS          range 0 .. AS;
+      BufferEnd              at  3 * WS          range 0 .. AS;
+      BufferMark             at  4 * WS          range 0 .. AS;
+      BufferLength           at  5 * WS          range 0 .. 31;
+      MemorySize             at  5 * WS +  1 * 4 range 0 .. 31;
+      Memory                 at  5 * WS +  2 * 4 range 0 .. AS;
+      IsClient               at  6 * WS +  2 * 4 range 0 .. 31;
+      ReuseBuffer            at  6 * WS +  3 * 4 range 0 .. 31;
+      pAllocAllNodesContext  at  6 * WS +  4 * 4 range 0 .. AS;
+      pPointerQueueState     at  7 * WS +  4 * 4 range 0 .. AS;
+      IgnoreEmbeddedPointers at  8 * WS +  4 * 4 range 0 .. 31;
+      PointerBufferMark      at  9 * WS +  4 * 4 range 0 .. AS;
+      fBufferValid           at 10 * WS +  4 * 4 range 0 .. 7;
+      uFlags                 at 10 * WS +  4 * 4 range 8 .. 15;
+      Unused2                at 10 * WS +  4 * 4 range 16 .. 31;
+      MaxCount               at 11 * WS +  4 * 4 range 0 .. AS;
+      Offset                 at 12 * WS +  4 * 4 range 0 .. 31;
+      ActualCount            at 12 * WS +  5 * 4 range 0 .. 31;
+      pfnAllocate            at 12 * WS +  6 * 4 range 0 .. AS;
+      pfnFree                at 13 * WS +  6 * 4 range 0 .. AS;
+      StackTop               at 14 * WS +  6 * 4 range 0 .. AS;
+      pPresentedType         at 15 * WS +  6 * 4 range 0 .. AS;
+      pTransmitType          at 16 * WS +  6 * 4 range 0 .. AS;
+      SavedHandle            at 17 * WS +  6 * 4 range 0 .. AS;
+      StubDesc               at 18 * WS +  6 * 4 range 0 .. AS;
+      FullPtrXlatTables      at 19 * WS +  6 * 4 range 0 .. AS;
+      FullPtrRefId           at 20 * WS +  6 * 4 range 0 .. 31;
+      fCheckBounds           at 20 * WS +  7 * 4 range 0 .. 31;
+      fInDontFree            at 20 * WS +  8 * 4 range 0 .. 0;
+      fDontCallFreeInst      at 20 * WS +  8 * 4 range 1 .. 1;
+      fInOnlyParam           at 20 * WS +  8 * 4 range 2 .. 2;
+      fHasReturn             at 20 * WS +  8 * 4 range 3 .. 3;
+      fHasExtensions         at 20 * WS +  8 * 4 range 4 .. 4;
+      fHasNewCorrDesc        at 20 * WS +  8 * 4 range 5 .. 5;
+      fUnused                at 20 * WS +  8 * 4 range 6 .. 31;
+      dwDestContext          at 20 * WS +  9 * 4 range 0 .. 31;
+      pvDestContext          at 20 * WS + 10 * 4 range 0 .. AS;
+      pSavedHContext         at 21 * WS + 10 * 4 range 0 .. AS;
+      ParamNumber            at 22 * WS + 10 * 4 range 0 .. 31;
+      pRpcChannelBuffer      at 23 * WS + 10 * 4 range 0 .. AS;
+      pArrayInfo             at 24 * WS + 10 * 4 range 0 .. AS;
+      SizePtrCountArray      at 25 * WS + 10 * 4 range 0 .. AS;
+      SizePtrOffsetArray     at 26 * WS + 10 * 4 range 0 .. AS;
+      SizePtrLengthArray     at 27 * WS + 10 * 4 range 0 .. AS;
+      pArgQueue              at 28 * WS + 10 * 4 range 0 .. AS;
+      dwStubPhase            at 29 * WS + 10 * 4 range 0 .. 31;
+      LowStackMark           at 30 * WS + 10 * 4 range 0 .. AS;
+      pAsyncMsg              at 31 * WS + 10 * 4 range 0 .. AS;
+      pCorrInfo              at 32 * WS + 10 * 4 range 0 .. AS;
+      pCorrMemory            at 33 * WS + 10 * 4 range 0 .. AS;
+      pMemoryList            at 34 * WS + 10 * 4 range 0 .. AS;
+      pCSInfo                at 35 * WS + 10 * 4 range 0 .. AS;
+      ConformanceMark        at 36 * WS + 10 * 4 range 0 .. AS;
+      VarianceMark           at 37 * WS + 10 * 4 range 0 .. AS;
+      Unused                 at 38 * WS + 10 * 4 range 0 .. AS;
+      pContext               at 39 * WS + 10 * 4 range 0 .. AS;
+      Reserved51_1           at 40 * WS + 10 * 4 range 0 .. AS;
+      Reserved51_2           at 41 * WS + 10 * 4 range 0 .. AS;
+      Reserved51_3           at 42 * WS + 10 * 4 range 0 .. AS;
+      Reserved51_4           at 43 * WS + 10 * 4 range 0 .. AS;
+      Reserved51_5           at 44 * WS + 10 * 4 range 0 .. AS;
+   end record;
 
    type EXPR_EVAL is access procedure
      (pStubMsg : PMIDL_STUB_MESSAGE);              --  rpcndr.h:608

@@ -72,7 +72,7 @@ begin
              lpTemplateName => lpszTemplate,
              hWndParent     => hWnd_p,
              lpDialogFunc   => lpfFunction,
-             dwInitParam    => lExtra);
+             dwInitParam    => Win32.LONG_PTR (lExtra));
   return nRet;
 end DisplayDialogBox;
 

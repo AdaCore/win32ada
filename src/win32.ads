@@ -48,6 +48,13 @@ package Win32 is
 
    --  C pointer to "void", a pointer to anything that must
    --  be converted to another pointer to be useful
+
+   --  This type is 32 bit on x86 and 64 bit on x64
+   type ULONG_PTR is mod 2 ** Standard'Address_Size;
+   type LONG_PTR is mod 2 ** Standard'Address_Size;
+   type UINT_PTR is mod 2 ** Standard'Address_Size;
+   type INT_PTR is mod 2 ** Standard'Address_Size;
+
    type    VOID    is null record;
    subtype PVOID   is System.Address;                      --  winnt.h
    subtype LPVOID  is PVOID;                               --  windef.h
@@ -141,7 +148,7 @@ package Win32 is
 
    --  "unsigned" or "unsigned int" types, unsigned, 32 bits on Intel
    subtype UINT       is Interfaces.C.unsigned;            --  windef.h
-   subtype WPARAM     is UINT;                             --  windef.h
+   subtype WPARAM     is UINT_PTR;                         --  windef.h
    type    PUINT      is access all UINT;                  --  windef.h
    type    PCUINT     is access constant UINT;
    type    UINT_Array is array (Natural range <>) of aliased UINT;
@@ -150,7 +157,7 @@ package Win32 is
 
    --  "long" 32 bit signed integers
    subtype LONG       is Interfaces.C.long;                --  winnt.h
-   subtype LPARAM     is LONG;                             --  windef.h
+   subtype LPARAM     is LONG_PTR;                         --  windef.h
    subtype LRESULT    is LONG;                             --  windef.h
    type    PLONG      is access all LONG;
    subtype LPLONG     is PLONG;                            --  windef.h
@@ -170,9 +177,6 @@ package Win32 is
    function To_PULONG is new Ada.Unchecked_Conversion (System.Address, PULONG);
 --     function To_LPTSTR is new Ada.Unchecked_Conversion (DWORD, PSTR);
 --     function To_LPWSTR is new Ada.Unchecked_Conversion (DWORD, LPWSTR);
-
-   --  This type is 32 bit on x86 and 64 bit on x64
-   type ULONG_PTR is mod 2 ** Standard'Address_Size;
 
    --  builtin C "float", 32 bits on Intel
    subtype FLOAT  is Interfaces.C.C_float;                 --  windef.h

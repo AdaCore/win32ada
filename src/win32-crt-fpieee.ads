@@ -166,7 +166,7 @@ package Win32.crt.Fpieee is
       U32Value     at 0 range 0 .. 31;
       U64Value     at 0 range 0 .. 63;
       Bcd80Value   at 0 range 0 .. 79;
-      StringValue  at 0 range 0 .. 31;
+      StringValue  at 0 range 0 .. LONG_PTR'Size - 1;
       CompareValue at 0 range 0 .. 31;
       OperandValid at 16 range 0 .. 0;
       Format       at 16 range 1 .. 4;

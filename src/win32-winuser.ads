@@ -15,6 +15,11 @@
 --  Microsoft is a registered trademark and Windows and Windows NT are
 --  trademarks of Microsoft Corporation.
 --
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (c) AdaCore 2000-2010, AdaCore
+--
 -------------------------------------------------------------------------------
 
 with Ada.Unchecked_Conversion;
@@ -4332,6 +4337,35 @@ package Win32.Winuser is
                            return Win32.LONG;
    --  winuser.h:4748
 
+   function GetWindowLongPtrA (hWnd : Win32.Windef.HWND;
+                           nIndex : Win32.INT)
+                          return Win32.LONG_PTR;
+
+   function GetWindowLongPtr (hWnd : Win32.Windef.HWND;
+                           nIndex : Win32.INT)
+                          return Win32.LONG_PTR
+     renames GetWindowLongPtrA;
+
+   function GetWindowLongPtrW (hWnd : Win32.Windef.HWND;
+                           nIndex : Win32.INT)
+                          return Win32.LONG_PTR;
+
+   function SetWindowLongPtrA (hWnd : Win32.Windef.HWND;
+                            nIndex : Win32.INT;
+                            dwNewLong : Win32.LONG_PTR)
+                              return Win32.LONG_PTR;
+
+   function SetWindowLongPtr (hWnd : Win32.Windef.HWND;
+                           nIndex : Win32.INT;
+                           dwNewLong : Win32.LONG_PTR)
+                          return Win32.LONG_PTR
+     renames SetWindowLongPtrA;
+
+   function SetWindowLongPtrW (hWnd : Win32.Windef.HWND;
+                            nIndex : Win32.INT;
+                            dwNewLong : Win32.LONG_PTR)
+                           return Win32.LONG_PTR;
+
    function GetClassWord (hWnd : Win32.Windef.HWND;
                           nIndex : Win32.INT)
                          return Win32.WORD;        --  winuser.h:4761
@@ -5621,6 +5655,11 @@ private
    pragma Import (Stdcall, SetWindowLongA, "SetWindowLongA");
    --  winuser.h:4741
    pragma Import (Stdcall, SetWindowLongW, "SetWindowLongW");
+   --
+   pragma Import (Stdcall, GetWindowLongPtrA, "GetWindowLongPtrA");
+   pragma Import (Stdcall, GetWindowLongPtrW, "GetWindowLongPtrW");
+   pragma Import (Stdcall, SetWindowLongPtrA, "SetWindowLongPtrA");
+   pragma Import (Stdcall, SetWindowLongPtrW, "SetWindowLongPtrW");
    --  winuser.h:4748
    pragma Import (Stdcall, GetClassWord, "GetClassWord");    --  winuser.h:4761
    pragma Import (Stdcall, SetClassWord, "SetClassWord");    --  winuser.h:4768
