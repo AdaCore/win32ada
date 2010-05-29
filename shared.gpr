@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                               Win32Ada                                   --
 --                                                                          --
---                       Copyright (C) 2008, AdaCore                        --
+--                    Copyright (C) 2008-2010, AdaCore                      --
 --                                                                          --
 --  This library is free software; you can redistribute it and/or modify    --
 --  it under the terms of the GNU General Public License as published by    --
@@ -28,6 +28,9 @@
 project Shared is
 
    for Source_Dirs use ();
+
+   type Host_Type is ("i686-pc-mingw32", "x86_64-pc-mingw32");
+   Host : Host_Type := external ("PRJ_HOST", "i686-pc-mingw32");
 
    type Build_Type is ("Debug", "Release");
    Build : Build_Type := external ("PRJ_BUILD", "Debug");

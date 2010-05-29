@@ -44,7 +44,9 @@ GPRBUILD	= gprbuild
 GPRCLEAN	= gprclean
 RM		= rm -f
 
-GMOPTS		= -j$(PROCESSORS)
+HOST		= $(shell gcc -dumpmachine)
+
+GMOPTS		= -j$(PROCESSORS) -XPRJ_HOST=$(HOST)
 
 ifeq ($(DEBUG), true)
 BDIR		= $(BUILD)/debug
