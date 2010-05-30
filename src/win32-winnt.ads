@@ -2431,9 +2431,9 @@ package Win32.Winnt is
          Base : Win32.DWORD;             --  winnt.h :3540
          NumberOfFunctions : Win32.DWORD;             --  winnt.h :3541
          NumberOfNames : Win32.DWORD;             --  winnt.h :3542
-         AddressOfFunctions : PPDWORD;                 --  winnt.h :3543
-         AddressOfNames : PPDWORD;                 --  winnt.h :3544
-         AddressOfNameOrdinals : PPWORD;                  --  winnt.h :3545
+         AddressOfFunctions : DWORD;                 --  winnt.h :3543
+         AddressOfNames : DWORD;                 --  winnt.h :3544
+         AddressOfNameOrdinals : WORD;                  --  winnt.h :3545
       end record;
 
    type IMAGE_IMPORT_BY_NAME is                            --  winnt.h :3552
