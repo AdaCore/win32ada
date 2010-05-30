@@ -944,12 +944,12 @@ package Win32.Winbase is
       record
          dwLength : Win32.DWORD;                   --  winbase.h :498
          dwMemoryLoad : Win32.DWORD;                   --  winbase.h :499
-         dwTotalPhys : Win32.DWORD;                   --  winbase.h :500
-         dwAvailPhys : Win32.DWORD;                   --  winbase.h :501
-         dwTotalPageFile : Win32.DWORD;                   --  winbase.h :502
-         dwAvailPageFile : Win32.DWORD;                   --  winbase.h :503
-         dwTotalVirtual : Win32.DWORD;                   --  winbase.h :504
-         dwAvailVirtual : Win32.DWORD;                   --  winbase.h :505
+         dwTotalPhys : Win32.Size_T;                   --  winbase.h :500
+         dwAvailPhys : Win32.Size_T;                   --  winbase.h :501
+         dwTotalPageFile : Win32.Size_T;                   --  winbase.h :502
+         dwAvailPageFile : Win32.Size_T;                   --  winbase.h :503
+         dwTotalVirtual : Win32.Size_T;                   --  winbase.h :504
+         dwAvailVirtual : Win32.Size_T;                   --  winbase.h :505
       end record;
 
    type EXCEPTION_DEBUG_INFO is                            --  winbase.h :580
