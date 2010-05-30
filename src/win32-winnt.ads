@@ -2208,10 +2208,11 @@ package Win32.Winnt is
          Short : Win32.DWORD;                             --  winnt.h :3183
          Long : Win32.DWORD;                             --  winnt.h :3184
       end record;
+   for anonymous22_t'Alignment use 2;
 
    type anonymous23_t is                                   --  winnt.h :3186
      array (Integer range 0 .. 1)
-     of Win32.PBYTE;
+     of Win32.DWORD;
 
    type union_anonymous24_t_kind is ( --  winnt.h :3187
      ShortName_kind,
@@ -2232,6 +2233,7 @@ package Win32.Winnt is
                LongName : anonymous23_t;                --  winnt.h :3186
          end case;
       end record;
+   for union_anonymous24_t'Alignment use 2;
 
    pragma Convention (C, union_anonymous24_t);
 
@@ -2246,6 +2248,7 @@ package Win32.Winnt is
          StorageClass : Win32.BYTE;                 --  winnt.h :3191
          NumberOfAuxSymbols : Win32.BYTE;                 --  winnt.h :3192
       end record;
+   for IMAGE_SYMBOL'Alignment use 2;
 
    type anonymous25_t is                                   --  winnt.h :3324
       record
