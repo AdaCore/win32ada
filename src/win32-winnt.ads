@@ -2397,7 +2397,7 @@ package Win32.Winnt is
                VirtualAddress : Win32.DWORD;            --  winnt.h :3495
          end case;
       end record;
-
+   for union_anonymous34_t'Alignment use 2;
    pragma Convention (C, union_anonymous34_t);
 
    pragma Unchecked_Union (union_anonymous34_t);
@@ -2407,6 +2407,7 @@ package Win32.Winnt is
          C_Type : union_anonymous34_t;                --  winnt.h :3496
          Linenumber : Win32.WORD;                         --  winnt.h :3497
       end record;
+   for IMAGE_LINENUMBER'Alignment use 2;
 
    type IMAGE_ARCHIVE_MEMBER_HEADER is                     --  winnt.h :3514
       record
