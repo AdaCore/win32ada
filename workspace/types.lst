@@ -3,14 +3,16 @@
 # test.
 #
 # 1. Size check
-#    [PACKAGE.]TYPE_NAME
+#    [PACKAGE.]TYPE_NAME [^ message]
 #
 #    PACKAGE is the name of a package, this is used to avoid ambiguity and
 #    is optional. It corresponds to the Ada package in whitch the type is
 #    declared. TYPE_NAME is the name of the type to check.
 #
+#    [^ message] expected failure, display message
+#
 # 2. Offset check
-#    TYPE_NAME-FIELD
+#    TYPE_NAME-FIELD [^ message]
 #
 #    FIELD is the name of the field in record TYPE_NAME to check. In this
 #    case the check is to ensure that FIELD in C and Ada are at the same
@@ -79,9 +81,9 @@ IMAGE_FUNCTION_ENTRY
 IMAGE_IMPORT_BY_NAME
 IMAGE_IMPORT_DESCRIPTOR
 IMAGE_LINENUMBER
-IMAGE_LOAD_CONFIG_DIRECTORY
-IMAGE_NT_HEADERS
-IMAGE_OPTIONAL_HEADER
+IMAGE_LOAD_CONFIG_DIRECTORY ^ defs on Win32/Win64 differents (see winnt.h)
+IMAGE_NT_HEADERS ^ defs on Win32/Win64 differents (see winnt.h)
+IMAGE_OPTIONAL_HEADER ^ defs on Win32/Win64 differents (see winnt.h)
 IMAGE_OS2_HEADER
 IMAGE_RELOCATION
 IMAGE_RESOURCE_DATA_ENTRY
@@ -96,7 +98,7 @@ IMAGE_SECTION_HEADER
 IMAGE_SEPARATE_DEBUG_HEADER
 IMAGE_SYMBOL
 IMAGE_THUNK_DATA
-IMAGE_TLS_DIRECTORY
+IMAGE_TLS_DIRECTORY ^ defs on Win32/Win64 differents (see winnt.h)
 INT
 LANGID
 LARGE_INTEGER
@@ -159,7 +161,7 @@ MESSAGE_RESOURCE_BLOCK
 MESSAGE_RESOURCE_DATA
 MESSAGE_RESOURCE_ENTRY
 MIDL_FORMAT_STRING
-MIDL_SERVER_INFO ^ expected to fail on Win32 (C header wrong)
+MIDL_SERVER_INFO ^ Win32 def is wrong (C header wrong, see MSDN)
 MIDL_STUB_DESC
 MIDL_STUB_MESSAGE
 NDR_CCONTEXT
