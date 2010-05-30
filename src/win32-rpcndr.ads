@@ -380,10 +380,19 @@ package Win32.Rpcndr is
 
    type ac_NDR_RUNDOWN_t is access all NDR_RUNDOWN;   --  rpcndr.h:865
 
+   type UCHAR_Array_0 is new Win32.UCHAR_Array (1 .. Win32.ANYSIZE_ARRAY);
+   pragma Convention (C, UCHAR_Array_0);
+   pragma Warnings (Off, UCHAR_Array_0);
+   for UCHAR_Array_0'Size use (64 - Standard'Address_Size) / 4;
+   --  The actual size in Win64 must be 0 as the C definition is
+   --     unsigned char Format[]
+   --  On Win32 it must be 8 as the C definition is
+   --     unsigned char Format[1]
+
    type MIDL_FORMAT_STRING is                              --  rpcndr.h:898
       record
          Pad : Win32.SHORT;                            --  rpcndr.h:900
-         Format : Win32.UCHAR_Array (0 .. Win32.ANYSIZE_ARRAY);
+         Format : UCHAR_Array_0;
          --  rpcndr.h:901
       end record;
 
@@ -473,9 +482,15 @@ package Win32.Rpcndr is
          pFormatTypes : Win32.PCBYTE;      --  rpcndr.h:872
          fCheckBounds : Win32.INT;         --  rpcndr.h:874
          Version : Win32.ULONG;       --  rpcndr.h:877
-         Reserved1 : Win32.INT;         --  rpcndr.h:882
-         Reserved2 : Win32.INT;         --  rpcndr.h:883
-         Reserved3 : Win32.INT;         --  rpcndr.h:884
+         pMallocFreeStruct : Win32.PVOID;
+         MIDLVersion : Win32.LONG;
+         CommFaultOffsets : Win32.PVOID;
+         aUserMarshalQuadruple : Win32.PVOID;
+         NotifyRoutineTable : Win32.PVOID;
+         mFlags : Win32.ULONG_PTR;
+         CsRoutineTables : Win32.PVOID;
+         Reserved4 : Win32.PVOID;         --  rpcndr.h:883
+         Reserved5 : Win32.ULONG_PTR;         --  rpcndr.h:884
       end record;
 
    type FULL_PTR_XLAT_TABLES is                            --  rpcndr.h:602
