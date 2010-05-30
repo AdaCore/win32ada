@@ -2255,6 +2255,7 @@ package Win32.Winnt is
          Linenumber : Win32.WORD;                         --  winnt.h :3322
          Size : Win32.WORD;                         --  winnt.h :3323
       end record;
+   for anonymous25_t'Alignment use 2;
 
    type union_anonymous26_t_kind is ( --  winnt.h :3326
      LnSz_kind,
@@ -2271,6 +2272,7 @@ package Win32.Winnt is
                TotalSize : Win32.DWORD;                 --  winnt.h :3325
          end case;
       end record;
+   for union_anonymous26_t'Alignment use 2;
 
    pragma Convention (C, union_anonymous26_t);
 
@@ -2281,11 +2283,13 @@ package Win32.Winnt is
          PointerToLinenumber : Win32.DWORD;             --  winnt.h :3329
          PointerToNextFunction : Win32.DWORD;             --  winnt.h :3330
       end record;
+   for anonymous27_t'Alignment use 2;
 
    type anonymous28_t is                                   --  winnt.h :3334
       record
-         Dimension : Win32.INT_Array (0 .. 3);               --  winnt.h :3333
+         Dimension : Win32.WORD_Array (0 .. 3);               --  winnt.h :3333
       end record;
+   for anonymous28_t'Alignment use 2;
 
    type union_anonymous29_t_kind is ( --  winnt.h :3335
      C_Function_kind,
@@ -2303,6 +2307,7 @@ package Win32.Winnt is
                C_Array : anonymous28_t;                 --  winnt.h :3334
          end case;
       end record;
+   for union_anonymous29_t'Alignment use 2;
 
    pragma Convention (C, union_anonymous29_t);
 
@@ -2315,11 +2320,13 @@ package Win32.Winnt is
          FcnAry : union_anonymous29_t;                  --  winnt.h :3335
          TvIndex : Win32.WORD;                           --  winnt.h :3336
       end record;
+   for anonymous30_t'Alignment use 2;
 
    type anonymous32_t is                                   --  winnt.h :3340
       record
          Name : Win32.BYTE_Array (0 .. 17);                  --  winnt.h :3339
       end record;
+   for anonymous32_t'Alignment use 2;
 
    type anonymous33_t is                                   --  winnt.h :3348
       record
@@ -2330,6 +2337,7 @@ package Win32.Winnt is
          Number : Win32.SHORT;               --  winnt.h :3346
          Selection : Win32.BYTE;                --  winnt.h :3347
       end record;
+   for anonymous33_t'Alignment use 2;
 
    type IMAGE_AUX_SYMBOL_kind is ( --  winnt.h :3317
      Sym_kind,
@@ -2349,7 +2357,7 @@ package Win32.Winnt is
                Section : anonymous33_t;                 --  winnt.h :3348
          end case;
       end record;
-
+   for IMAGE_AUX_SYMBOL'Alignment use 2;
    pragma Unchecked_Union (IMAGE_AUX_SYMBOL);
 
    type IMAGE_RELOCATION is                                --  winnt.h :3373
