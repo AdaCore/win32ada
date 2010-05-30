@@ -2577,9 +2577,7 @@ package Win32.Winnt is
       record
          BeginAddress : Win32.DWORD;                  --  winnt.h :3715
          EndAddress : Win32.DWORD;                  --  winnt.h :3716
-         ExceptionHandler : Win32.PVOID;                  --  winnt.h :3717
-         HandlerData : Win32.PVOID;                  --  winnt.h :3718
-         PrologEndAddress : Win32.DWORD;                  --  winnt.h :3719
+	 UnwindInfoAddress : Win32.DWORD;
       end record;
 
    type IMAGE_DEBUG_DIRECTORY is                           --  winnt.h :3726
