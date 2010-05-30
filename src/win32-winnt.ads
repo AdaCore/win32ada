@@ -2694,8 +2694,7 @@ package Win32.Winnt is
          ProcessLocksList : LIST_ENTRY;              --  winnt.h :3954
          EntryCount : Win32.DWORD;             --  winnt.h :3955
          ContentionCount : Win32.DWORD;             --  winnt.h :3956
-         Depth : Win32.DWORD;             --  winnt.h :3957
-         OwnerBackTrace : Win32.PVOID_Array (0 .. 4); --  winnt.h :3958
+         Spare : Win32.DWORD_Array (0 .. 1); --  winnt.h :3958
       end record;
 
    type EVENTLOGRECORD is                                  --  winnt.h :4021
