@@ -94,6 +94,7 @@ procedure Driver is
       --  Ada
 
       Text_IO.Put_Line (A_File, "with Ada.Text_IO;");
+      Text_IO.Put_Line (A_File, "with Ada.Strings.Unbounded;");
       Text_IO.Put_Line (A_File, "with Win32;");
       Text_IO.Put_Line (A_File, "with Win32.Winbase;");
       Text_IO.Put_Line (A_File, "with Win32.Windef;");
@@ -102,6 +103,7 @@ procedure Driver is
       Text_IO.Put_Line (A_File, "with Win32.Rpcndr;");
       Text_IO.Put_Line (A_File, "procedure RunCheck is");
       Text_IO.Put_Line (A_File, "   use Ada;");
+      Text_IO.Put_Line (A_File, "   use Ada.Strings.Unbounded;");
       Text_IO.Put_Line (A_File, "   use Win32;");
       Text_IO.Put_Line (A_File, "   use Win32.Winbase;");
       Text_IO.Put_Line (A_File, "   use Win32.Windef;");
@@ -110,6 +112,7 @@ procedure Driver is
       Text_IO.Put_Line (A_File, "   use Win32.Rpcndr;");
       Text_IO.Put_Line (A_File, "   Errors : Natural := 0;");
       Text_IO.Put_Line (A_File, "   Checks : Natural := 0;");
+      Text_IO.Put_Line (A_File, "   Xfail  : Unbounded_String;");
       Text_IO.Put_Line (A_File, "begin");
 
       --  C
@@ -174,14 +177,27 @@ procedure Driver is
       end if;
       Text_IO.Put_Line (A_File, "      else");
       Text_IO.Put_Line
-        (A_File, "         Text_IO.Put (""NOK " & Name & ": "");");
+        (A_File, "         if Xfail = Null_Unbounded_String then");
+      Text_IO.Put_Line
+        (A_File, "            Text_IO.Put (""NOK   "");");
+      Text_IO.Put_Line (A_File, "            Errors := Errors + 1;");
+      Text_IO.Put_Line
+        (A_File, "         else");
+      Text_IO.Put_Line
+        (A_File, "            Text_IO.Put (""XFAIL "");");
+      Text_IO.Put_Line
+        (A_File, "         end if;");
+      Text_IO.Put_Line
+        (A_File, "         Text_IO.Put (""" & Name & ": "");");
       Text_IO.Put_Line (A_File, "         Text_IO.Set_Col (40);");
       Text_IO.Put_Line
         (A_File, "         Text_IO.Put (""sizes, C ="" & C_Size'Img);");
       Text_IO.Put_Line
         (A_File,
-         "         Text_IO.Put_Line ("" and Ada ="" & A_Size'Img);");
-      Text_IO.Put_Line (A_File, "         Errors := Errors + 1;");
+         "         Text_IO.Put ("" and Ada ="" & A_Size'Img);");
+      Text_IO.Put_Line
+        (A_File,
+         "         Text_IO.Put_Line ("" "" & To_String (Xfail));");
       Text_IO.Put_Line (A_File, "      end if;");
       Text_IO.Put_Line (A_File, "      Checks := Checks + 1;");
       Text_IO.Put_Line (A_File, "   end;");
@@ -238,14 +254,27 @@ procedure Driver is
       end if;
       Text_IO.Put_Line (A_File, "      else");
       Text_IO.Put_Line
-        (A_File, "         Text_IO.Put (""NOK " & Field & ": "");");
+        (A_File, "         if Xfail = Null_Unbounded_String then");
+      Text_IO.Put_Line
+        (A_File, "            Text_IO.Put (""NOK   "");");
+      Text_IO.Put_Line (A_File, "            Errors := Errors + 1;");
+      Text_IO.Put_Line
+        (A_File, "         else");
+      Text_IO.Put_Line
+        (A_File, "            Text_IO.Put (""XFAIL "");");
+      Text_IO.Put_Line
+        (A_File, "         end if;");
+      Text_IO.Put_Line
+        (A_File, "         Text_IO.Put (""" & Field & ": "");");
       Text_IO.Put_Line (A_File, "         Text_IO.Set_Col (40);");
       Text_IO.Put_Line
         (A_File, "         Text_IO.Put (""offsets, C ="" & C_Off'Img);");
       Text_IO.Put_Line
         (A_File,
-         "         Text_IO.Put_Line ("" and Ada ="" & A_Off'Img);");
-      Text_IO.Put_Line (A_File, "         Errors := Errors + 1;");
+         "         Text_IO.Put ("" and Ada ="" & A_Off'Img);");
+      Text_IO.Put_Line
+        (A_File,
+         "         Text_IO.Put_Line ("" "" & To_String (Xfail));");
       Text_IO.Put_Line (A_File, "      end if;");
       Text_IO.Put_Line (A_File, "      Checks := Checks + 1;");
       Text_IO.Put_Line (A_File, "   end;");
@@ -261,10 +290,10 @@ procedure Driver is
       Text_IO.Put_Line (C_File, "}");
    end Gen_Offset_Check;
 
-   File   : Text_IO.File_Type;
-   Buffer : String (1 .. 256);
-   Last   : Natural;
-   FI     : Positive := 1;
+   File    : Text_IO.File_Type;
+   Buffer  : String (1 .. 256);
+   Last, L : Natural;
+   FI      : Positive := 1;
 
 begin
    if Command_Line.Argument_Count = 0 then
@@ -288,11 +317,34 @@ begin
       while not Text_IO.End_Of_File (File) loop
          Text_IO.Get_Line (File, Buffer, Last);
 
-         if Last /= 0 and then Buffer (1) /= '#' then
-            if Strings.Fixed.Index (Buffer (1 .. Last), "-") = 0 then
-               Gen_Size_Check (Buffer (1 .. Last));
+         if Last /= 0 then
+            if Buffer (1) = '#' then
+               null;
+
             else
-               Gen_Offset_Check (Buffer (1 .. Last));
+               L := Strings.Fixed.Index (Buffer (1 .. Last), "^");
+               if  L /= 0 then
+                  Text_IO.Put_Line
+                    (A_File,
+                     "   Xfail := To_Unbounded_String ("""
+                       & Strings.Fixed.Trim
+                         (Buffer (L + 1 .. Last), Strings.Both) & """);");
+                  Last := L - 1;
+                  while Buffer (Last) = ' ' loop
+                     Last := Last - 1;
+                  end loop;
+
+               else
+                  Text_IO.Put_Line
+                    (A_File,
+                     "   Xfail := Null_Unbounded_String;");
+               end if;
+
+               if Strings.Fixed.Index (Buffer (1 .. Last), "-") = 0 then
+                  Gen_Size_Check (Buffer (1 .. Last));
+               else
+                  Gen_Offset_Check (Buffer (1 .. Last));
+               end if;
             end if;
          end if;
       end loop;
