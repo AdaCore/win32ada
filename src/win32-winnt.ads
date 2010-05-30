@@ -1780,6 +1780,7 @@ package Win32.Winnt is
          --  winnt.h :2001
          Attributes : Win32.DWORD;                        --  winnt.h :2002
       end record;
+   for LUID_AND_ATTRIBUTES'Alignment use 4;
    pragma Convention (c_pass_by_copy, LUID_AND_ATTRIBUTES); --  winnt.h :2000
 
    SYSTEM_LUID : LUID_AND_ATTRIBUTES;                      --  winnt.h :2206
