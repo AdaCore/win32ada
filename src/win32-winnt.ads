@@ -2486,7 +2486,7 @@ package Win32.Winnt is
          TimeDateStamp : Win32.DWORD;                   --  winnt.h :3571
          ForwarderChain : Win32.DWORD;                   --  winnt.h :3572
          Name : Win32.DWORD;                   --  winnt.h :3573
-         FirstThunk : PIMAGE_THUNK_DATA;             --  winnt.h :3574
+         FirstThunk : Win32.DWORD;             --  winnt.h :3574
       end record;
 
    type PIMAGE_TLS_CALLBACK is access procedure
