@@ -2366,6 +2366,7 @@ package Win32.Winnt is
          SymbolTableIndex : Win32.DWORD;                  --  winnt.h :3375
          C_Type : Win32.WORD;                   --  winnt.h :3376
       end record;
+   for IMAGE_RELOCATION'Alignment use 2;
 
    for IMAGE_RELOCATION use
       record
