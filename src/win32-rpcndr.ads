@@ -412,6 +412,9 @@ package Win32.Rpcndr is
          ProcString : PFORMAT_STRING;                --  rpcndr.h:921
          FmtStringOffset : Win32.PCWSTR;                  --  rpcndr.h:922
          ThunkTable : ac_NDR_RUNDOWN_t;              --  rpcndr.h:923
+         pTransferSyntax : Rpcdcep.PRPC_SYNTAX_IDENTIFIER;
+         nCount : ULONG_PTR;
+         pSyntaxInfo : Win32.PVOID;
       end record;
 
    type CLIENT_CALL_RETURN_kind is
