@@ -363,6 +363,7 @@ private
    type LONGLONG is record
       A, B : INT;
    end record;
+   for LONGLONG'Alignment use 8;
 
    type DWORDLONG is record
       A, B : UINT;
