@@ -18,7 +18,6 @@
 -------------------------------------------------------------------------------
 
 with System;
-with Win32.Winsock;
 
 package body Win32.Wshisotp is
 

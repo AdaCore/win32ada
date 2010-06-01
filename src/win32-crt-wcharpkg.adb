@@ -48,10 +48,10 @@ package body Win32.crt.WcharPkg is
       args   : Stdarg.ArgList := Stdarg.Empty)
       return Win32.INT
    is
-      Complete_Args : Stdarg.ArgList := Stdarg.Empty &
-                                        stream &
-                                        format &
-                                        args;
+      Complete_Args : constant Stdarg.ArgList := Stdarg.Empty &
+                                                 stream &
+                                                 format &
+                                                 args;
 
       function C_fwprintf return Win32.INT;
       pragma Import (C, C_fwprintf, "fwprintf");
@@ -70,10 +70,10 @@ package body Win32.crt.WcharPkg is
       args   : Stdarg.ArgList := Stdarg.Empty)
       return Win32.INT
    is
-      Complete_Args : Stdarg.ArgList := Stdarg.Empty &
-                                        stream &
-                                        format &
-                                        args;
+      Complete_Args : constant Stdarg.ArgList := Stdarg.Empty &
+                                                 stream &
+                                                 format &
+                                                 args;
 
       function C_fwscanf return Win32.INT;
       pragma Import (C, C_fwscanf, "fwscanf");
@@ -91,7 +91,7 @@ package body Win32.crt.WcharPkg is
       args   : Stdarg.ArgList := Stdarg.Empty)
       return Win32.INT
    is
-      Complete_Args : Stdarg.ArgList := Stdarg.Empty & format & args;
+      Complete_Args : constant Stdarg.ArgList := Stdarg.Empty & format & args;
 
       function C_wprintf return Win32.INT;
       pragma Import (C, C_wprintf, "wprintf");
@@ -109,7 +109,7 @@ package body Win32.crt.WcharPkg is
       args   : Stdarg.ArgList := Stdarg.Empty)
       return Win32.INT
    is
-      Complete_Args : Stdarg.ArgList := Stdarg.Empty & format & args;
+      Complete_Args : constant Stdarg.ArgList := Stdarg.Empty & format & args;
 
       function C_wscanf return Win32.INT;
       pragma Import (C, C_wscanf, "wscanf");
@@ -129,7 +129,7 @@ package body Win32.crt.WcharPkg is
       args   : Stdarg.ArgList := Stdarg.Empty)
       return Win32.INT
    is
-      Complete_Args : Stdarg.ArgList :=
+      Complete_Args : constant Stdarg.ArgList :=
          Stdarg.Empty & buffer & INT (count) & format & args;
 
       function C_snwprintf return Win32.INT;
@@ -149,10 +149,10 @@ package body Win32.crt.WcharPkg is
       args   : Stdarg.ArgList := Stdarg.Empty)
       return Win32.INT
    is
-      Complete_Args : Stdarg.ArgList := Stdarg.Empty &
-                                        buffer &
-                                        format &
-                                        args;
+      Complete_Args : constant Stdarg.ArgList := Stdarg.Empty &
+                                                 buffer &
+                                                 format &
+                                                 args;
 
       function C_swprintf return Win32.INT;
       pragma Import (C, C_swprintf, "swprintf");
@@ -171,10 +171,10 @@ package body Win32.crt.WcharPkg is
       args   : Stdarg.ArgList := Stdarg.Empty)
       return Win32.INT
    is
-      Complete_Args : Stdarg.ArgList := Stdarg.Empty &
-                                        buffer &
-                                        format &
-                                        args;
+      Complete_Args : constant Stdarg.ArgList := Stdarg.Empty &
+                                                 buffer &
+                                                 format &
+                                                 args;
 
       function C_swscanf return Win32.INT;
       pragma Import (C, C_swscanf, "swscanf");

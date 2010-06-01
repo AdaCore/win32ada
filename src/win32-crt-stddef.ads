@@ -22,7 +22,7 @@ with Win32.crt.Stdlib;
 
 package Win32.crt.Stddef is
 
-   errno : Interfaces.C.int renames Win32.crt.Stdlib.errno;
+   function errno return Win32.INT renames Win32.crt.Stdlib.errno;
 
    subtype ptrdiff_t is Interfaces.C.ptrdiff_t;
 

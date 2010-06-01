@@ -18,7 +18,6 @@
 -------------------------------------------------------------------------------
 
 with Interfaces.C; use Interfaces.C;
-with Win32.Gl;
 
 package body Win32.Glaux is
 

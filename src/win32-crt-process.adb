@@ -34,7 +34,7 @@ package body Win32.crt.Process is
       args    : in Stdarg.ArgList := Stdarg.Empty)
       return Win32.INT
    is
-      Complete_Args : Stdarg.ArgList :=
+      Complete_Args : constant Stdarg.ArgList :=
          Stdarg.Empty & cmdname & args & Null_Ptr;
 
       procedure C_Execl;
@@ -57,7 +57,7 @@ package body Win32.crt.Process is
       env     : in Stdarg.ArgList := Stdarg.Empty)
       return Win32.INT
    is
-      Complete_Args : Stdarg.ArgList :=
+      Complete_Args : constant Stdarg.ArgList :=
          Stdarg.Empty & cmdname & args & Null_Ptr & env & Null_Ptr;
 
       procedure C_execle;
@@ -79,7 +79,7 @@ package body Win32.crt.Process is
       args    : in Stdarg.ArgList := Stdarg.Empty)
       return Win32.INT
    is
-      Complete_Args : Stdarg.ArgList :=
+      Complete_Args : constant Stdarg.ArgList :=
          Stdarg.Empty & cmdname & args & Null_Ptr;
 
       procedure C_execlp;
@@ -102,7 +102,7 @@ package body Win32.crt.Process is
       env     : in Stdarg.ArgList := Stdarg.Empty)
       return Win32.INT
    is
-      Complete_Args : Stdarg.ArgList :=
+      Complete_Args : constant Stdarg.ArgList :=
          Stdarg.Empty & cmdname & args & Null_Ptr & env & Null_Ptr;
 
       procedure C_execlpe;
@@ -125,7 +125,7 @@ package body Win32.crt.Process is
       args    : in Stdarg.ArgList := Stdarg.Empty)
       return Win32.INT
    is
-      Complete_Args : Stdarg.ArgList :=
+      Complete_Args : constant Stdarg.ArgList :=
          Stdarg.Empty & mode & cmdname & args & Null_Ptr;
 
       procedure C_spawnl;
@@ -150,7 +150,7 @@ package body Win32.crt.Process is
       env     : in Stdarg.ArgList := Stdarg.Empty)
       return Win32.INT
    is
-      Complete_Args : Stdarg.ArgList :=
+      Complete_Args : constant Stdarg.ArgList :=
          Stdarg.Empty & mode & cmdname & args & Null_Ptr & env & Null_Ptr;
 
       procedure C_spawnle;
@@ -174,7 +174,7 @@ package body Win32.crt.Process is
       args    : in Stdarg.ArgList := Stdarg.Empty)
       return Win32.INT
    is
-      Complete_Args : Stdarg.ArgList :=
+      Complete_Args : constant Stdarg.ArgList :=
          Stdarg.Empty & mode & cmdname & args & Null_Ptr;
 
       procedure C_spawnlp;
@@ -199,7 +199,7 @@ package body Win32.crt.Process is
       env     : in Stdarg.ArgList := Stdarg.Empty)
       return Win32.INT
    is
-      Complete_Args : Stdarg.ArgList :=
+      Complete_Args : constant Stdarg.ArgList :=
          Stdarg.Empty & mode & cmdname & args & Null_Ptr & env & Null_Ptr;
 
       procedure C_spawnlpe;

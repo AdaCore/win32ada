@@ -18,7 +18,7 @@
 -------------------------------------------------------------------------------
 
 with Ada.Unchecked_Conversion;
-with Interfaces.C.Pointers;
+with Interfaces.C;
 with System;
 
 package body Win32.Rpcndr is
@@ -92,7 +92,7 @@ package body Win32.Rpcndr is
    use P_RPCB;
 
    procedure byte_from_ndr
-     (source : in out Win32.Rpcdcep.PRPC_MESSAGE;
+     (source : Win32.Rpcdcep.PRPC_MESSAGE;
       target : out Win32.PBYTE)
    is
    begin
@@ -104,9 +104,9 @@ package body Win32.Rpcndr is
       renames Interfaces.C."-";
 
    procedure byte_array_from_ndr
-     (Source     : in out Win32.Rpcdcep.PRPC_MESSAGE;
-      LowerIndex : in Win32.UINT;
-      UpperIndex : in Win32.UINT;
+     (Source     : Win32.Rpcdcep.PRPC_MESSAGE;
+      LowerIndex : Win32.UINT;
+      UpperIndex : Win32.UINT;
       Target     : Win32.PBYTE)
    is
 
@@ -121,7 +121,7 @@ package body Win32.Rpcndr is
    end byte_array_from_ndr;
 
    procedure boolean_from_ndr
-     (source : in out Win32.Rpcdcep.PRPC_MESSAGE;
+     (source : Win32.Rpcdcep.PRPC_MESSAGE;
       target : out Win32.PBOOL)
    is
    begin
@@ -130,7 +130,7 @@ package body Win32.Rpcndr is
    end boolean_from_ndr;
 
    procedure boolean_array_from_ndr
-     (Source     : in out Win32.Rpcdcep.PRPC_MESSAGE;
+     (Source     : Win32.Rpcdcep.PRPC_MESSAGE;
       LowerIndex : Win32.UINT;
       UpperIndex : Win32.UINT;
       Target     : Win32.PBOOL)
@@ -146,7 +146,7 @@ package body Win32.Rpcndr is
    end boolean_array_from_ndr;
 
    procedure small_from_ndr
-     (source : in out Win32.Rpcdcep.PRPC_MESSAGE;
+     (source : Win32.Rpcdcep.PRPC_MESSAGE;
       target : out psmall)
    is
    begin
@@ -156,9 +156,9 @@ package body Win32.Rpcndr is
 
    pragma Warnings (Off);
    procedure small_array_from_ndr
-     (Source     : in out Win32.Rpcdcep.PRPC_MESSAGE;
-      LowerIndex : in Win32.UINT;
-      UpperIndex : in Win32.UINT;
+     (Source     : Win32.Rpcdcep.PRPC_MESSAGE;
+      LowerIndex : Win32.UINT;
+      UpperIndex : Win32.UINT;
       Target     : out psmall)
    is
       pragma Warnings (On);
@@ -173,15 +173,9 @@ package body Win32.Rpcndr is
          C.ptrdiff_t (UpperIndex - LowerIndex) * bp);
    end small_array_from_ndr;
 
-   function "+"
-     (l, r : Interfaces.C.unsigned_long)
-      return Interfaces.C.unsigned_long renames Interfaces.C."+";
    function "*"
      (l, r : Interfaces.C.unsigned_long)
       return Interfaces.C.unsigned_long renames Interfaces.C."*";
-   function "and"
-     (l, r : Interfaces.C.unsigned_long)
-      return Interfaces.C.unsigned_long renames Interfaces.C."and";
 
    procedure midl_fa2 (p : in out RPC_BUFPTR) is
    begin

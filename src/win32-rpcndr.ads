@@ -259,13 +259,14 @@ package Win32.Rpcndr is
       pCSInfo                at 35 * WS + 10 * 4 range 0 .. AS;
       ConformanceMark        at 36 * WS + 10 * 4 range 0 .. AS;
       VarianceMark           at 37 * WS + 10 * 4 range 0 .. AS;
-      Unused                 at 38 * WS + 10 * 4 range 0 .. AS;
-      pContext               at 39 * WS + 10 * 4 range 0 .. AS;
-      Reserved51_1           at 40 * WS + 10 * 4 range 0 .. AS;
-      Reserved51_2           at 41 * WS + 10 * 4 range 0 .. AS;
-      Reserved51_3           at 42 * WS + 10 * 4 range 0 .. AS;
-      Reserved51_4           at 43 * WS + 10 * 4 range 0 .. AS;
-      Reserved51_5           at 44 * WS + 10 * 4 range 0 .. AS;
+      BackingStoreLowMark    at 38 * WS + 10 * 4 range 0 .. AS;
+      Unused                 at 39 * WS + 10 * 4 range 0 .. AS;
+      pContext               at 40 * WS + 10 * 4 range 0 .. AS;
+      Reserved51_1           at 41 * WS + 10 * 4 range 0 .. AS;
+      Reserved51_2           at 42 * WS + 10 * 4 range 0 .. AS;
+      Reserved51_3           at 43 * WS + 10 * 4 range 0 .. AS;
+      Reserved51_4           at 44 * WS + 10 * 4 range 0 .. AS;
+      Reserved51_5           at 45 * WS + 10 * 4 range 0 .. AS;
    end record;
 
    type EXPR_EVAL is access procedure (pStubMsg : PMIDL_STUB_MESSAGE);
@@ -473,33 +474,33 @@ package Win32.Rpcndr is
    procedure RpcSsDestroyClientContext (ContextHandle : PPVOID);
 
    procedure byte_from_ndr
-     (source : in out Win32.Rpcdcep.PRPC_MESSAGE;
+     (source : Win32.Rpcdcep.PRPC_MESSAGE;
       target : out Win32.PBYTE);
 
    procedure byte_array_from_ndr
-     (Source     : in out Win32.Rpcdcep.PRPC_MESSAGE;
-      LowerIndex : in Win32.UINT;
-      UpperIndex : in Win32.UINT;
+     (Source     : Win32.Rpcdcep.PRPC_MESSAGE;
+      LowerIndex : Win32.UINT;
+      UpperIndex : Win32.UINT;
       Target     : Win32.PBYTE);
 
    procedure boolean_from_ndr
-     (source : in out Win32.Rpcdcep.PRPC_MESSAGE;
+     (source : Win32.Rpcdcep.PRPC_MESSAGE;
       target : out Win32.PBOOL);
 
    procedure boolean_array_from_ndr
-     (Source     : in out Win32.Rpcdcep.PRPC_MESSAGE;
+     (Source     : Win32.Rpcdcep.PRPC_MESSAGE;
       LowerIndex : Win32.UINT;
       UpperIndex : Win32.UINT;
       Target     : Win32.PBOOL);
 
    procedure small_from_ndr
-     (source : in out Win32.Rpcdcep.PRPC_MESSAGE;
+     (source : Win32.Rpcdcep.PRPC_MESSAGE;
       target : out psmall);
 
    procedure small_array_from_ndr
-     (Source     : in out Win32.Rpcdcep.PRPC_MESSAGE;
-      LowerIndex : in Win32.UINT;
-      UpperIndex : in Win32.UINT;
+     (Source     : Win32.Rpcdcep.PRPC_MESSAGE;
+      LowerIndex : Win32.UINT;
+      UpperIndex : Win32.UINT;
       Target     : out psmall);
 
    procedure NDRcopy

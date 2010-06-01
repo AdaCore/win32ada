@@ -16,9 +16,9 @@
 --  Copyright (C) 2000-2010, AdaCore
 --
 -------------------------------------------------------------------------------
+
 with System;
 
-with Ada.Unchecked_Conversion;
 with Interfaces;
 
 package body Win32.crt.Largeint.Ops is

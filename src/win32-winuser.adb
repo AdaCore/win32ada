@@ -17,7 +17,6 @@
 --
 -------------------------------------------------------------------------------
 
-with Ada.Unchecked_Conversion;
 with Stdarg.Impl;
 
 package body Win32.Winuser is
@@ -314,7 +313,7 @@ package body Win32.Winuser is
       function "&" is new Stdarg.Concat (LPSTR);
       function "&" is new Stdarg.Concat (LPCSTR);
 
-      Complete_Args : Stdarg.ArgList :=
+      Complete_Args : constant Stdarg.ArgList :=
          Stdarg.Empty & lpOut & lpFmt & arglist;
 
       function C_wsprintfA return Win32.INT;
@@ -343,7 +342,7 @@ package body Win32.Winuser is
       function "&" is new Stdarg.Concat (LPWSTR);
       function "&" is new Stdarg.Concat (LPCWSTR);
 
-      Complete_Args : Stdarg.ArgList :=
+      Complete_Args : constant Stdarg.ArgList :=
          Stdarg.Empty & lpOut & lpFmt & arglist;
 
       function C_wsprintfW return Win32.INT;

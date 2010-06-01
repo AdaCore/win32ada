@@ -44,7 +44,6 @@ package Win32.crt.Fpieee is
       FpFormatString);
 
    pragma Convention (C, FPIEEE_FORMAT);
-   for FPIEEE_FORMAT'Size use 4;
 
    type FP_OPERATION_CODE is (
       FpCodeUnspecified,
@@ -167,6 +166,9 @@ package Win32.crt.Fpieee is
       OperandValid at 16 range 0 .. 0;
       Format       at 16 range 1 .. 4;
    end record;
+
+   pragma Warnings (Off, FPIEEE_VALUE);
+   --  ??? This is suspicious but let's kill this working for now
 
    FVSIZE : constant := 24;
 

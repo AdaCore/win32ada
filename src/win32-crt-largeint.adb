@@ -86,7 +86,6 @@ package body Win32.crt.Largeint is
       Remainder : in Win32.PULONG)
       return Win32.Winnt.LARGE_INTEGER
    is
-      use Win32.crt.Largeint.Ops;
    begin
       Remainder.all := Dividend.QuadPart mod Divisor;
       return LI (Dividend.QuadPart / Divisor);

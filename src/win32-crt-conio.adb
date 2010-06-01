@@ -31,7 +31,7 @@ package body Win32.crt.Conio is
    is
       use Stdarg, Stdarg.Impl;
 
-      Complete_Args : Stdarg.ArgList := Stdarg.Empty & format & args;
+      Complete_Args : constant Stdarg.ArgList := Stdarg.Empty & format & args;
 
       function C_cprintf return Win32.INT;
       pragma Import (C, C_cprintf, "_cprintf");
@@ -54,7 +54,7 @@ package body Win32.crt.Conio is
    is
       use Stdarg, Stdarg.Impl;
 
-      Complete_Args : Stdarg.ArgList := Stdarg.Empty & format & args;
+      Complete_Args : constant Stdarg.ArgList := Stdarg.Empty & format & args;
 
       function C_cscanf return Win32.INT;
       pragma Import (C, C_cscanf, "_cscanf");

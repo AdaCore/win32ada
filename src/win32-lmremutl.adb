@@ -39,7 +39,7 @@ package body Win32.Lmremutl is
       Args           : Stdarg.ArgList := Stdarg.Empty)
       return Win32.DWORD
    is
-      ArgList : Stdarg.ArgList :=
+      ArgList : constant Stdarg.ArgList :=
          Stdarg.Empty &
          ApiNumber &
          UncServerName &

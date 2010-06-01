@@ -52,10 +52,10 @@ package body Win32.crt.Stdio is
       args   : Stdarg.ArgList := Stdarg.Empty)
       return Win32.INT
    is
-      Complete_Args : Stdarg.ArgList := Stdarg.Empty &
-                                        stream &
-                                        format &
-                                        args;
+      Complete_Args : constant Stdarg.ArgList := Stdarg.Empty &
+                                                 stream &
+                                                 format &
+                                                 args;
 
       function C_Fprintf return Win32.INT;
       pragma Import (C, C_Fprintf, "fprintf");
@@ -77,10 +77,10 @@ package body Win32.crt.Stdio is
       args   : Stdarg.ArgList := Stdarg.Empty)
       return Win32.INT
    is
-      Complete_Args : Stdarg.ArgList := Stdarg.Empty &
-                                        stream &
-                                        format &
-                                        args;
+      Complete_Args : constant Stdarg.ArgList := Stdarg.Empty &
+                                                 stream &
+                                                 format &
+                                                 args;
 
       function C_fscanf return Win32.INT;
       pragma Import (C, C_fscanf, "fscanf");
@@ -101,7 +101,7 @@ package body Win32.crt.Stdio is
       args   : Stdarg.ArgList := Stdarg.Empty)
       return Win32.INT
    is
-      Complete_Args : Stdarg.ArgList := Stdarg.Empty & format & args;
+      Complete_Args : constant Stdarg.ArgList := Stdarg.Empty & format & args;
 
       function C_printf return Win32.INT;
       pragma Import (C, C_printf, "printf");
@@ -122,7 +122,7 @@ package body Win32.crt.Stdio is
       args   : Stdarg.ArgList := Stdarg.Empty)
       return Win32.INT
    is
-      Complete_Args : Stdarg.ArgList := Stdarg.Empty & format & args;
+      Complete_Args : constant Stdarg.ArgList := Stdarg.Empty & format & args;
 
       function C_scanf return Win32.INT;
       pragma Import (C, C_scanf, "scanf");
@@ -145,7 +145,7 @@ package body Win32.crt.Stdio is
       args   : Stdarg.ArgList := Stdarg.Empty)
       return Win32.INT
    is
-      Complete_Args : Stdarg.ArgList :=
+      Complete_Args : constant Stdarg.ArgList :=
          Stdarg.Empty & buffer & INT (count) & format & args;
 
       function C_snprintf return Win32.INT;
@@ -168,10 +168,10 @@ package body Win32.crt.Stdio is
       args   : Stdarg.ArgList := Stdarg.Empty)
       return Win32.INT
    is
-      Complete_Args : Stdarg.ArgList := Stdarg.Empty &
-                                        buffer &
-                                        format &
-                                        args;
+      Complete_Args : constant Stdarg.ArgList := Stdarg.Empty &
+                                                 buffer &
+                                                 format &
+                                                 args;
 
       function C_sprintf return Win32.INT;
       pragma Import (C, C_sprintf, "sprintf");
@@ -193,10 +193,10 @@ package body Win32.crt.Stdio is
       args   : Stdarg.ArgList := Stdarg.Empty)
       return Win32.INT
    is
-      Complete_Args : Stdarg.ArgList := Stdarg.Empty &
-                                        buffer &
-                                        format &
-                                        args;
+      Complete_Args : constant Stdarg.ArgList := Stdarg.Empty &
+                                                 buffer &
+                                                 format &
+                                                 args;
 
       function C_sscanf return Win32.INT;
       pragma Import (C, C_sscanf, "sscanf");

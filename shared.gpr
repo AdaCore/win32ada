@@ -90,7 +90,7 @@ project Shared is
 
       case Build is
          when "Debug" =>
-            for Default_Switches ("Ada") use ("-g", "-gnato");
+            for Default_Switches ("Ada") use ("-g", "-gnato", "-gnatwae");
 
          when "Release" =>
             for Default_Switches ("Ada") use ("-O2", "-gnatn");

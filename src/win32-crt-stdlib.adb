@@ -17,8 +17,6 @@
 --
 -------------------------------------------------------------------------------
 
-with Ada.Unchecked_Conversion;
-with System;
 with Win32.crt.PerThread;
 
 package body Win32.crt.Stdlib is
@@ -51,8 +49,8 @@ package body Win32.crt.Stdlib is
    function errno return Win32.INT is
    begin
       return To_PINT
-                (Win32.crt.PerThread.Get_Address (Win32.crt.PerThread.Errno)).
-all;
+	        (Win32.crt.PerThread.Get_Address 
+	           (Win32.crt.PerThread.Errno)).all;
    end errno;
 
    function doserrno return Win32.ULONG is

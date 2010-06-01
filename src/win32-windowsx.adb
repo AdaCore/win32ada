@@ -22,7 +22,6 @@ with Interfaces.C;
 with Win32.Utils;
 with Win32.Winbase;
 with Win32.Wingdi;
-with Win32.Winuser;
 
 package body Win32.Windowsx is
 

@@ -17,8 +17,6 @@
 --
 -------------------------------------------------------------------------------
 
-with Ada.Unchecked_Conversion;
-
 package body Win32.Glu is
 
    function gluErrorStringWIN

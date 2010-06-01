@@ -62,6 +62,6 @@ package Win32.crt.Errno is
    EILSEQ       : constant := 42;
    EDEADLOCK    : constant := 36;
 
-   errno : Win32.INT renames Win32.crt.Stdlib.errno;
+   function errno return Win32.INT renames Win32.crt.Stdlib.errno;
 
 end Win32.crt.Errno;
