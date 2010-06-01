@@ -85,8 +85,8 @@ ifeq (${ENABLE_SHARED}, true)
 endif
 
 clean:
-	$(GPRCLEAN) -XLIBRARY_TYPE=static -P win32ada
+	$(GPRCLEAN) -XPRJ_HOST=$(HOST) -XLIBRARY_TYPE=static -P win32ada
 ifeq (${ENABLE_SHARED}, true)
-	$(GPRCLEAN) -XLIBRARY_TYPE=relocatable -P win32ada
+	$(GPRCLEAN) -XPRJ_HOST=$(HOST) -XLIBRARY_TYPE=relocatable -P win32ada
 endif
 	$(RM) -r $(BUILD)
