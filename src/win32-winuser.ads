@@ -4345,6 +4345,39 @@ package Win32.Winuser is
       dwNewLong : Win32.LONG)
       return Win32.DWORD;
 
+   function GetClassLongPtrA
+     (hWnd   : Win32.Windef.HWND;
+      nIndex : Win32.INT)
+      return Win32.ULONG_PTR;
+
+   function GetClassLongPtr
+     (hWnd   : Win32.Windef.HWND;
+      nIndex : Win32.INT)
+      return Win32.ULONG_PTR renames GetClassLongPtrA;
+
+   function GetClassLongPtrW
+     (hWnd   : Win32.Windef.HWND;
+      nIndex : Win32.INT)
+      return Win32.ULONG_PTR;
+
+   function SetClassLongPtrA
+     (hWnd      : Win32.Windef.HWND;
+      nIndex    : Win32.INT;
+      dwNewLong : Win32.LONG_PTR)
+      return Win32.ULONG_PTR;
+
+   function SetClassLongPtr
+     (hWnd      : Win32.Windef.HWND;
+      nIndex    : Win32.INT;
+      dwNewLong : Win32.LONG_PTR)
+      return Win32.ULONG_PTR renames SetClassLongPtrA;
+
+   function SetClassLongPtrW
+     (hWnd      : Win32.Windef.HWND;
+      nIndex    : Win32.INT;
+      dwNewLong : Win32.LONG_PTR)
+      return Win32.ULONG_PTR;
+
    function GetDesktopWindow return Win32.Windef.HWND;
 
    function GetParent (hWnd : Win32.Windef.HWND) return Win32.Windef.HWND;
@@ -5374,6 +5407,10 @@ private
    pragma Import (Stdcall, GetClassLongW, "GetClassLongW");
    pragma Import (Stdcall, SetClassLongA, "SetClassLongA");
    pragma Import (Stdcall, SetClassLongW, "SetClassLongW");
+   pragma Import (Stdcall, GetClassLongPtrA, "GetClassLongPtrA");
+   pragma Import (Stdcall, GetClassLongPtrW, "GetClassLongPtrW");
+   pragma Import (Stdcall, SetClassLongPtrA, "SetClassLongPtrA");
+   pragma Import (Stdcall, SetClassLongPtrW, "SetClassLongPtrW");
    pragma Import (Stdcall, GetDesktopWindow, "GetDesktopWindow");
    pragma Import (Stdcall, GetParent, "GetParent");
    pragma Import (Stdcall, SetParent, "SetParent");
