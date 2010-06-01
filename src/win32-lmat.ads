@@ -1,99 +1,93 @@
 -------------------------------------------------------------------------------
 --
---  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS PROVIDED WITHOUT CHARGE
---  "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
---  BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR
---  FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the entire risk as to
---  the accuracy and the use of this file.  This file may be used, copied,
---  modified and distributed only by licensees of Microsoft Corporation's
---  WIN32 Software Development Kit in accordance with the terms of the
---  licensee's End-User License Agreement for Microsoft Software for the
---  WIN32 Development Kit.
+--  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS FURNISHED "AS IS"
+--  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
+--  BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY
+--  AND/OR FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the
+--  entire risk as to the accuracy and the use of this file.
 --
---  Copyright (c) Intermetrics, Inc. 1995
---  Portions (c) 1985-1994 Microsoft Corporation with permission.
---  Microsoft is a registered trademark and Windows and Windows NT are
---  trademarks of Microsoft Corporation.
+--  Copyright (C) Intermetrics, Inc. 1995
+--  Royalty-free, unlimited, worldwide, non-exclusive use, modification,
+--  reproduction and further distribution of this file is permitted.
+--
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (C) 2000-2010, AdaCore
 --
 -------------------------------------------------------------------------------
 
 package Win32.Lmat is
 
-   JOB_RUN_PERIODICALLY : constant := 16#1#;               --  lmat.h:48
-   JOB_EXEC_ERROR : constant := 16#2#;               --  lmat.h:56
-   JOB_RUNS_TODAY : constant := 16#4#;               --  lmat.h:62
-   JOB_ADD_CURRENT_DATE : constant := 16#8#;               --  lmat.h:68
-   JOB_NONINTERACTIVE : constant := 16#10#;              --  lmat.h:75
-   JOB_INPUT_FLAGS : constant := 16#19#;              --  lmat.h:78
-   JOB_OUTPUT_FLAGS : constant := 16#17#;              --  lmat.h:82
+   JOB_RUN_PERIODICALLY : constant := 16#1#;
+   JOB_EXEC_ERROR       : constant := 16#2#;
+   JOB_RUNS_TODAY       : constant := 16#4#;
+   JOB_ADD_CURRENT_DATE : constant := 16#8#;
+   JOB_NONINTERACTIVE   : constant := 16#10#;
+   JOB_INPUT_FLAGS      : constant := 16#19#;
+   JOB_OUTPUT_FLAGS     : constant := 16#17#;
 
-   type AT_INFO;                                           --  lmat.h:89
-   type AT_ENUM;                                           --  lmat.h:97
+   type AT_INFO;
+   type AT_ENUM;
 
-   type PAT_INFO is access all AT_INFO;                    --  lmat.h:95
-   subtype LPAT_INFO is PAT_INFO;                          --  lmat.h:95
+   type PAT_INFO is access all AT_INFO;
+   subtype LPAT_INFO is PAT_INFO;
 
-   type PAT_ENUM is access all AT_ENUM;                    --  lmat.h:104
-   subtype LPAT_ENUM is PAT_ENUM;                          --  lmat.h:104
+   type PAT_ENUM is access all AT_ENUM;
+   subtype LPAT_ENUM is PAT_ENUM;
 
-   type AT_INFO is                                         --  lmat.h:89
-      record
-         JobTime : Win32.DWORD;                       --  lmat.h:90
-         DaysOfMonth : Win32.DWORD;                       --  lmat.h:91
-         DaysOfWeek : Win32.UCHAR;                       --  lmat.h:92
-         Flags : Win32.UCHAR;                       --  lmat.h:93
-         Command : Win32.LPWSTR;                      --  lmat.h:94
-      end record;
+   type AT_INFO is record
+      JobTime     : Win32.DWORD;
+      DaysOfMonth : Win32.DWORD;
+      DaysOfWeek  : Win32.UCHAR;
+      Flags       : Win32.UCHAR;
+      Command     : Win32.LPWSTR;
+   end record;
 
-   type AT_ENUM is                                         --  lmat.h:97
-      record
-         JobId : Win32.DWORD;                       --  lmat.h:98
-         JobTime : Win32.DWORD;                       --  lmat.h:99
-         DaysOfMonth : Win32.DWORD;                       --  lmat.h:100
-         DaysOfWeek : Win32.UCHAR;                       --  lmat.h:101
-         Flags : Win32.UCHAR;                       --  lmat.h:102
-         Command : Win32.LPWSTR;                      --  lmat.h:103
-      end record;
+   type AT_ENUM is record
+      JobId       : Win32.DWORD;
+      JobTime     : Win32.DWORD;
+      DaysOfMonth : Win32.DWORD;
+      DaysOfWeek  : Win32.UCHAR;
+      Flags       : Win32.UCHAR;
+      Command     : Win32.LPWSTR;
+   end record;
 
    function NetScheduleJobAdd
      (Servername : Win32.LPWSTR;
-      Buffer : Win32.LPBYTE;
-      JobId : Win32.LPDWORD)
-     return Win32.DWORD;                          --  lmat.h:107
+      Buffer     : Win32.LPBYTE;
+      JobId      : Win32.LPDWORD)
+      return Win32.DWORD;
 
    function NetScheduleJobDel
      (Servername : Win32.LPWSTR;
-      MinJobId : Win32.DWORD;
-      MaxJobId : Win32.DWORD)
-     return Win32.DWORD;                          --  lmat.h:114
+      MinJobId   : Win32.DWORD;
+      MaxJobId   : Win32.DWORD)
+      return Win32.DWORD;
 
    function NetScheduleJobEnum
-     (Servername : Win32.LPWSTR;
-      PointerToBuffer : access Win32.PBYTE;
+     (Servername             : Win32.LPWSTR;
+      PointerToBuffer        : access Win32.PBYTE;
       PrefferedMaximumLength : Win32.DWORD;
-      EntriesRead : Win32.LPDWORD;
-      TotalEntries : Win32.LPDWORD;
-      ResumeHandle : Win32.LPDWORD)
-     return Win32.DWORD;                          --  lmat.h:121
+      EntriesRead            : Win32.LPDWORD;
+      TotalEntries           : Win32.LPDWORD;
+      ResumeHandle           : Win32.LPDWORD)
+      return Win32.DWORD;
 
    function NetScheduleJobGetInfo
-     (Servername : Win32.LPWSTR;
-      JobId : Win32.DWORD;
+     (Servername      : Win32.LPWSTR;
+      JobId           : Win32.DWORD;
       PointerToBuffer : access Win32.PBYTE)
-     return Win32.DWORD;                          --  lmat.h:131
+      return Win32.DWORD;
 
 private
 
-   pragma Convention (C_Pass_By_Copy, AT_INFO);             --  lmat.h:89
-   pragma Convention (C, AT_ENUM);                          --  lmat.h:97
+   pragma Convention (C_Pass_By_Copy, AT_INFO);
+   pragma Convention (C, AT_ENUM);
 
    pragma Import (Stdcall, NetScheduleJobAdd, "NetScheduleJobAdd");
-   --  lmat.h:107
    pragma Import (Stdcall, NetScheduleJobDel, "NetScheduleJobDel");
-   --  lmat.h:114
    pragma Import (Stdcall, NetScheduleJobEnum, "NetScheduleJobEnum");
-   --  lmat.h:121
    pragma Import (Stdcall, NetScheduleJobGetInfo, "NetScheduleJobGetInfo");
-   --  lmat.h:131
 
 end Win32.Lmat;

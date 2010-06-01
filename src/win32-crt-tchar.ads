@@ -1,19 +1,19 @@
 -------------------------------------------------------------------------------
 --
---  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS PROVIDED WITHOUT CHARGE
---  "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
---  BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR
---  FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the entire risk as to
---  the accuracy and the use of this file.  This file may be used, copied,
---  modified and distributed only by licensees of Microsoft Corporation's
---  WIN32 Software Development Kit in accordance with the terms of the
---  licensee's End-User License Agreement for Microsoft Software for the
---  WIN32 Development Kit.
+--  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS FURNISHED "AS IS"
+--  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
+--  BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY
+--  AND/OR FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the
+--  entire risk as to the accuracy and the use of this file.
 --
---  Copyright (c) Intermetrics, Inc. 1995
---  Portions (c) 1985-1994 Microsoft Corporation with permission.
---  Microsoft is a registered trademark and Windows and Windows NT are
---  trademarks of Microsoft Corporation.
+--  Copyright (C) Intermetrics, Inc. 1995
+--  Royalty-free, unlimited, worldwide, non-exclusive use, modification,
+--  reproduction and further distribution of this file is permitted.
+--
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (C) 2000-2010, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -25,614 +25,549 @@ with Stdarg;
 
 package Win32.crt.Tchar is
 
-   TEOF : constant := -1;                           --  tchar.h:421
-   istlegal : constant := 1;                            --  tchar.h:505
+   TEOF     : constant := -1;
+   istlegal : constant := 1;
 
-   type TCHAR is new Win32.CHAR;                               --  tchar.h:409
-   type TINT is new Win32.INT;                                 --  tchar.h:410
+   type TCHAR is new Win32.CHAR;
+   type TINT is new Win32.INT;
 
+   function ftcscat
+     (string1 : Win32.PSTR;
+      string2 : Win32.PCSTR)
+      return Win32.PSTR renames Win32.crt.Strings.strcat;
 
-   function ftcscat (string1 : Win32.PSTR;
-                     string2 : Win32.PCSTR)
-                    return Win32.PSTR
-     renames Win32.crt.Strings.strcat;       --  tchar.h:42
+   function ftcschr
+     (string1 : Win32.PCSTR;
+      c       : Win32.INT)
+      return Win32.PSTR renames Win32.crt.Strings.strchr;
 
-   function ftcschr (string1 : Win32.PCSTR;
-                     c : Win32.INT)
-                    return Win32.PSTR
-     renames Win32.crt.Strings.strchr;       --  tchar.h:43
+   function ftcscmp
+     (string1 : Win32.PCSTR;
+      string2 : Win32.PCSTR)
+      return Win32.INT renames Win32.crt.Strings.strcmp;
 
-   function ftcscmp (string1 : Win32.PCSTR;
-                     string2 : Win32.PCSTR)
-                    return Win32.INT
-     renames Win32.crt.Strings.strcmp;       --  tchar.h:44
+   function ftcscpy
+     (string1 : Win32.PSTR;
+      string2 : Win32.PCSTR)
+      return Win32.PSTR renames Win32.crt.Strings.strcpy;
 
+   function ftcscspn
+     (string1 : Win32.PCSTR;
+      string2 : Win32.PCSTR)
+      return Win32.Size_T renames Win32.crt.Strings.strcspn;
 
+   function ftcslen (string1 : Win32.PCSTR) return Win32.Size_T renames
+     Win32.crt.Strings.strlen;
 
-   function ftcscpy (string1 : Win32.PSTR;
-                     string2 : Win32.PCSTR)
-                    return Win32.PSTR
-     renames Win32.crt.Strings.strcpy;       --  tchar.h:45
+   function ftcsncat
+     (string1 : Win32.PSTR;
+      string2 : Win32.PCSTR;
+      count   : Win32.Size_T)
+      return Win32.PSTR renames Win32.crt.Strings.strncat;
 
-   function ftcscspn (string1 : Win32.PCSTR;
-                      string2 : Win32.PCSTR)
-                     return Win32.Size_T
-     renames Win32.crt.Strings.strcspn;      --  tchar.h:46
+   function ftcsncmp
+     (string1 : Win32.PCSTR;
+      string2 : Win32.PCSTR;
+      count   : Win32.Size_T)
+      return Win32.INT renames Win32.crt.Strings.strncmp;
 
+   function ftcsncpy
+     (string1 : Win32.PSTR;
+      string2 : Win32.PCSTR;
+      count   : Win32.Size_T)
+      return Win32.PSTR renames Win32.crt.Strings.strncpy;
 
-   function ftcslen (string1 : Win32.PCSTR) return Win32.Size_T
-     renames Win32.crt.Strings.strlen;       --  tchar.h:47
+   function ftcspbrk
+     (string1 : Win32.PCSTR;
+      string2 : Win32.PCSTR)
+      return Win32.PSTR renames Win32.crt.Strings.strpbrk;
 
-   function ftcsncat (string1 : Win32.PSTR;
-                      string2 : Win32.PCSTR;
-                      count : Win32.Size_T)
-                     return Win32.PSTR
-     renames Win32.crt.Strings.strncat;      --  tchar.h:48
+   function ftcsrchr
+     (string1 : Win32.PCSTR;
+      c       : Win32.INT)
+      return Win32.PSTR renames Win32.crt.Strings.strrchr;
 
-   function ftcsncmp (string1 : Win32.PCSTR;
-                      string2 : Win32.PCSTR;
-                      count : Win32.Size_T)
-                     return Win32.INT
-     renames Win32.crt.Strings.strncmp;      --  tchar.h:49
+   function ftcsspn
+     (string1 : Win32.PCSTR;
+      string2 : Win32.PCSTR)
+      return Win32.Size_T renames Win32.crt.Strings.strspn;
 
-   function ftcsncpy (string1 : Win32.PSTR;
-                      string2 : Win32.PCSTR;
-                      count : Win32.Size_T)
-                     return Win32.PSTR
-     renames Win32.crt.Strings.strncpy;      --  tchar.h:50
+   function ftcsstr
+     (string1 : Win32.PCSTR;
+      string2 : Win32.PCSTR)
+      return Win32.PSTR renames Win32.crt.Strings.strstr;
 
+   function ftcstok
+     (string1 : Win32.PSTR;
+      string2 : Win32.PCSTR)
+      return Win32.PSTR renames Win32.crt.Strings.strtok;
 
-   function ftcspbrk (string1 : Win32.PCSTR;
-                      string2 : Win32.PCSTR)
-                     return Win32.PSTR
-     renames Win32.crt.Strings.strpbrk;      --  tchar.h:51
+   function ftcsdup (string1 : Win32.PCSTR) return Win32.PSTR renames
+     Win32.crt.Strings.strdup;
 
-   function ftcsrchr (string1 : Win32.PCSTR;
-                      c : Win32.INT)
-                     return Win32.PSTR
-     renames Win32.crt.Strings.strrchr;      --  tchar.h:52
+   function ftcsicmp
+     (string1 : Win32.PCSTR;
+      string2 : Win32.PCSTR)
+      return Win32.INT renames Win32.crt.Strings.stricmp;
 
+   function ftcsnicmp
+     (string1 : Win32.PCSTR;
+      string2 : Win32.PCSTR;
+      count   : Win32.Size_T)
+      return Win32.INT renames Win32.crt.Strings.strnicmp;
 
-   function ftcsspn (string1 : Win32.PCSTR;
-                     string2 : Win32.PCSTR)
-                    return Win32.Size_T
-     renames Win32.crt.Strings.strspn;       --  tchar.h:53
+   function ftcsnset
+     (string1 : Win32.PSTR;
+      c       : Win32.INT;
+      count   : Win32.Size_T)
+      return Win32.PSTR renames Win32.crt.Strings.strnset;
 
-   function ftcsstr (string1 : Win32.PCSTR;
-                     string2 : Win32.PCSTR)
-                    return Win32.PSTR
-     renames Win32.crt.Strings.strstr;       --  tchar.h:54
+   function ftcsrev (string1 : Win32.PSTR) return Win32.PSTR renames
+     Win32.crt.Strings.strrev;
 
-   function ftcstok (string1 : Win32.PSTR;
-                     string2 : Win32.PCSTR)
-                    return Win32.PSTR
-     renames Win32.crt.Strings.strtok;       --  tchar.h:55
+   function ftcsset (string1 : Win32.PSTR; c : Win32.INT) return Win32.PSTR
+      renames Win32.crt.Strings.strset;
 
-   function ftcsdup (string1 : Win32.PCSTR) return Win32.PSTR
-     renames Win32.crt.Strings.strdup;       --  tchar.h:57
+   function ftcsclen (string1 : Win32.PCSTR) return Win32.Size_T renames
+     Win32.crt.Strings.strlen;
 
-   function ftcsicmp (string1 : Win32.PCSTR;
-                      string2 : Win32.PCSTR)
-                     return Win32.INT
-     renames Win32.crt.Strings.stricmp;      --  tchar.h:58
+   function ftcsnccat
+     (string1 : Win32.PSTR;
+      string2 : Win32.PCSTR;
+      count   : Win32.Size_T)
+      return Win32.PSTR renames Win32.crt.Strings.strncat;
 
-   function ftcsnicmp (string1 : Win32.PCSTR;
-                       string2 : Win32.PCSTR;
-                       count : Win32.Size_T)
-                      return Win32.INT
-     renames Win32.crt.Strings.strnicmp;     --  tchar.h:59
+   function ftcsnccpy
+     (string1 : Win32.PSTR;
+      string2 : Win32.PCSTR;
+      count   : Win32.Size_T)
+      return Win32.PSTR renames Win32.crt.Strings.strncpy;
 
-   function ftcsnset (string1 : Win32.PSTR;
-                      c : Win32.INT;
-                      count : Win32.Size_T)
-                     return Win32.PSTR
-     renames Win32.crt.Strings.strnset;      --  tchar.h:60
+   function ftcsnccmp
+     (string1 : Win32.PCSTR;
+      string2 : Win32.PCSTR;
+      count   : Win32.Size_T)
+      return Win32.INT renames Win32.crt.Strings.strncmp;
 
-   function ftcsrev (string1 : Win32.PSTR) return Win32.PSTR
-     renames Win32.crt.Strings.strrev;       --  tchar.h:61
+   function ftcsncicmp
+     (string1 : Win32.PCSTR;
+      string2 : Win32.PCSTR;
+      count   : Win32.Size_T)
+      return Win32.INT renames Win32.crt.Strings.strnicmp;
 
-   function ftcsset (string1 : Win32.PSTR;
-                     c : Win32.INT)
-                    return Win32.PSTR
-     renames Win32.crt.Strings.strset;       --  tchar.h:62
-
-   function ftcsclen (string1 : Win32.PCSTR) return Win32.Size_T
-     renames Win32.crt.Strings.strlen;       --  tchar.h:67
-
-   function ftcsnccat (string1 : Win32.PSTR;
-                       string2 : Win32.PCSTR;
-                       count : Win32.Size_T)
-                      return Win32.PSTR
-     renames Win32.crt.Strings.strncat;      --  tchar.h:68
-
-   function ftcsnccpy (string1 : Win32.PSTR;
-                       string2 : Win32.PCSTR;
-                       count : Win32.Size_T)
-                      return Win32.PSTR
-     renames Win32.crt.Strings.strncpy;      --  tchar.h:69
-
-   function ftcsnccmp (string1 : Win32.PCSTR;
-                       string2 : Win32.PCSTR;
-                       count : Win32.Size_T)
-                      return Win32.INT
-     renames Win32.crt.Strings.strncmp;      --  tchar.h:70
-
-   function ftcsncicmp (string1 : Win32.PCSTR;
-                        string2 : Win32.PCSTR;
-                        count : Win32.Size_T)
-                       return Win32.INT
-     renames Win32.crt.Strings.strnicmp;   --  tchar.h:71
-
-   function ftcsncset (string1 : Win32.PSTR;
-                       c : Win32.INT;
-                       count : Win32.Size_T)
-                      return Win32.PSTR
-     renames Win32.crt.Strings.strnset;     --  tchar.h:72
-
+   function ftcsncset
+     (string1 : Win32.PSTR;
+      c       : Win32.INT;
+      count   : Win32.Size_T)
+      return Win32.PSTR renames Win32.crt.Strings.strnset;
 
    function tprintf
      (format : Win32.PCSTR;
-      args : Stdarg.ArgList := Stdarg.Empty) return Win32.INT
-     renames Win32.crt.Stdio.printf;                         --  tchar.h:269
+      args   : Stdarg.ArgList := Stdarg.Empty)
+      return Win32.INT renames Win32.crt.Stdio.printf;
 
    function ftprintf
      (stream : Win32.crt.Stdio.FILE_Access;
       format : Win32.PCSTR;
-      args : Stdarg.ArgList := Stdarg.Empty) return Win32.INT
-     renames Win32.crt.Stdio.fprintf;                        --  tchar.h:270
+      args   : Stdarg.ArgList := Stdarg.Empty)
+      return Win32.INT renames Win32.crt.Stdio.fprintf;
 
    function stprintf
      (buffer : Win32.PSTR;
       format : Win32.PCSTR;
-      args : Stdarg.ArgList := Stdarg.Empty) return Win32.INT
-     renames Win32.crt.Stdio.sprintf;                        --  tchar.h:271
+      args   : Stdarg.ArgList := Stdarg.Empty)
+      return Win32.INT renames Win32.crt.Stdio.sprintf;
 
    function sntprintf
      (buffer : Win32.PSTR;
-      count : Win32.Size_T;
+      count  : Win32.Size_T;
       format : Win32.PCSTR;
-      args : Stdarg.ArgList := Stdarg.Empty) return Win32.INT
-     renames Win32.crt.Stdio.snprintf;                       --  tchar.h:272
+      args   : Stdarg.ArgList := Stdarg.Empty)
+      return Win32.INT renames Win32.crt.Stdio.snprintf;
 
    function vtprintf
      (format : Win32.PCSTR;
-      args : Stdarg.ArgList := Stdarg.Empty) return Win32.INT
-     renames Win32.crt.Stdio.vprintf;                        --  tchar.h:273
+      args   : Stdarg.ArgList := Stdarg.Empty)
+      return Win32.INT renames Win32.crt.Stdio.vprintf;
 
    function vftprintf
      (stream : Win32.crt.Stdio.FILE_Access;
       format : Win32.PCSTR;
-      args : Stdarg.ArgList := Stdarg.Empty) return Win32.INT
-     renames Win32.crt.Stdio.vfprintf;                       --  tchar.h:274
+      args   : Stdarg.ArgList := Stdarg.Empty)
+      return Win32.INT renames Win32.crt.Stdio.vfprintf;
 
    function vstprintf
      (buffer : Win32.PSTR;
       format : Win32.PCSTR;
-      args : Stdarg.ArgList := Stdarg.Empty) return Win32.INT
-     renames Win32.crt.Stdio.vsprintf;                       --  tchar.h:275
+      args   : Stdarg.ArgList := Stdarg.Empty)
+      return Win32.INT renames Win32.crt.Stdio.vsprintf;
 
    function vsntprintf
      (buffer : Win32.PSTR;
-      count : Win32.Size_T;
+      count  : Win32.Size_T;
       format : Win32.PCSTR;
-      args : Stdarg.ArgList := Stdarg.Empty) return Win32.INT
-     renames Win32.crt.Stdio.vsnprintf;                      --  tchar.h:276
+      args   : Stdarg.ArgList := Stdarg.Empty)
+      return Win32.INT renames Win32.crt.Stdio.vsnprintf;
 
    function tscanf
      (format : Win32.PCSTR;
-      args : Stdarg.ArgList := Stdarg.Empty) return Win32.INT
-     renames Win32.crt.Stdio.scanf;                          --  tchar.h:277
+      args   : Stdarg.ArgList := Stdarg.Empty)
+      return Win32.INT renames Win32.crt.Stdio.scanf;
 
    function ftscanf
      (stream : Win32.crt.Stdio.FILE_Access;
       format : Win32.PCSTR;
-      args : Stdarg.ArgList := Stdarg.Empty) return Win32.INT
-     renames Win32.crt.Stdio.fscanf;                         --  tchar.h:278
+      args   : Stdarg.ArgList := Stdarg.Empty)
+      return Win32.INT renames Win32.crt.Stdio.fscanf;
 
    function stscanf
      (buffer : Win32.PSTR;
       format : Win32.PCSTR;
-      args : Stdarg.ArgList := Stdarg.Empty) return Win32.INT
-     renames Win32.crt.Stdio.sscanf;                         --  tchar.h:279
+      args   : Stdarg.ArgList := Stdarg.Empty)
+      return Win32.INT renames Win32.crt.Stdio.sscanf;
 
-   function fgettc
-     (f : in Win32.crt.Stdio.FILE_Access) return Win32.INT    --  tchar.h:284
-     renames Win32.crt.Stdio.fgetc;
+   function fgettc (f : in Win32.crt.Stdio.FILE_Access) return Win32.INT
+      renames Win32.crt.Stdio.fgetc;
 
-   function fgettchar return Win32.INT                         --  tchar.h:285
-     renames Win32.crt.Stdio.fgetchar;
+   function fgettchar return Win32.INT renames Win32.crt.Stdio.fgetchar;
 
    function fgetts
-     (s : in Win32.PSTR;
-      i : in Win32.INT;
-      f : in Win32.crt.Stdio.FILE_Access) return Win32.PSTR   --  tchar.h:286
-     renames Win32.crt.Stdio.fgets;
+     (s    : in Win32.PSTR;
+      i    : in Win32.INT;
+      f    : in Win32.crt.Stdio.FILE_Access)
+      return Win32.PSTR renames Win32.crt.Stdio.fgets;
 
    function fputtc
-     (i : in Win32.INT;
-      f : in Win32.crt.Stdio.FILE_Access)
-     return Win32.INT                                        --  tchar.h:287
-     renames Win32.crt.Stdio.fputc;
+     (i    : in Win32.INT;
+      f    : in Win32.crt.Stdio.FILE_Access)
+      return Win32.INT renames Win32.crt.Stdio.fputc;
 
-   function fputtchar
-     (i : in Win32.INT) return Win32.INT                      --  tchar.h:288
-     renames Win32.crt.Stdio.fputchar;
+   function fputtchar (i : in Win32.INT) return Win32.INT renames
+     Win32.crt.Stdio.fputchar;
 
    function fputts
-     (s : Win32.PCSTR;
-      f : in Win32.crt.Stdio.FILE_Access) return Win32.INT    --  tchar.h:289
-     renames Win32.crt.Stdio.fputs;
+     (s    : Win32.PCSTR;
+      f    : in Win32.crt.Stdio.FILE_Access)
+      return Win32.INT renames Win32.crt.Stdio.fputs;
 
-   function gettc (f : in Win32.crt.Stdio.FILE_Access) return Win32.INT
-   --  tchar.h:290
-     renames Win32.crt.Stdio.getc;
+   function gettc (f : in Win32.crt.Stdio.FILE_Access) return Win32.INT renames
+     Win32.crt.Stdio.getc;
 
-   function gettchar return Win32.INT                          --  tchar.h:291
-     renames Win32.crt.Stdio.getchar;
+   function gettchar return Win32.INT renames Win32.crt.Stdio.getchar;
 
    function puttc
-     (i : in Win32.INT;
-      f : in Win32.crt.Stdio.FILE_Access)
-     return Win32.INT                                        --  tchar.h:292
-     renames Win32.crt.Stdio.putc;
+     (i    : in Win32.INT;
+      f    : in Win32.crt.Stdio.FILE_Access)
+      return Win32.INT renames Win32.crt.Stdio.putc;
 
-   function puttchar
-     (i : in Win32.INT) return Win32.INT                      --  tchar.h:293
-     renames Win32.crt.Stdio.putchar;
+   function puttchar (i : in Win32.INT) return Win32.INT renames
+     Win32.crt.Stdio.putchar;
 
    function ungettc
-     (i : in Win32.INT;
-      f : in Win32.crt.Stdio.FILE_Access)
-     return Win32.INT                                        --  tchar.h:294
-     renames Win32.crt.Stdio.ungetc;
+     (i    : in Win32.INT;
+      f    : in Win32.crt.Stdio.FILE_Access)
+      return Win32.INT renames Win32.crt.Stdio.ungetc;
+
+   function tcstod
+     (nptr   : Win32.PCSTR;
+      endptr : access Win32.PSTR)
+      return Win32.DOUBLE renames Win32.crt.Stdlib.strtod;
+
+   function tcstol
+     (nptr   : Win32.PCSTR;
+      endptr : access Win32.PSTR;
+      base   : Win32.INT)
+      return Win32.INT renames Win32.crt.Stdlib.strtol;
+
+   function tcstoul
+     (nptr   : Win32.PCSTR;
+      endptr : access Win32.PSTR;
+      base   : Win32.INT)
+      return Win32.UINT renames Win32.crt.Stdlib.strtoul;
+
+   function tcscat
+     (string1 : Win32.PSTR;
+      string2 : Win32.PCSTR)
+      return Win32.PSTR renames Win32.crt.Strings.strcat;
+
+   function tcschr (string1 : Win32.PCSTR; c : Win32.INT) return Win32.PSTR
+      renames Win32.crt.Strings.strchr;
+
+   function tcscmp
+     (string1 : Win32.PCSTR;
+      string2 : Win32.PCSTR)
+      return Win32.INT renames Win32.crt.Strings.strcmp;
+
+   function tcscpy
+     (string1 : Win32.PSTR;
+      string2 : Win32.PCSTR)
+      return Win32.PSTR renames Win32.crt.Strings.strcpy;
+
+   function tcscspn
+     (string1 : Win32.PCSTR;
+      string2 : Win32.PCSTR)
+      return Win32.Size_T renames Win32.crt.Strings.strcspn;
+
+   function tcslen (string1 : Win32.PCSTR) return Win32.Size_T renames
+     Win32.crt.Strings.strlen;
+
+   function tcsncat
+     (string1 : Win32.PSTR;
+      string2 : Win32.PCSTR;
+      count   : Win32.Size_T)
+      return Win32.PSTR renames Win32.crt.Strings.strncat;
+
+   function tcsncmp
+     (string1 : Win32.PCSTR;
+      string2 : Win32.PCSTR;
+      count   : Win32.Size_T)
+      return Win32.INT renames Win32.crt.Strings.strncmp;
+
+   function tcsncpy
+     (string1 : Win32.PSTR;
+      string2 : Win32.PCSTR;
+      count   : Win32.Size_T)
+      return Win32.PSTR renames Win32.crt.Strings.strncpy;
+
+   function tcspbrk
+     (string1 : Win32.PCSTR;
+      string2 : Win32.PCSTR)
+      return Win32.PSTR renames Win32.crt.Strings.strpbrk;
+
+   function tcsrchr
+     (string1 : Win32.PCSTR;
+      c       : Win32.INT)
+      return Win32.PSTR renames Win32.crt.Strings.strrchr;
+
+   function tcsspn
+     (string1 : Win32.PCSTR;
+      string2 : Win32.PCSTR)
+      return Win32.Size_T renames Win32.crt.Strings.strspn;
+
+   function tcsstr
+     (string1 : Win32.PCSTR;
+      string2 : Win32.PCSTR)
+      return Win32.PSTR renames Win32.crt.Strings.strstr;
+
+   function tcstok
+     (string1 : Win32.PSTR;
+      string2 : Win32.PCSTR)
+      return Win32.PSTR renames Win32.crt.Strings.strtok;
+
+   function tcsdup (string1 : Win32.PCSTR) return Win32.PSTR renames
+     Win32.crt.Strings.strdup;
+
+   function tcsicmp
+     (string1 : Win32.PCSTR;
+      string2 : Win32.PCSTR)
+      return Win32.INT renames Win32.crt.Strings.stricmp;
+
+   function tcsnicmp
+     (string1 : Win32.PCSTR;
+      string2 : Win32.PCSTR;
+      count   : Win32.Size_T)
+      return Win32.INT renames Win32.crt.Strings.strnicmp;
 
-
-
-   function tcstod (nptr : Win32.PCSTR;
-                    endptr : access Win32.PSTR)
-                   return Win32.DOUBLE
-     renames Win32.crt.Stdlib.strtod;        --  tchar.h:299
-
-   function tcstol (nptr : Win32.PCSTR;
-                    endptr : access Win32.PSTR;
-                    base : Win32.INT)
-                   return Win32.INT
-     renames Win32.crt.Stdlib.strtol;        --  tchar.h:300
-
-   function tcstoul (nptr : Win32.PCSTR;
-                     endptr : access Win32.PSTR;
-                     base : Win32.INT)
-                    return Win32.UINT
-     renames Win32.crt.Stdlib.strtoul;      --  tchar.h:301
-
-   function tcscat (string1 : Win32.PSTR;
-                    string2 : Win32.PCSTR)
-                   return Win32.PSTR
-     renames Win32.crt.Strings.strcat;       --  tchar.h:426
-
-   function tcschr (string1 : Win32.PCSTR;
-                    c : Win32.INT)
-                   return Win32.PSTR
-     renames Win32.crt.Strings.strchr;       --  tchar.h:427
-
-   function tcscmp (string1 : Win32.PCSTR;
-                    string2 : Win32.PCSTR)
-                   return Win32.INT
-     renames Win32.crt.Strings.strcmp;       --  tchar.h:428
-
-
-
-   function tcscpy (string1 : Win32.PSTR;
-                    string2 : Win32.PCSTR)
-                   return Win32.PSTR
-     renames Win32.crt.Strings.strcpy;       --  tchar.h:429
-
-   function tcscspn (string1 : Win32.PCSTR;
-                     string2 : Win32.PCSTR)
-                    return Win32.Size_T
-     renames Win32.crt.Strings.strcspn;      --  tchar.h:430
-
-
-   function tcslen (string1 : Win32.PCSTR) return Win32.Size_T
-     renames Win32.crt.Strings.strlen;       --  tchar.h:431
-
-   function tcsncat (string1 : Win32.PSTR;
-                     string2 : Win32.PCSTR;
-                     count : Win32.Size_T)
-                    return Win32.PSTR
-     renames Win32.crt.Strings.strncat;      --  tchar.h:432
-
-   function tcsncmp (string1 : Win32.PCSTR;
-                     string2 : Win32.PCSTR;
-                     count : Win32.Size_T)
-                    return Win32.INT
-     renames Win32.crt.Strings.strncmp;      --  tchar.h:433
-
-   function tcsncpy (string1 : Win32.PSTR;
-                     string2 : Win32.PCSTR;
-                     count : Win32.Size_T)
-                    return Win32.PSTR
-     renames Win32.crt.Strings.strncpy;      --  tchar.h:434
-
-
-   function tcspbrk (string1 : Win32.PCSTR;
-                     string2 : Win32.PCSTR)
-                    return Win32.PSTR
-     renames Win32.crt.Strings.strpbrk;      --  tchar.h:435
-
-   function tcsrchr (string1 : Win32.PCSTR;
-                     c : Win32.INT)
-                    return Win32.PSTR
-     renames Win32.crt.Strings.strrchr;      --  tchar.h:436
-
-
-   function tcsspn (string1 : Win32.PCSTR;
-                    string2 : Win32.PCSTR)
-                   return Win32.Size_T
-     renames Win32.crt.Strings.strspn;       --  tchar.h:437
-
-   function tcsstr (string1 : Win32.PCSTR;
-                    string2 : Win32.PCSTR)
-                   return Win32.PSTR
-     renames Win32.crt.Strings.strstr;       --  tchar.h:438
-
-   function tcstok (string1 : Win32.PSTR;
-                    string2 : Win32.PCSTR)
-                   return Win32.PSTR
-     renames Win32.crt.Strings.strtok;       --  tchar.h:439
-
-   function tcsdup (string1 : Win32.PCSTR) return Win32.PSTR
-     renames Win32.crt.Strings.strdup;       --  tchar.h:441
-
-   function tcsicmp (string1 : Win32.PCSTR;
-                     string2 : Win32.PCSTR)
-                    return Win32.INT
-     renames Win32.crt.Strings.stricmp;      --  tchar.h:442
-
-   function tcsnicmp (string1 : Win32.PCSTR;
-                      string2 : Win32.PCSTR;
-                      count : Win32.Size_T)
-                     return Win32.INT
-     renames Win32.crt.Strings.strnicmp;     --  tchar.h:443
-
-   function tcsnset (string1 : Win32.PSTR;
-                     c : Win32.INT;
-                     count : Win32.Size_T)
-                    return Win32.PSTR
-     renames Win32.crt.Strings.strnset;      --  tchar.h:444
+   function tcsnset
+     (string1 : Win32.PSTR;
+      c       : Win32.INT;
+      count   : Win32.Size_T)
+      return Win32.PSTR renames Win32.crt.Strings.strnset;
 
-   function tcsrev (string1 : Win32.PSTR) return Win32.PSTR
-     renames Win32.crt.Strings.strrev;       --  tchar.h:445
+   function tcsrev (string1 : Win32.PSTR) return Win32.PSTR renames
+     Win32.crt.Strings.strrev;
 
-   function tcsset (string1 : Win32.PSTR;
-                    c : Win32.INT)
-                   return Win32.PSTR
-     renames Win32.crt.Strings.strset;       --  tchar.h:446
+   function tcsset (string1 : Win32.PSTR; c : Win32.INT) return Win32.PSTR
+      renames Win32.crt.Strings.strset;
 
+   function tcsclen (string1 : Win32.PCSTR) return Win32.Size_T renames
+     Win32.crt.Strings.strlen;
 
-   function tcsclen (string1 : Win32.PCSTR) return Win32.Size_T
-     renames Win32.crt.Strings.strlen;       --  tchar.h:451
+   function tcsnccat
+     (string1 : Win32.PSTR;
+      string2 : Win32.PCSTR;
+      count   : Win32.Size_T)
+      return Win32.PSTR renames Win32.crt.Strings.strncat;
 
-   function tcsnccat (string1 : Win32.PSTR;
-                      string2 : Win32.PCSTR;
-                      count : Win32.Size_T)
-                     return Win32.PSTR
-     renames Win32.crt.Strings.strncat;      --  tchar.h:452
+   function tcsnccpy
+     (string1 : Win32.PSTR;
+      string2 : Win32.PCSTR;
+      count   : Win32.Size_T)
+      return Win32.PSTR renames Win32.crt.Strings.strncpy;
 
-   function tcsnccpy (string1 : Win32.PSTR;
-                      string2 : Win32.PCSTR;
-                      count : Win32.Size_T)
-                     return Win32.PSTR
-     renames Win32.crt.Strings.strncpy;      --  tchar.h:453
+   function tcsnccmp
+     (string1 : Win32.PCSTR;
+      string2 : Win32.PCSTR;
+      count   : Win32.Size_T)
+      return Win32.INT renames Win32.crt.Strings.strncmp;
 
-   function tcsnccmp (string1 : Win32.PCSTR;
-                      string2 : Win32.PCSTR;
-                      count : Win32.Size_T)
-                     return Win32.INT
-     renames Win32.crt.Strings.strncmp;      --  tchar.h:454
+   function tcsncicmp
+     (string1 : Win32.PCSTR;
+      string2 : Win32.PCSTR;
+      count   : Win32.Size_T)
+      return Win32.INT renames Win32.crt.Strings.strnicmp;
 
-   function tcsncicmp (string1 : Win32.PCSTR;
-                       string2 : Win32.PCSTR;
-                       count : Win32.Size_T)
-                      return Win32.INT
-     renames Win32.crt.Strings.strnicmp;     --  tchar.h:455
+   function tcsncset
+     (string1 : Win32.PSTR;
+      c       : Win32.INT;
+      count   : Win32.Size_T)
+      return Win32.PSTR renames Win32.crt.Strings.strnset;
 
-   function tcsncset (string1 : Win32.PSTR;
-                      c : Win32.INT;
-                      count : Win32.Size_T)
-                     return Win32.PSTR
-     renames Win32.crt.Strings.strnset;      --  tchar.h:456
+   function tcslwr (string1 : Win32.PSTR) return Win32.PSTR renames
+     Win32.crt.Strings.strlwr;
 
+   function tcsupr (string1 : Win32.PSTR) return Win32.PSTR renames
+     Win32.crt.Strings.strupr;
 
-   function tcslwr (string1 : Win32.PSTR) return Win32.PSTR
-     renames Win32.crt.Strings.strlwr;       --  tchar.h:469
+   function tcsxfrm
+     (string1 : Win32.PSTR;
+      string2 : Win32.PCSTR;
+      count   : Win32.Size_T)
+      return Win32.Size_T renames Win32.crt.Strings.strxfrm;
 
-   function tcsupr (string1 : Win32.PSTR) return Win32.PSTR
-     renames Win32.crt.Strings.strupr;       --  tchar.h:470
+   function tcscoll
+     (string1 : Win32.PCSTR;
+      string2 : Win32.PCSTR)
+      return Win32.INT renames Win32.crt.Strings.strcoll;
 
-   function tcsxfrm (string1 : Win32.PSTR;
-                     string2 : Win32.PCSTR;
-                     count : Win32.Size_T)
-                    return Win32.Size_T
-     renames Win32.crt.Strings.strxfrm;      --  tchar.h:471
+   function tcsicoll
+     (string1 : Win32.PCSTR;
+      string2 : Win32.PCSTR)
+      return Win32.INT renames Win32.crt.Strings.stricoll;
 
-   function tcscoll (string1 : Win32.PCSTR;
-                     string2 : Win32.PCSTR)
-                    return Win32.INT
-     renames Win32.crt.Strings.strcoll;      --  tchar.h:472
+   function tclen (cpc : Win32.PCCH) return Win32.Size_T;
 
-   function tcsicoll (string1 : Win32.PCSTR;
-                      string2 : Win32.PCSTR)
-                     return Win32.INT
-     renames Win32.crt.Strings.stricoll;     --  tchar.h:473
+   procedure tccpy (pc1 : in out Win32.PCHAR; cpc2 : Win32.PCCH);
 
-   function tclen (cpc : Win32.PCCH)
-                  return Win32.Size_T;                          --  tchar.h:481
+   function tccmp (cpc1 : Win32.PCCH; cpc2 : Win32.PCCH) return Win32.INT;
 
-   procedure tccpy (pc1 : in out Win32.PCHAR;
-                    cpc2 : Win32.PCCH);                         --  tchar.h:482
+   function istalpha (c : in Win32.crt.Ctype.char) return Win32.INT renames
+     Win32.crt.Ctype.isalpha;
 
-   function tccmp (cpc1 : Win32.PCCH;
-                   cpc2 : Win32.PCCH)
-                  return Win32.INT;                            --  tchar.h:483
+   function istupper (c : in Win32.crt.Ctype.char) return Win32.INT renames
+     Win32.crt.Ctype.isupper;
 
-   function istalpha (c : in Win32.crt.Ctype.char) return Win32.INT
-     renames Win32.crt.Ctype.isalpha;                        --  tchar.h:489
+   function istlower (c : in Win32.crt.Ctype.char) return Win32.INT renames
+     Win32.crt.Ctype.islower;
 
-   function istupper (c : in Win32.crt.Ctype.char) return Win32.INT
-     renames Win32.crt.Ctype.isupper;                        --  tchar.h:490
+   function istdigit (c : in Win32.crt.Ctype.char) return Win32.INT renames
+     Win32.crt.Ctype.isdigit;
 
-   function istlower (c : in Win32.crt.Ctype.char) return Win32.INT
-     renames Win32.crt.Ctype.islower;                        --  tchar.h:491
+   function istxdigit (c : in Win32.crt.Ctype.char) return Win32.INT renames
+     Win32.crt.Ctype.isxdigit;
 
-   function istdigit (c : in Win32.crt.Ctype.char) return Win32.INT
-     renames Win32.crt.Ctype.isdigit;                        --  tchar.h:492
+   function istspace (c : in Win32.crt.Ctype.char) return Win32.INT renames
+     Win32.crt.Ctype.isspace;
 
-   function istxdigit (c : in Win32.crt.Ctype.char) return Win32.INT
-     renames Win32.crt.Ctype.isxdigit;                       --  tchar.h:493
+   function istpunct (c : in Win32.crt.Ctype.char) return Win32.INT renames
+     Win32.crt.Ctype.ispunct;
 
-   function istspace (c : in Win32.crt.Ctype.char) return Win32.INT
-     renames Win32.crt.Ctype.isspace;                        --  tchar.h:494
+   function istalnum (c : in Win32.crt.Ctype.char) return Win32.INT renames
+     Win32.crt.Ctype.isalnum;
 
-   function istpunct (c : in Win32.crt.Ctype.char) return Win32.INT
-     renames Win32.crt.Ctype.ispunct;                        --  tchar.h:495
+   function istprint (c : in Win32.crt.Ctype.char) return Win32.INT renames
+     Win32.crt.Ctype.isprint;
 
-   function istalnum (c : in Win32.crt.Ctype.char) return Win32.INT
-     renames Win32.crt.Ctype.isalnum;                        --  tchar.h:496
+   function istgraph (c : in Win32.crt.Ctype.char) return Win32.INT renames
+     Win32.crt.Ctype.isgraph;
 
-   function istprint (c : in Win32.crt.Ctype.char) return Win32.INT
-     renames Win32.crt.Ctype.isprint;                        --  tchar.h:497
+   function istcntrl (c : in Win32.crt.Ctype.char) return Win32.INT renames
+     Win32.crt.Ctype.iscntrl;
 
-   function istgraph (c : in Win32.crt.Ctype.char) return Win32.INT
-     renames Win32.crt.Ctype.isgraph;                        --  tchar.h:498
+   function istascii (c : in Win32.crt.Ctype.char) return Win32.INT renames
+     Win32.crt.Ctype.isascii;
 
-   function istcntrl (c : in Win32.crt.Ctype.char) return Win32.INT
-     renames Win32.crt.Ctype.iscntrl;                        --  tchar.h:499
+   function totupper (c : Win32.crt.Ctype.char) return Win32.crt.Ctype.char
+      renames Win32.crt.Ctype.toupper;
 
-   function istascii (c : in Win32.crt.Ctype.char) return Win32.INT
-     renames Win32.crt.Ctype.isascii;                        --  tchar.h:500
+   function totlower (c : Win32.crt.Ctype.char) return Win32.crt.Ctype.char
+      renames Win32.crt.Ctype.tolower;
 
+   function strdec (cpc : Win32.PCCH; pc : Win32.PCCH) return Win32.PCHAR;
 
-   function totupper (c : Win32.crt.Ctype.char)
-                     return Win32.crt.Ctype.char              --  tchar.h: 502
-     renames Win32.crt.Ctype.toupper;
+   function strinc (pc : Win32.PCCH) return Win32.PCHAR;
 
-   function totlower (c : Win32.crt.Ctype.char)
-                     return Win32.crt.Ctype.char              --  tchar.h: 503
-     renames Win32.crt.Ctype.tolower;
+   function strnextc (cpc : Win32.PCCH) return Win32.UINT;
 
-   function strdec (cpc : Win32.PCCH;
-                    pc : Win32.PCCH)
-                   return Win32.PCHAR;                     --  tchar.h: 529
+   function strninc (pc : Win32.PCCH; sz : Win32.Size_T) return Win32.PCHAR;
 
-   function strinc (pc : Win32.PCCH)
-                   return Win32.PCHAR;                     --  tchar.h: 530
+   function strncnt
+     (cpc  : Win32.PCCH;
+      sz   : Win32.Size_T)
+      return Win32.Size_T;
 
-   function strnextc (cpc : Win32.PCCH)
-                     return Win32.UINT;                      --  tchar.h: 531
+   procedure strspnp
+     (cpc1 : in out Win32.PCCH;
+      cpc2 : in Win32.PCCH;
+      crv  : out Win32.PCCH);
 
-   function strninc (pc : Win32.PCCH;
-                     sz : Win32.Size_T)
-                    return Win32.PCHAR;                    --  tchar.h: 532
+   function tcsdec (cpc : Win32.PCCH; pc : Win32.PCCH) return Win32.PCHAR
+      renames strdec;
 
-   function strncnt (cpc : Win32.PCCH;
-                     sz : Win32.Size_T)
-                    return Win32.Size_T;                        --  tchar.h:533
+   function tcsinc (pc : Win32.PCCH) return Win32.PCHAR renames strinc;
 
-   procedure strspnp (cpc1 : in out Win32.PCCH;
-                      cpc2 : in Win32.PCCH;
-                      crv : out Win32.PCCH);                --  tchar.h: 534
+   function tcsnbcnt
+     (cpc  : Win32.PCCH;
+      sz   : Win32.Size_T)
+      return Win32.Size_T renames strncnt;
 
+   function tcsnccnt
+     (cpc  : Win32.PCCH;
+      sz   : Win32.Size_T)
+      return Win32.Size_T renames strncnt;
 
-   function tcsdec (cpc : Win32.PCCH;
-                    pc : Win32.PCCH)
-                   return Win32.PCHAR                      --  tchar.h: 461
-     renames strdec;
+   function tcsnextc (cpc : Win32.PCCH) return Win32.UINT renames strnextc;
 
-   function tcsinc (pc : Win32.PCCH)
-                   return Win32.PCHAR                      --  tchar.h: 462
-     renames strinc;
+   function tcsninc (pc : Win32.PCCH; sz : Win32.Size_T) return Win32.PCHAR
+      renames strninc;
 
-   function tcsnbcnt (cpc : Win32.PCCH;
-                      sz : Win32.Size_T)
-                     return Win32.Size_T                   --  tchar.h:463
-     renames strncnt;
+   procedure tcsspnp
+     (cpc1 : in out Win32.PCCH;
+      cpc2 : in Win32.PCCH;
+      crv  : out Win32.PCCH) renames strspnp;
 
-   function tcsnccnt (cpc : Win32.PCCH;
-                      sz : Win32.Size_T)
-                     return Win32.Size_T                   --  tchar.h:464
-     renames strncnt;
+   function ftcsdec (cpc : Win32.PCCH; pc : Win32.PCCH) return Win32.PCHAR
+      renames tcsdec;
 
-   function tcsnextc (cpc : Win32.PCCH)
-                     return Win32.UINT                       --  tchar.h: 465
-     renames strnextc;
+   function ftcsinc (pc : Win32.PCCH) return Win32.PCHAR renames tcsinc;
 
-   function tcsninc (pc : Win32.PCCH;
-                     sz : Win32.Size_T)
-                    return Win32.PCHAR                     --  tchar.h: 466
-     renames strninc;
+   function ftcsnbcnt
+     (cpc  : Win32.PCCH;
+      sz   : Win32.Size_T)
+      return Win32.Size_T renames tcsnbcnt;
 
-   procedure tcsspnp (cpc1 : in out Win32.PCCH;
-                      cpc2 : in Win32.PCCH;
-                      crv : out Win32.PCCH)                 --  tchar.h: 467
-     renames strspnp;
+   function ftcsnccnt
+     (cpc  : Win32.PCCH;
+      sz   : Win32.Size_T)
+      return Win32.Size_T renames tcsnccnt;
 
-   function ftcsdec (cpc : Win32.PCCH;
-                     pc : Win32.PCCH)
-                    return Win32.PCHAR                     --  tchar.h: 74
-     renames tcsdec;
+   function ftcsnextc (cpc : Win32.PCCH) return Win32.UINT renames tcsnextc;
 
-   function ftcsinc (pc : Win32.PCCH)
-                    return Win32.PCHAR                      --  tchar.h: 75
-     renames tcsinc;
+   function ftcsninc
+     (pc   : Win32.PCCH;
+      sz   : Win32.Size_T)
+      return Win32.PCHAR renames tcsninc;
 
-   function ftcsnbcnt (cpc : Win32.PCCH;
-                       sz : Win32.Size_T)
-                      return Win32.Size_T                  --  tchar.h:76
-     renames tcsnbcnt;
+   procedure ftcsspnp
+     (cpc1 : in out Win32.PCCH;
+      cpc2 : in Win32.PCCH;
+      crv  : out Win32.PCCH) renames strspnp;
 
-   function ftcsnccnt (cpc : Win32.PCCH;
-                       sz : Win32.Size_T)
-                      return Win32.Size_T                  --  tchar.h:77
-     renames tcsnccnt;
+   function ftcslwr (string1 : Win32.PSTR) return Win32.PSTR renames tcslwr;
 
-   function ftcsnextc (cpc : Win32.PCCH)
-                      return Win32.UINT                       --  tchar.h: 78
-     renames tcsnextc;
+   function ftcsupr (string1 : Win32.PSTR) return Win32.PSTR renames tcsupr;
 
-   function ftcsninc (pc : Win32.PCCH;
-                      sz : Win32.Size_T)
-                     return Win32.PCHAR                     --  tchar.h: 79
-     renames tcsninc;
+   function ftclen (cpc : Win32.PCCH) return Win32.Size_T renames tclen;
 
-   procedure ftcsspnp (cpc1 : in out Win32.PCCH;
-                       cpc2 : in Win32.PCCH;
-                       crv : out Win32.PCCH)                --  tchar.h: 80
-     renames strspnp;
+   procedure ftccpy (pc1 : in out Win32.PCHAR; cpc2 : Win32.PCCH) renames
+     tccpy;
 
-   function ftcslwr (string1 : Win32.PSTR) return Win32.PSTR
-     renames tcslwr;                    --  tchar.h:82
+   function ftccmp (cpc1 : Win32.PCCH; cpc2 : Win32.PCCH) return Win32.INT
+      renames tccmp;
 
-   function ftcsupr (string1 : Win32.PSTR) return Win32.PSTR
-     renames tcsupr;                    --  tchar.h:83
+   function T (x : Win32.PSTR) return Win32.PSTR;
 
-   function ftclen (cpc : Win32.PCCH)
-                   return Win32.Size_T
-     renames tclen;                             --  tchar.h:85
-
-   procedure ftccpy (pc1 : in out Win32.PCHAR;
-                     cpc2 : Win32.PCCH)
-     renames tccpy;                             --  tchar.h:86
-
-   function ftccmp (cpc1 : Win32.PCCH;
-                    cpc2 : Win32.PCCH)
-                   return Win32.INT
-     renames tccmp;                             --  tchar.h: 87
-
-   function T (x : Win32.PSTR) return Win32.PSTR;           --  tchar.h: 546
-
-   function TEXT (x : Win32.PSTR) return Win32.PSTR
-     renames T;                                          --  tchar.h: 547
+   function TEXT (x : Win32.PSTR) return Win32.PSTR renames T;
 
 private
    pragma Inline (tclen);

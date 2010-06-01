@@ -1,19 +1,19 @@
 -------------------------------------------------------------------------------
 --
---  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS PROVIDED WITHOUT CHARGE
---  "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
---  BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR
---  FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the entire risk as to
---  the accuracy and the use of this file.  This file may be used, copied,
---  modified and distributed only by licensees of Microsoft Corporation's
---  WIN32 Software Development Kit in accordance with the terms of the
---  licensee's End-User License Agreement for Microsoft Software for the
---  WIN32 Development Kit.
+--  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS FURNISHED "AS IS"
+--  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
+--  BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY
+--  AND/OR FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the
+--  entire risk as to the accuracy and the use of this file.
 --
---  Copyright (c) Intermetrics, Inc. 1995
---  Portions (c) 1985-1994 Microsoft Corporation with permission.
---  Microsoft is a registered trademark and Windows and Windows NT are
---  trademarks of Microsoft Corporation.
+--  Copyright (C) Intermetrics, Inc. 1995
+--  Royalty-free, unlimited, worldwide, non-exclusive use, modification,
+--  reproduction and further distribution of this file is permitted.
+--
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (C) 2000-2010, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -21,54 +21,53 @@ with Win32;
 
 package Win32.crt.Direct is
 
-   type diskfree_t is                                      --  direct.h :54
-      record
-         total_clusters : Win32.UINT;                --  direct.h :55
-         avail_clusters : Win32.UINT;                --  direct.h :56
-         sectors_per_cluster : Win32.UINT;                --  direct.h :57
-         bytes_per_sector : Win32.UINT;                --  direct.h :58
-      end record;
+   type diskfree_t is record
+      total_clusters      : Win32.UINT;
+      avail_clusters      : Win32.UINT;
+      sectors_per_cluster : Win32.UINT;
+      bytes_per_sector    : Win32.UINT;
+   end record;
 
-   function chdir (dirname : Win32.PCSTR)
-                 return Win32.INT;                             --  direct.h :67
+   function chdir (dirname : Win32.PCSTR) return Win32.INT;
 
-   function chdrive (drive : Win32.INT) return Win32.INT;    --  direct.h :68
+   function chdrive (drive : Win32.INT) return Win32.INT;
 
-   function getcwd (buffer : Win32.PSTR;
-                   maxlen : Win32.INT)
-                  return Win32.PSTR;                  --  direct.h :69
+   function getcwd
+     (buffer : Win32.PSTR;
+      maxlen : Win32.INT)
+      return Win32.PSTR;
 
-   function getdcwd (drive : Win32.INT;
-                    buffer : Win32.PSTR;
-                    maxlen : Win32.INT)
-                   return Win32.PSTR;                 --  direct.h :70
+   function getdcwd
+     (drive  : Win32.INT;
+      buffer : Win32.PSTR;
+      maxlen : Win32.INT)
+      return Win32.PSTR;
 
-   function getdrive return Win32.INT;                     --  direct.h :71
+   function getdrive return Win32.INT;
 
-   function mkdir (dirname : Win32.PCSTR)
-                 return Win32.INT;                             --  direct.h :72
+   function mkdir (dirname : Win32.PCSTR) return Win32.INT;
 
-   function rmdir (dirname : Win32.PCSTR)
-                 return Win32.INT;                             --  direct.h :73
+   function rmdir (dirname : Win32.PCSTR) return Win32.INT;
 
-   function getdiskfree (p1 : Win32.UINT;
-                        p2 : access diskfree_t)
-                       return Win32.UINT;             --  direct.h :74
+   function getdiskfree
+     (p1   : Win32.UINT;
+      p2   : access diskfree_t)
+      return Win32.UINT;
 
-   function getdrives return Win32.UINT;                   --  direct.h :75
+   function getdrives return Win32.UINT;
 
 private
 
-   pragma Convention (C_Pass_By_Copy, diskfree_t);             --  direct.h :54
+   pragma Convention (C_Pass_By_Copy, diskfree_t);
 
-   pragma Import (C, chdir, "_chdir");                      --  direct.h :67
-   pragma Import (C, chdrive, "_chdrive");                  --  direct.h :68
-   pragma Import (C, getcwd, "_getcwd");                    --  direct.h :69
-   pragma Import (C, getdcwd, "_getdcwd");                  --  direct.h :70
-   pragma Import (C, getdrive, "_getdrive");                --  direct.h :71
-   pragma Import (C, mkdir, "_mkdir");                      --  direct.h :72
-   pragma Import (C, rmdir, "_rmdir");                      --  direct.h :73
-   pragma Import (C, getdiskfree, "_getdiskfree");          --  direct.h :74
-   pragma Import (C, getdrives, "_getdrives");              --  direct.h :75
+   pragma Import (C, chdir, "_chdir");
+   pragma Import (C, chdrive, "_chdrive");
+   pragma Import (C, getcwd, "_getcwd");
+   pragma Import (C, getdcwd, "_getdcwd");
+   pragma Import (C, getdrive, "_getdrive");
+   pragma Import (C, mkdir, "_mkdir");
+   pragma Import (C, rmdir, "_rmdir");
+   pragma Import (C, getdiskfree, "_getdiskfree");
+   pragma Import (C, getdrives, "_getdrives");
 
 end Win32.crt.Direct;

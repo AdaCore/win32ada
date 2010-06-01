@@ -1,7 +1,21 @@
--- $Source$ 
--- $Revision$ $Date$ $Author$ 
--- $Id$
-
+-------------------------------------------------------------------------------
+--
+--  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS FURNISHED "AS IS"
+--  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
+--  BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY
+--  AND/OR FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the
+--  entire risk as to the accuracy and the use of this file.
+--
+--  Copyright (C) Intermetrics, Inc. 1995
+--  Royalty-free, unlimited, worldwide, non-exclusive use, modification,
+--  reproduction and further distribution of this file is permitted.
+--
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (C) 2000-2010, AdaCore
+--
+-------------------------------------------------------------------------------
 
 with Win32;
 with Win32.Windef;
@@ -11,116 +25,111 @@ with Interfaces.C;
 
 package Bounce is
 
-  bounceclass_str : aliased constant Win32.CHAR_ARRAY := 
-      "BOUNCEDEMO";
-  bouncetitle_str : aliased constant Win32.CHAR_ARRAY := 
+   bounceclass_str : aliased constant Win32.CHAR_Array := "BOUNCEDEMO";
+   bouncetitle_str : aliased constant Win32.CHAR_Array :=
       "Bouncing Ball Demo (xforms)";
-  BOUNCECLASS : Win32.LPCSTR := Convert.CP(bounceclass_str);
-  BOUNCETITLE : Win32.LPCSTR := Convert.CP(bouncetitle_str); 
+   BOUNCECLASS     : Win32.LPCSTR                      :=
+      Convert.CP (bounceclass_str);
+   BOUNCETITLE     : Win32.LPCSTR                      :=
+      Convert.CP (bouncetitle_str);
 
-  type xForm_Matrix is array (0 .. 2, 0 .. 2) of aliased Win32.LONG;
-  type MYXFORM is record
-    xForm : aliased xForm_Matrix; 
-  end record;
-  type PMYXFORM is access MYXFORM;
+   type xForm_Matrix is array (0 .. 2, 0 .. 2) of aliased Win32.LONG;
+   type MYXFORM is record
+      xForm : aliased xForm_Matrix;
+   end record;
+   type PMYXFORM is access MYXFORM;
 
-  -- ** BALL OBJECT
-  type BALLDATA is record
-    hWnd          : Win32.WinDef.HWND;
-    nWidth        : Win32.LONG;
-    nHeight       : Win32.LONG;
-    xDirection    : Win32.LONG;
-    yDirection    : Win32.LONG;
-    bNewPosition  : Win32.BOOL;
-    xPosition     : Win32.LONG;
-    yPosition     : Win32.LONG;
-    crColor       : Win32.WinDef.COLORREF;
-    xForm         : MYXFORM;
-  end record;
-  type PBALLDATA is access BALLDATA;
+   type BALLDATA is record
+      hWnd         : Win32.Windef.HWND;
+      nWidth       : Win32.LONG;
+      nHeight      : Win32.LONG;
+      xDirection   : Win32.LONG;
+      yDirection   : Win32.LONG;
+      bNewPosition : Win32.BOOL;
+      xPosition    : Win32.LONG;
+      yPosition    : Win32.LONG;
+      crColor      : Win32.Windef.COLORREF;
+      xForm        : MYXFORM;
+   end record;
+   type PBALLDATA is access BALLDATA;
 
-  type BOUNCEDATA is record
-    hBall1 : Win32.Winnt.HANDLE;
-    hBall2 : Win32.Winnt.HANDLE;
-    hBall3 : Win32.Winnt.HANDLE;
-    hBall4 : Win32.Winnt.HANDLE;
-  end record;
-  type PBOUNCEDATA is access BOUNCEDATA;
+   type BOUNCEDATA is record
+      hBall1 : Win32.Winnt.HANDLE;
+      hBall2 : Win32.Winnt.HANDLE;
+      hBall3 : Win32.Winnt.HANDLE;
+      hBall4 : Win32.Winnt.HANDLE;
+   end record;
+   type PBOUNCEDATA is access BOUNCEDATA;
 
-  function ballCreate (hWnd_p  : Win32.WinDef.HWND;
-                       nWidth  : Win32.LONG;
-                       nHeight : Win32.LONG;
-                       crColor : Win32.WinDef.COLORREF) return 
-                                                        Win32.Winnt.HANDLE;
+   function ballCreate
+     (hWnd_p  : Win32.Windef.HWND;
+      nWidth  : Win32.LONG;
+      nHeight : Win32.LONG;
+      crColor : Win32.Windef.COLORREF)
+      return Win32.Winnt.HANDLE;
 
-  function ballDestroy (hBall : Win32.Winnt.HANDLE) return Win32.BOOL;
+   function ballDestroy (hBall : Win32.Winnt.HANDLE) return Win32.BOOL;
 
-  procedure ballBounce (hBall : Win32.Winnt.HANDLE);
+   procedure ballBounce (hBall : Win32.Winnt.HANDLE);
 
-  procedure ballGetDimensions (hBall      : Win32.Winnt.HANDLE;
-                               pDimension : in out Win32.WinDef.POINT); 
+   procedure ballGetDimensions
+     (hBall      : Win32.Winnt.HANDLE;
+      pDimension : in out Win32.Windef.POINT);
 
-  function ballSetDimensions (hBall   : Win32.Winnt.HANDLE;
-                              nWidth  : Win32.LONG;
-                              nHeight : Win32.LONG) return Win32.BOOL;
-  
-  procedure ballGetDirection (hBall      : Win32.Winnt.HANDLE;
-                              pDirection : in out Win32.WinDef.POINT); 
+   function ballSetDimensions
+     (hBall   : Win32.Winnt.HANDLE;
+      nWidth  : Win32.LONG;
+      nHeight : Win32.LONG)
+      return Win32.BOOL;
 
-  procedure ballSetDirection (hBall      : Win32.Winnt.HANDLE;
-                              xDirection : Win32.LONG;
-                              yDirection : Win32.LONG);
+   procedure ballGetDirection
+     (hBall      : Win32.Winnt.HANDLE;
+      pDirection : in out Win32.Windef.POINT);
 
-  procedure ballGetPosition (hBall     : Win32.Winnt.HANDLE;
-                             pPosition : in out Win32.WinDef.POINT); 
+   procedure ballSetDirection
+     (hBall      : Win32.Winnt.HANDLE;
+      xDirection : Win32.LONG;
+      yDirection : Win32.LONG);
 
-  procedure ballSetPosition (hBall : Win32.Winnt.HANDLE;
-                             x     : Win32.LONG;
-                             y     : Win32.LONG);
+   procedure ballGetPosition
+     (hBall     : Win32.Winnt.HANDLE;
+      pPosition : in out Win32.Windef.POINT);
 
-  procedure CreateBounceWindow (hWndClient : Win32.WinDef.HWND;
-                                nItem      : Win32.INT);
+   procedure ballSetPosition
+     (hBall : Win32.Winnt.HANDLE;
+      x     : Win32.LONG;
+      y     : Win32.LONG);
 
-  function BounceProc (hWnd_p   : Win32.WinDef.HWND;
-                       wMsg     : Win32.UINT;
-                       wParam_p : Win32.WPARAM;
-                       lParam_p : Win32.LPARAM) return Win32.LRESULT;
-  pragma Convention (Stdcall, BounceProc);
+   procedure CreateBounceWindow
+     (hWndClient : Win32.Windef.HWND;
+      nItem      : Win32.INT);
 
-  function BounceCreateProc (hWnd_p : Win32.WinDef.HWND) return Win32.BOOL;
+   function BounceProc
+     (hWnd_p   : Win32.Windef.HWND;
+      wMsg     : Win32.UINT;
+      wParam_p : Win32.WPARAM;
+      lParam_p : Win32.LPARAM)
+      return Win32.LRESULT;
+   pragma Convention (Stdcall, BounceProc);
 
-  procedure BounceDestroyProc (hWnd_p : Win32.WinDef.HWND);
+   function BounceCreateProc (hWnd_p : Win32.Windef.HWND) return Win32.BOOL;
 
-  function BounceCommandProc (hWnd_p   : Win32.WinDef.HWND;
-                              wParam_p : Win32.WPARAM;
-                              lParam_p : Win32.LPARAM) return Win32.BOOL;
+   procedure BounceDestroyProc (hWnd_p : Win32.Windef.HWND);
 
-  procedure BouncePaintProc (hWnd_p : Win32.WinDef.HWND);
+   function BounceCommandProc
+     (hWnd_p   : Win32.Windef.HWND;
+      wParam_p : Win32.WPARAM;
+      lParam_p : Win32.LPARAM)
+      return Win32.BOOL;
 
-  procedure BounceObjects (hWnd_p : Win32.WinDef.HWND);
+   procedure BouncePaintProc (hWnd_p : Win32.Windef.HWND);
 
-  procedure BounceRefresh (hWnd_p : Win32.WinDef.HWND);
+   procedure BounceObjects (hWnd_p : Win32.Windef.HWND);
 
-  procedure CheckEdgePosition (hWnd_p : Win32.WinDef.HWND;
-                               hBall  : Win32.Winnt.HANDLE);
+   procedure BounceRefresh (hWnd_p : Win32.Windef.HWND);
 
--------------------------------------------------------------------------------
---
--- THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS PROVIDED WITHOUT CHARGE
--- "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
--- BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR
--- FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the entire risk as to
--- the accuracy and the use of this file.  This file may be used, copied,
--- modified and distributed only by licensees of Microsoft Corporation's
--- WIN32 Software Development Kit in accordance with the terms of the 
--- licensee's End-User License Agreement for Microsoft Software for the
--- WIN32 Development Kit.
---
--- Copyright (c) Intermetrics, Inc. 1995
--- Portions (c) 1985-1994 Microsoft Corporation with permission.
--- Microsoft is a registered trademark and Windows and Windows NT are
--- trademarks of Microsoft Corporation.
---
--------------------------------------------------------------------------------
+   procedure CheckEdgePosition
+     (hWnd_p : Win32.Windef.HWND;
+      hBall  : Win32.Winnt.HANDLE);
 
 end Bounce;

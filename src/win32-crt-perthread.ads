@@ -6,9 +6,14 @@
 --  AND/OR FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the
 --  entire risk as to the accuracy and the use of this file.
 --
---  Copyright (c) Intermetrics, Inc. 1995
+--  Copyright (C) Intermetrics, Inc. 1995
 --  Royalty-free, unlimited, worldwide, non-exclusive use, modification,
 --  reproduction and further distribution of this file is permitted.
+--
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (C) 2000-2010, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -16,13 +21,6 @@ with System;
 
 package Win32.crt.PerThread is
 
-   --  Functions to get the address of per-thread data items.
-   --  It would be possible to write single-thread and multi-thread
-   --  versions of the bodies of these, where the single-thread
-   --  version would just call a function at program startup time
-   --  and then remember the address.
-
-   --  type Per_Thread_Object is (Errno, Doserrno, Fpecode, Pxcptinfoptrs);
    type Per_Thread_Object is (Errno, Doserrno);
 
    function Get_Address (Which : Per_Thread_Object) return System.Address;

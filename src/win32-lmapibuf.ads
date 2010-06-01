@@ -1,19 +1,19 @@
 -------------------------------------------------------------------------------
 --
---  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS PROVIDED WITHOUT CHARGE
---  "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
---  BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR
---  FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the entire risk as to
---  the accuracy and the use of this file.  This file may be used, copied,
---  modified and distributed only by licensees of Microsoft Corporation's
---  WIN32 Software Development Kit in accordance with the terms of the
---  licensee's End-User License Agreement for Microsoft Software for the
---  WIN32 Development Kit.
+--  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS FURNISHED "AS IS"
+--  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
+--  BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY
+--  AND/OR FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the
+--  entire risk as to the accuracy and the use of this file.
 --
---  Copyright (c) Intermetrics, Inc. 1995
---  Portions (c) 1985-1994 Microsoft Corporation with permission.
---  Microsoft is a registered trademark and Windows and Windows NT are
---  trademarks of Microsoft Corporation.
+--  Copyright (C) Intermetrics, Inc. 1995
+--  Royalty-free, unlimited, worldwide, non-exclusive use, modification,
+--  reproduction and further distribution of this file is permitted.
+--
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (C) 2000-2010, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -21,40 +21,33 @@ package Win32.Lmapibuf is
 
    function NetApiBufferAllocate
      (ByteCount : Win32.DWORD;
-      Buffer : access Win32.LPVOID)
-     return Win32.DWORD;                          --  lmapibuf.h:48
+      Buffer    : access Win32.LPVOID)
+      return Win32.DWORD;
 
-   function NetApiBufferFree
-     (Buffer : Win32.LPVOID)
-     return Win32.DWORD;                          --  lmapibuf.h:54
+   function NetApiBufferFree (Buffer : Win32.LPVOID) return Win32.DWORD;
 
    function NetApiBufferReallocate
-     (OldBuffer : Win32.LPVOID;
+     (OldBuffer    : Win32.LPVOID;
       NewByteCount : Win32.DWORD;
-      NewBuffer : access Win32.LPVOID)
-     return Win32.DWORD;                          --  lmapibuf.h:59
+      NewBuffer    : access Win32.LPVOID)
+      return Win32.DWORD;
 
    function NetApiBufferSize
-     (Buffer : Win32.LPVOID;
+     (Buffer    : Win32.LPVOID;
       ByteCount : Win32.LPDWORD)
-     return Win32.DWORD;                          --  lmapibuf.h:66
+      return Win32.DWORD;
 
    function NetapipBufferAllocate
      (ByteCount : Win32.DWORD;
-      Buffer : access Win32.LPVOID)
-     return Win32.DWORD;                          --  lmapibuf.h:77
+      Buffer    : access Win32.LPVOID)
+      return Win32.DWORD;
 
 private
 
    pragma Import (Stdcall, NetApiBufferAllocate, "NetApiBufferAllocate");
-   --  lmapibuf.h:48
    pragma Import (Stdcall, NetApiBufferFree, "NetApiBufferFree");
-   --  lmapibuf.h:54
    pragma Import (Stdcall, NetApiBufferReallocate, "NetApiBufferReallocate");
-   --  lmapibuf.h:59
    pragma Import (Stdcall, NetApiBufferSize, "NetApiBufferSize");
-   --  lmapibuf.h:66
    pragma Import (Stdcall, NetapipBufferAllocate, "NetapipBufferAllocate");
-   --  lmapibuf.h:77
 
 end Win32.Lmapibuf;

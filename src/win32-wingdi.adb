@@ -6,9 +6,14 @@
 --  AND/OR FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the
 --  entire risk as to the accuracy and the use of this file.
 --
---  Copyright (c) Intermetrics, Inc. 1995
+--  Copyright (C) Intermetrics, Inc. 1995
 --  Royalty-free, unlimited, worldwide, non-exclusive use, modification,
 --  reproduction and further distribution of this file is permitted.
+--
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (C) 2000-2010, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -19,8 +24,9 @@ package body Win32.Wingdi is
    function MAKEROP4 (fore, back : DWORD) return DWORD is
       use Interfaces;
    begin
-      return DWORD (((Shift_Left (Unsigned_32 (back), 8)) and 16#ff00_0000#) or
-        Unsigned_32 (fore));
+      return DWORD (((Shift_Left (Unsigned_32 (back), 8)) and
+                     16#ff00_0000#) or
+                    Unsigned_32 (fore));
    end MAKEROP4;
 
    function MAKEPOINTS (dwValue : DWORD) return Win32.Windef.POINTS is
@@ -32,31 +38,44 @@ package body Win32.Wingdi is
       return Res;
    end MAKEPOINTS;
 
-   function RGB (bRed, bGreen, bBlue : BYTE)
-                return Win32.Windef.COLORREF is
+   function RGB (bRed, bGreen, bBlue : BYTE) return Win32.Windef.COLORREF is
       use Win32.Utils;
    begin
-      return Win32.Windef.COLORREF
-        (MAKELONG (Low  => MAKEWORD (Low => bRed,  High => bGreen),
-        High => MAKEWORD (Low => bBlue, High => 0)));
+      return Win32.Windef.COLORREF (MAKELONG
+                                       (Low  =>
+                                           MAKEWORD
+                                             (Low  => bRed,
+                                              High => bGreen),
+                                        High =>
+                                           MAKEWORD (Low => bBlue, High => 0)))
+;
    end RGB;
 
-   function PALETTERGB (bRed, bGreen, bBlue : BYTE)
-                       return Win32.Windef.COLORREF is
+   function PALETTERGB
+     (bRed, bGreen, bBlue : BYTE)
+      return Win32.Windef.COLORREF
+   is
       use Win32.Utils;
    begin
-      return Win32.Windef.COLORREF
-        (MAKELONG (Low  => MAKEWORD (Low => bRed,  High => bGreen),
-        High => MAKEWORD (Low => bBlue, High => 2)));
+      return Win32.Windef.COLORREF (MAKELONG
+                                       (Low  =>
+                                           MAKEWORD
+                                             (Low  => bRed,
+                                              High => bGreen),
+                                        High =>
+                                           MAKEWORD (Low => bBlue, High => 2)))
+;
    end PALETTERGB;
 
-   function PALETTEINDEX (wPaletteIndex : WORD)
-                         return Win32.Windef.COLORREF is
+   function PALETTEINDEX
+     (wPaletteIndex : WORD)
+      return Win32.Windef.COLORREF
+   is
       use Win32.Utils;
    begin
-      return Win32.Windef.COLORREF
-        (MAKELONG (Low  => wPaletteIndex,
-        High => 16#0100#));
+      return Win32.Windef.COLORREF (MAKELONG
+                                       (Low  => wPaletteIndex,
+                                        High => 16#0100#));
    end PALETTEINDEX;
 
    function GetRValue (rgb : Win32.Windef.COLORREF) return BYTE is

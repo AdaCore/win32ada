@@ -6,24 +6,19 @@
 --  AND/OR FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the
 --  entire risk as to the accuracy and the use of this file.
 --
---  Copyright (c) Intermetrics, Inc. 1995
+--  Copyright (C) Intermetrics, Inc. 1995
 --  Royalty-free, unlimited, worldwide, non-exclusive use, modification,
 --  reproduction and further distribution of this file is permitted.
+--
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (C) 2000-2010, AdaCore
 --
 -------------------------------------------------------------------------------
 
 package body Win32.Winmain is
 
-   --  **************************************************************
-   --  Functions which grab the parameters passed to WinMain by NT.
-   --  See also the Ada.Command_Line package, Ada 95 Reference Manual
-   --  section A.15.
-   --
-   --  Note: When using AdaMagic, these functions work when a program is
-   --  a true Windows app (built with switch -w).  They
-   --  don't work with console apps.  The "rts_get_*" functions are part
-   --  of the AdaMagic Run-Time Library (rts.lib).
-   --  **************************************************************
    function Get_hInstance return Win32.Windef.HINSTANCE is
       function Retrieve_hInstance return Win32.Windef.HINSTANCE;
       pragma Import (C, Retrieve_hInstance, "rts_get_hInstance");
@@ -40,7 +35,7 @@ package body Win32.Winmain is
 
    function Get_lpCmdline return Win32.PCSTR is
       function Retrieve_lpCmdline return Win32.PCSTR;
-      pragma Import (C, Retrieve_lpCmdline,  "rts_get_lpCommandLine");
+      pragma Import (C, Retrieve_lpCmdline, "rts_get_lpCommandLine");
    begin
       return Retrieve_lpCmdline;
    end Get_lpCmdline;
@@ -53,5 +48,3 @@ package body Win32.Winmain is
    end Get_nCmdShow;
 
 end Win32.Winmain;
-
-

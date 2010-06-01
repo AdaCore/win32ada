@@ -1,19 +1,19 @@
 -------------------------------------------------------------------------------
 --
---  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS PROVIDED WITHOUT CHARGE
---  "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
---  BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR
---  FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the entire risk as to
---  the accuracy and the use of this file.  This file may be used, copied,
---  modified and distributed only by licensees of Microsoft Corporation's
---  WIN32 Software Development Kit in accordance with the terms of the
---  licensee's End-User License Agreement for Microsoft Software for the
---  WIN32 Development Kit.
+--  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS FURNISHED "AS IS"
+--  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
+--  BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY
+--  AND/OR FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the
+--  entire risk as to the accuracy and the use of this file.
 --
---  Copyright (c) Intermetrics, Inc. 1995
---  Portions (c) 1985-1994 Microsoft Corporation with permission.
---  Microsoft is a registered trademark and Windows and Windows NT are
---  trademarks of Microsoft Corporation.
+--  Copyright (C) Intermetrics, Inc. 1995
+--  Royalty-free, unlimited, worldwide, non-exclusive use, modification,
+--  reproduction and further distribution of this file is permitted.
+--
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (C) 2000-2010, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -22,110 +22,99 @@ with Win32.Winnt;
 
 package Win32.Wincon is
 
-   RIGHT_ALT_PRESSED : constant := 16#1#;     --  wincon.h:57
-   LEFT_ALT_PRESSED : constant := 16#2#;     --  wincon.h:58
-   RIGHT_CTRL_PRESSED : constant := 16#4#;     --  wincon.h:59
-   LEFT_CTRL_PRESSED : constant := 16#8#;     --  wincon.h:60
-   SHIFT_PRESSED : constant := 16#10#;    --  wincon.h:61
-   NUMLOCK_ON : constant := 16#20#;    --  wincon.h:62
-   SCROLLLOCK_ON : constant := 16#40#;    --  wincon.h:63
-   CAPSLOCK_ON : constant := 16#80#;    --  wincon.h:64
-   ENHANCED_KEY : constant := 16#100#;   --  wincon.h:65
-   FROM_LEFT_1ST_BUTTON_PRESSED : constant := 16#1#;     --  wincon.h:78
-   RIGHTMOST_BUTTON_PRESSED : constant := 16#2#;     --  wincon.h:79
-   FROM_LEFT_2ND_BUTTON_PRESSED : constant := 16#4#;     --  wincon.h:80
-   FROM_LEFT_3RD_BUTTON_PRESSED : constant := 16#8#;     --  wincon.h:81
-   FROM_LEFT_4TH_BUTTON_PRESSED : constant := 16#10#;    --  wincon.h:82
-   MOUSE_MOVED : constant := 16#1#;     --  wincon.h:88
-   DOUBLE_CLICK : constant := 16#2#;     --  wincon.h:89
-   KEY_EVENT : constant := 16#1#;     --  wincon.h:118
-   MOUSE_EVENT : constant := 16#2#;     --  wincon.h:119
-   WINDOW_BUFFER_SIZE_EVENT : constant := 16#4#;     --  wincon.h:120
-   MENU_EVENT : constant := 16#8#;     --  wincon.h:121
-   FOCUS_EVENT : constant := 16#10#;    --  wincon.h:122
-   FOREGROUND_BLUE : constant := 16#1#;     --  wincon.h:136
-   FOREGROUND_GREEN : constant := 16#2#;     --  wincon.h:137
-   FOREGROUND_RED : constant := 16#4#;     --  wincon.h:138
-   FOREGROUND_INTENSITY : constant := 16#8#;     --  wincon.h:139
-   BACKGROUND_BLUE : constant := 16#10#;    --  wincon.h:140
-   BACKGROUND_GREEN : constant := 16#20#;    --  wincon.h:141
-   BACKGROUND_RED : constant := 16#40#;    --  wincon.h:142
-   BACKGROUND_INTENSITY : constant := 16#80#;    --  wincon.h:143
-   CTRL_C_EVENT : constant := 0;         --  wincon.h:169
-   CTRL_BREAK_EVENT : constant := 1;         --  wincon.h:170
-   CTRL_CLOSE_EVENT : constant := 2;         --  wincon.h:171
-   CTRL_LOGOFF_EVENT : constant := 5;         --  wincon.h:174
-   CTRL_SHUTDOWN_EVENT : constant := 6;         --  wincon.h:175
-   ENABLE_PROCESSED_INPUT : constant := 16#1#;     --  wincon.h:181
-   ENABLE_LINE_INPUT : constant := 16#2#;     --  wincon.h:182
-   ENABLE_ECHO_INPUT : constant := 16#4#;     --  wincon.h:183
-   ENABLE_WINDOW_INPUT : constant := 16#8#;     --  wincon.h:184
-   ENABLE_MOUSE_INPUT : constant := 16#10#;    --  wincon.h:185
-   ENABLE_PROCESSED_OUTPUT : constant := 16#1#;     --  wincon.h:191
-   ENABLE_WRAP_AT_EOL_OUTPUT : constant := 16#2#;     --  wincon.h:192
-   CONSOLE_TEXTMODE_BUFFER : constant := 1;         --  wincon.h:685
+   RIGHT_ALT_PRESSED            : constant := 16#1#;
+   LEFT_ALT_PRESSED             : constant := 16#2#;
+   RIGHT_CTRL_PRESSED           : constant := 16#4#;
+   LEFT_CTRL_PRESSED            : constant := 16#8#;
+   SHIFT_PRESSED                : constant := 16#10#;
+   NUMLOCK_ON                   : constant := 16#20#;
+   SCROLLLOCK_ON                : constant := 16#40#;
+   CAPSLOCK_ON                  : constant := 16#80#;
+   ENHANCED_KEY                 : constant := 16#100#;
+   FROM_LEFT_1ST_BUTTON_PRESSED : constant := 16#1#;
+   RIGHTMOST_BUTTON_PRESSED     : constant := 16#2#;
+   FROM_LEFT_2ND_BUTTON_PRESSED : constant := 16#4#;
+   FROM_LEFT_3RD_BUTTON_PRESSED : constant := 16#8#;
+   FROM_LEFT_4TH_BUTTON_PRESSED : constant := 16#10#;
+   MOUSE_MOVED                  : constant := 16#1#;
+   DOUBLE_CLICK                 : constant := 16#2#;
+   KEY_EVENT                    : constant := 16#1#;
+   MOUSE_EVENT                  : constant := 16#2#;
+   WINDOW_BUFFER_SIZE_EVENT     : constant := 16#4#;
+   MENU_EVENT                   : constant := 16#8#;
+   FOCUS_EVENT                  : constant := 16#10#;
+   FOREGROUND_BLUE              : constant := 16#1#;
+   FOREGROUND_GREEN             : constant := 16#2#;
+   FOREGROUND_RED               : constant := 16#4#;
+   FOREGROUND_INTENSITY         : constant := 16#8#;
+   BACKGROUND_BLUE              : constant := 16#10#;
+   BACKGROUND_GREEN             : constant := 16#20#;
+   BACKGROUND_RED               : constant := 16#40#;
+   BACKGROUND_INTENSITY         : constant := 16#80#;
+   CTRL_C_EVENT                 : constant := 0;
+   CTRL_BREAK_EVENT             : constant := 1;
+   CTRL_CLOSE_EVENT             : constant := 2;
+   CTRL_LOGOFF_EVENT            : constant := 5;
+   CTRL_SHUTDOWN_EVENT          : constant := 6;
+   ENABLE_PROCESSED_INPUT       : constant := 16#1#;
+   ENABLE_LINE_INPUT            : constant := 16#2#;
+   ENABLE_ECHO_INPUT            : constant := 16#4#;
+   ENABLE_WINDOW_INPUT          : constant := 16#8#;
+   ENABLE_MOUSE_INPUT           : constant := 16#10#;
+   ENABLE_PROCESSED_OUTPUT      : constant := 16#1#;
+   ENABLE_WRAP_AT_EOL_OUTPUT    : constant := 16#2#;
+   CONSOLE_TEXTMODE_BUFFER      : constant := 1;
 
-   type COORD;                                             --  wincon.h:29
-   type SMALL_RECT;                                        --  wincon.h:34
-   type union_anonymous0_t;                                --  wincon.h:49
-   type KEY_EVENT_RECORD;                                  --  wincon.h:41
-   type MOUSE_EVENT_RECORD;                                --  wincon.h:67
-   type WINDOW_BUFFER_SIZE_RECORD;                         --  wincon.h:91
-   type MENU_EVENT_RECORD;                                 --  wincon.h:95
-   type FOCUS_EVENT_RECORD;                                --  wincon.h:99
-   type union_anonymous1_t;                                --  wincon.h:111
-   type INPUT_RECORD;                                      --  wincon.h:103
-   type union_anonymous2_t;                                --  wincon.h:128
-   type CHAR_INFO;                                         --  wincon.h:124
-   type CONSOLE_SCREEN_BUFFER_INFO;                        --  wincon.h:146
-   type CONSOLE_CURSOR_INFO;                               --  wincon.h:154
+   type COORD;
+   type SMALL_RECT;
+   type union_anonymous0_t;
+   type KEY_EVENT_RECORD;
+   type MOUSE_EVENT_RECORD;
+   type WINDOW_BUFFER_SIZE_RECORD;
+   type MENU_EVENT_RECORD;
+   type FOCUS_EVENT_RECORD;
+   type union_anonymous1_t;
+   type INPUT_RECORD;
+   type union_anonymous2_t;
+   type CHAR_INFO;
+   type CONSOLE_SCREEN_BUFFER_INFO;
+   type CONSOLE_CURSOR_INFO;
 
-   type PCOORD is access all COORD;                        --  wincon.h:32
-   type PSMALL_RECT is access all SMALL_RECT;              --  wincon.h:39
-   type PKEY_EVENT_RECORD is access all KEY_EVENT_RECORD;  --  wincon.h:51
+   type PCOORD is access all COORD;
+   type PSMALL_RECT is access all SMALL_RECT;
+   type PKEY_EVENT_RECORD is access all KEY_EVENT_RECORD;
    type PMOUSE_EVENT_RECORD is access all MOUSE_EVENT_RECORD;
-   --  wincon.h:72
    type PWINDOW_BUFFER_SIZE_RECORD is access all WINDOW_BUFFER_SIZE_RECORD;
-   --  wincon.h:93
-   type PMENU_EVENT_RECORD is access all MENU_EVENT_RECORD; --  wincon.h:97
+   type PMENU_EVENT_RECORD is access all MENU_EVENT_RECORD;
    type PFOCUS_EVENT_RECORD is access all FOCUS_EVENT_RECORD;
-   --  wincon.h:101
-   type PINPUT_RECORD is access all INPUT_RECORD;          --  wincon.h:112
-   type PCHAR_INFO is access all CHAR_INFO;                --  wincon.h:130
+   type PINPUT_RECORD is access all INPUT_RECORD;
+   type PCHAR_INFO is access all CHAR_INFO;
    type PCONSOLE_SCREEN_BUFFER_INFO is access all CONSOLE_SCREEN_BUFFER_INFO;
-   --  wincon.h:152
    type PCONSOLE_CURSOR_INFO is access all CONSOLE_CURSOR_INFO;
-   --  wincon.h:157
 
-   type COORD is                                           --  wincon.h:29
-      record
-         X : Win32.SHORT;                                 --  wincon.h:30
-         Y : Win32.SHORT;                                 --  wincon.h:31
-      end record;
+   type COORD is record
+      X : Win32.SHORT;
+      Y : Win32.SHORT;
+   end record;
 
+   type SMALL_RECT is record
+      Left   : Win32.SHORT;
+      Top    : Win32.SHORT;
+      Right  : Win32.SHORT;
+      Bottom : Win32.SHORT;
+   end record;
 
-   type SMALL_RECT is                                      --  wincon.h:34
-      record
-         Left : Win32.SHORT;                            --  wincon.h:35
-         Top : Win32.SHORT;                            --  wincon.h:36
-         Right : Win32.SHORT;                            --  wincon.h:37
-         Bottom : Win32.SHORT;                            --  wincon.h:38
-      end record;
-
-   type union_anonymous0_t_kind is ( --  wincon.h:49
-     UnicodeChar_kind,
-     AsciiChar_kind
-                                   );
+   type union_anonymous0_t_kind is (UnicodeChar_kind, AsciiChar_kind);
 
    type union_anonymous0_t
-     (Which : union_anonymous0_t_kind := UnicodeChar_kind) is
-      --  wincon.h:49
+     (Which : union_anonymous0_t_kind := UnicodeChar_kind)
+   is
       record
          case Which is
             when UnicodeChar_kind =>
-               UnicodeChar : Win32.WCHAR;               --  wincon.h:47
+               UnicodeChar : Win32.WCHAR;
             when AsciiChar_kind =>
-               AsciiChar : Win32.CHAR;                  --  wincon.h:48
+               AsciiChar : Win32.CHAR;
          end case;
       end record;
 
@@ -133,62 +122,55 @@ package Win32.Wincon is
 
    pragma Unchecked_Union (union_anonymous0_t);
 
-   type KEY_EVENT_RECORD is                                --  wincon.h:41
-      record
-         bKeyDown : Win32.BOOL;                  --  wincon.h:42
-         wRepeatCount : Win32.WORD;                  --  wincon.h:43
-         wVirtualKeyCode : Win32.WORD;                  --  wincon.h:44
-         wVirtualScanCode : Win32.WORD;                  --  wincon.h:45
-         uChar : union_anonymous0_t;          --  wincon.h:49
-         dwControlKeyState : Win32.DWORD;                 --  wincon.h:50
-      end record;
+   type KEY_EVENT_RECORD is record
+      bKeyDown          : Win32.BOOL;
+      wRepeatCount      : Win32.WORD;
+      wVirtualKeyCode   : Win32.WORD;
+      wVirtualScanCode  : Win32.WORD;
+      uChar             : union_anonymous0_t;
+      dwControlKeyState : Win32.DWORD;
+   end record;
 
-   type MOUSE_EVENT_RECORD is                              --  wincon.h:67
-      record
-         dwMousePosition : COORD;                       --  wincon.h:68
-         dwButtonState : Win32.DWORD;                 --  wincon.h:69
-         dwControlKeyState : Win32.DWORD;                 --  wincon.h:70
-         dwEventFlags : Win32.DWORD;                 --  wincon.h:71
-      end record;
+   type MOUSE_EVENT_RECORD is record
+      dwMousePosition   : COORD;
+      dwButtonState     : Win32.DWORD;
+      dwControlKeyState : Win32.DWORD;
+      dwEventFlags      : Win32.DWORD;
+   end record;
 
-   type WINDOW_BUFFER_SIZE_RECORD is                       --  wincon.h:91
-      record
-         dwSize : COORD;                                  --  wincon.h:92
-      end record;
+   type WINDOW_BUFFER_SIZE_RECORD is record
+      dwSize : COORD;
+   end record;
 
-   type MENU_EVENT_RECORD is                               --  wincon.h:95
-      record
-         dwCommandId : Win32.UINT;                        --  wincon.h:96
-      end record;
+   type MENU_EVENT_RECORD is record
+      dwCommandId : Win32.UINT;
+   end record;
 
-   type FOCUS_EVENT_RECORD is                              --  wincon.h:99
-      record
-         bSetFocus : Win32.BOOL;                          --  wincon.h:100
-      end record;
+   type FOCUS_EVENT_RECORD is record
+      bSetFocus : Win32.BOOL;
+   end record;
 
-   type union_anonymous1_t_kind is ( --  wincon.h:111
-     KeyEvent_kind,
-     MouseEvent_kind,
-     WindowBufferSizeEvent_kind,
-     MenuEvent_kind,
-     FocusEvent_kind
-                                   );
+   type union_anonymous1_t_kind is (
+      KeyEvent_kind,
+      MouseEvent_kind,
+      WindowBufferSizeEvent_kind,
+      MenuEvent_kind,
+      FocusEvent_kind);
 
-   type union_anonymous1_t
-     (Which : union_anonymous1_t_kind := KeyEvent_kind) is --  wincon.h:111
+   type union_anonymous1_t (Which : union_anonymous1_t_kind := KeyEvent_kind)
+   is
       record
          case Which is
             when KeyEvent_kind =>
-               KeyEvent : KEY_EVENT_RECORD;        --  wincon.h:106
+               KeyEvent : KEY_EVENT_RECORD;
             when MouseEvent_kind =>
-               MouseEvent : MOUSE_EVENT_RECORD;      --  wincon.h:107
+               MouseEvent : MOUSE_EVENT_RECORD;
             when WindowBufferSizeEvent_kind =>
                WindowBufferSizeEvent : WINDOW_BUFFER_SIZE_RECORD;
-               --  wincon.h:108
             when MenuEvent_kind =>
-               MenuEvent : MENU_EVENT_RECORD;       --  wincon.h:109
+               MenuEvent : MENU_EVENT_RECORD;
             when FocusEvent_kind =>
-               FocusEvent : FOCUS_EVENT_RECORD;      --  wincon.h:110
+               FocusEvent : FOCUS_EVENT_RECORD;
          end case;
       end record;
 
@@ -196,26 +178,22 @@ package Win32.Wincon is
 
    pragma Unchecked_Union (union_anonymous1_t);
 
-   type INPUT_RECORD is                                    --  wincon.h:103
-      record
-         EventType : Win32.WORD;                          --  wincon.h:104
-         Event : union_anonymous1_t;                  --  wincon.h:111
-      end record;
+   type INPUT_RECORD is record
+      EventType : Win32.WORD;
+      Event     : union_anonymous1_t;
+   end record;
 
-   type union_anonymous2_t_kind is ( --  wincon.h:128
-     UnicodeChar_kind,
-     AsciiChar_kind
-                                   );
+   type union_anonymous2_t_kind is (UnicodeChar_kind, AsciiChar_kind);
 
    type union_anonymous2_t
-     (Which : union_anonymous2_t_kind := UnicodeChar_kind) is
-      --  wincon.h:128
+     (Which : union_anonymous2_t_kind := UnicodeChar_kind)
+   is
       record
          case Which is
             when UnicodeChar_kind =>
-               UnicodeChar : Win32.WCHAR;               --  wincon.h:126
+               UnicodeChar : Win32.WCHAR;
             when AsciiChar_kind =>
-               AsciiChar : Win32.CHAR;                  --  wincon.h:127
+               AsciiChar : Win32.CHAR;
          end case;
       end record;
 
@@ -223,566 +201,566 @@ package Win32.Wincon is
 
    pragma Unchecked_Union (union_anonymous2_t);
 
-   type CHAR_INFO is                                       --  wincon.h:124
-      record
-         Char : union_anonymous2_t;                 --  wincon.h:128
-         Attributes : Win32.WORD;                         --  wincon.h:129
-      end record;
+   type CHAR_INFO is record
+      Char       : union_anonymous2_t;
+      Attributes : Win32.WORD;
+   end record;
 
-   type CONSOLE_SCREEN_BUFFER_INFO is                      --  wincon.h:146
-      record
-         dwSize : COORD;                     --  wincon.h:147
-         dwCursorPosition : COORD;                     --  wincon.h:148
-         wAttributes : Win32.WORD;                --  wincon.h:149
-         srWindow : SMALL_RECT;                --  wincon.h:150
-         dwMaximumWindowSize : COORD;                     --  wincon.h:151
-      end record;
+   type CONSOLE_SCREEN_BUFFER_INFO is record
+      dwSize              : COORD;
+      dwCursorPosition    : COORD;
+      wAttributes         : Win32.WORD;
+      srWindow            : SMALL_RECT;
+      dwMaximumWindowSize : COORD;
+   end record;
 
-   type CONSOLE_CURSOR_INFO is                             --  wincon.h:154
-      record
-         dwSize : Win32.DWORD;                          --  wincon.h:155
-         bVisible : Win32.BOOL;                           --  wincon.h:156
-      end record;
+   type CONSOLE_CURSOR_INFO is record
+      dwSize   : Win32.DWORD;
+      bVisible : Win32.BOOL;
+   end record;
 
-   type PHANDLER_ROUTINE is access function (CtrlType : Win32.DWORD)
-      return Win32.BOOL;                                  --  wincon.h:165
+   type PHANDLER_ROUTINE is access function
+     (CtrlType : Win32.DWORD)
+      return Win32.BOOL;
    pragma Convention (Stdcall, PHANDLER_ROUTINE);
 
-   type ac_INPUT_RECORD_t is access all INPUT_RECORD; --  wincon.h:254
-   type ac_CHAR_INFO_t is access all CHAR_INFO;       --  wincon.h:305
+   type ac_INPUT_RECORD_t is access all INPUT_RECORD;
+   type ac_CHAR_INFO_t is access all CHAR_INFO;
    type ac_CONSOLE_CURSOR_INFO_t is access all CONSOLE_CURSOR_INFO;
-   --  wincon.h:523
-   type ac_SMALL_RECT_t is access all SMALL_RECT;     --  wincon.h:534
+   type ac_SMALL_RECT_t is access all SMALL_RECT;
    type ac_SECURITY_ATTRIBUTES_t is access all
-     Win32.Winbase.SECURITY_ATTRIBUTES;             --  wincon.h:696
+     Win32.Winbase.SECURITY_ATTRIBUTES;
 
-   function PeekConsoleInputA (hConsoleInput : Win32.Winnt.HANDLE;
-                               lpBuffer : PINPUT_RECORD;
-                               nLength : Win32.DWORD;
-                               lpNumberOfEventsRead : Win32.LPDWORD)
-                              return Win32.BOOL;
-   --  wincon.h:201
+   function PeekConsoleInputA
+     (hConsoleInput        : Win32.Winnt.HANDLE;
+      lpBuffer             : PINPUT_RECORD;
+      nLength              : Win32.DWORD;
+      lpNumberOfEventsRead : Win32.LPDWORD)
+      return Win32.BOOL;
 
-   function PeekConsoleInput (hConsoleInput : Win32.Winnt.HANDLE;
-                              lpBuffer : PINPUT_RECORD;
-                              nLength : Win32.DWORD;
-                              lpNumberOfEventsRead : Win32.LPDWORD)
-                             return Win32.BOOL
-     renames PeekConsoleInputA;
-   --  wincon.h:201
+   function PeekConsoleInput
+     (hConsoleInput        : Win32.Winnt.HANDLE;
+      lpBuffer             : PINPUT_RECORD;
+      nLength              : Win32.DWORD;
+      lpNumberOfEventsRead : Win32.LPDWORD)
+      return Win32.BOOL renames PeekConsoleInputA;
 
-   function PeekConsoleInputW (hConsoleInput : Win32.Winnt.HANDLE;
-                               lpBuffer : PINPUT_RECORD;
-                               nLength : Win32.DWORD;
-                               lpNumberOfEventsRead : Win32.LPDWORD)
-                              return Win32.BOOL;
-   --  wincon.h:210
+   function PeekConsoleInputW
+     (hConsoleInput        : Win32.Winnt.HANDLE;
+      lpBuffer             : PINPUT_RECORD;
+      nLength              : Win32.DWORD;
+      lpNumberOfEventsRead : Win32.LPDWORD)
+      return Win32.BOOL;
 
-   function ReadConsoleInputA (hConsoleInput : Win32.Winnt.HANDLE;
-                               lpBuffer : PINPUT_RECORD;
-                               nLength : Win32.DWORD;
-                               lpNumberOfEventsRead : Win32.LPDWORD)
-                              return Win32.BOOL;
-   --  wincon.h:225
+   function ReadConsoleInputA
+     (hConsoleInput        : Win32.Winnt.HANDLE;
+      lpBuffer             : PINPUT_RECORD;
+      nLength              : Win32.DWORD;
+      lpNumberOfEventsRead : Win32.LPDWORD)
+      return Win32.BOOL;
 
-   function ReadConsoleInput (hConsoleInput : Win32.Winnt.HANDLE;
-                              lpBuffer : PINPUT_RECORD;
-                              nLength : Win32.DWORD;
-                              lpNumberOfEventsRead : Win32.LPDWORD)
-                             return Win32.BOOL
-     renames ReadConsoleInputA;
-   --  wincon.h:225
+   function ReadConsoleInput
+     (hConsoleInput        : Win32.Winnt.HANDLE;
+      lpBuffer             : PINPUT_RECORD;
+      nLength              : Win32.DWORD;
+      lpNumberOfEventsRead : Win32.LPDWORD)
+      return Win32.BOOL renames ReadConsoleInputA;
 
-   function ReadConsoleInputW (hConsoleInput : Win32.Winnt.HANDLE;
-                               lpBuffer : PINPUT_RECORD;
-                               nLength : Win32.DWORD;
-                               lpNumberOfEventsRead : Win32.LPDWORD)
-                              return Win32.BOOL;
-   --  wincon.h:234
+   function ReadConsoleInputW
+     (hConsoleInput        : Win32.Winnt.HANDLE;
+      lpBuffer             : PINPUT_RECORD;
+      nLength              : Win32.DWORD;
+      lpNumberOfEventsRead : Win32.LPDWORD)
+      return Win32.BOOL;
 
-   function WriteConsoleInputA (hConsoleInput : Win32.Winnt.HANDLE;
-                                lpBuffer : ac_INPUT_RECORD_t;
-                                nLength : Win32.DWORD;
-                                lpNumberOfEventsWritten : Win32.LPDWORD)
-                               return Win32.BOOL;
-   --  wincon.h:249
+   function WriteConsoleInputA
+     (hConsoleInput           : Win32.Winnt.HANDLE;
+      lpBuffer                : ac_INPUT_RECORD_t;
+      nLength                 : Win32.DWORD;
+      lpNumberOfEventsWritten : Win32.LPDWORD)
+      return Win32.BOOL;
 
    function WriteConsoleInput
-     (hConsoleInput : Win32.Winnt.HANDLE;
-      lpBuffer : ac_INPUT_RECORD_t;
-      nLength : Win32.DWORD;
+     (hConsoleInput           : Win32.Winnt.HANDLE;
+      lpBuffer                : ac_INPUT_RECORD_t;
+      nLength                 : Win32.DWORD;
       lpNumberOfEventsWritten : Win32.LPDWORD)
-     return Win32.BOOL
-     renames WriteConsoleInputA; --  wincon.h:249
+      return Win32.BOOL renames WriteConsoleInputA;
 
-   function WriteConsoleInputW (hConsoleInput : Win32.Winnt.HANDLE;
-                                lpBuffer : ac_INPUT_RECORD_t;
-                                nLength : Win32.DWORD;
-                                lpNumberOfEventsWritten : Win32.LPDWORD)
-                               return Win32.BOOL;
-   --  wincon.h:258
+   function WriteConsoleInputW
+     (hConsoleInput           : Win32.Winnt.HANDLE;
+      lpBuffer                : ac_INPUT_RECORD_t;
+      nLength                 : Win32.DWORD;
+      lpNumberOfEventsWritten : Win32.LPDWORD)
+      return Win32.BOOL;
 
-   function ReadConsoleOutputA (hConsoleOutput : Win32.Winnt.HANDLE;
-                                lpBuffer : PCHAR_INFO;
-                                dwBufferSize : COORD;
-                                dwBufferCoord : COORD;
-                                lpReadRegion : PSMALL_RECT)
-                               return Win32.BOOL;
-   --  wincon.h:273
+   function ReadConsoleOutputA
+     (hConsoleOutput : Win32.Winnt.HANDLE;
+      lpBuffer       : PCHAR_INFO;
+      dwBufferSize   : COORD;
+      dwBufferCoord  : COORD;
+      lpReadRegion   : PSMALL_RECT)
+      return Win32.BOOL;
 
-   function ReadConsoleOutput (hConsoleOutput : Win32.Winnt.HANDLE;
-                               lpBuffer : PCHAR_INFO;
-                               dwBufferSize : COORD;
-                               dwBufferCoord : COORD;
-                               lpReadRegion : PSMALL_RECT)
-                              return Win32.BOOL
-     renames ReadConsoleOutputA;
-   --  wincon.h:273
+   function ReadConsoleOutput
+     (hConsoleOutput : Win32.Winnt.HANDLE;
+      lpBuffer       : PCHAR_INFO;
+      dwBufferSize   : COORD;
+      dwBufferCoord  : COORD;
+      lpReadRegion   : PSMALL_RECT)
+      return Win32.BOOL renames ReadConsoleOutputA;
 
-   function ReadConsoleOutputW (hConsoleOutput : Win32.Winnt.HANDLE;
-                                lpBuffer : PCHAR_INFO;
-                                dwBufferSize : COORD;
-                                dwBufferCoord : COORD;
-                                lpReadRegion : PSMALL_RECT)
-                               return Win32.BOOL;
-   --  wincon.h:283
+   function ReadConsoleOutputW
+     (hConsoleOutput : Win32.Winnt.HANDLE;
+      lpBuffer       : PCHAR_INFO;
+      dwBufferSize   : COORD;
+      dwBufferCoord  : COORD;
+      lpReadRegion   : PSMALL_RECT)
+      return Win32.BOOL;
 
-   function WriteConsoleOutputA (hConsoleOutput : Win32.Winnt.HANDLE;
-                                 lpBuffer : ac_CHAR_INFO_t;
-                                 dwBufferSize : COORD;
-                                 dwBufferCoord : COORD;
-                                 lpWriteRegion : PSMALL_RECT)
-                                return Win32.BOOL;
-   --  wincon.h:299
+   function WriteConsoleOutputA
+     (hConsoleOutput : Win32.Winnt.HANDLE;
+      lpBuffer       : ac_CHAR_INFO_t;
+      dwBufferSize   : COORD;
+      dwBufferCoord  : COORD;
+      lpWriteRegion  : PSMALL_RECT)
+      return Win32.BOOL;
 
-   function WriteConsoleOutput (hConsoleOutput : Win32.Winnt.HANDLE;
-                                lpBuffer : ac_CHAR_INFO_t;
-                                dwBufferSize : COORD;
-                                dwBufferCoord : COORD;
-                                lpWriteRegion : PSMALL_RECT)
-                               return Win32.BOOL
-     renames WriteConsoleOutputA;
-   --  wincon.h:299
+   function WriteConsoleOutput
+     (hConsoleOutput : Win32.Winnt.HANDLE;
+      lpBuffer       : ac_CHAR_INFO_t;
+      dwBufferSize   : COORD;
+      dwBufferCoord  : COORD;
+      lpWriteRegion  : PSMALL_RECT)
+      return Win32.BOOL renames WriteConsoleOutputA;
 
-   function WriteConsoleOutputW (hConsoleOutput : Win32.Winnt.HANDLE;
-                                 lpBuffer : ac_CHAR_INFO_t;
-                                 dwBufferSize : COORD;
-                                 dwBufferCoord : COORD;
-                                 lpWriteRegion : PSMALL_RECT)
-                                return Win32.BOOL;
-   --  wincon.h:309
+   function WriteConsoleOutputW
+     (hConsoleOutput : Win32.Winnt.HANDLE;
+      lpBuffer       : ac_CHAR_INFO_t;
+      dwBufferSize   : COORD;
+      dwBufferCoord  : COORD;
+      lpWriteRegion  : PSMALL_RECT)
+      return Win32.BOOL;
 
    function ReadConsoleOutputCharacterA
-     (hConsoleOutput : Win32.Winnt.HANDLE;
-      lpCharacter : Win32.LPSTR;
-      nLength : Win32.DWORD;
-      dwReadCoord : COORD;
+     (hConsoleOutput      : Win32.Winnt.HANDLE;
+      lpCharacter         : Win32.LPSTR;
+      nLength             : Win32.DWORD;
+      dwReadCoord         : COORD;
       lpNumberOfCharsRead : Win32.LPDWORD)
-     return Win32.BOOL;                                  --  wincon.h:325
+      return Win32.BOOL;
 
    function ReadConsoleOutputCharacter
-     (hConsoleOutput : Win32.Winnt.HANDLE;
-      lpCharacter : Win32.LPSTR;
-      nLength : Win32.DWORD;
-      dwReadCoord : COORD;
+     (hConsoleOutput      : Win32.Winnt.HANDLE;
+      lpCharacter         : Win32.LPSTR;
+      nLength             : Win32.DWORD;
+      dwReadCoord         : COORD;
       lpNumberOfCharsRead : Win32.LPDWORD)
-     return Win32.BOOL
-     renames ReadConsoleOutputCharacterA;                --  wincon.h:325
+      return Win32.BOOL renames ReadConsoleOutputCharacterA;
 
    function ReadConsoleOutputCharacterW
-     (hConsoleOutput : Win32.Winnt.HANDLE;
-      lpCharacter : Win32.LPWSTR;
-      nLength : Win32.DWORD;
-      dwReadCoord : COORD;
+     (hConsoleOutput      : Win32.Winnt.HANDLE;
+      lpCharacter         : Win32.LPWSTR;
+      nLength             : Win32.DWORD;
+      dwReadCoord         : COORD;
       lpNumberOfCharsRead : Win32.LPDWORD)
-     return Win32.BOOL;                                  --  wincon.h:335
+      return Win32.BOOL;
 
    function ReadConsoleOutputAttribute
-     (hConsoleOutput : Win32.Winnt.HANDLE;
-      lpAttribute : Win32.LPWORD;
-      nLength : Win32.DWORD;
-      dwReadCoord : COORD;
+     (hConsoleOutput      : Win32.Winnt.HANDLE;
+      lpAttribute         : Win32.LPWORD;
+      nLength             : Win32.DWORD;
+      dwReadCoord         : COORD;
       lpNumberOfAttrsRead : Win32.LPDWORD)
-     return Win32.BOOL;                                  --  wincon.h:351
+      return Win32.BOOL;
 
    function WriteConsoleOutputCharacterA
-     (hConsoleOutput : Win32.Winnt.HANDLE;
-      lpCharacter : Win32.LPCSTR;
-      nLength : Win32.DWORD;
-      dwWriteCoord : COORD;
+     (hConsoleOutput         : Win32.Winnt.HANDLE;
+      lpCharacter            : Win32.LPCSTR;
+      nLength                : Win32.DWORD;
+      dwWriteCoord           : COORD;
       lpNumberOfCharsWritten : Win32.LPDWORD)
-     return Win32.BOOL;                                  --  wincon.h:362
+      return Win32.BOOL;
 
    function WriteConsoleOutputCharacter
-     (hConsoleOutput : Win32.Winnt.HANDLE;
-      lpCharacter : Win32.LPCSTR;
-      nLength : Win32.DWORD;
-      dwWriteCoord : COORD;
+     (hConsoleOutput         : Win32.Winnt.HANDLE;
+      lpCharacter            : Win32.LPCSTR;
+      nLength                : Win32.DWORD;
+      dwWriteCoord           : COORD;
       lpNumberOfCharsWritten : Win32.LPDWORD)
-     return Win32.BOOL
-     renames WriteConsoleOutputCharacterA;               --  wincon.h:362
+      return Win32.BOOL renames WriteConsoleOutputCharacterA;
 
    function WriteConsoleOutputCharacterW
-     (hConsoleOutput : Win32.Winnt.HANDLE;
-      lpCharacter : Win32.LPCWSTR;
-      nLength : Win32.DWORD;
-      dwWriteCoord : COORD;
+     (hConsoleOutput         : Win32.Winnt.HANDLE;
+      lpCharacter            : Win32.LPCWSTR;
+      nLength                : Win32.DWORD;
+      dwWriteCoord           : COORD;
       lpNumberOfCharsWritten : Win32.LPDWORD)
-     return Win32.BOOL;                                  --  wincon.h:372
+      return Win32.BOOL;
 
    function WriteConsoleOutputAttribute
-     (hConsoleOutput : Win32.Winnt.HANDLE;
-      lpAttribute : Win32.PWSTR;
-      nLength : Win32.DWORD;
-      dwWriteCoord : COORD;
+     (hConsoleOutput         : Win32.Winnt.HANDLE;
+      lpAttribute            : Win32.PWSTR;
+      nLength                : Win32.DWORD;
+      dwWriteCoord           : COORD;
       lpNumberOfAttrsWritten : Win32.LPDWORD)
-     return Win32.BOOL;                                  --  wincon.h:388
+      return Win32.BOOL;
 
    function FillConsoleOutputCharacterA
-     (hConsoleOutput : Win32.Winnt.HANDLE;
-      cCharacter : Win32.CHAR;
-      nLength : Win32.DWORD;
-      dwWriteCoord : COORD;
+     (hConsoleOutput         : Win32.Winnt.HANDLE;
+      cCharacter             : Win32.CHAR;
+      nLength                : Win32.DWORD;
+      dwWriteCoord           : COORD;
       lpNumberOfCharsWritten : Win32.LPDWORD)
-     return Win32.BOOL;                                  --  wincon.h:399
+      return Win32.BOOL;
 
    function FillConsoleOutputCharacter
-     (hConsoleOutput : Win32.Winnt.HANDLE;
-      cCharacter : Win32.CHAR;
-      nLength : Win32.DWORD;
-      dwWriteCoord : COORD;
+     (hConsoleOutput         : Win32.Winnt.HANDLE;
+      cCharacter             : Win32.CHAR;
+      nLength                : Win32.DWORD;
+      dwWriteCoord           : COORD;
       lpNumberOfCharsWritten : Win32.LPDWORD)
-     return Win32.BOOL
-     renames FillConsoleOutputCharacterA;                --  wincon.h:399
+      return Win32.BOOL renames FillConsoleOutputCharacterA;
 
    function FillConsoleOutputCharacterW
-     (hConsoleOutput : Win32.Winnt.HANDLE;
-      cCharacter : Win32.WCHAR;
-      nLength : Win32.DWORD;
-      dwWriteCoord : COORD;
+     (hConsoleOutput         : Win32.Winnt.HANDLE;
+      cCharacter             : Win32.WCHAR;
+      nLength                : Win32.DWORD;
+      dwWriteCoord           : COORD;
       lpNumberOfCharsWritten : Win32.LPDWORD)
-     return Win32.BOOL;                                  --  wincon.h:409
+      return Win32.BOOL;
 
    function FillConsoleOutputAttribute
-     (hConsoleOutput : Win32.Winnt.HANDLE;
-      wAttribute : Win32.WORD;
-      nLength : Win32.DWORD;
-      dwWriteCoord : COORD;
+     (hConsoleOutput         : Win32.Winnt.HANDLE;
+      wAttribute             : Win32.WORD;
+      nLength                : Win32.DWORD;
+      dwWriteCoord           : COORD;
       lpNumberOfAttrsWritten : Win32.LPDWORD)
-     return Win32.BOOL;                                  --  wincon.h:425
+      return Win32.BOOL;
 
    function GetConsoleMode
      (hConsoleHandle : Win32.Winnt.HANDLE;
-      lpMode : Win32.LPDWORD)
-     return Win32.BOOL;                                  --  wincon.h:436
+      lpMode         : Win32.LPDWORD)
+      return Win32.BOOL;
 
    function GetNumberOfConsoleInputEvents
-     (hConsoleInput : Win32.Winnt.HANDLE;
+     (hConsoleInput    : Win32.Winnt.HANDLE;
       lpNumberOfEvents : Win32.LPDWORD)
-     return Win32.BOOL;                                  --  wincon.h:444
+      return Win32.BOOL;
 
    function GetConsoleScreenBufferInfo
-     (hConsoleOutput : Win32.Winnt.HANDLE;
+     (hConsoleOutput            : Win32.Winnt.HANDLE;
       lpConsoleScreenBufferInfo : PCONSOLE_SCREEN_BUFFER_INFO)
-     return Win32.BOOL;                                  --  wincon.h:452
+      return Win32.BOOL;
 
    function GetLargestConsoleWindowSize
-     (hConsoleOutput : Win32.Winnt.HANDLE) return COORD;   --  wincon.h:460
+     (hConsoleOutput : Win32.Winnt.HANDLE)
+      return COORD;
 
    function GetConsoleCursorInfo
-     (hConsoleOutput : Win32.Winnt.HANDLE;
+     (hConsoleOutput      : Win32.Winnt.HANDLE;
       lpConsoleCursorInfo : PCONSOLE_CURSOR_INFO)
-     return Win32.BOOL;                                  --  wincon.h:467
+      return Win32.BOOL;
 
    function GetNumberOfConsoleMouseButtons
-     (lpNumberOfMouseButtons : Win32.LPDWORD) return Win32.BOOL;
-   --  wincon.h:475
+     (lpNumberOfMouseButtons : Win32.LPDWORD)
+      return Win32.BOOL;
 
-   function SetConsoleMode (hConsoleHandle : Win32.Winnt.HANDLE;
-                            dwMode : Win32.DWORD)
-                           return Win32.BOOL;              --  wincon.h:482
+   function SetConsoleMode
+     (hConsoleHandle : Win32.Winnt.HANDLE;
+      dwMode         : Win32.DWORD)
+      return Win32.BOOL;
 
    function SetConsoleActiveScreenBuffer
-     (hConsoleOutput : Win32.Winnt.HANDLE) return Win32.BOOL;
-   --  wincon.h:490
+     (hConsoleOutput : Win32.Winnt.HANDLE)
+      return Win32.BOOL;
 
    function FlushConsoleInputBuffer
-     (hConsoleInput : Win32.Winnt.HANDLE) return Win32.BOOL;
-   --  wincon.h:497
+     (hConsoleInput : Win32.Winnt.HANDLE)
+      return Win32.BOOL;
 
    function SetConsoleScreenBufferSize
      (hConsoleOutput : Win32.Winnt.HANDLE;
-      dwSize : COORD)
-     return Win32.BOOL;                                  --  wincon.h:504
+      dwSize         : COORD)
+      return Win32.BOOL;
 
    function SetConsoleCursorPosition
-     (hConsoleOutput : Win32.Winnt.HANDLE;
+     (hConsoleOutput   : Win32.Winnt.HANDLE;
       dwCursorPosition : COORD)
-     return Win32.BOOL;                                  --  wincon.h:512
+      return Win32.BOOL;
 
    function SetConsoleCursorInfo
-     (hConsoleOutput : Win32.Winnt.HANDLE;
+     (hConsoleOutput      : Win32.Winnt.HANDLE;
       lpConsoleCursorInfo : ac_CONSOLE_CURSOR_INFO_t)
-     return Win32.BOOL;                                  --  wincon.h:520
+      return Win32.BOOL;
 
    function ScrollConsoleScreenBufferA
-     (hConsoleOutput : Win32.Winnt.HANDLE;
-      lpScrollRectangle : ac_SMALL_RECT_t;
-      lpClipRectangle : ac_SMALL_RECT_t;
+     (hConsoleOutput      : Win32.Winnt.HANDLE;
+      lpScrollRectangle   : ac_SMALL_RECT_t;
+      lpClipRectangle     : ac_SMALL_RECT_t;
       dwDestinationOrigin : COORD;
-      lpFill : ac_CHAR_INFO_t)
-     return Win32.BOOL;                                  --  wincon.h:528
+      lpFill              : ac_CHAR_INFO_t)
+      return Win32.BOOL;
 
    function ScrollConsoleScreenBuffer
-     (hConsoleOutput : Win32.Winnt.HANDLE;
-      lpScrollRectangle : ac_SMALL_RECT_t;
-      lpClipRectangle : ac_SMALL_RECT_t;
+     (hConsoleOutput      : Win32.Winnt.HANDLE;
+      lpScrollRectangle   : ac_SMALL_RECT_t;
+      lpClipRectangle     : ac_SMALL_RECT_t;
       dwDestinationOrigin : COORD;
-      lpFill : ac_CHAR_INFO_t)
-     return Win32.BOOL
-     renames ScrollConsoleScreenBufferA;                 --  wincon.h:528
+      lpFill              : ac_CHAR_INFO_t)
+      return Win32.BOOL renames ScrollConsoleScreenBufferA;
 
    function ScrollConsoleScreenBufferW
-     (hConsoleOutput : Win32.Winnt.HANDLE;
-      lpScrollRectangle : ac_SMALL_RECT_t;
-      lpClipRectangle : ac_SMALL_RECT_t;
+     (hConsoleOutput      : Win32.Winnt.HANDLE;
+      lpScrollRectangle   : ac_SMALL_RECT_t;
+      lpClipRectangle     : ac_SMALL_RECT_t;
       dwDestinationOrigin : COORD;
-      lpFill : ac_CHAR_INFO_t)
-     return Win32.BOOL;                                  --  wincon.h:538
+      lpFill              : ac_CHAR_INFO_t)
+      return Win32.BOOL;
 
    function SetConsoleWindowInfo
-     (hConsoleOutput : Win32.Winnt.HANDLE;
-      bAbsolute : Win32.BOOL;
+     (hConsoleOutput  : Win32.Winnt.HANDLE;
+      bAbsolute       : Win32.BOOL;
       lpConsoleWindow : ac_SMALL_RECT_t)
-     return Win32.BOOL;                                  --  wincon.h:554
+      return Win32.BOOL;
 
    function SetConsoleTextAttribute
      (hConsoleOutput : Win32.Winnt.HANDLE;
-      wAttributes : Win32.WORD)
-     return Win32.BOOL;                                  --  wincon.h:563
+      wAttributes    : Win32.WORD)
+      return Win32.BOOL;
 
    function SetConsoleCtrlHandler
      (HandlerRoutine : PHANDLER_ROUTINE;
-      Add : Win32.BOOL)
-     return Win32.BOOL;                                  --  wincon.h:571
+      Add            : Win32.BOOL)
+      return Win32.BOOL;
 
    function GenerateConsoleCtrlEvent
-     (dwCtrlEvent : Win32.DWORD;
+     (dwCtrlEvent      : Win32.DWORD;
       dwProcessGroupId : Win32.DWORD)
-     return Win32.BOOL;                                  --  wincon.h:579
+      return Win32.BOOL;
 
-   function AllocConsole return Win32.BOOL;                --  wincon.h:587
+   function AllocConsole return Win32.BOOL;
 
-   function FreeConsole return Win32.BOOL;                 --  wincon.h:592
+   function FreeConsole return Win32.BOOL;
 
    function GetConsoleTitleA
      (lpConsoleTitle : Win32.LPSTR;
-      nSize : Win32.DWORD)
-     return Win32.DWORD;                                 --  wincon.h:598
+      nSize          : Win32.DWORD)
+      return Win32.DWORD;
 
    function GetConsoleTitle
      (lpConsoleTitle : Win32.LPSTR;
-      nSize : Win32.DWORD)
-     return Win32.DWORD
-     renames GetConsoleTitleA;                           --  wincon.h:598
+      nSize          : Win32.DWORD)
+      return Win32.DWORD renames GetConsoleTitleA;
 
    function GetConsoleTitleW
      (lpConsoleTitle : Win32.LPWSTR;
-      nSize : Win32.DWORD)
-     return Win32.DWORD;                                 --  wincon.h:605
+      nSize          : Win32.DWORD)
+      return Win32.DWORD;
 
    function SetConsoleTitleA
-     (lpConsoleTitle : Win32.LPCSTR) return Win32.BOOL;    --  wincon.h:618
+     (lpConsoleTitle : Win32.LPCSTR)
+      return Win32.BOOL;
 
-   function SetConsoleTitle (lpConsoleTitle : Win32.LPCSTR)
-      return Win32.BOOL renames SetConsoleTitleA;         --  wincon.h:618
+   function SetConsoleTitle
+     (lpConsoleTitle : Win32.LPCSTR)
+      return Win32.BOOL renames SetConsoleTitleA;
 
    function SetConsoleTitleW
-     (lpConsoleTitle : Win32.LPCWSTR) return Win32.BOOL;   --  wincon.h:624
+     (lpConsoleTitle : Win32.LPCWSTR)
+      return Win32.BOOL;
 
-   function ReadConsoleA (hConsoleInput : Win32.Winnt.HANDLE;
-                          lpBuffer : Win32.LPVOID;
-                          nNumberOfCharsToRead : Win32.DWORD;
-                          lpNumberOfCharsRead : Win32.LPDWORD;
-                          lpReserved : Win32.LPVOID)
-                         return Win32.BOOL;
-   --  wincon.h:636
+   function ReadConsoleA
+     (hConsoleInput        : Win32.Winnt.HANDLE;
+      lpBuffer             : Win32.LPVOID;
+      nNumberOfCharsToRead : Win32.DWORD;
+      lpNumberOfCharsRead  : Win32.LPDWORD;
+      lpReserved           : Win32.LPVOID)
+      return Win32.BOOL;
 
-   function ReadConsole (hConsoleInput : Win32.Winnt.HANDLE;
-                         lpBuffer : Win32.LPVOID;
-                         nNumberOfCharsToRead : Win32.DWORD;
-                         lpNumberOfCharsRead : Win32.LPDWORD;
-                         lpReserved : Win32.LPVOID)
-                        return Win32.BOOL
-     renames ReadConsoleA;
-   --  wincon.h:636
+   function ReadConsole
+     (hConsoleInput        : Win32.Winnt.HANDLE;
+      lpBuffer             : Win32.LPVOID;
+      nNumberOfCharsToRead : Win32.DWORD;
+      lpNumberOfCharsRead  : Win32.LPDWORD;
+      lpReserved           : Win32.LPVOID)
+      return Win32.BOOL renames ReadConsoleA;
 
-   function ReadConsoleW (hConsoleInput : Win32.Winnt.HANDLE;
-                          lpBuffer : Win32.LPVOID;
-                          nNumberOfCharsToRead : Win32.DWORD;
-                          lpNumberOfCharsRead : Win32.LPDWORD;
-                          lpReserved : Win32.LPVOID)
-                         return Win32.BOOL;
-   --  wincon.h:646
+   function ReadConsoleW
+     (hConsoleInput        : Win32.Winnt.HANDLE;
+      lpBuffer             : Win32.LPVOID;
+      nNumberOfCharsToRead : Win32.DWORD;
+      lpNumberOfCharsRead  : Win32.LPDWORD;
+      lpReserved           : Win32.LPVOID)
+      return Win32.BOOL;
 
-   function WriteConsoleA (hConsoleOutput : Win32.Winnt.HANDLE;
-                           lpBuffer : Win32.PCVOID;
-                           nNumberOfCharsToWrite : Win32.DWORD;
-                           lpNumberOfCharsWritten : Win32.LPDWORD;
-                           lpReserved : Win32.LPVOID)
-                          return Win32.BOOL;
-   --  wincon.h:662
+   function WriteConsoleA
+     (hConsoleOutput         : Win32.Winnt.HANDLE;
+      lpBuffer               : Win32.PCVOID;
+      nNumberOfCharsToWrite  : Win32.DWORD;
+      lpNumberOfCharsWritten : Win32.LPDWORD;
+      lpReserved             : Win32.LPVOID)
+      return Win32.BOOL;
 
-   function WriteConsole (hConsoleOutput : Win32.Winnt.HANDLE;
-                          lpBuffer : Win32.PCVOID;
-                          nNumberOfCharsToWrite : Win32.DWORD;
-                          lpNumberOfCharsWritten : Win32.LPDWORD;
-                          lpReserved : Win32.LPVOID)
-                         return Win32.BOOL
-     renames WriteConsoleA;
-   --  wincon.h:662
+   function WriteConsole
+     (hConsoleOutput         : Win32.Winnt.HANDLE;
+      lpBuffer               : Win32.PCVOID;
+      nNumberOfCharsToWrite  : Win32.DWORD;
+      lpNumberOfCharsWritten : Win32.LPDWORD;
+      lpReserved             : Win32.LPVOID)
+      return Win32.BOOL renames WriteConsoleA;
 
-   function WriteConsoleW (hConsoleOutput : Win32.Winnt.HANDLE;
-                           lpBuffer : Win32.PCVOID;
-                           nNumberOfCharsToWrite : Win32.DWORD;
-                           lpNumberOfCharsWritten : Win32.LPDWORD;
-                           lpReserved : Win32.LPVOID)
-                          return Win32.BOOL;
-   --  wincon.h:672
+   function WriteConsoleW
+     (hConsoleOutput         : Win32.Winnt.HANDLE;
+      lpBuffer               : Win32.PCVOID;
+      nNumberOfCharsToWrite  : Win32.DWORD;
+      lpNumberOfCharsWritten : Win32.LPDWORD;
+      lpReserved             : Win32.LPVOID)
+      return Win32.BOOL;
 
    function CreateConsoleScreenBuffer
-     (dwDesiredAccess : Win32.DWORD;
-      dwShareMode : Win32.DWORD;
+     (dwDesiredAccess      : Win32.DWORD;
+      dwShareMode          : Win32.DWORD;
       lpSecurityAttributes : ac_SECURITY_ATTRIBUTES_t;
-      dwFlags : Win32.DWORD;
-      lpScreenBufferData : Win32.LPVOID)
-     return Win32.Winnt.HANDLE;         --  wincon.h:690
+      dwFlags              : Win32.DWORD;
+      lpScreenBufferData   : Win32.LPVOID)
+      return Win32.Winnt.HANDLE;
 
-   function GetConsoleCP return Win32.UINT;                --  wincon.h:701
+   function GetConsoleCP return Win32.UINT;
 
-   function SetConsoleCP (wCodePageID : Win32.UINT)
-         return Win32.BOOL;                                  --  wincon.h:706
+   function SetConsoleCP (wCodePageID : Win32.UINT) return Win32.BOOL;
 
-   function GetConsoleOutputCP return Win32.UINT;          --  wincon.h:713
+   function GetConsoleOutputCP return Win32.UINT;
 
-   function SetConsoleOutputCP (wCodePageID : Win32.UINT)
-      return Win32.BOOL;                            --  wincon.h:718
+   function SetConsoleOutputCP (wCodePageID : Win32.UINT) return Win32.BOOL;
 
 private
 
-   pragma Convention (C_Pass_By_Copy, COORD);                   --  wincon.h:29
-   pragma Convention (C_Pass_By_Copy, SMALL_RECT);              --  wincon.h:34
-   pragma Convention (C_Pass_By_Copy, KEY_EVENT_RECORD);        --  wincon.h:41
-   pragma Convention (C_Pass_By_Copy, MOUSE_EVENT_RECORD);      --  wincon.h:67
+   pragma Convention (C_Pass_By_Copy, COORD);
+   pragma Convention (C_Pass_By_Copy, SMALL_RECT);
+   pragma Convention (C_Pass_By_Copy, KEY_EVENT_RECORD);
+   pragma Convention (C_Pass_By_Copy, MOUSE_EVENT_RECORD);
    pragma Convention (C_Pass_By_Copy, WINDOW_BUFFER_SIZE_RECORD);
-   --  wincon.h:91
-   pragma Convention (C_Pass_By_Copy, MENU_EVENT_RECORD);       --  wincon.h:95
-   pragma Convention (C_Pass_By_Copy, FOCUS_EVENT_RECORD);      --  wincon.h:99
-   pragma Convention (C, INPUT_RECORD);                     --  wincon.h:103
-   pragma Convention (C_Pass_By_Copy, CHAR_INFO);              --  wincon.h:124
-   pragma Convention (C, CONSOLE_SCREEN_BUFFER_INFO);       --  wincon.h:146
-   pragma Convention (C_Pass_By_Copy, CONSOLE_CURSOR_INFO);    --  wincon.h:154
+   pragma Convention (C_Pass_By_Copy, MENU_EVENT_RECORD);
+   pragma Convention (C_Pass_By_Copy, FOCUS_EVENT_RECORD);
+   pragma Convention (C, INPUT_RECORD);
+   pragma Convention (C_Pass_By_Copy, CHAR_INFO);
+   pragma Convention (C, CONSOLE_SCREEN_BUFFER_INFO);
+   pragma Convention (C_Pass_By_Copy, CONSOLE_CURSOR_INFO);
 
    pragma Import (Stdcall, PeekConsoleInputA, "PeekConsoleInputA");
-   --  wincon.h:201
    pragma Import (Stdcall, PeekConsoleInputW, "PeekConsoleInputW");
-   --  wincon.h:210
    pragma Import (Stdcall, ReadConsoleInputA, "ReadConsoleInputA");
-   --  wincon.h:225
    pragma Import (Stdcall, ReadConsoleInputW, "ReadConsoleInputW");
-   --  wincon.h:234
    pragma Import (Stdcall, WriteConsoleInputA, "WriteConsoleInputA");
-   --  wincon.h:249
    pragma Import (Stdcall, WriteConsoleInputW, "WriteConsoleInputW");
-   --  wincon.h:258
    pragma Import (Stdcall, ReadConsoleOutputA, "ReadConsoleOutputA");
-   --  wincon.h:273
    pragma Import (Stdcall, ReadConsoleOutputW, "ReadConsoleOutputW");
-   --  wincon.h:283
    pragma Import (Stdcall, WriteConsoleOutputA, "WriteConsoleOutputA");
-   --  wincon.h:299
    pragma Import (Stdcall, WriteConsoleOutputW, "WriteConsoleOutputW");
-   --  wincon.h:309
-   pragma Import (Stdcall, ReadConsoleOutputCharacterA,
-                    "ReadConsoleOutputCharacterA");        --  wincon.h:325
-   pragma Import (Stdcall, ReadConsoleOutputCharacterW,
-                    "ReadConsoleOutputCharacterW");        --  wincon.h:335
-   pragma Import (Stdcall, ReadConsoleOutputAttribute,
-                    "ReadConsoleOutputAttribute");
-   --  wincon.h:351
-   pragma Import (Stdcall, WriteConsoleOutputCharacterA,
-                    "WriteConsoleOutputCharacterA");       --  wincon.h:362
-   pragma Import (Stdcall, WriteConsoleOutputCharacterW,
-                    "WriteConsoleOutputCharacterW");       --  wincon.h:372
-   pragma Import (Stdcall, WriteConsoleOutputAttribute,
-                    "WriteConsoleOutputAttribute");        --  wincon.h:388
-   pragma Import (Stdcall, FillConsoleOutputCharacterA,
-                    "FillConsoleOutputCharacterA");        --  wincon.h:399
-   pragma Import (Stdcall, FillConsoleOutputCharacterW,
-                    "FillConsoleOutputCharacterW");        --  wincon.h:409
-   pragma Import (Stdcall, FillConsoleOutputAttribute,
-                    "FillConsoleOutputAttribute");
-   --  wincon.h:425
-   pragma Import (Stdcall, GetConsoleMode, "GetConsoleMode");  --  wincon.h:436
-   pragma Import (Stdcall, GetNumberOfConsoleInputEvents,
-                    "GetNumberOfConsoleInputEvents");      --  wincon.h:444
-   pragma Import (Stdcall, GetConsoleScreenBufferInfo,
-                    "GetConsoleScreenBufferInfo");
-   --  wincon.h:452
+   pragma Import
+     (Stdcall,
+      ReadConsoleOutputCharacterA,
+      "ReadConsoleOutputCharacterA");
+   pragma Import
+     (Stdcall,
+      ReadConsoleOutputCharacterW,
+      "ReadConsoleOutputCharacterW");
+   pragma Import
+     (Stdcall,
+      ReadConsoleOutputAttribute,
+      "ReadConsoleOutputAttribute");
+   pragma Import
+     (Stdcall,
+      WriteConsoleOutputCharacterA,
+      "WriteConsoleOutputCharacterA");
+   pragma Import
+     (Stdcall,
+      WriteConsoleOutputCharacterW,
+      "WriteConsoleOutputCharacterW");
+   pragma Import
+     (Stdcall,
+      WriteConsoleOutputAttribute,
+      "WriteConsoleOutputAttribute");
+   pragma Import
+     (Stdcall,
+      FillConsoleOutputCharacterA,
+      "FillConsoleOutputCharacterA");
+   pragma Import
+     (Stdcall,
+      FillConsoleOutputCharacterW,
+      "FillConsoleOutputCharacterW");
+   pragma Import
+     (Stdcall,
+      FillConsoleOutputAttribute,
+      "FillConsoleOutputAttribute");
+   pragma Import (Stdcall, GetConsoleMode, "GetConsoleMode");
+   pragma Import
+     (Stdcall,
+      GetNumberOfConsoleInputEvents,
+      "GetNumberOfConsoleInputEvents");
+   pragma Import
+     (Stdcall,
+      GetConsoleScreenBufferInfo,
+      "GetConsoleScreenBufferInfo");
    pragma Import (Stdcall, GetConsoleCursorInfo, "GetConsoleCursorInfo");
-   --  wincon.h:467
-   pragma Import (Stdcall, GetNumberOfConsoleMouseButtons,
-                    "GetNumberOfConsoleMouseButtons");     --  wincon.h:475
-   pragma Import (Stdcall, SetConsoleMode, "SetConsoleMode");  --  wincon.h:482
-   pragma Import (Stdcall, SetConsoleActiveScreenBuffer,
-                    "SetConsoleActiveScreenBuffer");       --  wincon.h:490
-   pragma Import (Stdcall, FlushConsoleInputBuffer, "FlushConsoleInputBuffer");
-   --  wincon.h:497
-   pragma Import (Stdcall, SetConsoleScreenBufferSize,
-                    "SetConsoleScreenBufferSize");
-   --  wincon.h:504
-   pragma Import (Stdcall, SetConsoleCursorPosition,
-                    "SetConsoleCursorPosition");
-   --  wincon.h:512
+   pragma Import
+     (Stdcall,
+      GetNumberOfConsoleMouseButtons,
+      "GetNumberOfConsoleMouseButtons");
+   pragma Import (Stdcall, SetConsoleMode, "SetConsoleMode");
+   pragma Import
+     (Stdcall,
+      SetConsoleActiveScreenBuffer,
+      "SetConsoleActiveScreenBuffer");
+   pragma Import
+     (Stdcall,
+      FlushConsoleInputBuffer,
+      "FlushConsoleInputBuffer");
+   pragma Import
+     (Stdcall,
+      SetConsoleScreenBufferSize,
+      "SetConsoleScreenBufferSize");
+   pragma Import
+     (Stdcall,
+      SetConsoleCursorPosition,
+      "SetConsoleCursorPosition");
    pragma Import (Stdcall, SetConsoleCursorInfo, "SetConsoleCursorInfo");
-   --  wincon.h:520
-   pragma Import (Stdcall, ScrollConsoleScreenBufferA,
-                    "ScrollConsoleScreenBufferA");
-   --  wincon.h:528
-   pragma Import (Stdcall, ScrollConsoleScreenBufferW,
-                    "ScrollConsoleScreenBufferW");
-   --  wincon.h:538
+   pragma Import
+     (Stdcall,
+      ScrollConsoleScreenBufferA,
+      "ScrollConsoleScreenBufferA");
+   pragma Import
+     (Stdcall,
+      ScrollConsoleScreenBufferW,
+      "ScrollConsoleScreenBufferW");
    pragma Import (Stdcall, SetConsoleWindowInfo, "SetConsoleWindowInfo");
-   --  wincon.h:554
-   pragma Import (Stdcall, SetConsoleTextAttribute, "SetConsoleTextAttribute");
-   --  wincon.h:563
+   pragma Import
+     (Stdcall,
+      SetConsoleTextAttribute,
+      "SetConsoleTextAttribute");
    pragma Import (Stdcall, SetConsoleCtrlHandler, "SetConsoleCtrlHandler");
-   --  wincon.h:571
-   pragma Import (Stdcall, GenerateConsoleCtrlEvent,
-                    "GenerateConsoleCtrlEvent");
-   --  wincon.h:579
-   pragma Import (Stdcall, AllocConsole, "AllocConsole");      --  wincon.h:587
-   pragma Import (Stdcall, FreeConsole, "FreeConsole");        --  wincon.h:592
+   pragma Import
+     (Stdcall,
+      GenerateConsoleCtrlEvent,
+      "GenerateConsoleCtrlEvent");
+   pragma Import (Stdcall, AllocConsole, "AllocConsole");
+   pragma Import (Stdcall, FreeConsole, "FreeConsole");
    pragma Import (Stdcall, GetConsoleTitleA, "GetConsoleTitleA");
-   --  wincon.h:598
    pragma Import (Stdcall, GetConsoleTitleW, "GetConsoleTitleW");
-   --  wincon.h:605
    pragma Import (Stdcall, SetConsoleTitleA, "SetConsoleTitleA");
-   --  wincon.h:618
    pragma Import (Stdcall, SetConsoleTitleW, "SetConsoleTitleW");
-   --  wincon.h:624
-   pragma Import (Stdcall, ReadConsoleA, "ReadConsoleA");      --  wincon.h:636
-   pragma Import (Stdcall, ReadConsoleW, "ReadConsoleW");      --  wincon.h:646
-   pragma Import (Stdcall, WriteConsoleA, "WriteConsoleA");    --  wincon.h:662
-   pragma Import (Stdcall, WriteConsoleW, "WriteConsoleW");    --  wincon.h:672
-   pragma Import (Stdcall, CreateConsoleScreenBuffer,
-                    "CreateConsoleScreenBuffer");
-   --  wincon.h:690
-   pragma Import (Stdcall, GetConsoleCP, "GetConsoleCP");      --  wincon.h:701
-   pragma Import (Stdcall, SetConsoleCP, "SetConsoleCP");      --  wincon.h:706
+   pragma Import (Stdcall, ReadConsoleA, "ReadConsoleA");
+   pragma Import (Stdcall, ReadConsoleW, "ReadConsoleW");
+   pragma Import (Stdcall, WriteConsoleA, "WriteConsoleA");
+   pragma Import (Stdcall, WriteConsoleW, "WriteConsoleW");
+   pragma Import
+     (Stdcall,
+      CreateConsoleScreenBuffer,
+      "CreateConsoleScreenBuffer");
+   pragma Import (Stdcall, GetConsoleCP, "GetConsoleCP");
+   pragma Import (Stdcall, SetConsoleCP, "SetConsoleCP");
    pragma Import (Stdcall, GetConsoleOutputCP, "GetConsoleOutputCP");
-   --  wincon.h:713
    pragma Import (Stdcall, SetConsoleOutputCP, "SetConsoleOutputCP");
-   --  wincon.h:718
 
 end Win32.Wincon;

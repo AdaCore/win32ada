@@ -1,19 +1,19 @@
 -------------------------------------------------------------------------------
 --
---  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS PROVIDED WITHOUT CHARGE
---  "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
---  BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR
---  FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the entire risk as to
---  the accuracy and the use of this file.  This file may be used, copied,
---  modified and distributed only by licensees of Microsoft Corporation's
---  WIN32 Software Development Kit in accordance with the terms of the
---  licensee's End-User License Agreement for Microsoft Software for the
---  WIN32 Development Kit.
+--  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS FURNISHED "AS IS"
+--  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
+--  BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY
+--  AND/OR FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the
+--  entire risk as to the accuracy and the use of this file.
 --
---  Copyright (c) Intermetrics, Inc. 1995
---  Portions (c) 1985-1994 Microsoft Corporation with permission.
---  Microsoft is a registered trademark and Windows and Windows NT are
---  trademarks of Microsoft Corporation.
+--  Copyright (C) Intermetrics, Inc. 1995
+--  Royalty-free, unlimited, worldwide, non-exclusive use, modification,
+--  reproduction and further distribution of this file is permitted.
+--
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (C) 2000-2010, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -30,7 +30,8 @@ package Win32.Aclapi is
       ppsidGroup           : access Winnt.PSID;
       ppDacl               : access Winnt.PACL;
       ppSacl               : access Winnt.PACL;
-      ppSecurityDescriptor : Winnt.PSECURITY_DESCRIPTOR) return DWORD;
+      ppSecurityDescriptor : Winnt.PSECURITY_DESCRIPTOR)
+      return DWORD;
 
    function GetNamedSecurityInfo
      (pObjectName          : Winnt.LPTSTR;
@@ -40,7 +41,8 @@ package Win32.Aclapi is
       ppsidGroup           : access Winnt.PSID;
       ppDacl               : access Winnt.PACL;
       ppSacl               : access Winnt.PACL;
-      ppSecurityDescriptor : Winnt.PSECURITY_DESCRIPTOR) return DWORD;
+      ppSecurityDescriptor : Winnt.PSECURITY_DESCRIPTOR)
+      return DWORD;
 
    function SetNamedSecurityInfo
      (pObjectName         : Winnt.LPTSTR;
@@ -49,13 +51,15 @@ package Win32.Aclapi is
       psidOwner           : Winnt.PSID;
       psidGroup           : Winnt.PSID;
       pDacl               : Winnt.PACL;
-      pSacl               : Winnt.PACL) return DWORD;
+      pSacl               : Winnt.PACL)
+      return DWORD;
 
    function SetEntriesInAcl
      (cCountOfExplicitEntries : ULONG;
       pListOfExplicitEntries  : AccCtrl.PEXPLICIT_ACCESS;
       OldAcl                  : Winnt.PACL;
-      NewAcl                  : access Winnt.PACL) return DWORD;
+      NewAcl                  : access Winnt.PACL)
+      return DWORD;
 
    procedure BuildExplicitAccessWithName
      (pExplicitAccess   : AccCtrl.PEXPLICIT_ACCESS;
@@ -67,7 +71,8 @@ package Win32.Aclapi is
    function GetExplicitEntriesFromAcl
      (pacl                     : Winnt.PACL;
       pcCountOfExplicitEntries : Win32.PULONG;
-      pListOfExplicitEntries   : access AccCtrl.PEXPLICIT_ACCESS) return DWORD;
+      pListOfExplicitEntries   : access AccCtrl.PEXPLICIT_ACCESS)
+      return DWORD;
 
 private
 
@@ -76,8 +81,12 @@ private
    pragma Import (Stdcall, SetNamedSecurityInfo, "SetNamedSecurityInfoA");
    pragma Import (Stdcall, SetEntriesInAcl, "SetEntriesInAclA");
    pragma Import
-     (Stdcall, BuildExplicitAccessWithName, "BuildExplicitAccessWithName");
+     (Stdcall,
+      BuildExplicitAccessWithName,
+      "BuildExplicitAccessWithName");
    pragma Import
-     (Stdcall, GetExplicitEntriesFromAcl, "GetExplicitEntriesFromAclA");
+     (Stdcall,
+      GetExplicitEntriesFromAcl,
+      "GetExplicitEntriesFromAclA");
 
 end Win32.Aclapi;

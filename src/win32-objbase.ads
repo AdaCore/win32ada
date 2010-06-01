@@ -1,4 +1,21 @@
---  See end of file for Copyright (c) information.
+-------------------------------------------------------------------------------
+--
+--  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS FURNISHED "AS IS"
+--  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
+--  BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY
+--  AND/OR FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the
+--  entire risk as to the accuracy and the use of this file.
+--
+--  Copyright (C) Intermetrics, Inc. 1995
+--  Royalty-free, unlimited, worldwide, non-exclusive use, modification,
+--  reproduction and further distribution of this file is permitted.
+--
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (C) 2000-2010, AdaCore
+--
+-------------------------------------------------------------------------------
 
 with Win32.Rpcdce;
 with Win32.Rpcdcep;
@@ -9,2956 +26,2761 @@ with Win32.Winnt;
 
 package Win32.Objbase is
 
+   MARSHALINTERFACE_MIN            : constant := 500;
+   CWCSTORAGENAME                  : constant := 32;
+   STGM_DIRECT                     : constant := 16#0#;
+   STGM_TRANSACTED                 : constant := 16#10000#;
+   STGM_READ                       : constant := 16#0#;
+   STGM_WRITE                      : constant := 16#1#;
+   STGM_READWRITE                  : constant := 16#2#;
+   STGM_SHARE_DENY_NONE            : constant := 16#40#;
+   STGM_SHARE_DENY_READ            : constant := 16#30#;
+   STGM_SHARE_DENY_WRITE           : constant := 16#20#;
+   STGM_SHARE_EXCLUSIVE            : constant := 16#10#;
+   STGM_PRIORITY                   : constant := 16#40000#;
+   STGM_DELETEONRELEASE            : constant := 16#4000000#;
+   STGM_CREATE                     : constant := 16#1000#;
+   STGM_CONVERT                    : constant := 16#20000#;
+   STGM_FAILIFTHERE                : constant := 16#0#;
+   ROTFLAGS_REGISTRATIONKEEPSALIVE : constant := 1;
 
-   MARSHALINTERFACE_MIN            : constant :=  500;       --  objbase.h :274
-   CWCSTORAGENAME                  : constant :=  32;        --  objbase.h :284
-   STGM_DIRECT                     : constant :=  16#0#;     --  objbase.h :287
-   STGM_TRANSACTED                 : constant :=  16#10000#; --  objbase.h :288
-   STGM_READ                       : constant :=  16#0#;     --  objbase.h :290
-   STGM_WRITE                      : constant :=  16#1#;     --  objbase.h :291
-   STGM_READWRITE                  : constant :=  16#2#;     --  objbase.h :292
-   STGM_SHARE_DENY_NONE            : constant :=  16#40#;    --  objbase.h :294
-   STGM_SHARE_DENY_READ            : constant :=  16#30#;    --  objbase.h :295
-   STGM_SHARE_DENY_WRITE           : constant :=  16#20#;    --  objbase.h :296
-   STGM_SHARE_EXCLUSIVE            : constant :=  16#10#;    --  objbase.h :297
-   STGM_PRIORITY                   : constant :=  16#40000#; --  objbase.h :299
-   STGM_DELETEONRELEASE            : constant :=  16#4000000#;
-   --  objbase.h:300
-   STGM_CREATE                     : constant :=  16#1000#;  --  objbase.h :302
-   STGM_CONVERT                    : constant :=  16#20000#; --  objbase.h :303
-   STGM_FAILIFTHERE                : constant :=  16#0#;     --  objbase.h :304
-   ROTFLAGS_REGISTRATIONKEEPSALIVE : constant :=  1;        --  objbase.h :1013
+   type REGCLS is (
+      REGCLS_SINGLEUSE,
+      REGCLS_MULTIPLEUSE,
+      REGCLS_MULTI_SEPARATE);
+   for REGCLS'Size use 32;
 
+   type OLECHAR is new Win32.WCHAR;
+   subtype SCODE is Win32.Winerror.SCODE;
+   subtype HRESULT is Win32.Winerror.HRESULT;
 
-   type REGCLS is ( --  objbase.h :264
-     REGCLS_SINGLEUSE,                                   --  objbase.h :266
-     REGCLS_MULTIPLEUSE,                                 --  objbase.h :267
-     REGCLS_MULTI_SEPARATE                               --  objbase.h :271
-                  );
-   for REGCLS'Size use 32;                                 --  objbase.h :264
+   subtype STDAPI is HRESULT;
+   subtype STDMETHODIMP is HRESULT;
+   subtype STDAPIV is HRESULT;
+   subtype STDMETHODIMPV is HRESULT;
+   subtype WINOLEAPI is HRESULT;
 
-   type OLECHAR is new Win32.WCHAR;                        --  objbase.h :728
-   subtype SCODE is Win32.Winerror.SCODE;                  --  objbase.h :907
-   subtype HRESULT is Win32.Winerror.HRESULT;              --  objbase.h :910
+   type MEMCTX is (
+      MEMCTX_SAME,
+      MEMCTX_UNKNOWN,
+      MEMCTX_TASK,
+      MEMCTX_SHARED,
+      MEMCTX_MACSYSTEM);
+   for MEMCTX use
+     (MEMCTX_SAME      => -2,
+      MEMCTX_UNKNOWN   => -1,
+      MEMCTX_TASK      => 1,
+      MEMCTX_SHARED    => 2,
+      MEMCTX_MACSYSTEM => 3);
+   for MEMCTX'Size use 32;
 
-   subtype STDAPI   is HRESULT;                            --  objbase.h :61
-   subtype STDMETHODIMP  is HRESULT;                       --  objbase.h :64
-   subtype STDAPIV  is HRESULT;                            --  objbase.h :69
-   subtype STDMETHODIMPV  is HRESULT;                      --  objbase.h :72
-   subtype WINOLEAPI  is HRESULT;                          --  objbase.h :79
+   type CLSCTX is (
+      CLSCTX_INPROC_SERVER,
+      CLSCTX_INPROC_HANDLER,
+      CLSCTX_LOCAL_SERVER,
+      CLSCTX_INPROC_SERVER16);
+   for CLSCTX use
+     (CLSCTX_INPROC_SERVER   => 1,
+      CLSCTX_INPROC_HANDLER  => 2,
+      CLSCTX_LOCAL_SERVER    => 4,
+      CLSCTX_INPROC_SERVER16 => 8);
+   for CLSCTX'Size use 32;
+   function "or"
+     (l, r : Interfaces.C.unsigned)
+      return Interfaces.C.unsigned renames Interfaces.C."or";
 
+   type MSHLFLAGS is (
+      MSHLFLAGS_NORMAL,
+      MSHLFLAGS_TABLESTRONG,
+      MSHLFLAGS_TABLEWEAK);
+   for MSHLFLAGS'Size use 32;
 
+   type MSHCTX is (MSHCTX_LOCAL, MSHCTX_NOSHAREDMEM, MSHCTX_DIFFERENTMACHINE);
+   for MSHCTX'Size use 32;
 
-   type MEMCTX is ( --  objbase.h :1003
-     MEMCTX_SAME,                                        --  objbase.h :1009
-     MEMCTX_UNKNOWN,                                     --  objbase.h :1007
-     MEMCTX_TASK,                                        --  objbase.h :1004
-     MEMCTX_SHARED,                                      --  objbase.h :1005
-     MEMCTX_MACSYSTEM                                    --  objbase.h :1006
-                  );
-   for MEMCTX use ( --  objbase.h :1003
-      MEMCTX_SAME => -2,                                  --  objbase.h :1009
-      MEMCTX_UNKNOWN => -1,                               --  objbase.h :1007
-      MEMCTX_TASK => 1,                                   --  objbase.h :1004
-      MEMCTX_SHARED => 2,                                 --  objbase.h :1005
-      MEMCTX_MACSYSTEM => 3                               --  objbase.h :1006
-                  );
-   for MEMCTX'Size use 32;                                 --  objbase.h :1003
+   type DVASPECT is (
+      DVASPECT_CONTENT,
+      DVASPECT_THUMBNAIL,
+      DVASPECT_ICON,
+      DVASPECT_DOCPRINT);
+   for DVASPECT use
+     (DVASPECT_CONTENT   => 1,
+      DVASPECT_THUMBNAIL => 2,
+      DVASPECT_ICON      => 4,
+      DVASPECT_DOCPRINT  => 8);
+   for DVASPECT'Size use 32;
 
-   type CLSCTX is ( --  objbase.h :1017
-     CLSCTX_INPROC_SERVER,                               --  objbase.h :1018
-     CLSCTX_INPROC_HANDLER,                              --  objbase.h :1019
-     CLSCTX_LOCAL_SERVER,                                --  objbase.h :1020
-     CLSCTX_INPROC_SERVER16                              --  objbase.h :1022
-                  );
-   for CLSCTX use ( --  objbase.h :1017
-      CLSCTX_INPROC_SERVER => 1,                          --  objbase.h :1018
-      CLSCTX_INPROC_HANDLER => 2,                         --  objbase.h :1019
-      CLSCTX_LOCAL_SERVER => 4,                           --  objbase.h :1020
-      CLSCTX_INPROC_SERVER16 => 8                         --  objbase.h :1022
-                  );
-   for CLSCTX'Size use 32;                                 --  objbase.h :1017
-   function "or"(l, r : Interfaces.C.unsigned)
-                return Interfaces.C.unsigned
-     renames Interfaces.C."or";
+   type STGC is (
+      STGC_DEFAULT,
+      STGC_OVERWRITE,
+      STGC_ONLYIFCURRENT,
+      STGC_DANGEROUSLYCOMMITMERELYTODISKCACHE);
+   for STGC use
+     (STGC_DEFAULT                            => 0,
+      STGC_OVERWRITE                          => 1,
+      STGC_ONLYIFCURRENT                      => 2,
+      STGC_DANGEROUSLYCOMMITMERELYTODISKCACHE => 4);
+   for STGC'Size use 32;
 
+   type STGMOVE is (STGMOVE_MOVE, STGMOVE_COPY);
+   for STGMOVE'Size use 32;
 
-   type MSHLFLAGS is ( --  objbase.h :1026
-     MSHLFLAGS_NORMAL,                                   --  objbase.h :1027
-     MSHLFLAGS_TABLESTRONG,                              --  objbase.h :1028
-     MSHLFLAGS_TABLEWEAK                                 --  objbase.h :1030
-                     );
-   for MSHLFLAGS'Size use 32;                              --  objbase.h :1026
+   type STATFLAG is (STATFLAG_DEFAULT, STATFLAG_NONAME);
+   for STATFLAG'Size use 32;
 
-   type MSHCTX is ( --  objbase.h :1034
-     MSHCTX_LOCAL,                                       --  objbase.h :1035
-     MSHCTX_NOSHAREDMEM,                                 --  objbase.h :1036
-     MSHCTX_DIFFERENTMACHINE                             --  objbase.h :1038
-                  );
-   for MSHCTX'Size use 32;                                 --  objbase.h :1034
+   type EXTCONN is (EXTCONN_STRONG, EXTCONN_WEAK, EXTCONN_CALLABLE);
+   for EXTCONN use
+     (EXTCONN_STRONG   => 1,
+      EXTCONN_WEAK     => 2,
+      EXTCONN_CALLABLE => 4);
+   for EXTCONN'Size use 32;
 
-   type DVASPECT is ( --  objbase.h :1042
-     DVASPECT_CONTENT,                                   --  objbase.h :1043
-     DVASPECT_THUMBNAIL,                                 --  objbase.h :1044
-     DVASPECT_ICON,                                      --  objbase.h :1045
-     DVASPECT_DOCPRINT                                   --  objbase.h :1047
-                    );
-   for DVASPECT use ( --  objbase.h :1042
-      DVASPECT_CONTENT => 1,                              --  objbase.h :1043
-      DVASPECT_THUMBNAIL => 2,                            --  objbase.h :1044
-      DVASPECT_ICON => 4,                                 --  objbase.h :1045
-      DVASPECT_DOCPRINT => 8                              --  objbase.h :1047
-                    );
-   for DVASPECT'Size use 32;                               --  objbase.h :1042
+   type BIND_FLAGS is (BIND_MAYBOTHERUSER, BIND_JUSTTESTEXISTENCE);
+   for BIND_FLAGS use (BIND_MAYBOTHERUSER => 1, BIND_JUSTTESTEXISTENCE => 2);
+   for BIND_FLAGS'Size use 32;
 
-   type STGC is ( --  objbase.h :1051
-     STGC_DEFAULT,                                       --  objbase.h :1052
-     STGC_OVERWRITE,                                     --  objbase.h :1053
-     STGC_ONLYIFCURRENT,                                 --  objbase.h :1054
-     STGC_DANGEROUSLYCOMMITMERELYTODISKCACHE             --  objbase.h :1056
-                );
-   for STGC use ( --  objbase.h :1051
-      STGC_DEFAULT => 0,                                  --  objbase.h :1052
-      STGC_OVERWRITE => 1,                                --  objbase.h :1053
-      STGC_ONLYIFCURRENT => 2,                            --  objbase.h :1054
-      STGC_DANGEROUSLYCOMMITMERELYTODISKCACHE => 4        --  objbase.h :1056
-                );
-   for STGC'Size use 32;                                   --  objbase.h :1051
+   type MKSYS is (
+      MKSYS_NONE,
+      MKSYS_GENERICCOMPOSITE,
+      MKSYS_FILEMONIKER,
+      MKSYS_ANTIMONIKER,
+      MKSYS_ITEMMONIKER,
+      MKSYS_POINTERMONIKER);
+   for MKSYS'Size use 32;
 
-   type STGMOVE is ( --  objbase.h :1060
-     STGMOVE_MOVE,                                       --  objbase.h :1061
-     STGMOVE_COPY                                        --  objbase.h :1063
-                   );
-   for STGMOVE'Size use 32;                                --  objbase.h :1060
+   type MKREDUCE is (
+      MKRREDUCE_ALL,
+      MKRREDUCE_THROUGHUSER,
+      MKRREDUCE_TOUSER,
+      MKRREDUCE_ONE);
+   for MKREDUCE use
+     (MKRREDUCE_ALL         => 0,
+      MKRREDUCE_THROUGHUSER => 65536,
+      MKRREDUCE_TOUSER      => 131072,
+      MKRREDUCE_ONE         => 196608);
+   for MKREDUCE'Size use 32;
 
-   type STATFLAG is ( --  objbase.h :1067
-     STATFLAG_DEFAULT,                                   --  objbase.h :1068
-     STATFLAG_NONAME                                     --  objbase.h :1070
-                    );
-   for STATFLAG'Size use 32;                               --  objbase.h :1067
+   type STGTY is (
+      STGTY_STORAGE,
+      STGTY_STREAM,
+      STGTY_LOCKBYTES,
+      STGTY_PROPERTY);
+   for STGTY use
+     (STGTY_STORAGE   => 1,
+      STGTY_STREAM    => 2,
+      STGTY_LOCKBYTES => 3,
+      STGTY_PROPERTY  => 4);
+   for STGTY'Size use 32;
 
-   type EXTCONN is ( --  objbase.h :2232
-     EXTCONN_STRONG,                                     --  objbase.h :2233
-     EXTCONN_WEAK,                                       --  objbase.h :2234
-     EXTCONN_CALLABLE                                    --  objbase.h :2236
-                   );
-   for EXTCONN use ( --  objbase.h :2232
-      EXTCONN_STRONG => 1,                                --  objbase.h :2233
-      EXTCONN_WEAK => 2,                                  --  objbase.h :2234
-      EXTCONN_CALLABLE => 4                               --  objbase.h :2236
-                   );
-   for EXTCONN'Size use 32;                                --  objbase.h :2232
+   type STREAM_SEEK is (STREAM_SEEK_SET, STREAM_SEEK_CUR, STREAM_SEEK_END);
+   for STREAM_SEEK'Size use 32;
 
-   type BIND_FLAGS is ( --  objbase.h :2665
-     BIND_MAYBOTHERUSER,                                 --  objbase.h :2666
-     BIND_JUSTTESTEXISTENCE                              --  objbase.h :2668
-                      );
-   for BIND_FLAGS use ( --  objbase.h :2665
-      BIND_MAYBOTHERUSER => 1,                            --  objbase.h :2666
-      BIND_JUSTTESTEXISTENCE => 2                         --  objbase.h :2668
-                      );
-   for BIND_FLAGS'Size use 32;                             --  objbase.h :2665
+   type LOCKTYPE is (LOCK_WRITE, LOCK_EXCLUSIVE, LOCK_ONLYONCE);
+   for LOCKTYPE use
+     (LOCK_WRITE     => 1,
+      LOCK_EXCLUSIVE => 2,
+      LOCK_ONLYONCE  => 4);
+   for LOCKTYPE'Size use 32;
 
-   type MKSYS is ( --  objbase.h :3928
-     MKSYS_NONE,                                         --  objbase.h :3929
-     MKSYS_GENERICCOMPOSITE,                             --  objbase.h :3930
-     MKSYS_FILEMONIKER,                                  --  objbase.h :3931
-     MKSYS_ANTIMONIKER,                                  --  objbase.h :3932
-     MKSYS_ITEMMONIKER,                                  --  objbase.h :3933
-     MKSYS_POINTERMONIKER                                --  objbase.h :3935
-                 );
-   for MKSYS'Size use 32;                                  --  objbase.h :3928
+   type CLIPFORMAT is new Win32.WORD;
 
-   type MKREDUCE is ( --  objbase.h :3939
-     MKRREDUCE_ALL,                                      --  objbase.h :3944
-     MKRREDUCE_THROUGHUSER,                              --  objbase.h :3942
-     MKRREDUCE_TOUSER,                                   --  objbase.h :3941
-     MKRREDUCE_ONE                                       --  objbase.h :3940
-                    );
-   for MKREDUCE use ( --  objbase.h :3939
-      MKRREDUCE_ALL => 0,                                 --  objbase.h :3944
-      MKRREDUCE_THROUGHUSER => 65536,                     --  objbase.h :3942
-      MKRREDUCE_TOUSER => 131072,                         --  objbase.h :3941
-      MKRREDUCE_ONE => 196608                             --  objbase.h :3940
-                    );
-   for MKREDUCE'Size use 32;                               --  objbase.h :3939
+   type ADVF is (
+      ADVF_NODATA,
+      ADVF_PRIMEFIRST,
+      ADVF_ONLYONCE,
+      ADVFCACHE_NOHANDLER,
+      ADVFCACHE_FORCEBUILTIN,
+      ADVFCACHE_ONSAVE,
+      ADVF_DATAONSTOP);
+   for ADVF use
+     (ADVF_NODATA            => 1,
+      ADVF_PRIMEFIRST        => 2,
+      ADVF_ONLYONCE          => 4,
+      ADVFCACHE_NOHANDLER    => 8,
+      ADVFCACHE_FORCEBUILTIN => 16,
+      ADVFCACHE_ONSAVE       => 32,
+      ADVF_DATAONSTOP        => 64);
+   for ADVF'Size use 32;
 
-   type STGTY is ( --  objbase.h :4640
-     STGTY_STORAGE,                                      --  objbase.h :4641
-     STGTY_STREAM,                                       --  objbase.h :4642
-     STGTY_LOCKBYTES,                                    --  objbase.h :4643
-     STGTY_PROPERTY                                      --  objbase.h :4645
-                 );
-   for STGTY use ( --  objbase.h :4640
-      STGTY_STORAGE => 1,                                 --  objbase.h :4641
-      STGTY_STREAM => 2,                                  --  objbase.h :4642
-      STGTY_LOCKBYTES => 3,                               --  objbase.h :4643
-      STGTY_PROPERTY => 4                                 --  objbase.h :4645
-                 );
-   for STGTY'Size use 32;                                  --  objbase.h :4640
+   type TYMED is (
+      TYMED_NULL,
+      TYMED_HGLOBAL,
+      TYMED_FILE,
+      TYMED_ISTREAM,
+      TYMED_ISTORAGE,
+      TYMED_GDI,
+      TYMED_MFPICT,
+      TYMED_ENHMF);
+   for TYMED use
+     (TYMED_NULL     => 0,
+      TYMED_HGLOBAL  => 1,
+      TYMED_FILE     => 2,
+      TYMED_ISTREAM  => 4,
+      TYMED_ISTORAGE => 8,
+      TYMED_GDI      => 16,
+      TYMED_MFPICT   => 32,
+      TYMED_ENHMF    => 64);
+   for TYMED'Size use 32;
 
-   type STREAM_SEEK is ( --  objbase.h :4649
-     STREAM_SEEK_SET,                                    --  objbase.h :4650
-     STREAM_SEEK_CUR,                                    --  objbase.h :4651
-     STREAM_SEEK_END                                     --  objbase.h :4653
-                       );
-   for STREAM_SEEK'Size use 32;                            --  objbase.h :4649
+   type DATADIR is (DATADIR_GET, DATADIR_SET);
+   for DATADIR use (DATADIR_GET => 1, DATADIR_SET => 2);
+   for DATADIR'Size use 32;
 
-   type LOCKTYPE is ( --  objbase.h :4657
-     LOCK_WRITE,                                         --  objbase.h :4658
-     LOCK_EXCLUSIVE,                                     --  objbase.h :4659
-     LOCK_ONLYONCE                                       --  objbase.h :4661
-                    );
-   for LOCKTYPE use ( --  objbase.h :4657
-      LOCK_WRITE => 1,                                    --  objbase.h :4658
-      LOCK_EXCLUSIVE => 2,                                --  objbase.h :4659
-      LOCK_ONLYONCE => 4                                  --  objbase.h :4661
-                    );
-   for LOCKTYPE'Size use 32;                               --  objbase.h :4657
+   type CALLTYPE is (
+      CALLTYPE_TOPLEVEL,
+      CALLTYPE_NESTED,
+      CALLTYPE_ASYNC,
+      CALLTYPE_TOPLEVEL_CALLPENDING,
+      CALLTYPE_ASYNC_CALLPENDING);
+   for CALLTYPE use
+     (CALLTYPE_TOPLEVEL             => 1,
+      CALLTYPE_NESTED               => 2,
+      CALLTYPE_ASYNC                => 3,
+      CALLTYPE_TOPLEVEL_CALLPENDING => 4,
+      CALLTYPE_ASYNC_CALLPENDING    => 5);
+   for CALLTYPE'Size use 32;
 
-   type CLIPFORMAT is new Win32.WORD;                      --  objbase.h :6365
+   type SERVERCALL is (
+      SERVERCALL_ISHANDLED,
+      SERVERCALL_REJECTED,
+      SERVERCALL_RETRYLATER);
+   for SERVERCALL'Size use 32;
 
-   type ADVF is ( --  objbase.h :6549
-     ADVF_NODATA,                                        --  objbase.h :6550
-     ADVF_PRIMEFIRST,                                    --  objbase.h :6551
-     ADVF_ONLYONCE,                                      --  objbase.h :6552
-     ADVFCACHE_NOHANDLER,                                --  objbase.h :6554
-     ADVFCACHE_FORCEBUILTIN,                             --  objbase.h :6555
-     ADVFCACHE_ONSAVE,                                   --  objbase.h :6557
-     ADVF_DATAONSTOP                                     --  objbase.h :6553
-                );
-   for ADVF use ( --  objbase.h :6549
-      ADVF_NODATA => 1,                                   --  objbase.h :6550
-      ADVF_PRIMEFIRST => 2,                               --  objbase.h :6551
-      ADVF_ONLYONCE => 4,                                 --  objbase.h :6552
-      ADVFCACHE_NOHANDLER => 8,                           --  objbase.h :6554
-      ADVFCACHE_FORCEBUILTIN => 16,                       --  objbase.h :6555
-      ADVFCACHE_ONSAVE => 32,                             --  objbase.h :6557
-      ADVF_DATAONSTOP => 64                               --  objbase.h :6553
-                );
-   for ADVF'Size use 32;                                   --  objbase.h :6549
+   type PENDINGTYPE is (PENDINGTYPE_TOPLEVEL, PENDINGTYPE_NESTED);
+   for PENDINGTYPE use (PENDINGTYPE_TOPLEVEL => 1, PENDINGTYPE_NESTED => 2);
+   for PENDINGTYPE'Size use 32;
 
-   type TYMED is ( --  objbase.h :6832
-     TYMED_NULL,                                         --  objbase.h :6841
-     TYMED_HGLOBAL,                                      --  objbase.h :6833
-     TYMED_FILE,                                         --  objbase.h :6834
-     TYMED_ISTREAM,                                      --  objbase.h :6835
-     TYMED_ISTORAGE,                                     --  objbase.h :6836
-     TYMED_GDI,                                          --  objbase.h :6837
-     TYMED_MFPICT,                                       --  objbase.h :6838
-     TYMED_ENHMF                                         --  objbase.h :6839
-                 );
-   for TYMED use ( --  objbase.h :6832
-      TYMED_NULL => 0,                                    --  objbase.h :6841
-      TYMED_HGLOBAL => 1,                                 --  objbase.h :6833
-      TYMED_FILE => 2,                                    --  objbase.h :6834
-      TYMED_ISTREAM => 4,                                 --  objbase.h :6835
-      TYMED_ISTORAGE => 8,                                --  objbase.h :6836
-      TYMED_GDI => 16,                                    --  objbase.h :6837
-      TYMED_MFPICT => 32,                                 --  objbase.h :6838
-      TYMED_ENHMF => 64                                   --  objbase.h :6839
-                 );
-   for TYMED'Size use 32;                                  --  objbase.h :6832
+   type PENDINGMSG is (
+      PENDINGMSG_CANCELCALL,
+      PENDINGMSG_WAITNOPROCESS,
+      PENDINGMSG_WAITDEFPROCESS);
+   for PENDINGMSG'Size use 32;
 
-   type DATADIR is ( --  objbase.h :7209
-     DATADIR_GET,                                        --  objbase.h :7210
-     DATADIR_SET                                         --  objbase.h :7212
-                   );
-   for DATADIR use ( --  objbase.h :7209
-      DATADIR_GET => 1,                                   --  objbase.h :7210
-      DATADIR_SET => 2                                    --  objbase.h :7212
-                   );
-   for DATADIR'Size use 32;                                --  objbase.h :7209
+   type RPCOLEDATAREP is new Win32.UINT;
 
-   type CALLTYPE is ( --  objbase.h :7693
-     CALLTYPE_TOPLEVEL,                                  --  objbase.h :7694
-     CALLTYPE_NESTED,                                    --  objbase.h :7695
-     CALLTYPE_ASYNC,                                     --  objbase.h :7696
-     CALLTYPE_TOPLEVEL_CALLPENDING,                      --  objbase.h :7697
-     CALLTYPE_ASYNC_CALLPENDING                          --  objbase.h :7699
-                    );
-   for CALLTYPE use ( --  objbase.h :7693
-      CALLTYPE_TOPLEVEL => 1,                             --  objbase.h :7694
-      CALLTYPE_NESTED => 2,                               --  objbase.h :7695
-      CALLTYPE_ASYNC => 3,                                --  objbase.h :7696
-      CALLTYPE_TOPLEVEL_CALLPENDING => 4,                 --  objbase.h :7697
-      CALLTYPE_ASYNC_CALLPENDING => 5                     --  objbase.h :7699
-                    );
-   for CALLTYPE'Size use 32;                               --  objbase.h :7693
+   subtype HMETAFILEPICT is Win32.Winnt.HANDLE;
+   type LPOLESTR is access all OLECHAR;
+   type LPCOLESTR is access all OLECHAR;
+   type PSCODE is access all SCODE;
+   subtype HCONTEXT is Win32.Winnt.HANDLE;
+   type SNB_Extra is access all OLECHAR;
+   type SNB is access all SNB_Extra;
+   type LPCLIPFORMAT is access all CLIPFORMAT;
 
-   type SERVERCALL is ( --  objbase.h :7703
-     SERVERCALL_ISHANDLED,                               --  objbase.h :7704
-     SERVERCALL_REJECTED,                                --  objbase.h :7705
-     SERVERCALL_RETRYLATER                               --  objbase.h :7707
-                      );
-   for SERVERCALL'Size use 32;                             --  objbase.h :7703
+   type RemHGLOBAL;
+   type RemHMETAFILEPICT;
+   type RemHENHMETAFILE;
+   type RemHBITMAP;
+   type RemHPALETTE;
+   type RemBRUSH;
+   type OBJECTID;
+   type IUnknown;
+   type IClassFactory;
+   type IMarshal;
+   type IMalloc;
+   type IStdMarshalInfo;
+   type IExternalConnection;
+   type IWeakRef;
+   type IEnumUnknown;
+   type IBindCtx;
+   type IParseDisplayName;
+   type IEnumMoniker;
+   type IRunnableObject;
+   type IRunningObjectTable;
+   type IPersist;
+   type IPersistStream;
+   type IMoniker;
+   type IEnumString;
+   type IStream;
+   type IEnumSTATSTG;
+   type IStorage;
+   type IPersistFile;
+   type IPersistStorage;
+   type ILockBytes;
+   type IEnumFORMATETC;
+   type IEnumSTATDATA;
+   type IRootStorage;
+   type IAdviseSink;
+   type IAdviseSink2;
+   type IDataObject;
+   type IDataAdviseHolder;
+   type IMessageFilter;
+   type IRpcChannelBuffer;
+   type IRpcProxyBuffer;
+   type IPSFactoryBuffer;
+   type IUnknownVtbl;
+   type IClassFactoryVtbl;
+   type IMarshalVtbl;
+   type IMallocVtbl;
+   type IStdMarshalInfoVtbl;
+   type IExternalConnectionVtbl;
+   type IWeakRefVtbl;
+   type IEnumUnknownVtbl;
+   type BIND_OPTS;
+   type IBindCtxVtbl;
+   type IParseDisplayNameVtbl;
+   type IEnumMonikerVtbl;
+   type IRunnableObjectVtbl;
+   type IRunningObjectTableVtbl;
+   type IPersistVtbl;
+   type IPersistStreamVtbl;
+   type IMonikerVtbl;
+   type IEnumStringVtbl;
+   type STATSTG;
+   type IStreamVtbl;
+   type IEnumSTATSTGVtbl;
+   type RemSNB;
+   type IStorageVtbl;
+   type IPersistFileVtbl;
+   type IPersistStorageVtbl;
+   type ILockBytesVtbl;
+   type DVTARGETDEVICE;
+   type FORMATETC;
+   type IEnumFORMATETCVtbl;
+   type STATDATA;
+   type IEnumSTATDATAVtbl;
+   type IRootStorageVtbl;
+   type RemSTGMEDIUM;
+   type union_anonymous7_t;
+   type STGMEDIUM;
+   type IAdviseSinkVtbl;
+   type IAdviseSink2Vtbl;
+   type IDataObjectVtbl;
+   type IDataAdviseHolderVtbl;
+   type INTERFACEINFO;
+   type IMessageFilterVtbl;
+   type RPCOLEMESSAGE;
+   type IRpcChannelBufferVtbl;
+   type IRpcProxyBufferVtbl;
+   type IRpcStubBufferVtbl;
+   type IPSFactoryBufferVtbl;
+   type IRpcStubBuffer;
 
-   type PENDINGTYPE is ( --  objbase.h :7711
-     PENDINGTYPE_TOPLEVEL,                               --  objbase.h :7712
-     PENDINGTYPE_NESTED                                  --  objbase.h :7714
-                       );
-   for PENDINGTYPE use ( --  objbase.h :7711
-      PENDINGTYPE_TOPLEVEL => 1,                          --  objbase.h :7712
-      PENDINGTYPE_NESTED => 2                             --  objbase.h :7714
-                       );
-   for PENDINGTYPE'Size use 32;                            --  objbase.h :7711
-
-   type PENDINGMSG is ( --  objbase.h :7718
-     PENDINGMSG_CANCELCALL,                              --  objbase.h :7719
-     PENDINGMSG_WAITNOPROCESS,                           --  objbase.h :7720
-     PENDINGMSG_WAITDEFPROCESS                           --  objbase.h :7722
-                      );
-   for PENDINGMSG'Size use 32;                             --  objbase.h :7718
-
-   type RPCOLEDATAREP is new Win32.UINT;                   --  objbase.h :7893
-
-   subtype HMETAFILEPICT is Win32.Winnt.HANDLE;           --  objbase.h :349
-   type LPOLESTR is access all OLECHAR;                    --  objbase.h :731
-   type LPCOLESTR is access all OLECHAR;              --  objbase.h :734
-   type PSCODE is access all SCODE;                        --  objbase.h :913
-   subtype HCONTEXT is Win32.Winnt.HANDLE;                --  objbase.h :1073
-   type SNB_Extra is access all OLECHAR;                   --  objbase.h :5191
-   type SNB is access all SNB_Extra;                       --  objbase.h :5192
-   type LPCLIPFORMAT is access all CLIPFORMAT;             --  objbase.h :6368
-
-   type RemHGLOBAL;                                        --  objbase.h :331
-   type RemHMETAFILEPICT;                                  --  objbase.h :339
-   type RemHENHMETAFILE;                                   --  objbase.h :352
-   type RemHBITMAP;                                        --  objbase.h :359
-   type RemHPALETTE;                                       --  objbase.h :366
-   type RemBRUSH;                                          --  objbase.h :373
-   type OBJECTID;                                          --  objbase.h :937
-   type IUnknown;                                          --  objbase.h :1173
-   type IClassFactory;                                     --  objbase.h :1179
-   type IMarshal;                                          --  objbase.h :1185
-   type IMalloc;                                           --  objbase.h :1191
-   type IStdMarshalInfo;                                   --  objbase.h :1197
-   type IExternalConnection;                               --  objbase.h :1203
-   type IWeakRef;                                          --  objbase.h :1209
-   type IEnumUnknown;                                      --  objbase.h :1215
-   type IBindCtx;                                          --  objbase.h :1221
-   type IParseDisplayName;                                 --  objbase.h :1227
-   type IEnumMoniker;                                      --  objbase.h :1233
-   type IRunnableObject;                                   --  objbase.h :1239
-   type IRunningObjectTable;                               --  objbase.h :1245
-   type IPersist;                                          --  objbase.h :1251
-   type IPersistStream;                                    --  objbase.h :1257
-   type IMoniker;                                          --  objbase.h :1263
-   type IEnumString;                                       --  objbase.h :1269
-   type IStream;                                           --  objbase.h :1275
-   type IEnumSTATSTG;                                      --  objbase.h :1281
-   type IStorage;                                          --  objbase.h :1287
-   type IPersistFile;                                      --  objbase.h :1293
-   type IPersistStorage;                                   --  objbase.h :1299
-   type ILockBytes;                                        --  objbase.h :1305
-   type IEnumFORMATETC;                                    --  objbase.h :1311
-   type IEnumSTATDATA;                                     --  objbase.h :1317
-   type IRootStorage;                                      --  objbase.h :1323
-   type IAdviseSink;                                       --  objbase.h :1329
-   type IAdviseSink2;                                      --  objbase.h :1335
-   type IDataObject;                                       --  objbase.h :1341
-   type IDataAdviseHolder;                                 --  objbase.h :1347
-   type IMessageFilter;                                    --  objbase.h :1353
-   type IRpcChannelBuffer;                                 --  objbase.h :1359
-   type IRpcProxyBuffer;                                   --  objbase.h :1365
-   type IPSFactoryBuffer;                                  --  objbase.h :1377
-   type IUnknownVtbl;                                      --  objbase.h :1451
-   type IClassFactoryVtbl;                                 --  objbase.h :1566
-   type IMarshalVtbl;                                      --  objbase.h :1715
-   type IMallocVtbl;                                       --  objbase.h :1954
-   type IStdMarshalInfoVtbl;                               --  objbase.h :2146
-   type IExternalConnectionVtbl;                           --  objbase.h :2259
-   type IWeakRefVtbl;                                      --  objbase.h :2383
-   type IEnumUnknownVtbl;                                  --  objbase.h :2509
-   type BIND_OPTS;                                         --  objbase.h :2652
-   type IBindCtxVtbl;                                      --  objbase.h :2713
-   type IParseDisplayNameVtbl;                             --  objbase.h :2984
-   type IEnumMonikerVtbl;                                  --  objbase.h :3095
-   type IRunnableObjectVtbl;                               --  objbase.h :3261
-   type IRunningObjectTableVtbl;                           --  objbase.h :3456
-   type IPersistVtbl;                                      --  objbase.h :3677
-   type IPersistStreamVtbl;                                --  objbase.h :3781
-   type IMonikerVtbl;                                      --  objbase.h :4027
-   type IEnumStringVtbl;                                   --  objbase.h :4483
-   type STATSTG;                                           --  objbase.h :4623
-   type IStreamVtbl;                                       --  objbase.h :4721
-   type IEnumSTATSTGVtbl;                                  --  objbase.h :5042
-   type RemSNB;                                            --  objbase.h :5182
-   type IStorageVtbl;                                      --  objbase.h :5282
-   type IPersistFileVtbl;                                  --  objbase.h :5720
-   type IPersistStorageVtbl;                               --  objbase.h :5915
-   type ILockBytesVtbl;                                    --  objbase.h :6139
-   type DVTARGETDEVICE;                                    --  objbase.h :6354
-   type FORMATETC;                                         --  objbase.h :6371
-   type IEnumFORMATETCVtbl;                                --  objbase.h :6408
-   type STATDATA;                                          --  objbase.h :6560
-   type IEnumSTATDATAVtbl;                                 --  objbase.h :6596
-   type IRootStorageVtbl;                                  --  objbase.h :6750
-   type RemSTGMEDIUM;                                      --  objbase.h :6845
-   type union_anonymous7_t;                                --  objbase.h :6867
-   type STGMEDIUM;                                         --  objbase.h :6857
-   type IAdviseSinkVtbl;                                   --  objbase.h :6920
-   type IAdviseSink2Vtbl;                                  --  objbase.h :7091
-   type IDataObjectVtbl;                                   --  objbase.h :7262
-   type IDataAdviseHolderVtbl;                             --  objbase.h :7542
-   type INTERFACEINFO;                                     --  objbase.h :7725
-   type IMessageFilterVtbl;                                --  objbase.h :7763
-   type RPCOLEMESSAGE;                                     --  objbase.h :7896
-   type IRpcChannelBufferVtbl;                             --  objbase.h :7939
-   type IRpcProxyBufferVtbl;                               --  objbase.h :8113
-   type IRpcStubBufferVtbl;                                --  objbase.h :8239
-   type IPSFactoryBufferVtbl;                              --  objbase.h :8451
-   type IRpcStubBuffer;                                    --  objbase.h :8282
-
-   type ac_RECTL_t is access all Win32.Windef.RECTL;  --  objbase.h :744
-   type LPCRECTL is access all Win32.Windef.RECTL;    --  objbase.h :744
-   type LPGUID is access all Win32.Rpcdce.GUID;            --  objbase.h :930
-   subtype IID is Win32.Rpcdce.GUID;                       --  objbase.h :947
-   type LPIID is access all IID;                           --  objbase.h :950
-   type REFGUID is access all Win32.Rpcdce.GUID;      --  objbase.h :989
-   type REFIID is access all IID;                     --  objbase.h :993
-   subtype CLSID is Win32.Rpcdce.GUID;                     --  objbase.h :947
-   type LPCLSID is access all CLSID;                       --  objbase.h :958
-   type REFCLSID is access all CLSID;                 --  objbase.h :997
-   type LPCRECT is access all Win32.Windef.RECT;      --  objbase.h :1082
-   type a_RemHGLOBAL_t is access all RemHGLOBAL;           --  objbase.h :1084
-   type a_RemHBITMAP_t is access all RemHBITMAP;           --  objbase.h :1088
-   type a_RemHPALETTE_t is access all RemHPALETTE;         --  objbase.h :1092
-   type a_RemHBRUSH_t is access all RemBRUSH;              --  objbase.h :1096
+   type ac_RECTL_t is access all Win32.Windef.RECTL;
+   type LPCRECTL is access all Win32.Windef.RECTL;
+   type LPGUID is access all Win32.Rpcdce.GUID;
+   subtype IID is Win32.Rpcdce.GUID;
+   type LPIID is access all IID;
+   type REFGUID is access all Win32.Rpcdce.GUID;
+   type REFIID is access all IID;
+   subtype CLSID is Win32.Rpcdce.GUID;
+   type LPCLSID is access all CLSID;
+   type REFCLSID is access all CLSID;
+   type LPCRECT is access all Win32.Windef.RECT;
+   type a_RemHGLOBAL_t is access all RemHGLOBAL;
+   type a_RemHBITMAP_t is access all RemHBITMAP;
+   type a_RemHPALETTE_t is access all RemHPALETTE;
+   type a_RemHBRUSH_t is access all RemBRUSH;
    type a_RemHMETAFILEPICT_t is access all RemHMETAFILEPICT;
-   --  objbase.h :1100
    type a_RemHENHMETAFILE_t is access all RemHENHMETAFILE;
-   --  objbase.h :1104
-   type LPUNKNOWN is access all IUnknown;                  --  objbase.h :1429
-   type a_IUnknownVtbl_t is access all IUnknownVtbl;       --  objbase.h :1469
+   type LPUNKNOWN is access all IUnknown;
+   type a_IUnknownVtbl_t is access all IUnknownVtbl;
    type a_IClassFactoryVtbl_t is access all IClassFactoryVtbl;
-   --  objbase.h :1594
-   type LPCLASSFACTORY is access all IClassFactory;        --  objbase.h :1544
-   type LPMARSHAL is access all IMarshal;                  --  objbase.h :1666
-   type a_IMarshalVtbl_t is access all IMarshalVtbl;       --  objbase.h :1774
-   type LPMALLOC is access all IMalloc;                    --  objbase.h :1922
-   type a_IMallocVtbl_t is access all IMallocVtbl;         --  objbase.h :1996
-   type LPSTDMARSHALINFO is access all IStdMarshalInfo;    --  objbase.h :2127
+   type LPCLASSFACTORY is access all IClassFactory;
+   type LPMARSHAL is access all IMarshal;
+   type a_IMarshalVtbl_t is access all IMarshalVtbl;
+   type LPMALLOC is access all IMalloc;
+   type a_IMallocVtbl_t is access all IMallocVtbl;
+   type LPSTDMARSHALINFO is access all IStdMarshalInfo;
    type a_IStdMarshalInfoVtbl_t is access all IStdMarshalInfoVtbl;
-   --  objbase.h :2170
    type LPEXTERNALCONNECTION is access all IExternalConnection;
-   --  objbase.h :2228
    type a_IExternalConnectionVtbl_t is access all IExternalConnectionVtbl;
-   --  objbase.h :2288
-   type LPWEAKREF is access all IWeakRef;                  --  objbase.h :2362
-   type a_IWeakRefVtbl_t is access all IWeakRefVtbl;       --  objbase.h :2410
-   type LPENUMUNKNOWN is access all IEnumUnknown;          --  objbase.h :2482
+   type LPWEAKREF is access all IWeakRef;
+   type a_IWeakRefVtbl_t is access all IWeakRefVtbl;
+   type LPENUMUNKNOWN is access all IEnumUnknown;
    type a_IEnumUnknownVtbl_t is access all IEnumUnknownVtbl;
-   --  objbase.h :2544
-   type LPBC is access all IBindCtx;                       --  objbase.h :2646
-   type LPBINDCTX is access all IBindCtx;                  --  objbase.h :2649
-   type LPBIND_OPTS is access all BIND_OPTS;               --  objbase.h :2661
-   type a_IBindCtxVtbl_t is access all IBindCtxVtbl;       --  objbase.h :2772
-   type LPPARSEDISPLAYNAME is access all IParseDisplayName; --  objbase.h :2964
+   type LPBC is access all IBindCtx;
+   type LPBINDCTX is access all IBindCtx;
+   type LPBIND_OPTS is access all BIND_OPTS;
+   type a_IBindCtxVtbl_t is access all IBindCtxVtbl;
+   type LPPARSEDISPLAYNAME is access all IParseDisplayName;
    type a_IParseDisplayNameVtbl_t is access all IParseDisplayNameVtbl;
-   --  objbase.h :3009
-   type LPENUMMONIKER is access all IEnumMoniker;          --  objbase.h :3068
+   type LPENUMMONIKER is access all IEnumMoniker;
    type a_IEnumMonikerVtbl_t is access all IEnumMonikerVtbl;
-   --  objbase.h :3130
-   type LPRUNNABLEOBJECT is access all IRunnableObject;    --  objbase.h :3232
+   type LPRUNNABLEOBJECT is access all IRunnableObject;
    type a_IRunnableObjectVtbl_t is access all IRunnableObjectVtbl;
-   --  objbase.h :3299
    type LPRUNNINGOBJECTTABLE is access all IRunningObjectTable;
-   --  objbase.h :3415
    type a_IRunningObjectTableVtbl_t is access all IRunningObjectTableVtbl;
-   --  objbase.h :3508
-   type LPPERSIST is access all IPersist;                  --  objbase.h :3660
-   type a_IPersistVtbl_t is access all IPersistVtbl;       --  objbase.h :3699
-   type LPPERSISTSTREAM is access all IPersistStream;      --  objbase.h :3755
+   type LPPERSIST is access all IPersist;
+   type a_IPersistVtbl_t is access all IPersistVtbl;
+   type LPPERSISTSTREAM is access all IPersistStream;
    type a_IPersistStreamVtbl_t is access all IPersistStreamVtbl;
-   --  objbase.h :3819
-   type LPMONIKER is access all IMoniker;                  --  objbase.h :3924
-   type a_IMonikerVtbl_t is access all IMonikerVtbl;       --  objbase.h :4149
-   type LPENUMSTRING is access all IEnumString;            --  objbase.h :4456
-   type a_IEnumStringVtbl_t is access all IEnumStringVtbl; --  objbase.h :4518
-   type LPSTREAM is access all IStream;                    --  objbase.h :4620
-   type a_IStreamVtbl_t is access all IStreamVtbl;         --  objbase.h :4796
-   type LPENUMSTATSTG is access all IEnumSTATSTG;          --  objbase.h :5015
+   type LPMONIKER is access all IMoniker;
+   type a_IMonikerVtbl_t is access all IMonikerVtbl;
+   type LPENUMSTRING is access all IEnumString;
+   type a_IEnumStringVtbl_t is access all IEnumStringVtbl;
+   type LPSTREAM is access all IStream;
+   type a_IStreamVtbl_t is access all IStreamVtbl;
+   type LPENUMSTATSTG is access all IEnumSTATSTG;
    type a_IEnumSTATSTGVtbl_t is access all IEnumSTATSTGVtbl;
-   --  objbase.h :5077
-   type LPSTORAGE is access all IStorage;                  --  objbase.h :5179
-   type a_IStorageVtbl_t is access all IStorageVtbl;       --  objbase.h :5391
-   type LPPERSISTFILE is access all IPersistFile;          --  objbase.h :5690
+   type LPSTORAGE is access all IStorage;
+   type a_IStorageVtbl_t is access all IStorageVtbl;
+   type LPPERSISTFILE is access all IPersistFile;
    type a_IPersistFileVtbl_t is access all IPersistFileVtbl;
-   --  objbase.h :5763
-   type LPPERSISTSTORAGE is access all IPersistStorage;    --  objbase.h :5884
+   type LPPERSISTSTORAGE is access all IPersistStorage;
    type a_IPersistStorageVtbl_t is access all IPersistStorageVtbl;
-   --  objbase.h :5960
-   type LPLOCKBYTES is access all ILockBytes;              --  objbase.h :6094
-   type a_ILockBytesVtbl_t is access all ILockBytesVtbl;   --  objbase.h :6195
-   type LPENUMFORMATETC is access all IEnumFORMATETC;      --  objbase.h :6351
-   type a_DVTARGETDEVICE_t is access all DVTARGETDEVICE;   --  objbase.h :6374
-   type LPFORMATETC is access all FORMATETC;               --  objbase.h :6381
+   type LPLOCKBYTES is access all ILockBytes;
+   type a_ILockBytesVtbl_t is access all ILockBytesVtbl;
+   type LPENUMFORMATETC is access all IEnumFORMATETC;
+   type a_DVTARGETDEVICE_t is access all DVTARGETDEVICE;
+   type LPFORMATETC is access all FORMATETC;
    type a_IEnumFORMATETCVtbl_t is access all IEnumFORMATETCVtbl;
-   --  objbase.h :6443
-   type LPENUMSTATDATA is access all IEnumSTATDATA;        --  objbase.h :6545
-   type LPSTATDATA is access all STATDATA;                 --  objbase.h :6569
+   type LPENUMSTATDATA is access all IEnumSTATDATA;
+   type LPSTATDATA is access all STATDATA;
    type a_IEnumSTATDATAVtbl_t is access all IEnumSTATDATAVtbl;
-   --  objbase.h :6631
-   type LPROOTSTORAGE is access all IRootStorage;          --  objbase.h :6733
+   type LPROOTSTORAGE is access all IRootStorage;
    type a_IRootStorageVtbl_t is access all IRootStorageVtbl;
-   --  objbase.h :6772
-   type LPADVISESINK is access all IAdviseSink;            --  objbase.h :6828
-   type LPSTGMEDIUM is access all STGMEDIUM;               --  objbase.h :6891
+   type LPADVISESINK is access all IAdviseSink;
+   type LPSTGMEDIUM is access all STGMEDIUM;
    type a_IAdviseSinkVtbl_t is access all IAdviseSinkVtbl;
-   --  objbase.h :6958
    type a_RemSTGMEDIUM_t is access all RemSTGMEDIUM;
-   --  objbase.h :7001
-   type LPADVISESINK2 is access all IAdviseSink2;          --  objbase.h :7074
+   type LPADVISESINK2 is access all IAdviseSink2;
    type a_IAdviseSink2Vtbl_t is access all IAdviseSink2Vtbl;
-   --  objbase.h :7133
-   type LPDATAOBJECT is access all IDataObject;            --  objbase.h :7205
-   type a_IDataObjectVtbl_t is access all IDataObjectVtbl; --  objbase.h :7325
-   type LPDATAADVISEHOLDER is access all IDataAdviseHolder; --  objbase.h :7510
+   type LPDATAOBJECT is access all IDataObject;
+   type a_IDataObjectVtbl_t is access all IDataObjectVtbl;
+   type LPDATAADVISEHOLDER is access all IDataAdviseHolder;
    type a_IDataAdviseHolderVtbl_t is access all IDataAdviseHolderVtbl;
-   --  objbase.h :7582
-   type LPMESSAGEFILTER is access all IMessageFilter;      --  objbase.h :7689
+   type LPMESSAGEFILTER is access all IMessageFilter;
    type LPINTERFACEINFO is access all INTERFACEINFO;
-   --  objbase.h :7733
    type a_IMessageFilterVtbl_t is access all IMessageFilterVtbl;
-   --  objbase.h :7800
-   type PRPCOLEMESSAGE is access all RPCOLEMESSAGE;        --  objbase.h :7908
+   type PRPCOLEMESSAGE is access all RPCOLEMESSAGE;
    type a_IRpcChannelBufferVtbl is access all IRpcChannelBufferVtbl;
-   --  objbase.h :7979
-   type PIRpcProxyBuffer is access all IRpcProxyBuffer;    --  objbase.h :8465
+   type PIRpcProxyBuffer is access all IRpcProxyBuffer;
    type a_IRpcProxyBufferVtbl_t is access all IRpcProxyBufferVtbl;
-   --  objbase.h :8138
    type a_IRpcStubBufferVtbl is access all IRpcStubBufferVtbl;
-   --  objbase.h :8284
-   type a_IRpcStubBuffer_t is access all IRpcStubBuffer;   --  objbase.h :8332
-   type a_IPSFactoryBufferVtbl_t is
-     access all IPSFactoryBufferVtbl;                    --  objbase.h :8482
-   type a_RemSNB_t is access all RemSNB;                   --  objbase.h :8549
+   type a_IRpcStubBuffer_t is access all IRpcStubBuffer;
+   type a_IPSFactoryBufferVtbl_t is access all IPSFactoryBufferVtbl;
+   type a_RemSNB_t is access all RemSNB;
 
    type af_1454_QueryInterface is access function
-     (This : access IUnknown;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :1454
+     (This      : access IUnknown;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_1454_QueryInterface);
 
    type af_1459_AddRef is access function
      (This : access IUnknown)
-     return Win32.ULONG;                          --  objbase.h :1459
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_1459_AddRef);
 
    type af_1462_Release is access function
      (This : access IUnknown)
-     return Win32.ULONG;                          --  objbase.h :1462
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_1462_Release);
 
    type af_1569_QueryInterface is access function
-     (This : access IClassFactory;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :1569
+     (This      : access IClassFactory;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_1569_QueryInterface);
 
    type af_1574_AddRef is access function
      (This : access IClassFactory)
-     return Win32.ULONG;                          --  objbase.h :1574
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_1574_AddRef);
 
    type af_1577_Release is access function
      (This : access IClassFactory)
-     return Win32.ULONG;                          --  objbase.h :1577
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_1577_Release);
 
    type af_1580_CreateInstance is access function
-     (This : access IClassFactory;
-                      pUnkOuter : access IUnknown;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :1580
+     (This      : access IClassFactory;
+      pUnkOuter : access IUnknown;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_1580_CreateInstance);
 
    type af_1586_LockServer is access function
-     (This : access IClassFactory;
-                      fLock : Win32.BOOL)
-     return HRESULT;                              --  objbase.h :1586
+     (This  : access IClassFactory;
+      fLock : Win32.BOOL)
+      return HRESULT;
    pragma Convention (Stdcall, af_1586_LockServer);
 
    type af_1718_QueryInterface is access function
-     (This : access IMarshal;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :1718
+     (This      : access IMarshal;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_1718_QueryInterface);
 
    type af_1723_AddRef is access function
      (This : access IMarshal)
-     return Win32.ULONG;                          --  objbase.h :1723
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_1723_AddRef);
 
    type af_1726_Release is access function
      (This : access IMarshal)
-     return Win32.ULONG;                          --  objbase.h :1726
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_1726_Release);
 
    type af_1729_GetUnmarshalClass is access function
-     (This : access IMarshal;
-                      riid : REFIID;
-                      pv : Win32.PVOID;
-                      dwDestContext : Win32.DWORD;
-                      pvDestContext : Win32.PVOID;
-                      mshlflags : Win32.DWORD;
-                      pCid : access CLSID)
-     return HRESULT;                              --  objbase.h :1729
+     (This          : access IMarshal;
+      riid          : REFIID;
+      pv            : Win32.PVOID;
+      dwDestContext : Win32.DWORD;
+      pvDestContext : Win32.PVOID;
+      mshlflags     : Win32.DWORD;
+      pCid          : access CLSID)
+      return HRESULT;
    pragma Convention (Stdcall, af_1729_GetUnmarshalClass);
 
    type af_1738_GetMarshalSizeMax is access function
-     (This : access IMarshal;
-                      riid : REFIID;
-                      pv : Win32.PVOID;
-                      dwDestContext : Win32.DWORD;
-                      pvDestContext : Win32.PVOID;
-                      mshlflags : Win32.DWORD;
-                      pSize : access Win32.DWORD)
-     return HRESULT;                              --  objbase.h :1738
+     (This          : access IMarshal;
+      riid          : REFIID;
+      pv            : Win32.PVOID;
+      dwDestContext : Win32.DWORD;
+      pvDestContext : Win32.PVOID;
+      mshlflags     : Win32.DWORD;
+      pSize         : access Win32.DWORD)
+      return HRESULT;
    pragma Convention (Stdcall, af_1738_GetMarshalSizeMax);
 
    type af_1747_MarshalInterface is access function
-     (This : access IMarshal;
-                      pStm : access IStream;
-                      riid : REFIID;
-                      pv : Win32.PVOID;
-                      dwDestContext : Win32.DWORD;
-                      pvDestContext : Win32.PVOID;
-                      mshlflags : Win32.DWORD)
-     return HRESULT;                              --  objbase.h :1747
+     (This          : access IMarshal;
+      pStm          : access IStream;
+      riid          : REFIID;
+      pv            : Win32.PVOID;
+      dwDestContext : Win32.DWORD;
+      pvDestContext : Win32.PVOID;
+      mshlflags     : Win32.DWORD)
+      return HRESULT;
    pragma Convention (Stdcall, af_1747_MarshalInterface);
 
    type af_1756_UnmarshalInterface is access function
      (This : access IMarshal;
-                      pStm : access IStream;
-                      riid : REFIID;
-                      ppv : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :1756
+      pStm : access IStream;
+      riid : REFIID;
+      ppv  : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_1756_UnmarshalInterface);
 
    type af_1762_ReleaseMarshalData is access function
      (This : access IMarshal;
-                      pStm : access IStream)
-     return HRESULT;                              --  objbase.h :1762
+      pStm : access IStream)
+      return HRESULT;
    pragma Convention (Stdcall, af_1762_ReleaseMarshalData);
 
    type af_1766_DisconnectObject is access function
-     (This : access IMarshal;
-                      dwReserved : Win32.DWORD)
-     return HRESULT;                              --  objbase.h :1766
+     (This       : access IMarshal;
+      dwReserved : Win32.DWORD)
+      return HRESULT;
    pragma Convention (Stdcall, af_1766_DisconnectObject);
 
    type af_1957_QueryInterface is access function
-     (This : access IMalloc;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :1957
+     (This      : access IMalloc;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_1957_QueryInterface);
 
    type af_1962_AddRef is access function
      (This : access IMalloc)
-     return Win32.ULONG;                          --  objbase.h :1962
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_1962_AddRef);
 
    type af_1965_Release is access function
      (This : access IMalloc)
-     return Win32.ULONG;                          --  objbase.h :1965
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_1965_Release);
 
    type af_1968_Alloc is access function
      (This : access IMalloc;
-                      cb : Win32.ULONG)
-     return Win32.PVOID;                          --  objbase.h :1968
+      cb   : Win32.ULONG)
+      return Win32.PVOID;
    pragma Convention (Stdcall, af_1968_Alloc);
 
    type af_1972_Realloc is access function
      (This : access IMalloc;
-                      pv : Win32.PVOID;
-                      cb : Win32.ULONG)
-     return Win32.PVOID;                          --  objbase.h :1972
+      pv   : Win32.PVOID;
+      cb   : Win32.ULONG)
+      return Win32.PVOID;
    pragma Convention (Stdcall, af_1972_Realloc);
 
    type ap_1977_Free is access procedure
      (This : access IMalloc;
-                      pv : Win32.PVOID);                    --  objbase.h :1977
+      pv   : Win32.PVOID);
    pragma Convention (Stdcall, ap_1977_Free);
 
    type af_1981_GetSize is access function
      (This : access IMalloc;
-                      pv : Win32.PVOID)
-     return Win32.ULONG;                          --  objbase.h :1981
+      pv   : Win32.PVOID)
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_1981_GetSize);
 
    type af_1985_DidAlloc is access function
      (This : access IMalloc;
-                      pv : Win32.PVOID)
-     return Win32.INT;                            --  objbase.h :1985
+      pv   : Win32.PVOID)
+      return Win32.INT;
    pragma Convention (Stdcall, af_1985_DidAlloc);
 
-   type ap_1989_HeapMinimize is access procedure
-     (This : access IMalloc);                      --  objbase.h :1989
+   type ap_1989_HeapMinimize is access procedure (This : access IMalloc);
    pragma Convention (Stdcall, ap_1989_HeapMinimize);
 
    type af_2149_QueryInterface is access function
-     (This : access IStdMarshalInfo;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :2149
+     (This      : access IStdMarshalInfo;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_2149_QueryInterface);
 
    type af_2154_AddRef is access function
      (This : access IStdMarshalInfo)
-     return Win32.ULONG;                          --  objbase.h :2154
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_2154_AddRef);
 
    type af_2157_Release is access function
      (This : access IStdMarshalInfo)
-     return Win32.ULONG;                          --  objbase.h :2157
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_2157_Release);
 
    type af_2160_GetClassForHandler is access function
-     (This : access IStdMarshalInfo;
-                      dwDestContext : Win32.DWORD;
-                      pvDestContext : Win32.PVOID;
-                      pClsid : access CLSID)
-     return HRESULT;                              --  objbase.h :2160
+     (This          : access IStdMarshalInfo;
+      dwDestContext : Win32.DWORD;
+      pvDestContext : Win32.PVOID;
+      pClsid        : access CLSID)
+      return HRESULT;
    pragma Convention (Stdcall, af_2160_GetClassForHandler);
 
    type af_2262_QueryInterface is access function
-     (This : access IExternalConnection;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :2262
+     (This      : access IExternalConnection;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_2262_QueryInterface);
 
    type af_2267_AddRef is access function
      (This : access IExternalConnection)
-     return Win32.ULONG;                          --  objbase.h :2267
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_2267_AddRef);
 
    type af_2270_Release is access function
      (This : access IExternalConnection)
-     return Win32.ULONG;                          --  objbase.h :2270
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_2270_Release);
 
    type af_2273_AddConnection is access function
-     (This : access IExternalConnection;
-                      extconn : Win32.DWORD;
-                      reserved : Win32.DWORD)
-     return Win32.DWORD;                          --  objbase.h :2273
+     (This     : access IExternalConnection;
+      extconn  : Win32.DWORD;
+      reserved : Win32.DWORD)
+      return Win32.DWORD;
    pragma Convention (Stdcall, af_2273_AddConnection);
 
    type af_2278_ReleaseConnection is access function
-     (This : access IExternalConnection;
-                      extconn : Win32.DWORD;
-                      reserved : Win32.DWORD;
-                      fLastReleaseCloses : Win32.BOOL)
-     return Win32.DWORD;                          --  objbase.h :2278
+     (This               : access IExternalConnection;
+      extconn            : Win32.DWORD;
+      reserved           : Win32.DWORD;
+      fLastReleaseCloses : Win32.BOOL)
+      return Win32.DWORD;
    pragma Convention (Stdcall, af_2278_ReleaseConnection);
 
    type af_2386_QueryInterface is access function
-     (This : access IWeakRef;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :2386
+     (This      : access IWeakRef;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_2386_QueryInterface);
 
    type af_2391_AddRef is access function
      (This : access IWeakRef)
-     return Win32.ULONG;                          --  objbase.h :2391
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_2391_AddRef);
 
    type af_2394_Release is access function
      (This : access IWeakRef)
-     return Win32.ULONG;                          --  objbase.h :2394
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_2394_Release);
 
    type af_2397_ChangeWeakCount is access function
-     (This : access IWeakRef;
-                      c_delta : Win32.LONG)
-     return Win32.ULONG;                          --  objbase.h :2397
+     (This    : access IWeakRef;
+      c_delta : Win32.LONG)
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_2397_ChangeWeakCount);
 
    type af_2401_ReleaseKeepAlive is access function
-     (This : access IWeakRef;
-                      pUnkReleased : access IUnknown;
-                      reserved : Win32.DWORD)
-     return Win32.ULONG;                          --  objbase.h :2401
+     (This         : access IWeakRef;
+      pUnkReleased : access IUnknown;
+      reserved     : Win32.DWORD)
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_2401_ReleaseKeepAlive);
 
    type af_2512_QueryInterface is access function
-     (This : access IEnumUnknown;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :2512
+     (This      : access IEnumUnknown;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_2512_QueryInterface);
 
    type af_2517_AddRef is access function
      (This : access IEnumUnknown)
-     return Win32.ULONG;                          --  objbase.h :2517
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_2517_AddRef);
 
    type af_2520_Release is access function
      (This : access IEnumUnknown)
-     return Win32.ULONG;                          --  objbase.h :2520
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_2520_Release);
 
    type af_2523_Next is access function
-     (This : access IEnumUnknown;
-                      celt : Win32.ULONG;
-                      rgelt : access LPUNKNOWN;
-                      pceltFetched : access Win32.ULONG)
-     return HRESULT;                              --  objbase.h :2523
+     (This         : access IEnumUnknown;
+      celt         : Win32.ULONG;
+      rgelt        : access LPUNKNOWN;
+      pceltFetched : access Win32.ULONG)
+      return HRESULT;
    pragma Convention (Stdcall, af_2523_Next);
 
    type af_2529_Skip is access function
      (This : access IEnumUnknown;
-                      celt : Win32.ULONG)
-     return HRESULT;                              --  objbase.h :2529
+      celt : Win32.ULONG)
+      return HRESULT;
    pragma Convention (Stdcall, af_2529_Skip);
 
    type af_2533_Reset is access function
      (This : access IEnumUnknown)
-     return HRESULT;                              --  objbase.h :2533
+      return HRESULT;
    pragma Convention (Stdcall, af_2533_Reset);
 
    type af_2536_Clone is access function
-     (This : access IEnumUnknown;
-                      ppenum : access LPENUMUNKNOWN)
-     return HRESULT;                              --  objbase.h :2536
+     (This   : access IEnumUnknown;
+      ppenum : access LPENUMUNKNOWN)
+      return HRESULT;
    pragma Convention (Stdcall, af_2536_Clone);
 
    type af_2716_QueryInterface is access function
-     (This : access IBindCtx;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :2716
+     (This      : access IBindCtx;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_2716_QueryInterface);
 
    type af_2721_AddRef is access function
      (This : access IBindCtx)
-     return Win32.ULONG;                          --  objbase.h :2721
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_2721_AddRef);
 
    type af_2724_Release is access function
      (This : access IBindCtx)
-     return Win32.ULONG;                          --  objbase.h :2724
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_2724_Release);
 
    type af_2727_RegisterObjectBound is access function
      (This : access IBindCtx;
-                      punk : access IUnknown)
-     return HRESULT;                              --  objbase.h :2727
+      punk : access IUnknown)
+      return HRESULT;
    pragma Convention (Stdcall, af_2727_RegisterObjectBound);
 
    type af_2731_RevokeObjectBound is access function
      (This : access IBindCtx;
-                      punk : access IUnknown)
-     return HRESULT;                              --  objbase.h :2731
+      punk : access IUnknown)
+      return HRESULT;
    pragma Convention (Stdcall, af_2731_RevokeObjectBound);
 
    type af_2735_ReleaseBoundObjects is access function
      (This : access IBindCtx)
-     return HRESULT;                              --  objbase.h :2735
+      return HRESULT;
    pragma Convention (Stdcall, af_2735_ReleaseBoundObjects);
 
    type af_2738_SetBindOptions is access function
-     (This : access IBindCtx;
-                      pbindopts : access BIND_OPTS)
-     return HRESULT;                              --  objbase.h :2738
+     (This      : access IBindCtx;
+      pbindopts : access BIND_OPTS)
+      return HRESULT;
    pragma Convention (Stdcall, af_2738_SetBindOptions);
 
    type af_2742_GetBindOptions is access function
-     (This : access IBindCtx;
-                      pbindopts : access BIND_OPTS)
-     return HRESULT;                              --  objbase.h :2742
+     (This      : access IBindCtx;
+      pbindopts : access BIND_OPTS)
+      return HRESULT;
    pragma Convention (Stdcall, af_2742_GetBindOptions);
 
    type af_2746_GetRunningObjectTable is access function
-     (This : access IBindCtx;
-                      pprot : access LPRUNNINGOBJECTTABLE)
-     return HRESULT;                              --  objbase.h :2746
+     (This  : access IBindCtx;
+      pprot : access LPRUNNINGOBJECTTABLE)
+      return HRESULT;
    pragma Convention (Stdcall, af_2746_GetRunningObjectTable);
 
    type af_2750_RegisterObjectParam is access function
-     (This : access IBindCtx;
-                      pszKey : LPOLESTR;
-                      punk : access IUnknown)
-     return HRESULT;                              --  objbase.h :2750
+     (This   : access IBindCtx;
+      pszKey : LPOLESTR;
+      punk   : access IUnknown)
+      return HRESULT;
    pragma Convention (Stdcall, af_2750_RegisterObjectParam);
 
    type af_2755_GetObjectParam is access function
-     (This : access IBindCtx;
-                      pszKey : LPOLESTR;
-                      ppunk : access LPUNKNOWN)
-     return HRESULT;                              --  objbase.h :2755
+     (This   : access IBindCtx;
+      pszKey : LPOLESTR;
+      ppunk  : access LPUNKNOWN)
+      return HRESULT;
    pragma Convention (Stdcall, af_2755_GetObjectParam);
 
    type af_2760_EnumObjectParam is access function
-     (This : access IBindCtx;
-                      ppenum : access LPENUMSTRING)
-     return HRESULT;                              --  objbase.h :2760
+     (This   : access IBindCtx;
+      ppenum : access LPENUMSTRING)
+      return HRESULT;
    pragma Convention (Stdcall, af_2760_EnumObjectParam);
 
    type af_2764_RevokeObjectParam is access function
-     (This : access IBindCtx;
-                      pszKey : LPOLESTR)
-     return HRESULT;                              --  objbase.h :2764
+     (This   : access IBindCtx;
+      pszKey : LPOLESTR)
+      return HRESULT;
    pragma Convention (Stdcall, af_2764_RevokeObjectParam);
 
    type af_2987_QueryInterface is access function
-     (This : access IParseDisplayName;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :2987
+     (This      : access IParseDisplayName;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_2987_QueryInterface);
 
    type af_2992_AddRef is access function
      (This : access IParseDisplayName)
-     return Win32.ULONG;                          --  objbase.h :2992
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_2992_AddRef);
 
    type af_2995_Release is access function
      (This : access IParseDisplayName)
-     return Win32.ULONG;                          --  objbase.h :2995
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_2995_Release);
 
    type af_2998_ParseDisplayName is access function
-     (This : access IParseDisplayName;
-                      pbc : access IBindCtx;
-                      pszDisplayName : LPOLESTR;
-                      pchEaten : access Win32.ULONG;
-                      ppmkOut : access LPMONIKER)
-     return HRESULT;                              --  objbase.h :2998
+     (This           : access IParseDisplayName;
+      pbc            : access IBindCtx;
+      pszDisplayName : LPOLESTR;
+      pchEaten       : access Win32.ULONG;
+      ppmkOut        : access LPMONIKER)
+      return HRESULT;
    pragma Convention (Stdcall, af_2998_ParseDisplayName);
 
    type af_3098_QueryInterface is access function
-     (This : access IEnumMoniker;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :3098
+     (This      : access IEnumMoniker;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_3098_QueryInterface);
 
    type af_3103_AddRef is access function
      (This : access IEnumMoniker)
-     return Win32.ULONG;                          --  objbase.h :3103
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_3103_AddRef);
 
    type af_3106_Release is access function
      (This : access IEnumMoniker)
-     return Win32.ULONG;                          --  objbase.h :3106
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_3106_Release);
 
    type af_3109_Next is access function
-     (This : access IEnumMoniker;
-                      celt : Win32.ULONG;
-                      rgelt : access LPMONIKER;
-                      pceltFetched : access Win32.ULONG)
-     return HRESULT;                              --  objbase.h :3109
+     (This         : access IEnumMoniker;
+      celt         : Win32.ULONG;
+      rgelt        : access LPMONIKER;
+      pceltFetched : access Win32.ULONG)
+      return HRESULT;
    pragma Convention (Stdcall, af_3109_Next);
 
    type af_3115_Skip is access function
      (This : access IEnumMoniker;
-                      celt : Win32.ULONG)
-     return HRESULT;                              --  objbase.h :3115
+      celt : Win32.ULONG)
+      return HRESULT;
    pragma Convention (Stdcall, af_3115_Skip);
 
    type af_3119_Reset is access function
      (This : access IEnumMoniker)
-     return HRESULT;                              --  objbase.h :3119
+      return HRESULT;
    pragma Convention (Stdcall, af_3119_Reset);
 
    type af_3122_Clone is access function
-     (This : access IEnumMoniker;
-                      ppenum : access LPENUMMONIKER)
-     return HRESULT;                              --  objbase.h :3122
+     (This   : access IEnumMoniker;
+      ppenum : access LPENUMMONIKER)
+      return HRESULT;
    pragma Convention (Stdcall, af_3122_Clone);
 
    type af_3264_QueryInterface is access function
-     (This : access IRunnableObject;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :3264
+     (This      : access IRunnableObject;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_3264_QueryInterface);
 
    type af_3269_AddRef is access function
      (This : access IRunnableObject)
-     return Win32.ULONG;                          --  objbase.h :3269
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_3269_AddRef);
 
    type af_3272_Release is access function
      (This : access IRunnableObject)
-     return Win32.ULONG;                          --  objbase.h :3272
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_3272_Release);
 
    type af_3275_GetRunningClass is access function
-     (This : access IRunnableObject;
-                      lpClsid : access CLSID)
-     return HRESULT;                              --  objbase.h :3275
+     (This    : access IRunnableObject;
+      lpClsid : access CLSID)
+      return HRESULT;
    pragma Convention (Stdcall, af_3275_GetRunningClass);
 
    type af_3279_Run is access function
      (This : access IRunnableObject;
-                      pbc : LPBINDCTX)
-     return HRESULT;                              --  objbase.h :3279
+      pbc  : LPBINDCTX)
+      return HRESULT;
    pragma Convention (Stdcall, af_3279_Run);
 
    type af_3283_IsRunning is access function
      (This : access IRunnableObject)
-     return Win32.BOOL;                           --  objbase.h :3283
+      return Win32.BOOL;
    pragma Convention (Stdcall, af_3283_IsRunning);
 
    type af_3286_LockRunning is access function
-     (This : access IRunnableObject;
-                      fLock : Win32.BOOL;
-                      fLastUnlockCloses : Win32.BOOL)
-     return HRESULT;                              --  objbase.h :3286
+     (This              : access IRunnableObject;
+      fLock             : Win32.BOOL;
+      fLastUnlockCloses : Win32.BOOL)
+      return HRESULT;
    pragma Convention (Stdcall, af_3286_LockRunning);
 
    type af_3291_SetContainedObject is access function
-     (This : access IRunnableObject;
-                      fContained : Win32.BOOL)
-     return HRESULT;                              --  objbase.h :3291
+     (This       : access IRunnableObject;
+      fContained : Win32.BOOL)
+      return HRESULT;
    pragma Convention (Stdcall, af_3291_SetContainedObject);
 
    type af_3459_QueryInterface is access function
-     (This : access IRunningObjectTable;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :3459
+     (This      : access IRunningObjectTable;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_3459_QueryInterface);
 
    type af_3464_AddRef is access function
      (This : access IRunningObjectTable)
-     return Win32.ULONG;                          --  objbase.h :3464
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_3464_AddRef);
 
    type af_3467_Release is access function
      (This : access IRunningObjectTable)
-     return Win32.ULONG;                          --  objbase.h :3467
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_3467_Release);
 
    type af_3470_Register is access function
-     (This : access IRunningObjectTable;
-                      grfFlags : Win32.DWORD;
-                      punkObject : access IUnknown;
-                      pmkObjectName : access IMoniker;
-                      pdwRegister : access Win32.DWORD)
-     return HRESULT;                              --  objbase.h :3470
+     (This          : access IRunningObjectTable;
+      grfFlags      : Win32.DWORD;
+      punkObject    : access IUnknown;
+      pmkObjectName : access IMoniker;
+      pdwRegister   : access Win32.DWORD)
+      return HRESULT;
    pragma Convention (Stdcall, af_3470_Register);
 
    type af_3477_Revoke is access function
-     (This : access IRunningObjectTable;
-                      dwRegister : Win32.DWORD)
-     return HRESULT;                              --  objbase.h :3477
+     (This       : access IRunningObjectTable;
+      dwRegister : Win32.DWORD)
+      return HRESULT;
    pragma Convention (Stdcall, af_3477_Revoke);
 
    type af_3481_IsRunning is access function
-     (This : access IRunningObjectTable;
-                      pmkObjectName : access IMoniker)
-     return HRESULT;                              --  objbase.h :3481
+     (This          : access IRunningObjectTable;
+      pmkObjectName : access IMoniker)
+      return HRESULT;
    pragma Convention (Stdcall, af_3481_IsRunning);
 
    type af_3485_GetObjectA is access function
-     (This : access IRunningObjectTable;
-                      pmkObjectName : access IMoniker;
-                      ppunkObject : access LPUNKNOWN)
-     return HRESULT;                              --  objbase.h :3485
+     (This          : access IRunningObjectTable;
+      pmkObjectName : access IMoniker;
+      ppunkObject   : access LPUNKNOWN)
+      return HRESULT;
    pragma Convention (Stdcall, af_3485_GetObjectA);
 
    type af_3490_NoteChangeTime is access function
-     (This : access IRunningObjectTable;
-                      dwRegister : Win32.DWORD;
-                      pfiletime : access Win32.Winbase.FILETIME)
-     return HRESULT;                              --  objbase.h :3490
+     (This       : access IRunningObjectTable;
+      dwRegister : Win32.DWORD;
+      pfiletime  : access Win32.Winbase.FILETIME)
+      return HRESULT;
    pragma Convention (Stdcall, af_3490_NoteChangeTime);
 
    type af_3495_GetTimeOfLastChange is access function
-     (This : access IRunningObjectTable;
-                      pmkObjectName : access IMoniker;
-                      pfiletime : access Win32.Winbase.FILETIME)
-     return HRESULT;                              --  objbase.h :3495
+     (This          : access IRunningObjectTable;
+      pmkObjectName : access IMoniker;
+      pfiletime     : access Win32.Winbase.FILETIME)
+      return HRESULT;
    pragma Convention (Stdcall, af_3495_GetTimeOfLastChange);
 
    type af_3500_EnumRunning is access function
-     (This : access IRunningObjectTable;
-                      ppenumMoniker : access LPENUMMONIKER)
-     return HRESULT;                              --  objbase.h :3500
+     (This          : access IRunningObjectTable;
+      ppenumMoniker : access LPENUMMONIKER)
+      return HRESULT;
    pragma Convention (Stdcall, af_3500_EnumRunning);
 
    type af_3680_QueryInterface is access function
-     (This : access IPersist;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :3680
+     (This      : access IPersist;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_3680_QueryInterface);
 
    type af_3685_AddRef is access function
      (This : access IPersist)
-     return Win32.ULONG;                          --  objbase.h :3685
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_3685_AddRef);
 
    type af_3688_Release is access function
      (This : access IPersist)
-     return Win32.ULONG;                          --  objbase.h :3688
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_3688_Release);
 
    type af_3691_GetClassID is access function
-     (This : access IPersist;
-                      pClassID : access CLSID)
-     return HRESULT;                              --  objbase.h :3691
+     (This     : access IPersist;
+      pClassID : access CLSID)
+      return HRESULT;
    pragma Convention (Stdcall, af_3691_GetClassID);
 
    type af_3784_QueryInterface is access function
-     (This : access IPersistStream;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :3784
+     (This      : access IPersistStream;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_3784_QueryInterface);
 
    type af_3789_AddRef is access function
      (This : access IPersistStream)
-     return Win32.ULONG;                          --  objbase.h :3789
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_3789_AddRef);
 
    type af_3792_Release is access function
      (This : access IPersistStream)
-     return Win32.ULONG;                          --  objbase.h :3792
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_3792_Release);
 
    type af_3795_GetClassID is access function
-     (This : access IPersistStream;
-                      pClassID : access CLSID)
-     return HRESULT;                              --  objbase.h :3795
+     (This     : access IPersistStream;
+      pClassID : access CLSID)
+      return HRESULT;
    pragma Convention (Stdcall, af_3795_GetClassID);
 
    type af_3799_IsDirty is access function
      (This : access IPersistStream)
-     return HRESULT;                              --  objbase.h :3799
+      return HRESULT;
    pragma Convention (Stdcall, af_3799_IsDirty);
 
    type af_3802_Load is access function
      (This : access IPersistStream;
-                      pStm : access IStream)
-     return HRESULT;                              --  objbase.h :3802
+      pStm : access IStream)
+      return HRESULT;
    pragma Convention (Stdcall, af_3802_Load);
 
    type af_3806_Save is access function
-     (This : access IPersistStream;
-                      pStm : access IStream;
-                      fClearDirty : Win32.BOOL)
-     return HRESULT;                              --  objbase.h :3806
+     (This        : access IPersistStream;
+      pStm        : access IStream;
+      fClearDirty : Win32.BOOL)
+      return HRESULT;
    pragma Convention (Stdcall, af_3806_Save);
 
    type af_3811_GetSizeMax is access function
-     (This : access IPersistStream;
-                      pcbSize : access Win32.Winnt.ULARGE_INTEGER)
-     return HRESULT;                              --  objbase.h :3811
+     (This    : access IPersistStream;
+      pcbSize : access Win32.Winnt.ULARGE_INTEGER)
+      return HRESULT;
    pragma Convention (Stdcall, af_3811_GetSizeMax);
 
    type af_4030_QueryInterface is access function
-     (This : access IMoniker;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :4030
+     (This      : access IMoniker;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_4030_QueryInterface);
 
    type af_4035_AddRef is access function
      (This : access IMoniker)
-     return Win32.ULONG;                          --  objbase.h :4035
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_4035_AddRef);
 
    type af_4038_Release is access function
      (This : access IMoniker)
-     return Win32.ULONG;                          --  objbase.h :4038
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_4038_Release);
 
    type af_4041_GetClassID is access function
-     (This : access IMoniker;
-                      pClassID : access CLSID)
-     return HRESULT;                              --  objbase.h :4041
+     (This     : access IMoniker;
+      pClassID : access CLSID)
+      return HRESULT;
    pragma Convention (Stdcall, af_4041_GetClassID);
 
    type af_4045_IsDirty is access function
      (This : access IMoniker)
-     return HRESULT;                              --  objbase.h :4045
+      return HRESULT;
    pragma Convention (Stdcall, af_4045_IsDirty);
 
    type af_4048_Load is access function
      (This : access IMoniker;
-                      pStm : access IStream)
-     return HRESULT;                              --  objbase.h :4048
+      pStm : access IStream)
+      return HRESULT;
    pragma Convention (Stdcall, af_4048_Load);
 
    type af_4052_Save is access function
-     (This : access IMoniker;
-                      pStm : access IStream;
-                      fClearDirty : Win32.BOOL)
-     return HRESULT;                              --  objbase.h :4052
+     (This        : access IMoniker;
+      pStm        : access IStream;
+      fClearDirty : Win32.BOOL)
+      return HRESULT;
    pragma Convention (Stdcall, af_4052_Save);
 
    type af_4057_GetSizeMax is access function
-     (This : access IMoniker;
-                      pcbSize : access Win32.Winnt.ULARGE_INTEGER)
-     return HRESULT;                              --  objbase.h :4057
+     (This    : access IMoniker;
+      pcbSize : access Win32.Winnt.ULARGE_INTEGER)
+      return HRESULT;
    pragma Convention (Stdcall, af_4057_GetSizeMax);
 
    type af_4061_BindToObject is access function
-     (This : access IMoniker;
-                      pbc : access IBindCtx;
-                      pmkToLeft : access IMoniker;
-                      riidResult : access IID;
-                      ppvResult : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :4061
+     (This       : access IMoniker;
+      pbc        : access IBindCtx;
+      pmkToLeft  : access IMoniker;
+      riidResult : access IID;
+      ppvResult  : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_4061_BindToObject);
 
    type af_4068_BindToStorage is access function
-     (This : access IMoniker;
-                      pbc : access IBindCtx;
-                      pmkToLeft : access IMoniker;
-                      riid : REFIID;
-                      ppvObj : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :4068
+     (This      : access IMoniker;
+      pbc       : access IBindCtx;
+      pmkToLeft : access IMoniker;
+      riid      : REFIID;
+      ppvObj    : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_4068_BindToStorage);
 
    type af_4075_Reduce is access function
-     (This : access IMoniker;
-                      pbc : access IBindCtx;
-                      dwReduceHowFar : Win32.DWORD;
-                      ppmkToLeft : access LPMONIKER;
-                      ppmkReduced : access LPMONIKER)
-     return HRESULT;                              --  objbase.h :4075
+     (This           : access IMoniker;
+      pbc            : access IBindCtx;
+      dwReduceHowFar : Win32.DWORD;
+      ppmkToLeft     : access LPMONIKER;
+      ppmkReduced    : access LPMONIKER)
+      return HRESULT;
    pragma Convention (Stdcall, af_4075_Reduce);
 
    type af_4082_ComposeWith is access function
-     (This : access IMoniker;
-                      pmkRight : access IMoniker;
-                      fOnlyIfNotGeneric : Win32.BOOL;
-                      ppmkComposite : access LPMONIKER)
-     return HRESULT;                              --  objbase.h :4082
+     (This              : access IMoniker;
+      pmkRight          : access IMoniker;
+      fOnlyIfNotGeneric : Win32.BOOL;
+      ppmkComposite     : access LPMONIKER)
+      return HRESULT;
    pragma Convention (Stdcall, af_4082_ComposeWith);
 
    type af_4088_Enum is access function
-     (This : access IMoniker;
-                      fForward : Win32.BOOL;
-                      ppenumMoniker : access LPENUMMONIKER)
-     return HRESULT;                              --  objbase.h :4088
+     (This          : access IMoniker;
+      fForward      : Win32.BOOL;
+      ppenumMoniker : access LPENUMMONIKER)
+      return HRESULT;
    pragma Convention (Stdcall, af_4088_Enum);
 
    type af_4093_IsEqual is access function
-     (This : access IMoniker;
-                      pmkOtherMoniker : access IMoniker)
-     return HRESULT;                              --  objbase.h :4093
+     (This            : access IMoniker;
+      pmkOtherMoniker : access IMoniker)
+      return HRESULT;
    pragma Convention (Stdcall, af_4093_IsEqual);
 
    type af_4097_Hash is access function
-     (This : access IMoniker;
-                      pdwHash : access Win32.DWORD)
-     return HRESULT;                              --  objbase.h :4097
+     (This    : access IMoniker;
+      pdwHash : access Win32.DWORD)
+      return HRESULT;
    pragma Convention (Stdcall, af_4097_Hash);
 
    type af_4101_IsRunning is access function
-     (This : access IMoniker;
-                      pbc : access IBindCtx;
-                      pmkToLeft : access IMoniker;
-                      pmkNewlyRunning : access IMoniker)
-     return HRESULT;                              --  objbase.h :4101
+     (This            : access IMoniker;
+      pbc             : access IBindCtx;
+      pmkToLeft       : access IMoniker;
+      pmkNewlyRunning : access IMoniker)
+      return HRESULT;
    pragma Convention (Stdcall, af_4101_IsRunning);
 
    type af_4107_GetTimeOfLastChange is access function
-     (This : access IMoniker;
-                      pbc : access IBindCtx;
-                      pmkToLeft : access IMoniker;
-                      pFileTime : access Win32.Winbase.FILETIME)
-     return HRESULT;                              --  objbase.h :4107
+     (This      : access IMoniker;
+      pbc       : access IBindCtx;
+      pmkToLeft : access IMoniker;
+      pFileTime : access Win32.Winbase.FILETIME)
+      return HRESULT;
    pragma Convention (Stdcall, af_4107_GetTimeOfLastChange);
 
    type af_4113_Inverse is access function
      (This : access IMoniker;
-                      ppmk : access LPMONIKER)
-     return HRESULT;                              --  objbase.h :4113
+      ppmk : access LPMONIKER)
+      return HRESULT;
    pragma Convention (Stdcall, af_4113_Inverse);
 
    type af_4117_CommonPrefixWith is access function
-     (This : access IMoniker;
-                      pmkOther : access IMoniker;
-                      ppmkPx : access LPMONIKER)
-     return HRESULT;                              --  objbase.h :4117
+     (This     : access IMoniker;
+      pmkOther : access IMoniker;
+      ppmkPx   : access LPMONIKER)
+      return HRESULT;
    pragma Convention (Stdcall, af_4117_CommonPrefixWith);
 
    type af_4122_RelativePathTo is access function
-     (This : access IMoniker;
-                      pmkOther : access IMoniker;
-                      ppmkRelPath : access LPMONIKER)
-     return HRESULT;                              --  objbase.h :4122
+     (This        : access IMoniker;
+      pmkOther    : access IMoniker;
+      ppmkRelPath : access LPMONIKER)
+      return HRESULT;
    pragma Convention (Stdcall, af_4122_RelativePathTo);
 
    type af_4127_GetDisplayName is access function
-     (This : access IMoniker;
-                      pbc : access IBindCtx;
-                      pmkToLeft : access IMoniker;
-                      ppszDisplayName : access LPOLESTR)
-     return HRESULT;                              --  objbase.h :4127
+     (This            : access IMoniker;
+      pbc             : access IBindCtx;
+      pmkToLeft       : access IMoniker;
+      ppszDisplayName : access LPOLESTR)
+      return HRESULT;
    pragma Convention (Stdcall, af_4127_GetDisplayName);
 
    type af_4133_ParseDisplayName is access function
-     (This : access IMoniker;
-                      pbc : access IBindCtx;
-                      pmkToLeft : access IMoniker;
-                      pszDisplayName : LPOLESTR;
-                      pchEaten : access Win32.ULONG;
-                      ppmkOut : access LPMONIKER)
-     return HRESULT;                              --  objbase.h :4133
+     (This           : access IMoniker;
+      pbc            : access IBindCtx;
+      pmkToLeft      : access IMoniker;
+      pszDisplayName : LPOLESTR;
+      pchEaten       : access Win32.ULONG;
+      ppmkOut        : access LPMONIKER)
+      return HRESULT;
    pragma Convention (Stdcall, af_4133_ParseDisplayName);
 
    type af_4141_IsSystemMoniker is access function
-     (This : access IMoniker;
-                      pdwMksys : access Win32.DWORD)
-     return HRESULT;                              --  objbase.h :4141
+     (This     : access IMoniker;
+      pdwMksys : access Win32.DWORD)
+      return HRESULT;
    pragma Convention (Stdcall, af_4141_IsSystemMoniker);
 
    type af_4486_QueryInterface is access function
-     (This : access IEnumString;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :4486
+     (This      : access IEnumString;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_4486_QueryInterface);
 
    type af_4491_AddRef is access function
      (This : access IEnumString)
-     return Win32.ULONG;                          --  objbase.h :4491
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_4491_AddRef);
 
    type af_4494_Release is access function
      (This : access IEnumString)
-     return Win32.ULONG;                          --  objbase.h :4494
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_4494_Release);
 
    type af_4497_Next is access function
-     (This : access IEnumString;
-                      celt : Win32.ULONG;
-                      rgelt : access LPOLESTR;
-                      pceltFetched : access Win32.ULONG)
-     return HRESULT;                              --  objbase.h :4497
+     (This         : access IEnumString;
+      celt         : Win32.ULONG;
+      rgelt        : access LPOLESTR;
+      pceltFetched : access Win32.ULONG)
+      return HRESULT;
    pragma Convention (Stdcall, af_4497_Next);
 
    type af_4503_Skip is access function
      (This : access IEnumString;
-                      celt : Win32.ULONG)
-     return HRESULT;                              --  objbase.h :4503
+      celt : Win32.ULONG)
+      return HRESULT;
    pragma Convention (Stdcall, af_4503_Skip);
 
    type af_4507_Reset is access function
      (This : access IEnumString)
-     return HRESULT;                              --  objbase.h :4507
+      return HRESULT;
    pragma Convention (Stdcall, af_4507_Reset);
 
    type af_4510_Clone is access function
-     (This : access IEnumString;
-                      ppenum : access LPENUMSTRING)
-     return HRESULT;                              --  objbase.h :4510
+     (This   : access IEnumString;
+      ppenum : access LPENUMSTRING)
+      return HRESULT;
    pragma Convention (Stdcall, af_4510_Clone);
 
    type af_4724_QueryInterface is access function
-     (This : access IStream;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :4724
+     (This      : access IStream;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_4724_QueryInterface);
 
    type af_4729_AddRef is access function
      (This : access IStream)
-     return Win32.ULONG;                          --  objbase.h :4729
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_4729_AddRef);
 
    type af_4732_Release is access function
      (This : access IStream)
-     return Win32.ULONG;                          --  objbase.h :4732
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_4732_Release);
 
    type af_4735_Read is access function
-     (This : access IStream;
-                      pv : Win32.PVOID;
-                      cb : Win32.ULONG;
-                      pcbRead : access Win32.ULONG)
-     return HRESULT;                              --  objbase.h :4735
+     (This    : access IStream;
+      pv      : Win32.PVOID;
+      cb      : Win32.ULONG;
+      pcbRead : access Win32.ULONG)
+      return HRESULT;
    pragma Convention (Stdcall, af_4735_Read);
 
    type af_4741_Write is access function
-     (This : access IStream;
-                      pv : Win32.PVOID;
-                      cb : Win32.ULONG;
-                      pcbWritten : access Win32.ULONG)
-     return HRESULT;                              --  objbase.h :4741
+     (This       : access IStream;
+      pv         : Win32.PVOID;
+      cb         : Win32.ULONG;
+      pcbWritten : access Win32.ULONG)
+      return HRESULT;
    pragma Convention (Stdcall, af_4741_Write);
 
    type af_4747_Seek is access function
-     (This : access IStream;
-                      dlibMove : Win32.Winnt.LARGE_INTEGER;
-                      dwOrigin : Win32.DWORD;
-                      plibNewPosition : access Win32.Winnt.ULARGE_INTEGER)
-     return HRESULT;                              --  objbase.h :4747
+     (This            : access IStream;
+      dlibMove        : Win32.Winnt.LARGE_INTEGER;
+      dwOrigin        : Win32.DWORD;
+      plibNewPosition : access Win32.Winnt.ULARGE_INTEGER)
+      return HRESULT;
    pragma Convention (Stdcall, af_4747_Seek);
 
    type af_4753_SetSize is access function
-     (This : access IStream;
-                      libNewSize : Win32.Winnt.ULARGE_INTEGER)
-     return HRESULT;                              --  objbase.h :4753
+     (This       : access IStream;
+      libNewSize : Win32.Winnt.ULARGE_INTEGER)
+      return HRESULT;
    pragma Convention (Stdcall, af_4753_SetSize);
 
    type af_4757_CopyTo is access function
-     (This : access IStream;
-                      pstm : access IStream;
-                      cb : Win32.Winnt.ULARGE_INTEGER;
-                      pcbRead : access Win32.Winnt.ULARGE_INTEGER;
-                      pcbWritten : access Win32.Winnt.ULARGE_INTEGER)
-     return HRESULT;                              --  objbase.h :4757
+     (This       : access IStream;
+      pstm       : access IStream;
+      cb         : Win32.Winnt.ULARGE_INTEGER;
+      pcbRead    : access Win32.Winnt.ULARGE_INTEGER;
+      pcbWritten : access Win32.Winnt.ULARGE_INTEGER)
+      return HRESULT;
    pragma Convention (Stdcall, af_4757_CopyTo);
 
    type af_4764_Commit is access function
-     (This : access IStream;
-                      grfCommitFlags : Win32.DWORD)
-     return HRESULT;                              --  objbase.h :4764
+     (This           : access IStream;
+      grfCommitFlags : Win32.DWORD)
+      return HRESULT;
    pragma Convention (Stdcall, af_4764_Commit);
 
    type af_4768_Revert is access function
      (This : access IStream)
-     return HRESULT;                              --  objbase.h :4768
+      return HRESULT;
    pragma Convention (Stdcall, af_4768_Revert);
 
    type af_4771_LockRegion is access function
-     (This : access IStream;
-                      libOffset : Win32.Winnt.ULARGE_INTEGER;
-                      cb : Win32.Winnt.ULARGE_INTEGER;
-                      dwLockType : Win32.DWORD)
-     return HRESULT;                              --  objbase.h :4771
+     (This       : access IStream;
+      libOffset  : Win32.Winnt.ULARGE_INTEGER;
+      cb         : Win32.Winnt.ULARGE_INTEGER;
+      dwLockType : Win32.DWORD)
+      return HRESULT;
    pragma Convention (Stdcall, af_4771_LockRegion);
 
    type af_4777_UnlockRegion is access function
-     (This : access IStream;
-                      libOffset : Win32.Winnt.ULARGE_INTEGER;
-                      cb : Win32.Winnt.ULARGE_INTEGER;
-                      dwLockType : Win32.DWORD)
-     return HRESULT;                              --  objbase.h :4777
+     (This       : access IStream;
+      libOffset  : Win32.Winnt.ULARGE_INTEGER;
+      cb         : Win32.Winnt.ULARGE_INTEGER;
+      dwLockType : Win32.DWORD)
+      return HRESULT;
    pragma Convention (Stdcall, af_4777_UnlockRegion);
 
    type af_4783_Stat is access function
-     (This : access IStream;
-                      pstatstg : access STATSTG;
-                      grfStatFlag : Win32.DWORD)
-     return HRESULT;                              --  objbase.h :4783
+     (This        : access IStream;
+      pstatstg    : access STATSTG;
+      grfStatFlag : Win32.DWORD)
+      return HRESULT;
    pragma Convention (Stdcall, af_4783_Stat);
 
    type af_4788_Clone is access function
-     (This : access IStream;
-                      ppstm : access LPSTREAM)
-     return HRESULT;                              --  objbase.h :4788
+     (This  : access IStream;
+      ppstm : access LPSTREAM)
+      return HRESULT;
    pragma Convention (Stdcall, af_4788_Clone);
 
    type af_5045_QueryInterface is access function
-     (This : access IEnumSTATSTG;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :5045
+     (This      : access IEnumSTATSTG;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_5045_QueryInterface);
 
    type af_5050_AddRef is access function
      (This : access IEnumSTATSTG)
-     return Win32.ULONG;                          --  objbase.h :5050
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_5050_AddRef);
 
    type af_5053_Release is access function
      (This : access IEnumSTATSTG)
-     return Win32.ULONG;                          --  objbase.h :5053
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_5053_Release);
 
    type af_5056_Next is access function
-     (This : access IEnumSTATSTG;
-                      celt : Win32.ULONG;
-                      rgelt : access STATSTG;
-                      pceltFetched : access Win32.ULONG)
-     return HRESULT;                              --  objbase.h :5056
+     (This         : access IEnumSTATSTG;
+      celt         : Win32.ULONG;
+      rgelt        : access STATSTG;
+      pceltFetched : access Win32.ULONG)
+      return HRESULT;
    pragma Convention (Stdcall, af_5056_Next);
 
    type af_5062_Skip is access function
      (This : access IEnumSTATSTG;
-                      celt : Win32.ULONG)
-     return HRESULT;                              --  objbase.h :5062
+      celt : Win32.ULONG)
+      return HRESULT;
    pragma Convention (Stdcall, af_5062_Skip);
 
    type af_5066_Reset is access function
      (This : access IEnumSTATSTG)
-     return HRESULT;                              --  objbase.h :5066
+      return HRESULT;
    pragma Convention (Stdcall, af_5066_Reset);
 
    type af_5069_Clone is access function
-     (This : access IEnumSTATSTG;
-                      ppenum : access LPENUMSTATSTG)
-     return HRESULT;                              --  objbase.h :5069
+     (This   : access IEnumSTATSTG;
+      ppenum : access LPENUMSTATSTG)
+      return HRESULT;
    pragma Convention (Stdcall, af_5069_Clone);
 
    type af_5285_QueryInterface is access function
-     (This : access IStorage;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :5285
+     (This      : access IStorage;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_5285_QueryInterface);
 
    type af_5290_AddRef is access function
      (This : access IStorage)
-     return Win32.ULONG;                          --  objbase.h :5290
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_5290_AddRef);
 
    type af_5293_Release is access function
      (This : access IStorage)
-     return Win32.ULONG;                          --  objbase.h :5293
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_5293_Release);
 
    type af_5296_CreateStream is access function
-     (This : access IStorage;
-                      pwcsName : access OLECHAR;
-                      grfMode : Win32.DWORD;
-                      reserved1 : Win32.DWORD;
-                      reserved2 : Win32.DWORD;
-                      ppstm : access LPSTREAM)
-     return HRESULT;                              --  objbase.h :5296
+     (This      : access IStorage;
+      pwcsName  : access OLECHAR;
+      grfMode   : Win32.DWORD;
+      reserved1 : Win32.DWORD;
+      reserved2 : Win32.DWORD;
+      ppstm     : access LPSTREAM)
+      return HRESULT;
    pragma Convention (Stdcall, af_5296_CreateStream);
 
    type af_5304_OpenStream is access function
-     (This : access IStorage;
-                      pwcsName : access OLECHAR;
-                      reserved1 : Win32.PVOID;
-                      grfMode : Win32.DWORD;
-                      reserved2 : Win32.DWORD;
-                      ppstm : access LPSTREAM)
-     return HRESULT;                              --  objbase.h :5304
+     (This      : access IStorage;
+      pwcsName  : access OLECHAR;
+      reserved1 : Win32.PVOID;
+      grfMode   : Win32.DWORD;
+      reserved2 : Win32.DWORD;
+      ppstm     : access LPSTREAM)
+      return HRESULT;
    pragma Convention (Stdcall, af_5304_OpenStream);
 
    type af_5312_CreateStorage is access function
-     (This : access IStorage;
-                      pwcsName : access OLECHAR;
-                      grfMode : Win32.DWORD;
-                      dwStgFmt : Win32.DWORD;
-                      reserved2 : Win32.DWORD;
-                      ppstg : access LPSTORAGE)
-     return HRESULT;                              --  objbase.h :5312
+     (This      : access IStorage;
+      pwcsName  : access OLECHAR;
+      grfMode   : Win32.DWORD;
+      dwStgFmt  : Win32.DWORD;
+      reserved2 : Win32.DWORD;
+      ppstg     : access LPSTORAGE)
+      return HRESULT;
    pragma Convention (Stdcall, af_5312_CreateStorage);
 
    type af_5320_OpenStorage is access function
-     (This : access IStorage;
-                      pwcsName : access OLECHAR;
-                      pstgPriority : access IStorage;
-                      grfMode : Win32.DWORD;
-                      snbExclude : SNB;
-                      reserved : Win32.DWORD;
-                      ppstg : access LPSTORAGE)
-     return HRESULT;                              --  objbase.h :5320
+     (This         : access IStorage;
+      pwcsName     : access OLECHAR;
+      pstgPriority : access IStorage;
+      grfMode      : Win32.DWORD;
+      snbExclude   : SNB;
+      reserved     : Win32.DWORD;
+      ppstg        : access LPSTORAGE)
+      return HRESULT;
    pragma Convention (Stdcall, af_5320_OpenStorage);
 
    type af_5329_CopyTo is access function
-     (This : access IStorage;
-                      ciidExclude : Win32.DWORD;
-                      rgiidExclude : access IID;
-                      snbExclude : SNB;
-                      pstgDest : access IStorage)
-     return HRESULT;                              --  objbase.h :5329
+     (This         : access IStorage;
+      ciidExclude  : Win32.DWORD;
+      rgiidExclude : access IID;
+      snbExclude   : SNB;
+      pstgDest     : access IStorage)
+      return HRESULT;
    pragma Convention (Stdcall, af_5329_CopyTo);
 
    type af_5336_MoveElementTo is access function
-     (This : access IStorage;
-                      pwcsName : access OLECHAR;
-                      pstgDest : access IStorage;
-                      pwcsNewName : access OLECHAR;
-                      grfFlags : Win32.DWORD)
-     return HRESULT;                              --  objbase.h :5336
+     (This        : access IStorage;
+      pwcsName    : access OLECHAR;
+      pstgDest    : access IStorage;
+      pwcsNewName : access OLECHAR;
+      grfFlags    : Win32.DWORD)
+      return HRESULT;
    pragma Convention (Stdcall, af_5336_MoveElementTo);
 
    type af_5343_Commit is access function
-     (This : access IStorage;
-                      grfCommitFlags : Win32.DWORD)
-     return HRESULT;                              --  objbase.h :5343
+     (This           : access IStorage;
+      grfCommitFlags : Win32.DWORD)
+      return HRESULT;
    pragma Convention (Stdcall, af_5343_Commit);
 
    type af_5347_Revert is access function
      (This : access IStorage)
-     return HRESULT;                              --  objbase.h :5347
+      return HRESULT;
    pragma Convention (Stdcall, af_5347_Revert);
 
    type af_5350_EnumElements is access function
-     (This : access IStorage;
-                      reserved1 : Win32.DWORD;
-                      reserved2 : Win32.PVOID;
-                      reserved3 : Win32.DWORD;
-                      ppenum : access LPENUMSTATSTG)
-     return HRESULT;                              --  objbase.h :5350
+     (This      : access IStorage;
+      reserved1 : Win32.DWORD;
+      reserved2 : Win32.PVOID;
+      reserved3 : Win32.DWORD;
+      ppenum    : access LPENUMSTATSTG)
+      return HRESULT;
    pragma Convention (Stdcall, af_5350_EnumElements);
 
    type af_5357_DestroyElement is access function
-     (This : access IStorage;
-                      pwcsName : access OLECHAR)
-     return HRESULT;                              --  objbase.h :5357
+     (This     : access IStorage;
+      pwcsName : access OLECHAR)
+      return HRESULT;
    pragma Convention (Stdcall, af_5357_DestroyElement);
 
    type af_5361_RenameElement is access function
-     (This : access IStorage;
-                      pwcsOldName : access OLECHAR;
-                      pwcsNewName : access OLECHAR)
-     return HRESULT;                              --  objbase.h :5361
+     (This        : access IStorage;
+      pwcsOldName : access OLECHAR;
+      pwcsNewName : access OLECHAR)
+      return HRESULT;
    pragma Convention (Stdcall, af_5361_RenameElement);
 
    type af_5366_SetElementTimes is access function
-     (This : access IStorage;
-                      pwcsName : access OLECHAR;
-                      pctime : access Win32.Winbase.FILETIME;
-                      patime : access Win32.Winbase.FILETIME;
-                      pmtime : access Win32.Winbase.FILETIME)
-     return HRESULT;                              --  objbase.h :5366
+     (This     : access IStorage;
+      pwcsName : access OLECHAR;
+      pctime   : access Win32.Winbase.FILETIME;
+      patime   : access Win32.Winbase.FILETIME;
+      pmtime   : access Win32.Winbase.FILETIME)
+      return HRESULT;
    pragma Convention (Stdcall, af_5366_SetElementTimes);
 
    type af_5373_SetClass is access function
-     (This : access IStorage;
-                      clsid : access Win32.Objbase.CLSID)
-     return HRESULT;                              --  objbase.h :5373
+     (This  : access IStorage;
+      clsid : access Win32.Objbase.CLSID)
+      return HRESULT;
    pragma Convention (Stdcall, af_5373_SetClass);
 
    type af_5377_SetStateBits is access function
-     (This : access IStorage;
-                      grfStateBits : Win32.DWORD;
-                      grfMask : Win32.DWORD)
-     return HRESULT;                              --  objbase.h :5377
+     (This         : access IStorage;
+      grfStateBits : Win32.DWORD;
+      grfMask      : Win32.DWORD)
+      return HRESULT;
    pragma Convention (Stdcall, af_5377_SetStateBits);
 
    type af_5382_Stat is access function
-     (This : access IStorage;
-                      pstatstg : access STATSTG;
-                      grfStatFlag : Win32.DWORD)
-     return HRESULT;                              --  objbase.h :5382
+     (This        : access IStorage;
+      pstatstg    : access STATSTG;
+      grfStatFlag : Win32.DWORD)
+      return HRESULT;
    pragma Convention (Stdcall, af_5382_Stat);
 
    type af_5723_QueryInterface is access function
-     (This : access IPersistFile;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :5723
+     (This      : access IPersistFile;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_5723_QueryInterface);
 
    type af_5728_AddRef is access function
      (This : access IPersistFile)
-     return Win32.ULONG;                          --  objbase.h :5728
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_5728_AddRef);
 
    type af_5731_Release is access function
      (This : access IPersistFile)
-     return Win32.ULONG;                          --  objbase.h :5731
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_5731_Release);
 
    type af_5734_GetClassID is access function
-     (This : access IPersistFile;
-                      pClassID : access CLSID)
-     return HRESULT;                              --  objbase.h :5734
+     (This     : access IPersistFile;
+      pClassID : access CLSID)
+      return HRESULT;
    pragma Convention (Stdcall, af_5734_GetClassID);
 
    type af_5738_IsDirty is access function
      (This : access IPersistFile)
-     return HRESULT;                              --  objbase.h :5738
+      return HRESULT;
    pragma Convention (Stdcall, af_5738_IsDirty);
 
    type af_5741_Load is access function
-     (This : access IPersistFile;
-                      pszFileName : LPCOLESTR;
-                      dwMode : Win32.DWORD)
-     return HRESULT;                              --  objbase.h :5741
+     (This        : access IPersistFile;
+      pszFileName : LPCOLESTR;
+      dwMode      : Win32.DWORD)
+      return HRESULT;
    pragma Convention (Stdcall, af_5741_Load);
 
    type af_5746_Save is access function
-     (This : access IPersistFile;
-                      pszFileName : LPCOLESTR;
-                      fRemember : Win32.BOOL)
-     return HRESULT;                              --  objbase.h :5746
+     (This        : access IPersistFile;
+      pszFileName : LPCOLESTR;
+      fRemember   : Win32.BOOL)
+      return HRESULT;
    pragma Convention (Stdcall, af_5746_Save);
 
    type af_5751_SaveCompleted is access function
-     (This : access IPersistFile;
-                      pszFileName : LPCOLESTR)
-     return HRESULT;                              --  objbase.h :5751
+     (This        : access IPersistFile;
+      pszFileName : LPCOLESTR)
+      return HRESULT;
    pragma Convention (Stdcall, af_5751_SaveCompleted);
 
    type af_5755_GetCurFile is access function
-     (This : access IPersistFile;
-                      ppszFileName : access LPOLESTR)
-     return HRESULT;                              --  objbase.h :5755
+     (This         : access IPersistFile;
+      ppszFileName : access LPOLESTR)
+      return HRESULT;
    pragma Convention (Stdcall, af_5755_GetCurFile);
 
    type af_5918_QueryInterface is access function
-     (This : access IPersistStorage;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :5918
+     (This      : access IPersistStorage;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_5918_QueryInterface);
 
    type af_5923_AddRef is access function
      (This : access IPersistStorage)
-     return Win32.ULONG;                          --  objbase.h :5923
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_5923_AddRef);
 
    type af_5926_Release is access function
      (This : access IPersistStorage)
-     return Win32.ULONG;                          --  objbase.h :5926
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_5926_Release);
 
    type af_5929_GetClassID is access function
-     (This : access IPersistStorage;
-                      pClassID : access CLSID)
-     return HRESULT;                              --  objbase.h :5929
+     (This     : access IPersistStorage;
+      pClassID : access CLSID)
+      return HRESULT;
    pragma Convention (Stdcall, af_5929_GetClassID);
 
    type af_5933_IsDirty is access function
      (This : access IPersistStorage)
-     return HRESULT;                              --  objbase.h :5933
+      return HRESULT;
    pragma Convention (Stdcall, af_5933_IsDirty);
 
    type af_5936_InitNew is access function
      (This : access IPersistStorage;
-                      pStg : access IStorage)
-     return HRESULT;                              --  objbase.h :5936
+      pStg : access IStorage)
+      return HRESULT;
    pragma Convention (Stdcall, af_5936_InitNew);
 
    type af_5940_Load is access function
      (This : access IPersistStorage;
-                      pStg : access IStorage)
-     return HRESULT;                              --  objbase.h :5940
+      pStg : access IStorage)
+      return HRESULT;
    pragma Convention (Stdcall, af_5940_Load);
 
    type af_5944_Save is access function
-     (This : access IPersistStorage;
-                      pStgSave : access IStorage;
-                      fSameAsLoad : Win32.BOOL)
-     return HRESULT;                              --  objbase.h :5944
+     (This        : access IPersistStorage;
+      pStgSave    : access IStorage;
+      fSameAsLoad : Win32.BOOL)
+      return HRESULT;
    pragma Convention (Stdcall, af_5944_Save);
 
    type af_5949_SaveCompleted is access function
-     (This : access IPersistStorage;
-                      pStgNew : access IStorage)
-     return HRESULT;                              --  objbase.h :5949
+     (This    : access IPersistStorage;
+      pStgNew : access IStorage)
+      return HRESULT;
    pragma Convention (Stdcall, af_5949_SaveCompleted);
 
    type af_5953_HandsOffStorage is access function
      (This : access IPersistStorage)
-     return HRESULT;                              --  objbase.h :5953
+      return HRESULT;
    pragma Convention (Stdcall, af_5953_HandsOffStorage);
 
    type af_6142_QueryInterface is access function
-     (This : access ILockBytes;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :6142
+     (This      : access ILockBytes;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_6142_QueryInterface);
 
    type af_6147_AddRef is access function
      (This : access ILockBytes)
-     return Win32.ULONG;                          --  objbase.h :6147
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_6147_AddRef);
 
    type af_6150_Release is access function
      (This : access ILockBytes)
-     return Win32.ULONG;                          --  objbase.h :6150
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_6150_Release);
 
    type af_6153_ReadAt is access function
-     (This : access ILockBytes;
-                      ulOffset : Win32.Winnt.ULARGE_INTEGER;
-                      pv : Win32.PVOID;
-                      cb : Win32.ULONG;
-                      pcbRead : access Win32.ULONG)
-     return HRESULT;                              --  objbase.h :6153
+     (This     : access ILockBytes;
+      ulOffset : Win32.Winnt.ULARGE_INTEGER;
+      pv       : Win32.PVOID;
+      cb       : Win32.ULONG;
+      pcbRead  : access Win32.ULONG)
+      return HRESULT;
    pragma Convention (Stdcall, af_6153_ReadAt);
 
    type af_6160_WriteAt is access function
-     (This : access ILockBytes;
-                      ulOffset : Win32.Winnt.ULARGE_INTEGER;
-                      pv : Win32.PVOID;
-                      cb : Win32.ULONG;
-                      pcbWritten : access Win32.ULONG)
-     return HRESULT;                              --  objbase.h :6160
+     (This       : access ILockBytes;
+      ulOffset   : Win32.Winnt.ULARGE_INTEGER;
+      pv         : Win32.PVOID;
+      cb         : Win32.ULONG;
+      pcbWritten : access Win32.ULONG)
+      return HRESULT;
    pragma Convention (Stdcall, af_6160_WriteAt);
 
    type af_6167_Flush is access function
      (This : access ILockBytes)
-     return HRESULT;                              --  objbase.h :6167
+      return HRESULT;
    pragma Convention (Stdcall, af_6167_Flush);
 
    type af_6170_SetSize is access function
      (This : access ILockBytes;
-                      cb : Win32.Winnt.ULARGE_INTEGER)
-     return HRESULT;                              --  objbase.h :6170
+      cb   : Win32.Winnt.ULARGE_INTEGER)
+      return HRESULT;
    pragma Convention (Stdcall, af_6170_SetSize);
 
    type af_6174_LockRegion is access function
-     (This : access ILockBytes;
-                      libOffset : Win32.Winnt.ULARGE_INTEGER;
-                      cb : Win32.Winnt.ULARGE_INTEGER;
-                      dwLockType : Win32.DWORD)
-     return HRESULT;                              --  objbase.h :6174
+     (This       : access ILockBytes;
+      libOffset  : Win32.Winnt.ULARGE_INTEGER;
+      cb         : Win32.Winnt.ULARGE_INTEGER;
+      dwLockType : Win32.DWORD)
+      return HRESULT;
    pragma Convention (Stdcall, af_6174_LockRegion);
 
    type af_6180_UnlockRegion is access function
-     (This : access ILockBytes;
-                      libOffset : Win32.Winnt.ULARGE_INTEGER;
-                      cb : Win32.Winnt.ULARGE_INTEGER;
-                      dwLockType : Win32.DWORD)
-     return HRESULT;                              --  objbase.h :6180
+     (This       : access ILockBytes;
+      libOffset  : Win32.Winnt.ULARGE_INTEGER;
+      cb         : Win32.Winnt.ULARGE_INTEGER;
+      dwLockType : Win32.DWORD)
+      return HRESULT;
    pragma Convention (Stdcall, af_6180_UnlockRegion);
 
    type af_6186_Stat is access function
-     (This : access ILockBytes;
-                      pstatstg : access STATSTG;
-                      grfStatFlag : Win32.DWORD)
-     return HRESULT;                              --  objbase.h :6186
+     (This        : access ILockBytes;
+      pstatstg    : access STATSTG;
+      grfStatFlag : Win32.DWORD)
+      return HRESULT;
    pragma Convention (Stdcall, af_6186_Stat);
 
    type af_6411_QueryInterface is access function
-     (This : access IEnumFORMATETC;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :6411
+     (This      : access IEnumFORMATETC;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_6411_QueryInterface);
 
    type af_6416_AddRef is access function
      (This : access IEnumFORMATETC)
-     return Win32.ULONG;                          --  objbase.h :6416
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_6416_AddRef);
 
    type af_6419_Release is access function
      (This : access IEnumFORMATETC)
-     return Win32.ULONG;                          --  objbase.h :6419
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_6419_Release);
 
    type af_6422_Next is access function
-     (This : access IEnumFORMATETC;
-                      celt : Win32.ULONG;
-                      rgelt : access FORMATETC;
-                      pceltFetched : access Win32.ULONG)
-     return HRESULT;                              --  objbase.h :6422
+     (This         : access IEnumFORMATETC;
+      celt         : Win32.ULONG;
+      rgelt        : access FORMATETC;
+      pceltFetched : access Win32.ULONG)
+      return HRESULT;
    pragma Convention (Stdcall, af_6422_Next);
 
    type af_6428_Skip is access function
      (This : access IEnumFORMATETC;
-                      celt : Win32.ULONG)
-     return HRESULT;                              --  objbase.h :6428
+      celt : Win32.ULONG)
+      return HRESULT;
    pragma Convention (Stdcall, af_6428_Skip);
 
    type af_6432_Reset is access function
      (This : access IEnumFORMATETC)
-     return HRESULT;                              --  objbase.h :6432
+      return HRESULT;
    pragma Convention (Stdcall, af_6432_Reset);
 
    type af_6435_Clone is access function
-     (This : access IEnumFORMATETC;
-                      ppenum : access LPENUMFORMATETC)
-     return HRESULT;                              --  objbase.h :6435
+     (This   : access IEnumFORMATETC;
+      ppenum : access LPENUMFORMATETC)
+      return HRESULT;
    pragma Convention (Stdcall, af_6435_Clone);
 
    type af_6599_QueryInterface is access function
-     (This : access IEnumSTATDATA;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :6599
+     (This      : access IEnumSTATDATA;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_6599_QueryInterface);
 
    type af_6604_AddRef is access function
      (This : access IEnumSTATDATA)
-     return Win32.ULONG;                          --  objbase.h :6604
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_6604_AddRef);
 
    type af_6607_Release is access function
      (This : access IEnumSTATDATA)
-     return Win32.ULONG;                          --  objbase.h :6607
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_6607_Release);
 
    type af_6610_Next is access function
-     (This : access IEnumSTATDATA;
-                      celt : Win32.ULONG;
-                      rgelt : access STATDATA;
-                      pceltFetched : access Win32.ULONG)
-     return HRESULT;                              --  objbase.h :6610
+     (This         : access IEnumSTATDATA;
+      celt         : Win32.ULONG;
+      rgelt        : access STATDATA;
+      pceltFetched : access Win32.ULONG)
+      return HRESULT;
    pragma Convention (Stdcall, af_6610_Next);
 
    type af_6616_Skip is access function
      (This : access IEnumSTATDATA;
-                      celt : Win32.ULONG)
-     return HRESULT;                              --  objbase.h :6616
+      celt : Win32.ULONG)
+      return HRESULT;
    pragma Convention (Stdcall, af_6616_Skip);
 
    type af_6620_Reset is access function
      (This : access IEnumSTATDATA)
-     return HRESULT;                              --  objbase.h :6620
+      return HRESULT;
    pragma Convention (Stdcall, af_6620_Reset);
 
    type af_6623_Clone is access function
-     (This : access IEnumSTATDATA;
-                      ppenum : access LPENUMSTATDATA)
-     return HRESULT;                              --  objbase.h :6623
+     (This   : access IEnumSTATDATA;
+      ppenum : access LPENUMSTATDATA)
+      return HRESULT;
    pragma Convention (Stdcall, af_6623_Clone);
 
    type af_6753_QueryInterface is access function
-     (This : access IRootStorage;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :6753
+     (This      : access IRootStorage;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_6753_QueryInterface);
 
    type af_6758_AddRef is access function
      (This : access IRootStorage)
-     return Win32.ULONG;                          --  objbase.h :6758
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_6758_AddRef);
 
    type af_6761_Release is access function
      (This : access IRootStorage)
-     return Win32.ULONG;                          --  objbase.h :6761
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_6761_Release);
 
    type af_6764_SwitchToFile is access function
-     (This : access IRootStorage;
-                      pszFile : LPOLESTR)
-     return HRESULT;                              --  objbase.h :6764
+     (This    : access IRootStorage;
+      pszFile : LPOLESTR)
+      return HRESULT;
    pragma Convention (Stdcall, af_6764_SwitchToFile);
 
    type af_6923_QueryInterface is access function
-     (This : access IAdviseSink;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :6923
+     (This      : access IAdviseSink;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_6923_QueryInterface);
 
    type af_6928_AddRef is access function
      (This : access IAdviseSink)
-     return Win32.ULONG;                          --  objbase.h :6928
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_6928_AddRef);
 
    type af_6931_Release is access function
      (This : access IAdviseSink)
-     return Win32.ULONG;                          --  objbase.h :6931
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_6931_Release);
 
    type ap_6934_OnDataChange is access procedure
-     (This : access IAdviseSink;
-                      pFormatetc : access FORMATETC;
-                      pStgmed : access STGMEDIUM);          --  objbase.h :6934
+     (This       : access IAdviseSink;
+      pFormatetc : access FORMATETC;
+      pStgmed    : access STGMEDIUM);
    pragma Convention (Stdcall, ap_6934_OnDataChange);
 
    type ap_6939_OnViewChange is access procedure
-     (This : access IAdviseSink;
-                      dwAspect : Win32.DWORD;
-                      lindex : Win32.LONG);                 --  objbase.h :6939
+     (This     : access IAdviseSink;
+      dwAspect : Win32.DWORD;
+      lindex   : Win32.LONG);
    pragma Convention (Stdcall, ap_6939_OnViewChange);
 
    type ap_6944_OnRename is access procedure
      (This : access IAdviseSink;
-                      pmk : access IMoniker);               --  objbase.h :6944
+      pmk  : access IMoniker);
    pragma Convention (Stdcall, ap_6944_OnRename);
 
-   type ap_6948_OnSave is access procedure
-     (This : access IAdviseSink);                  --  objbase.h :6948
+   type ap_6948_OnSave is access procedure (This : access IAdviseSink);
    pragma Convention (Stdcall, ap_6948_OnSave);
 
-   type ap_6951_OnClose is access procedure
-     (This : access IAdviseSink);                  --  objbase.h :6951
+   type ap_6951_OnClose is access procedure (This : access IAdviseSink);
    pragma Convention (Stdcall, ap_6951_OnClose);
 
    type af_7094_QueryInterface is access function
-     (This : access IAdviseSink2;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :7094
+     (This      : access IAdviseSink2;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_7094_QueryInterface);
 
    type af_7099_AddRef is access function
      (This : access IAdviseSink2)
-     return Win32.ULONG;                          --  objbase.h :7099
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_7099_AddRef);
 
    type af_7102_Release is access function
      (This : access IAdviseSink2)
-     return Win32.ULONG;                          --  objbase.h :7102
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_7102_Release);
 
    type ap_7105_OnDataChange is access procedure
-     (This : access IAdviseSink2;
-                      pFormatetc : access FORMATETC;
-                      pStgmed : access STGMEDIUM);          --  objbase.h :7105
+     (This       : access IAdviseSink2;
+      pFormatetc : access FORMATETC;
+      pStgmed    : access STGMEDIUM);
    pragma Convention (Stdcall, ap_7105_OnDataChange);
 
    type ap_7110_OnViewChange is access procedure
-     (This : access IAdviseSink2;
-                      dwAspect : Win32.DWORD;
-                      lindex : Win32.LONG);                 --  objbase.h :7110
+     (This     : access IAdviseSink2;
+      dwAspect : Win32.DWORD;
+      lindex   : Win32.LONG);
    pragma Convention (Stdcall, ap_7110_OnViewChange);
 
    type ap_7115_OnRename is access procedure
      (This : access IAdviseSink2;
-                      pmk : access IMoniker);               --  objbase.h :7115
+      pmk  : access IMoniker);
    pragma Convention (Stdcall, ap_7115_OnRename);
 
-   type ap_7119_OnSave is access procedure
-     (This : access IAdviseSink2);                 --  objbase.h :7119
+   type ap_7119_OnSave is access procedure (This : access IAdviseSink2);
    pragma Convention (Stdcall, ap_7119_OnSave);
 
-   type ap_7122_OnClose is access procedure
-     (This : access IAdviseSink2);                 --  objbase.h :7122
+   type ap_7122_OnClose is access procedure (This : access IAdviseSink2);
    pragma Convention (Stdcall, ap_7122_OnClose);
 
    type ap_7125_OnLinkSrcChange is access procedure
      (This : access IAdviseSink2;
-                      pmk : access IMoniker);               --  objbase.h :7125
+      pmk  : access IMoniker);
    pragma Convention (Stdcall, ap_7125_OnLinkSrcChange);
 
    type af_7265_QueryInterface is access function
-     (This : access IDataObject;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :7265
+     (This      : access IDataObject;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_7265_QueryInterface);
 
    type af_7270_AddRef is access function
      (This : access IDataObject)
-     return Win32.ULONG;                          --  objbase.h :7270
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_7270_AddRef);
 
    type af_7273_Release is access function
      (This : access IDataObject)
-     return Win32.ULONG;                          --  objbase.h :7273
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_7273_Release);
 
    type af_7276_GetData is access function
-     (This : access IDataObject;
-                      pformatetcIn : access FORMATETC;
-                      pmedium : access STGMEDIUM)
-     return HRESULT;                              --  objbase.h :7276
+     (This         : access IDataObject;
+      pformatetcIn : access FORMATETC;
+      pmedium      : access STGMEDIUM)
+      return HRESULT;
    pragma Convention (Stdcall, af_7276_GetData);
 
    type af_7281_GetDataHere is access function
-     (This : access IDataObject;
-                      pformatetc : access FORMATETC;
-                      pmedium : access STGMEDIUM)
-     return HRESULT;                              --  objbase.h :7281
+     (This       : access IDataObject;
+      pformatetc : access FORMATETC;
+      pmedium    : access STGMEDIUM)
+      return HRESULT;
    pragma Convention (Stdcall, af_7281_GetDataHere);
 
    type af_7286_QueryGetData is access function
-     (This : access IDataObject;
-                      pformatetc : access FORMATETC)
-     return HRESULT;                              --  objbase.h :7286
+     (This       : access IDataObject;
+      pformatetc : access FORMATETC)
+      return HRESULT;
    pragma Convention (Stdcall, af_7286_QueryGetData);
 
    type af_7290_GetCanonicalFormatEtc is access function
-     (This : access IDataObject;
-                      pformatectIn : access FORMATETC;
-                      pformatetcOut : access FORMATETC)
-     return HRESULT;                              --  objbase.h :7290
+     (This          : access IDataObject;
+      pformatectIn  : access FORMATETC;
+      pformatetcOut : access FORMATETC)
+      return HRESULT;
    pragma Convention (Stdcall, af_7290_GetCanonicalFormatEtc);
 
    type af_7295_SetData is access function
-     (This : access IDataObject;
-                      pformatetc : access FORMATETC;
-                      pmedium : access STGMEDIUM;
-                      fRelease : Win32.BOOL)
-     return HRESULT;                              --  objbase.h :7295
+     (This       : access IDataObject;
+      pformatetc : access FORMATETC;
+      pmedium    : access STGMEDIUM;
+      fRelease   : Win32.BOOL)
+      return HRESULT;
    pragma Convention (Stdcall, af_7295_SetData);
 
    type af_7301_EnumFormatEtc is access function
-     (This : access IDataObject;
-                      dwDirection : Win32.DWORD;
-                      ppenumFormatEtc : access LPENUMFORMATETC)
-     return HRESULT;                              --  objbase.h :7301
+     (This            : access IDataObject;
+      dwDirection     : Win32.DWORD;
+      ppenumFormatEtc : access LPENUMFORMATETC)
+      return HRESULT;
    pragma Convention (Stdcall, af_7301_EnumFormatEtc);
 
    type af_7306_DAdvise is access function
-     (This : access IDataObject;
-                      pformatetc : access FORMATETC;
-                      advf : Win32.DWORD;
-                      pAdvSink : access IAdviseSink;
-                      pdwConnection : access Win32.DWORD)
-     return HRESULT;                              --  objbase.h :7306
+     (This          : access IDataObject;
+      pformatetc    : access FORMATETC;
+      advf          : Win32.DWORD;
+      pAdvSink      : access IAdviseSink;
+      pdwConnection : access Win32.DWORD)
+      return HRESULT;
    pragma Convention (Stdcall, af_7306_DAdvise);
 
    type af_7313_DUnadvise is access function
-     (This : access IDataObject;
-                      dwConnection : Win32.DWORD)
-     return HRESULT;                              --  objbase.h :7313
+     (This         : access IDataObject;
+      dwConnection : Win32.DWORD)
+      return HRESULT;
    pragma Convention (Stdcall, af_7313_DUnadvise);
 
    type af_7317_EnumDAdvise is access function
-     (This : access IDataObject;
-                      ppenumAdvise : access LPENUMSTATDATA)
-     return HRESULT;                              --  objbase.h :7317
+     (This         : access IDataObject;
+      ppenumAdvise : access LPENUMSTATDATA)
+      return HRESULT;
    pragma Convention (Stdcall, af_7317_EnumDAdvise);
 
    type af_7545_QueryInterface is access function
-     (This : access IDataAdviseHolder;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :7545
+     (This      : access IDataAdviseHolder;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_7545_QueryInterface);
 
    type af_7550_AddRef is access function
      (This : access IDataAdviseHolder)
-     return Win32.ULONG;                          --  objbase.h :7550
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_7550_AddRef);
 
    type af_7553_Release is access function
      (This : access IDataAdviseHolder)
-     return Win32.ULONG;                          --  objbase.h :7553
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_7553_Release);
 
    type af_7556_Advise is access function
-     (This : access IDataAdviseHolder;
-                      pDataObject : access IDataObject;
-                      pFetc : access FORMATETC;
-                      advf : Win32.DWORD;
-                      pAdvise : access IAdviseSink;
-                      pdwConnection : access Win32.DWORD)
-     return HRESULT;                              --  objbase.h :7556
+     (This          : access IDataAdviseHolder;
+      pDataObject   : access IDataObject;
+      pFetc         : access FORMATETC;
+      advf          : Win32.DWORD;
+      pAdvise       : access IAdviseSink;
+      pdwConnection : access Win32.DWORD)
+      return HRESULT;
    pragma Convention (Stdcall, af_7556_Advise);
 
    type af_7564_Unadvise is access function
-     (This : access IDataAdviseHolder;
-                      dwConnection : Win32.DWORD)
-     return HRESULT;                              --  objbase.h :7564
+     (This         : access IDataAdviseHolder;
+      dwConnection : Win32.DWORD)
+      return HRESULT;
    pragma Convention (Stdcall, af_7564_Unadvise);
 
    type af_7568_EnumAdvise is access function
-     (This : access IDataAdviseHolder;
-                      ppenumAdvise : access LPENUMSTATDATA)
-     return HRESULT;                              --  objbase.h :7568
+     (This         : access IDataAdviseHolder;
+      ppenumAdvise : access LPENUMSTATDATA)
+      return HRESULT;
    pragma Convention (Stdcall, af_7568_EnumAdvise);
 
    type af_7572_SendOnDataChange is access function
-     (This : access IDataAdviseHolder;
-                      pDataObject : access IDataObject;
-                      dwReserved : Win32.DWORD;
-                      advf : Win32.DWORD)
-     return HRESULT;                              --  objbase.h :7572
+     (This        : access IDataAdviseHolder;
+      pDataObject : access IDataObject;
+      dwReserved  : Win32.DWORD;
+      advf        : Win32.DWORD)
+      return HRESULT;
    pragma Convention (Stdcall, af_7572_SendOnDataChange);
 
    type af_7766_QueryInterface is access function
-     (This : access IMessageFilter;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :7766
+     (This      : access IMessageFilter;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_7766_QueryInterface);
 
    type af_7771_AddRef is access function
      (This : access IMessageFilter)
-     return Win32.ULONG;                          --  objbase.h :7771
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_7771_AddRef);
 
    type af_7774_Release is access function
      (This : access IMessageFilter)
-     return Win32.ULONG;                          --  objbase.h :7774
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_7774_Release);
 
    type af_7777_HandleInComingCall is access function
-     (This : access IMessageFilter;
-                      dwCallType : Win32.DWORD;
-                      htaskCaller : Win32.Windef.HTASK;
-                      dwTickCount : Win32.DWORD;
-                      lpInterfaceInfo : Win32.Objbase.LPINTERFACEINFO)
-     return Win32.DWORD;                          --  objbase.h :7777
+     (This            : access IMessageFilter;
+      dwCallType      : Win32.DWORD;
+      htaskCaller     : Win32.Windef.HTASK;
+      dwTickCount     : Win32.DWORD;
+      lpInterfaceInfo : Win32.Objbase.LPINTERFACEINFO)
+      return Win32.DWORD;
    pragma Convention (Stdcall, af_7777_HandleInComingCall);
 
    type af_7784_RetryRejectedCall is access function
-     (This : access IMessageFilter;
-                      htaskCallee : Win32.Windef.HTASK;
-                      dwTickCount : Win32.DWORD;
-                      dwRejectType : Win32.DWORD)
-     return Win32.DWORD;                          --  objbase.h :7784
+     (This         : access IMessageFilter;
+      htaskCallee  : Win32.Windef.HTASK;
+      dwTickCount  : Win32.DWORD;
+      dwRejectType : Win32.DWORD)
+      return Win32.DWORD;
    pragma Convention (Stdcall, af_7784_RetryRejectedCall);
 
    type af_7790_MessagePending is access function
-     (This : access IMessageFilter;
-                      htaskCallee : Win32.Windef.HTASK;
-                      dwTickCount : Win32.DWORD;
-                      dwPendingType : Win32.DWORD)
-     return Win32.DWORD;                          --  objbase.h :7790
+     (This          : access IMessageFilter;
+      htaskCallee   : Win32.Windef.HTASK;
+      dwTickCount   : Win32.DWORD;
+      dwPendingType : Win32.DWORD)
+      return Win32.DWORD;
    pragma Convention (Stdcall, af_7790_MessagePending);
 
    type af_7942_QueryInterface is access function
-     (This : access IRpcChannelBuffer;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :7942
+     (This      : access IRpcChannelBuffer;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_7942_QueryInterface);
 
    type af_7947_AddRef is access function
      (This : access IRpcChannelBuffer)
-     return Win32.ULONG;                          --  objbase.h :7947
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_7947_AddRef);
 
    type af_7950_Release is access function
      (This : access IRpcChannelBuffer)
-     return Win32.ULONG;                          --  objbase.h :7950
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_7950_Release);
 
    type af_7953_GetBuffer is access function
-     (This : access IRpcChannelBuffer;
-                      pMessage : access RPCOLEMESSAGE;
-                      riid : REFIID)
-     return HRESULT;                              --  objbase.h :7953
+     (This     : access IRpcChannelBuffer;
+      pMessage : access RPCOLEMESSAGE;
+      riid     : REFIID)
+      return HRESULT;
    pragma Convention (Stdcall, af_7953_GetBuffer);
 
    type af_7958_SendReceive is access function
-     (This : access IRpcChannelBuffer;
-                      pMessage : access RPCOLEMESSAGE;
-                      pStatus : access Win32.ULONG)
-     return HRESULT;                              --  objbase.h :7958
+     (This     : access IRpcChannelBuffer;
+      pMessage : access RPCOLEMESSAGE;
+      pStatus  : access Win32.ULONG)
+      return HRESULT;
    pragma Convention (Stdcall, af_7958_SendReceive);
 
    type af_7963_FreeBuffer is access function
-     (This : access IRpcChannelBuffer;
-                      pMessage : access RPCOLEMESSAGE)
-     return HRESULT;                              --  objbase.h :7963
+     (This     : access IRpcChannelBuffer;
+      pMessage : access RPCOLEMESSAGE)
+      return HRESULT;
    pragma Convention (Stdcall, af_7963_FreeBuffer);
 
    type af_7967_GetDestCtx is access function
-     (This : access IRpcChannelBuffer;
-                      pdwDestContext : access Win32.DWORD;
-                      ppvDestContext : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :7967
+     (This           : access IRpcChannelBuffer;
+      pdwDestContext : access Win32.DWORD;
+      ppvDestContext : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_7967_GetDestCtx);
 
    type af_7972_IsConnected is access function
      (This : access IRpcChannelBuffer)
-     return HRESULT;                              --  objbase.h :7972
+      return HRESULT;
    pragma Convention (Stdcall, af_7972_IsConnected);
 
    type af_8116_QueryInterface is access function
-     (This : access IRpcProxyBuffer;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :8116
+     (This      : access IRpcProxyBuffer;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_8116_QueryInterface);
 
    type af_8121_AddRef is access function
      (This : access IRpcProxyBuffer)
-     return Win32.ULONG;                          --  objbase.h :8121
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_8121_AddRef);
 
    type af_8124_Release is access function
      (This : access IRpcProxyBuffer)
-     return Win32.ULONG;                          --  objbase.h :8124
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_8124_Release);
 
    type af_8127_Connect is access function
-     (This : access IRpcProxyBuffer;
-                      pRpcChannelBuffer : access IRpcChannelBuffer)
-     return HRESULT;                              --  objbase.h :8127
+     (This              : access IRpcProxyBuffer;
+      pRpcChannelBuffer : access IRpcChannelBuffer)
+      return HRESULT;
    pragma Convention (Stdcall, af_8127_Connect);
 
    type ap_8131_Disconnect is access procedure
-     (This : access IRpcProxyBuffer);              --  objbase.h :8131
+     (This : access IRpcProxyBuffer);
    pragma Convention (Stdcall, ap_8131_Disconnect);
 
    type af_8242_QueryInterface is access function
-     (This : access IRpcStubBuffer;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :8242
+     (This      : access IRpcStubBuffer;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_8242_QueryInterface);
 
    type af_8247_AddRef is access function
      (This : access IRpcStubBuffer)
-     return Win32.ULONG;                          --  objbase.h :8247
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_8247_AddRef);
 
    type af_8250_Release is access function
      (This : access IRpcStubBuffer)
-     return Win32.ULONG;                          --  objbase.h :8250
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_8250_Release);
 
    type af_8253_Connect is access function
-     (This : access IRpcStubBuffer;
-                      pUnkServer : access IUnknown)
-     return HRESULT;                              --  objbase.h :8253
+     (This       : access IRpcStubBuffer;
+      pUnkServer : access IUnknown)
+      return HRESULT;
    pragma Convention (Stdcall, af_8253_Connect);
 
    type ap_8257_Disconnect is access procedure
-     (This : access IRpcStubBuffer);               --  objbase.h :8257
+     (This : access IRpcStubBuffer);
    pragma Convention (Stdcall, ap_8257_Disconnect);
 
    type af_8260_Invoke is access function
-     (This : access IRpcStubBuffer;
-                      prpcmsg : access RPCOLEMESSAGE;
-                      pRpcChannelBuffer : access IRpcChannelBuffer)
-     return HRESULT;                              --  objbase.h :8260
+     (This              : access IRpcStubBuffer;
+      prpcmsg           : access RPCOLEMESSAGE;
+      pRpcChannelBuffer : access IRpcChannelBuffer)
+      return HRESULT;
    pragma Convention (Stdcall, af_8260_Invoke);
 
    type af_8265_IsIIDSupported is access function
      (This : access IRpcStubBuffer;
-                      riid : REFIID)
-     return a_IRpcStubBuffer_t;                   --  objbase.h :8265
+      riid : REFIID)
+      return a_IRpcStubBuffer_t;
    pragma Convention (Stdcall, af_8265_IsIIDSupported);
 
    type af_8269_CountRefs is access function
      (This : access IRpcStubBuffer)
-     return Win32.ULONG;                          --  objbase.h :8269
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_8269_CountRefs);
 
    type af_8272_DebugServerQueryInterface is access function
      (This : access IRpcStubBuffer;
-                      ppv : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :8272
+      ppv  : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_8272_DebugServerQueryInterface);
 
    type ap_8276_DebugServerRelease is access procedure
      (This : access IRpcStubBuffer;
-                      pv : Win32.PVOID);                    --  objbase.h :8276
+      pv   : Win32.PVOID);
    pragma Convention (Stdcall, ap_8276_DebugServerRelease);
 
    type af_8454_QueryInterface is access function
-     (This : access IPSFactoryBuffer;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :8454
+     (This      : access IPSFactoryBuffer;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_8454_QueryInterface);
 
    type af_8459_AddRef is access function
      (This : access IPSFactoryBuffer)
-     return Win32.ULONG;                          --  objbase.h :8459
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_8459_AddRef);
 
    type af_8462_Release is access function
      (This : access IPSFactoryBuffer)
-     return Win32.ULONG;                          --  objbase.h :8462
+      return Win32.ULONG;
    pragma Convention (Stdcall, af_8462_Release);
 
    type af_8465_CreateProxy is access function
-     (This : access IPSFactoryBuffer;
-                      pUnkOuter : access IUnknown;
-                      riid : REFIID;
-                      ppProxy : access PIRpcProxyBuffer;
-                      ppv : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :8465
+     (This      : access IPSFactoryBuffer;
+      pUnkOuter : access IUnknown;
+      riid      : REFIID;
+      ppProxy   : access PIRpcProxyBuffer;
+      ppv       : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, af_8465_CreateProxy);
 
    type af_8472_CreateStub is access function
-     (This : access IPSFactoryBuffer;
-                      riid : REFIID;
-                      pUnkServer : access IUnknown;
-                      ppStub : access a_IRpcStubBuffer_t)
-     return HRESULT;                              --  objbase.h :8472
+     (This       : access IPSFactoryBuffer;
+      riid       : REFIID;
+      pUnkServer : access IUnknown;
+      ppStub     : access a_IRpcStubBuffer_t)
+      return HRESULT;
    pragma Convention (Stdcall, af_8472_CreateStub);
 
-   type RemHGLOBAL is                                      --  objbase.h :331
-      record
-         fNullHGlobal : Win32.INT;                        --  objbase.h :333
-         cbData : Win32.UINT;                       --  objbase.h :334
-         data : Win32.BYTE_Array (0 .. Win32.ANYSIZE_ARRAY);
-         --  objbase.h :335
-      end record;
+   type RemHGLOBAL is record
+      fNullHGlobal : Win32.INT;
+      cbData       : Win32.UINT;
+      data         : Win32.BYTE_Array (0 .. Win32.ANYSIZE_ARRAY);
+   end record;
 
-   type RemHMETAFILEPICT is                                --  objbase.h :339
-      record
-         mm : Win32.INT;                              --  objbase.h :341
-         xExt : Win32.INT;                              --  objbase.h :342
-         yExt : Win32.INT;                              --  objbase.h :343
-         cbData : Win32.UINT;                             --  objbase.h :344
-         data : Win32.BYTE_Array (0 .. Win32.ANYSIZE_ARRAY);
-         --  objbase.h :345
-      end record;
+   type RemHMETAFILEPICT is record
+      mm     : Win32.INT;
+      xExt   : Win32.INT;
+      yExt   : Win32.INT;
+      cbData : Win32.UINT;
+      data   : Win32.BYTE_Array (0 .. Win32.ANYSIZE_ARRAY);
+   end record;
 
-   type RemHENHMETAFILE is                                 --  objbase.h :352
-      record
-         cbData : Win32.UINT;                             --  objbase.h :354
-         data : Win32.BYTE_Array (0 .. Win32.ANYSIZE_ARRAY);
-         --  objbase.h :355
-      end record;
+   type RemHENHMETAFILE is record
+      cbData : Win32.UINT;
+      data   : Win32.BYTE_Array (0 .. Win32.ANYSIZE_ARRAY);
+   end record;
 
-   type RemHBITMAP is                                      --  objbase.h :359
-      record
-         cbData : Win32.UINT;                             --  objbase.h :361
-         data : Win32.BYTE_Array (0 .. Win32.ANYSIZE_ARRAY);
-         --  objbase.h :362
-      end record;
+   type RemHBITMAP is record
+      cbData : Win32.UINT;
+      data   : Win32.BYTE_Array (0 .. Win32.ANYSIZE_ARRAY);
+   end record;
 
-   type RemHPALETTE is                                     --  objbase.h :366
-      record
-         cbData : Win32.UINT;                             --  objbase.h :368
-         data : Win32.BYTE_Array (0 .. Win32.ANYSIZE_ARRAY);
-         --  objbase.h :369
-      end record;
+   type RemHPALETTE is record
+      cbData : Win32.UINT;
+      data   : Win32.BYTE_Array (0 .. Win32.ANYSIZE_ARRAY);
+   end record;
 
-   type RemBRUSH is                                        --  objbase.h :373
-      record
-         cbData : Win32.UINT;                             --  objbase.h :375
-         data : Win32.BYTE_Array (0 .. Win32.ANYSIZE_ARRAY);
-         --  objbase.h :376
-      end record;
+   type RemBRUSH is record
+      cbData : Win32.UINT;
+      data   : Win32.BYTE_Array (0 .. Win32.ANYSIZE_ARRAY);
+   end record;
 
-   type OBJECTID is                                        --  objbase.h :937
-      record
-         Lineage : Win32.Rpcdce.GUID;                  --  objbase.h :939
-         Uniquifier : Win32.UINT;                         --  objbase.h :940
-      end record;
+   type OBJECTID is record
+      Lineage    : Win32.Rpcdce.GUID;
+      Uniquifier : Win32.UINT;
+   end record;
 
-   type IUnknown is                                        --  objbase.h :1173
-      record
-         lpVtbl : a_IUnknownVtbl_t;                       --  objbase.h :1469
-      end record;
+   type IUnknown is record
+      lpVtbl : a_IUnknownVtbl_t;
+   end record;
 
-   type IClassFactory is                                   --  objbase.h :1179
-      record
-         lpVtbl : a_IClassFactoryVtbl_t;                  --  objbase.h :1594
-      end record;
+   type IClassFactory is record
+      lpVtbl : a_IClassFactoryVtbl_t;
+   end record;
 
-   type IMarshal is                                        --  objbase.h :1185
-      record
-         lpVtbl : a_IMarshalVtbl_t;                       --  objbase.h :1774
-      end record;
+   type IMarshal is record
+      lpVtbl : a_IMarshalVtbl_t;
+   end record;
 
-   type IMalloc is                                         --  objbase.h :1191
-      record
-         lpVtbl : a_IMallocVtbl_t;                        --  objbase.h :1996
-      end record;
+   type IMalloc is record
+      lpVtbl : a_IMallocVtbl_t;
+   end record;
 
-   type IStdMarshalInfo is                                 --  objbase.h :1197
-      record
-         lpVtbl : a_IStdMarshalInfoVtbl_t;                --  objbase.h :2170
-      end record;
+   type IStdMarshalInfo is record
+      lpVtbl : a_IStdMarshalInfoVtbl_t;
+   end record;
 
-   type IExternalConnection is                             --  objbase.h :1203
-      record
-         lpVtbl : a_IExternalConnectionVtbl_t;            --  objbase.h :2288
-      end record;
+   type IExternalConnection is record
+      lpVtbl : a_IExternalConnectionVtbl_t;
+   end record;
 
-   type IWeakRef is                                        --  objbase.h :1209
-      record
-         lpVtbl : a_IWeakRefVtbl_t;                       --  objbase.h :2410
-      end record;
+   type IWeakRef is record
+      lpVtbl : a_IWeakRefVtbl_t;
+   end record;
 
-   type IEnumUnknown is                                    --  objbase.h :1215
-      record
-         lpVtbl : a_IEnumUnknownVtbl_t;                   --  objbase.h :2544
-      end record;
+   type IEnumUnknown is record
+      lpVtbl : a_IEnumUnknownVtbl_t;
+   end record;
 
-   type IBindCtx is                                        --  objbase.h :1221
-      record
-         lpVtbl : a_IBindCtxVtbl_t;                       --  objbase.h :2772
-      end record;
+   type IBindCtx is record
+      lpVtbl : a_IBindCtxVtbl_t;
+   end record;
 
-   type IParseDisplayName is                               --  objbase.h :1227
-      record
-         lpVtbl : a_IParseDisplayNameVtbl_t;              --  objbase.h :3009
-      end record;
+   type IParseDisplayName is record
+      lpVtbl : a_IParseDisplayNameVtbl_t;
+   end record;
 
-   type IEnumMoniker is                                    --  objbase.h :1233
-      record
-         lpVtbl : a_IEnumMonikerVtbl_t;                   --  objbase.h :3130
-      end record;
+   type IEnumMoniker is record
+      lpVtbl : a_IEnumMonikerVtbl_t;
+   end record;
 
-   type IRunnableObject is                                 --  objbase.h :1239
-      record
-         lpVtbl : a_IRunnableObjectVtbl_t;                --  objbase.h :3299
-      end record;
+   type IRunnableObject is record
+      lpVtbl : a_IRunnableObjectVtbl_t;
+   end record;
 
-   type IRunningObjectTable is                             --  objbase.h :1245
-      record
-         lpVtbl : a_IRunningObjectTableVtbl_t;            --  objbase.h :3508
-      end record;
+   type IRunningObjectTable is record
+      lpVtbl : a_IRunningObjectTableVtbl_t;
+   end record;
 
-   type IPersist is                                        --  objbase.h :1251
-      record
-         lpVtbl : a_IPersistVtbl_t;                       --  objbase.h :3699
-      end record;
+   type IPersist is record
+      lpVtbl : a_IPersistVtbl_t;
+   end record;
 
-   type IPersistStream is                                  --  objbase.h :1257
-      record
-         lpVtbl : a_IPersistStreamVtbl_t;                 --  objbase.h :3819
-      end record;
+   type IPersistStream is record
+      lpVtbl : a_IPersistStreamVtbl_t;
+   end record;
 
-   type IMoniker is                                        --  objbase.h :1263
-      record
-         lpVtbl : a_IMonikerVtbl_t;                       --  objbase.h :4149
-      end record;
+   type IMoniker is record
+      lpVtbl : a_IMonikerVtbl_t;
+   end record;
 
-   type IEnumString is                                     --  objbase.h :1269
-      record
-         lpVtbl : a_IEnumStringVtbl_t;                    --  objbase.h :4518
-      end record;
+   type IEnumString is record
+      lpVtbl : a_IEnumStringVtbl_t;
+   end record;
 
-   type IStream is                                         --  objbase.h :1275
-      record
-         lpVtbl : a_IStreamVtbl_t;                        --  objbase.h :4796
-      end record;
+   type IStream is record
+      lpVtbl : a_IStreamVtbl_t;
+   end record;
 
-   type IEnumSTATSTG is                                    --  objbase.h :1281
-      record
-         lpVtbl : a_IEnumSTATSTGVtbl_t;                   --  objbase.h :5077
-      end record;
+   type IEnumSTATSTG is record
+      lpVtbl : a_IEnumSTATSTGVtbl_t;
+   end record;
 
-   type IStorage is                                        --  objbase.h :1287
-      record
-         lpVtbl : a_IStorageVtbl_t;                       --  objbase.h :5391
-      end record;
+   type IStorage is record
+      lpVtbl : a_IStorageVtbl_t;
+   end record;
 
-   type IPersistFile is                                    --  objbase.h :1293
-      record
-         lpVtbl : a_IPersistFileVtbl_t;                   --  objbase.h :5763
-      end record;
+   type IPersistFile is record
+      lpVtbl : a_IPersistFileVtbl_t;
+   end record;
 
-   type IPersistStorage is                                 --  objbase.h :1299
-      record
-         lpVtbl : a_IPersistStorageVtbl_t;                --  objbase.h :5960
-      end record;
+   type IPersistStorage is record
+      lpVtbl : a_IPersistStorageVtbl_t;
+   end record;
 
-   type ILockBytes is                                      --  objbase.h :1305
-      record
-         lpVtbl : a_ILockBytesVtbl_t;                     --  objbase.h :6195
-      end record;
+   type ILockBytes is record
+      lpVtbl : a_ILockBytesVtbl_t;
+   end record;
 
-   type IEnumFORMATETC is                                  --  objbase.h :1311
-      record
-         lpVtbl : a_IEnumFORMATETCVtbl_t;                 --  objbase.h :6443
-      end record;
+   type IEnumFORMATETC is record
+      lpVtbl : a_IEnumFORMATETCVtbl_t;
+   end record;
 
-   type IEnumSTATDATA is                                   --  objbase.h :1317
-      record
-         lpVtbl : a_IEnumSTATDATAVtbl_t;                  --  objbase.h :6631
-      end record;
+   type IEnumSTATDATA is record
+      lpVtbl : a_IEnumSTATDATAVtbl_t;
+   end record;
 
-   type IRootStorage is                                    --  objbase.h :1323
-      record
-         lpVtbl : a_IRootStorageVtbl_t;                   --  objbase.h :6772
-      end record;
+   type IRootStorage is record
+      lpVtbl : a_IRootStorageVtbl_t;
+   end record;
 
-   type IAdviseSink is                                     --  objbase.h :1329
-      record
-         lpVtbl : a_IAdviseSinkVtbl_t;                    --  objbase.h :6958
-      end record;
+   type IAdviseSink is record
+      lpVtbl : a_IAdviseSinkVtbl_t;
+   end record;
 
-   type IAdviseSink2 is                                    --  objbase.h :1335
-      record
-         lpVtbl : a_IAdviseSink2Vtbl_t;                   --  objbase.h :7133
-      end record;
+   type IAdviseSink2 is record
+      lpVtbl : a_IAdviseSink2Vtbl_t;
+   end record;
 
-   type IDataObject is                                     --  objbase.h :1341
-      record
-         lpVtbl : a_IDataObjectVtbl_t;                    --  objbase.h :7325
-      end record;
+   type IDataObject is record
+      lpVtbl : a_IDataObjectVtbl_t;
+   end record;
 
-   type IDataAdviseHolder is                               --  objbase.h :1347
-      record
-         lpVtbl : a_IDataAdviseHolderVtbl_t;              --  objbase.h :7582
-      end record;
+   type IDataAdviseHolder is record
+      lpVtbl : a_IDataAdviseHolderVtbl_t;
+   end record;
 
-   type IMessageFilter is                                  --  objbase.h :1353
-      record
-         lpVtbl : a_IMessageFilterVtbl_t;                 --  objbase.h :7800
-      end record;
+   type IMessageFilter is record
+      lpVtbl : a_IMessageFilterVtbl_t;
+   end record;
 
-   type IRpcProxyBuffer is                                 --  objbase.h :1365
-      record
-         lpVtbl : a_IRpcProxyBufferVtbl_t;                --  objbase.h :8138
-      end record;
+   type IRpcProxyBuffer is record
+      lpVtbl : a_IRpcProxyBufferVtbl_t;
+   end record;
 
-   type IPSFactoryBuffer is                                --  objbase.h :1377
-      record
-         lpVtbl : a_IPSFactoryBufferVtbl_t;               --  objbase.h :8482
-      end record;
+   type IPSFactoryBuffer is record
+      lpVtbl : a_IPSFactoryBufferVtbl_t;
+   end record;
 
-   type IUnknownVtbl is                                    --  objbase.h :1451
-      record
-         QueryInterface : af_1454_QueryInterface;         --  objbase.h :1454
-         AddRef : af_1459_AddRef;                 --  objbase.h :1459
-         Release : af_1462_Release;                --  objbase.h :1462
-      end record;
+   type IUnknownVtbl is record
+      QueryInterface : af_1454_QueryInterface;
+      AddRef         : af_1459_AddRef;
+      Release        : af_1462_Release;
+   end record;
 
-   type IClassFactoryVtbl is                               --  objbase.h :1566
-      record
-         QueryInterface : af_1569_QueryInterface;         --  objbase.h :1569
-         AddRef : af_1574_AddRef;                 --  objbase.h :1574
-         Release : af_1577_Release;                --  objbase.h :1577
-         CreateInstance : af_1580_CreateInstance;         --  objbase.h :1580
-         LockServer : af_1586_LockServer;             --  objbase.h :1586
-      end record;
+   type IClassFactoryVtbl is record
+      QueryInterface : af_1569_QueryInterface;
+      AddRef         : af_1574_AddRef;
+      Release        : af_1577_Release;
+      CreateInstance : af_1580_CreateInstance;
+      LockServer     : af_1586_LockServer;
+   end record;
 
-   type IMarshalVtbl is                                    --  objbase.h :1715
-      record
-         QueryInterface : af_1718_QueryInterface;     --  objbase.h :1718
-         AddRef : af_1723_AddRef;             --  objbase.h :1723
-         Release : af_1726_Release;            --  objbase.h :1726
-         GetUnmarshalClass : af_1729_GetUnmarshalClass;  --  objbase.h :1729
-         GetMarshalSizeMax : af_1738_GetMarshalSizeMax;  --  objbase.h :1738
-         MarshalInterface : af_1747_MarshalInterface;   --  objbase.h :1747
-         UnmarshalInterface : af_1756_UnmarshalInterface; --  objbase.h :1756
-         ReleaseMarshalData : af_1762_ReleaseMarshalData; --  objbase.h :1762
-         DisconnectObject : af_1766_DisconnectObject;   --  objbase.h :1766
-      end record;
+   type IMarshalVtbl is record
+      QueryInterface     : af_1718_QueryInterface;
+      AddRef             : af_1723_AddRef;
+      Release            : af_1726_Release;
+      GetUnmarshalClass  : af_1729_GetUnmarshalClass;
+      GetMarshalSizeMax  : af_1738_GetMarshalSizeMax;
+      MarshalInterface   : af_1747_MarshalInterface;
+      UnmarshalInterface : af_1756_UnmarshalInterface;
+      ReleaseMarshalData : af_1762_ReleaseMarshalData;
+      DisconnectObject   : af_1766_DisconnectObject;
+   end record;
 
-   type IMallocVtbl is                                     --  objbase.h :1954
-      record
-         QueryInterface : af_1957_QueryInterface;         --  objbase.h :1957
-         AddRef : af_1962_AddRef;                 --  objbase.h :1962
-         Release : af_1965_Release;                --  objbase.h :1965
-         Alloc : af_1968_Alloc;                  --  objbase.h :1968
-         Realloc : af_1972_Realloc;                --  objbase.h :1972
-         Free : ap_1977_Free;                   --  objbase.h :1977
-         GetSize : af_1981_GetSize;                --  objbase.h :1981
-         DidAlloc : af_1985_DidAlloc;               --  objbase.h :1985
-         HeapMinimize : ap_1989_HeapMinimize;           --  objbase.h :1989
-      end record;
+   type IMallocVtbl is record
+      QueryInterface : af_1957_QueryInterface;
+      AddRef         : af_1962_AddRef;
+      Release        : af_1965_Release;
+      Alloc          : af_1968_Alloc;
+      Realloc        : af_1972_Realloc;
+      Free           : ap_1977_Free;
+      GetSize        : af_1981_GetSize;
+      DidAlloc       : af_1985_DidAlloc;
+      HeapMinimize   : ap_1989_HeapMinimize;
+   end record;
 
-   type IStdMarshalInfoVtbl is                             --  objbase.h :2146
-      record
-         QueryInterface : af_2149_QueryInterface;     --  objbase.h :2149
-         AddRef : af_2154_AddRef;             --  objbase.h :2154
-         Release : af_2157_Release;            --  objbase.h :2157
-         GetClassForHandler : af_2160_GetClassForHandler; --  objbase.h :2160
-      end record;
+   type IStdMarshalInfoVtbl is record
+      QueryInterface     : af_2149_QueryInterface;
+      AddRef             : af_2154_AddRef;
+      Release            : af_2157_Release;
+      GetClassForHandler : af_2160_GetClassForHandler;
+   end record;
 
-   type IExternalConnectionVtbl is                         --  objbase.h :2259
-      record
-         QueryInterface : af_2262_QueryInterface;      --  objbase.h :2262
-         AddRef : af_2267_AddRef;              --  objbase.h :2267
-         Release : af_2270_Release;             --  objbase.h :2270
-         AddConnection : af_2273_AddConnection;       --  objbase.h :2273
-         ReleaseConnection : af_2278_ReleaseConnection;   --  objbase.h :2278
-      end record;
+   type IExternalConnectionVtbl is record
+      QueryInterface    : af_2262_QueryInterface;
+      AddRef            : af_2267_AddRef;
+      Release           : af_2270_Release;
+      AddConnection     : af_2273_AddConnection;
+      ReleaseConnection : af_2278_ReleaseConnection;
+   end record;
 
-   type IWeakRefVtbl is                                    --  objbase.h :2383
-      record
-         QueryInterface : af_2386_QueryInterface;       --  objbase.h :2386
-         AddRef : af_2391_AddRef;               --  objbase.h :2391
-         Release : af_2394_Release;              --  objbase.h :2394
-         ChangeWeakCount : af_2397_ChangeWeakCount;      --  objbase.h :2397
-         ReleaseKeepAlive : af_2401_ReleaseKeepAlive;     --  objbase.h :2401
-      end record;
+   type IWeakRefVtbl is record
+      QueryInterface   : af_2386_QueryInterface;
+      AddRef           : af_2391_AddRef;
+      Release          : af_2394_Release;
+      ChangeWeakCount  : af_2397_ChangeWeakCount;
+      ReleaseKeepAlive : af_2401_ReleaseKeepAlive;
+   end record;
 
-   type IEnumUnknownVtbl is                                --  objbase.h :2509
-      record
-         QueryInterface : af_2512_QueryInterface;         --  objbase.h :2512
-         AddRef : af_2517_AddRef;                 --  objbase.h :2517
-         Release : af_2520_Release;                --  objbase.h :2520
-         Next : af_2523_Next;                   --  objbase.h :2523
-         Skip : af_2529_Skip;                   --  objbase.h :2529
-         Reset : af_2533_Reset;                  --  objbase.h :2533
-         Clone : af_2536_Clone;                  --  objbase.h :2536
-      end record;
+   type IEnumUnknownVtbl is record
+      QueryInterface : af_2512_QueryInterface;
+      AddRef         : af_2517_AddRef;
+      Release        : af_2520_Release;
+      Next           : af_2523_Next;
+      Skip           : af_2529_Skip;
+      Reset          : af_2533_Reset;
+      Clone          : af_2536_Clone;
+   end record;
 
-   type BIND_OPTS is                                       --  objbase.h :2652
-      record
-         cbStruct : DWORD;                     --  objbase.h :2654
-         grfFlags : DWORD;                     --  objbase.h :2655
-         grfMode : DWORD;                     --  objbase.h :2656
-         dwTickCountDeadline : DWORD;                     --  objbase.h :2657
-      end record;
+   type BIND_OPTS is record
+      cbStruct            : DWORD;
+      grfFlags            : DWORD;
+      grfMode             : DWORD;
+      dwTickCountDeadline : DWORD;
+   end record;
 
-   type IBindCtxVtbl is                                    --  objbase.h :2713
-      record
-         QueryInterface : af_2716_QueryInterface;  --  objbase.h :2716
-         AddRef : af_2721_AddRef;          --  objbase.h :2721
-         Release : af_2724_Release;         --  objbase.h :2724
-         RegisterObjectBound : af_2727_RegisterObjectBound;
-         --  objbase.h :2727
-         RevokeObjectBound : af_2731_RevokeObjectBound;
-         --  objbase.h :2731
-         ReleaseBoundObjects : af_2735_ReleaseBoundObjects;
-         --  objbase.h :2735
-         SetBindOptions : af_2738_SetBindOptions;  --  objbase.h :2738
-         GetBindOptions : af_2742_GetBindOptions;  --  objbase.h :2742
-         GetRunningObjectTable : af_2746_GetRunningObjectTable;
-         --  objbase.h :2746
-         RegisterObjectParam : af_2750_RegisterObjectParam;
-         --  objbase.h :2750
-         GetObjectParam : af_2755_GetObjectParam;  --  objbase.h :2755
-         EnumObjectParam : af_2760_EnumObjectParam; --  objbase.h :2760
-         RevokeObjectParam : af_2764_RevokeObjectParam;
-         --  objbase.h :2764
-      end record;
+   type IBindCtxVtbl is record
+      QueryInterface        : af_2716_QueryInterface;
+      AddRef                : af_2721_AddRef;
+      Release               : af_2724_Release;
+      RegisterObjectBound   : af_2727_RegisterObjectBound;
+      RevokeObjectBound     : af_2731_RevokeObjectBound;
+      ReleaseBoundObjects   : af_2735_ReleaseBoundObjects;
+      SetBindOptions        : af_2738_SetBindOptions;
+      GetBindOptions        : af_2742_GetBindOptions;
+      GetRunningObjectTable : af_2746_GetRunningObjectTable;
+      RegisterObjectParam   : af_2750_RegisterObjectParam;
+      GetObjectParam        : af_2755_GetObjectParam;
+      EnumObjectParam       : af_2760_EnumObjectParam;
+      RevokeObjectParam     : af_2764_RevokeObjectParam;
+   end record;
 
-   type IParseDisplayNameVtbl is                           --  objbase.h :2984
-      record
-         QueryInterface : af_2987_QueryInterface;       --  objbase.h :2987
-         AddRef : af_2992_AddRef;               --  objbase.h :2992
-         Release : af_2995_Release;              --  objbase.h :2995
-         ParseDisplayName : af_2998_ParseDisplayName;     --  objbase.h :2998
-      end record;
+   type IParseDisplayNameVtbl is record
+      QueryInterface   : af_2987_QueryInterface;
+      AddRef           : af_2992_AddRef;
+      Release          : af_2995_Release;
+      ParseDisplayName : af_2998_ParseDisplayName;
+   end record;
 
-   type IEnumMonikerVtbl is                                --  objbase.h :3095
-      record
-         QueryInterface : af_3098_QueryInterface;         --  objbase.h :3098
-         AddRef : af_3103_AddRef;                 --  objbase.h :3103
-         Release : af_3106_Release;                --  objbase.h :3106
-         Next : af_3109_Next;                   --  objbase.h :3109
-         Skip : af_3115_Skip;                   --  objbase.h :3115
-         Reset : af_3119_Reset;                  --  objbase.h :3119
-         Clone : af_3122_Clone;                  --  objbase.h :3122
-      end record;
+   type IEnumMonikerVtbl is record
+      QueryInterface : af_3098_QueryInterface;
+      AddRef         : af_3103_AddRef;
+      Release        : af_3106_Release;
+      Next           : af_3109_Next;
+      Skip           : af_3115_Skip;
+      Reset          : af_3119_Reset;
+      Clone          : af_3122_Clone;
+   end record;
 
-   type IRunnableObjectVtbl is                             --  objbase.h :3261
-      record
-         QueryInterface : af_3264_QueryInterface;     --  objbase.h :3264
-         AddRef : af_3269_AddRef;             --  objbase.h :3269
-         Release : af_3272_Release;            --  objbase.h :3272
-         GetRunningClass : af_3275_GetRunningClass;    --  objbase.h :3275
-         Run : af_3279_Run;                --  objbase.h :3279
-         IsRunning : af_3283_IsRunning;          --  objbase.h :3283
-         LockRunning : af_3286_LockRunning;        --  objbase.h :3286
-         SetContainedObject : af_3291_SetContainedObject; --  objbase.h :3291
-      end record;
+   type IRunnableObjectVtbl is record
+      QueryInterface     : af_3264_QueryInterface;
+      AddRef             : af_3269_AddRef;
+      Release            : af_3272_Release;
+      GetRunningClass    : af_3275_GetRunningClass;
+      Run                : af_3279_Run;
+      IsRunning          : af_3283_IsRunning;
+      LockRunning        : af_3286_LockRunning;
+      SetContainedObject : af_3291_SetContainedObject;
+   end record;
 
-   type IRunningObjectTableVtbl is                         --  objbase.h :3456
-      record
-         QueryInterface : af_3459_QueryInterface;    --  objbase.h :3459
-         AddRef : af_3464_AddRef;            --  objbase.h :3464
-         Release : af_3467_Release;           --  objbase.h :3467
-         Register : af_3470_Register;          --  objbase.h :3470
-         Revoke : af_3477_Revoke;            --  objbase.h :3477
-         IsRunning : af_3481_IsRunning;         --  objbase.h :3481
-         GetObjectA : af_3485_GetObjectA;        --  objbase.h :3485
-         NoteChangeTime : af_3490_NoteChangeTime;    --  objbase.h :3490
-         GetTimeOfLastChange : af_3495_GetTimeOfLastChange;
-         --  objbase.h :3495
-         EnumRunning : af_3500_EnumRunning;       --  objbase.h :3500
-      end record;
+   type IRunningObjectTableVtbl is record
+      QueryInterface      : af_3459_QueryInterface;
+      AddRef              : af_3464_AddRef;
+      Release             : af_3467_Release;
+      Register            : af_3470_Register;
+      Revoke              : af_3477_Revoke;
+      IsRunning           : af_3481_IsRunning;
+      GetObjectA          : af_3485_GetObjectA;
+      NoteChangeTime      : af_3490_NoteChangeTime;
+      GetTimeOfLastChange : af_3495_GetTimeOfLastChange;
+      EnumRunning         : af_3500_EnumRunning;
+   end record;
 
-   type IPersistVtbl is                                    --  objbase.h :3677
-      record
-         QueryInterface : af_3680_QueryInterface;         --  objbase.h :3680
-         AddRef : af_3685_AddRef;                 --  objbase.h :3685
-         Release : af_3688_Release;                --  objbase.h :3688
-         GetClassID : af_3691_GetClassID;             --  objbase.h :3691
-      end record;
+   type IPersistVtbl is record
+      QueryInterface : af_3680_QueryInterface;
+      AddRef         : af_3685_AddRef;
+      Release        : af_3688_Release;
+      GetClassID     : af_3691_GetClassID;
+   end record;
 
-   type IEnumStringVtbl is                                 --  objbase.h :4483
-      record
-         QueryInterface : af_4486_QueryInterface;         --  objbase.h :4486
-         AddRef : af_4491_AddRef;                 --  objbase.h :4491
-         Release : af_4494_Release;                --  objbase.h :4494
-         Next : af_4497_Next;                   --  objbase.h :4497
-         Skip : af_4503_Skip;                   --  objbase.h :4503
-         Reset : af_4507_Reset;                  --  objbase.h :4507
-         Clone : af_4510_Clone;                  --  objbase.h :4510
-      end record;
+   type IEnumStringVtbl is record
+      QueryInterface : af_4486_QueryInterface;
+      AddRef         : af_4491_AddRef;
+      Release        : af_4494_Release;
+      Next           : af_4497_Next;
+      Skip           : af_4503_Skip;
+      Reset          : af_4507_Reset;
+      Clone          : af_4510_Clone;
+   end record;
 
-   type STATSTG is                                         --  objbase.h :4623
-      record
-         pwcsName : LPOLESTR;                    --  objbase.h :4625
-         c_type : DWORD;                       --  objbase.h :4626
-         cbSize : Win32.Winnt.ULARGE_INTEGER;  --  objbase.h :4627
-         mtime : Win32.Winbase.FILETIME;      --  objbase.h :4628
-         ctime : Win32.Winbase.FILETIME;      --  objbase.h :4629
-         atime : Win32.Winbase.FILETIME;      --  objbase.h :4630
-         grfMode : DWORD;                       --  objbase.h :4631
-         grfLocksSupported : DWORD;                       --  objbase.h :4632
-         clsid : Objbase.CLSID;               --  objbase.h :4633
-         grfStateBits : DWORD;                       --  objbase.h :4634
-         reserved : DWORD;                       --  objbase.h :4635
-      end record;
+   type STATSTG is record
+      pwcsName          : LPOLESTR;
+      c_type            : DWORD;
+      cbSize            : Win32.Winnt.ULARGE_INTEGER;
+      mtime             : Win32.Winbase.FILETIME;
+      ctime             : Win32.Winbase.FILETIME;
+      atime             : Win32.Winbase.FILETIME;
+      grfMode           : DWORD;
+      grfLocksSupported : DWORD;
+      clsid             : Objbase.CLSID;
+      grfStateBits      : DWORD;
+      reserved          : DWORD;
+   end record;
 
-   type IStreamVtbl is                                     --  objbase.h :4721
-      record
-         QueryInterface : af_4724_QueryInterface;         --  objbase.h :4724
-         AddRef : af_4729_AddRef;                 --  objbase.h :4729
-         Release : af_4732_Release;                --  objbase.h :4732
-         Read : af_4735_Read;                   --  objbase.h :4735
-         Write : af_4741_Write;                  --  objbase.h :4741
-         Seek : af_4747_Seek;                   --  objbase.h :4747
-         SetSize : af_4753_SetSize;                --  objbase.h :4753
-         CopyTo : af_4757_CopyTo;                 --  objbase.h :4757
-         Commit : af_4764_Commit;                 --  objbase.h :4764
-         Revert : af_4768_Revert;                 --  objbase.h :4768
-         LockRegion : af_4771_LockRegion;             --  objbase.h :4771
-         UnlockRegion : af_4777_UnlockRegion;           --  objbase.h :4777
-         Stat : af_4783_Stat;                   --  objbase.h :4783
-         Clone : af_4788_Clone;                  --  objbase.h :4788
-      end record;
+   type IStreamVtbl is record
+      QueryInterface : af_4724_QueryInterface;
+      AddRef         : af_4729_AddRef;
+      Release        : af_4732_Release;
+      Read           : af_4735_Read;
+      Write          : af_4741_Write;
+      Seek           : af_4747_Seek;
+      SetSize        : af_4753_SetSize;
+      CopyTo         : af_4757_CopyTo;
+      Commit         : af_4764_Commit;
+      Revert         : af_4768_Revert;
+      LockRegion     : af_4771_LockRegion;
+      UnlockRegion   : af_4777_UnlockRegion;
+      Stat           : af_4783_Stat;
+      Clone          : af_4788_Clone;
+   end record;
 
-   type IEnumSTATSTGVtbl is                                --  objbase.h :5042
-      record
-         QueryInterface : af_5045_QueryInterface;         --  objbase.h :5045
-         AddRef : af_5050_AddRef;                 --  objbase.h :5050
-         Release : af_5053_Release;                --  objbase.h :5053
-         Next : af_5056_Next;                   --  objbase.h :5056
-         Skip : af_5062_Skip;                   --  objbase.h :5062
-         Reset : af_5066_Reset;                  --  objbase.h :5066
-         Clone : af_5069_Clone;                  --  objbase.h :5069
-      end record;
+   type IEnumSTATSTGVtbl is record
+      QueryInterface : af_5045_QueryInterface;
+      AddRef         : af_5050_AddRef;
+      Release        : af_5053_Release;
+      Next           : af_5056_Next;
+      Skip           : af_5062_Skip;
+      Reset          : af_5066_Reset;
+      Clone          : af_5069_Clone;
+   end record;
 
    type OLECHAR_Array is array (Natural range <>) of OLECHAR;
 
-   type RemSNB is                                          --  objbase.h :5182
-      record
-         ulCntStr : Win32.UINT;                          --  objbase.h :5184
-         ulCntChar : Win32.UINT;                          --  objbase.h :5185
-         rgString : OLECHAR_Array (0 .. Win32.ANYSIZE_ARRAY);
-         --  objbase.h :5186
-      end record;
+   type RemSNB is record
+      ulCntStr  : Win32.UINT;
+      ulCntChar : Win32.UINT;
+      rgString  : OLECHAR_Array (0 .. Win32.ANYSIZE_ARRAY);
+   end record;
 
-   type IStorageVtbl is                                    --  objbase.h :5282
-      record
-         QueryInterface : af_5285_QueryInterface;        --  objbase.h :5285
-         AddRef : af_5290_AddRef;                --  objbase.h :5290
-         Release : af_5293_Release;               --  objbase.h :5293
-         CreateStream : af_5296_CreateStream;          --  objbase.h :5296
-         OpenStream : af_5304_OpenStream;            --  objbase.h :5304
-         CreateStorage : af_5312_CreateStorage;         --  objbase.h :5312
-         OpenStorage : af_5320_OpenStorage;           --  objbase.h :5320
-         CopyTo : af_5329_CopyTo;                --  objbase.h :5329
-         MoveElementTo : af_5336_MoveElementTo;         --  objbase.h :5336
-         Commit : af_5343_Commit;                --  objbase.h :5343
-         Revert : af_5347_Revert;                --  objbase.h :5347
-         EnumElements : af_5350_EnumElements;          --  objbase.h :5350
-         DestroyElement : af_5357_DestroyElement;        --  objbase.h :5357
-         RenameElement : af_5361_RenameElement;         --  objbase.h :5361
-         SetElementTimes : af_5366_SetElementTimes;       --  objbase.h :5366
-         SetClass : af_5373_SetClass;              --  objbase.h :5373
-         SetStateBits : af_5377_SetStateBits;          --  objbase.h :5377
-         Stat : af_5382_Stat;                  --  objbase.h :5382
-      end record;
+   type IStorageVtbl is record
+      QueryInterface  : af_5285_QueryInterface;
+      AddRef          : af_5290_AddRef;
+      Release         : af_5293_Release;
+      CreateStream    : af_5296_CreateStream;
+      OpenStream      : af_5304_OpenStream;
+      CreateStorage   : af_5312_CreateStorage;
+      OpenStorage     : af_5320_OpenStorage;
+      CopyTo          : af_5329_CopyTo;
+      MoveElementTo   : af_5336_MoveElementTo;
+      Commit          : af_5343_Commit;
+      Revert          : af_5347_Revert;
+      EnumElements    : af_5350_EnumElements;
+      DestroyElement  : af_5357_DestroyElement;
+      RenameElement   : af_5361_RenameElement;
+      SetElementTimes : af_5366_SetElementTimes;
+      SetClass        : af_5373_SetClass;
+      SetStateBits    : af_5377_SetStateBits;
+      Stat            : af_5382_Stat;
+   end record;
 
-   type IPersistFileVtbl is                                --  objbase.h :5720
-      record
-         QueryInterface : af_5723_QueryInterface;         --  objbase.h :5723
-         AddRef : af_5728_AddRef;                 --  objbase.h :5728
-         Release : af_5731_Release;                --  objbase.h :5731
-         GetClassID : af_5734_GetClassID;             --  objbase.h :5734
-         IsDirty : af_5738_IsDirty;                --  objbase.h :5738
-         Load : af_5741_Load;                   --  objbase.h :5741
-         Save : af_5746_Save;                   --  objbase.h :5746
-         SaveCompleted : af_5751_SaveCompleted;          --  objbase.h :5751
-         GetCurFile : af_5755_GetCurFile;             --  objbase.h :5755
-      end record;
+   type IPersistFileVtbl is record
+      QueryInterface : af_5723_QueryInterface;
+      AddRef         : af_5728_AddRef;
+      Release        : af_5731_Release;
+      GetClassID     : af_5734_GetClassID;
+      IsDirty        : af_5738_IsDirty;
+      Load           : af_5741_Load;
+      Save           : af_5746_Save;
+      SaveCompleted  : af_5751_SaveCompleted;
+      GetCurFile     : af_5755_GetCurFile;
+   end record;
 
-   type IPersistStorageVtbl is                             --  objbase.h :5915
-      record
-         QueryInterface : af_5918_QueryInterface;        --  objbase.h :5918
-         AddRef : af_5923_AddRef;                --  objbase.h :5923
-         Release : af_5926_Release;               --  objbase.h :5926
-         GetClassID : af_5929_GetClassID;            --  objbase.h :5929
-         IsDirty : af_5933_IsDirty;               --  objbase.h :5933
-         InitNew : af_5936_InitNew;               --  objbase.h :5936
-         Load : af_5940_Load;                  --  objbase.h :5940
-         Save : af_5944_Save;                  --  objbase.h :5944
-         SaveCompleted : af_5949_SaveCompleted;         --  objbase.h :5949
-         HandsOffStorage : af_5953_HandsOffStorage;       --  objbase.h :5953
-      end record;
+   type IPersistStorageVtbl is record
+      QueryInterface  : af_5918_QueryInterface;
+      AddRef          : af_5923_AddRef;
+      Release         : af_5926_Release;
+      GetClassID      : af_5929_GetClassID;
+      IsDirty         : af_5933_IsDirty;
+      InitNew         : af_5936_InitNew;
+      Load            : af_5940_Load;
+      Save            : af_5944_Save;
+      SaveCompleted   : af_5949_SaveCompleted;
+      HandsOffStorage : af_5953_HandsOffStorage;
+   end record;
 
-   type ILockBytesVtbl is                                  --  objbase.h :6139
-      record
-         QueryInterface : af_6142_QueryInterface;         --  objbase.h :6142
-         AddRef : af_6147_AddRef;                 --  objbase.h :6147
-         Release : af_6150_Release;                --  objbase.h :6150
-         ReadAt : af_6153_ReadAt;                 --  objbase.h :6153
-         WriteAt : af_6160_WriteAt;                --  objbase.h :6160
-         Flush : af_6167_Flush;                  --  objbase.h :6167
-         SetSize : af_6170_SetSize;                --  objbase.h :6170
-         LockRegion : af_6174_LockRegion;             --  objbase.h :6174
-         UnlockRegion : af_6180_UnlockRegion;           --  objbase.h :6180
-         Stat : af_6186_Stat;                   --  objbase.h :6186
-      end record;
+   type ILockBytesVtbl is record
+      QueryInterface : af_6142_QueryInterface;
+      AddRef         : af_6147_AddRef;
+      Release        : af_6150_Release;
+      ReadAt         : af_6153_ReadAt;
+      WriteAt        : af_6160_WriteAt;
+      Flush          : af_6167_Flush;
+      SetSize        : af_6170_SetSize;
+      LockRegion     : af_6174_LockRegion;
+      UnlockRegion   : af_6180_UnlockRegion;
+      Stat           : af_6186_Stat;
+   end record;
 
-   type DVTARGETDEVICE is                                  --  objbase.h :6354
-      record
-         tdSize : DWORD;                      --  objbase.h :6356
-         tdDriverNameOffset : WORD;                       --  objbase.h :6357
-         tdDeviceNameOffset : WORD;                       --  objbase.h :6358
-         tdPortNameOffset : WORD;                       --  objbase.h :6359
-         tdExtDevmodeOffset : WORD;                       --  objbase.h :6360
-         tdData : Win32.BYTE_Array (0 .. Win32.ANYSIZE_ARRAY);
-         --  objbase.h :6361
-      end record;
+   type DVTARGETDEVICE is record
+      tdSize             : DWORD;
+      tdDriverNameOffset : WORD;
+      tdDeviceNameOffset : WORD;
+      tdPortNameOffset   : WORD;
+      tdExtDevmodeOffset : WORD;
+      tdData             : Win32.BYTE_Array (0 .. Win32.ANYSIZE_ARRAY);
+   end record;
 
-   type FORMATETC is                                       --  objbase.h :6371
-      record
-         cfFormat : CLIPFORMAT;                           --  objbase.h :6373
-         ptd : a_DVTARGETDEVICE_t;                   --  objbase.h :6374
-         dwAspect : DWORD;                                --  objbase.h :6375
-         lindex : LONG;                                 --  objbase.h :6376
-         tymed : DWORD;                                --  objbase.h :6377
-      end record;
+   type FORMATETC is record
+      cfFormat : CLIPFORMAT;
+      ptd      : a_DVTARGETDEVICE_t;
+      dwAspect : DWORD;
+      lindex   : LONG;
+      tymed    : DWORD;
+   end record;
 
-   type IEnumFORMATETCVtbl is                              --  objbase.h :6408
-      record
-         QueryInterface : af_6411_QueryInterface;         --  objbase.h :6411
-         AddRef : af_6416_AddRef;                 --  objbase.h :6416
-         Release : af_6419_Release;                --  objbase.h :6419
-         Next : af_6422_Next;                   --  objbase.h :6422
-         Skip : af_6428_Skip;                   --  objbase.h :6428
-         Reset : af_6432_Reset;                  --  objbase.h :6432
-         Clone : af_6435_Clone;                  --  objbase.h :6435
-      end record;
+   type IEnumFORMATETCVtbl is record
+      QueryInterface : af_6411_QueryInterface;
+      AddRef         : af_6416_AddRef;
+      Release        : af_6419_Release;
+      Next           : af_6422_Next;
+      Skip           : af_6428_Skip;
+      Reset          : af_6432_Reset;
+      Clone          : af_6435_Clone;
+   end record;
 
-   type STATDATA is                                        --  objbase.h :6560
-      record
-         formatetc : Objbase.FORMATETC;                --  objbase.h :6562
-         advf : DWORD;                            --  objbase.h :6563
-         pAdvSink : LPADVISESINK;                     --  objbase.h :6564
-         dwConnection : DWORD;                            --  objbase.h :6565
-      end record;
+   type STATDATA is record
+      formatetc    : Objbase.FORMATETC;
+      advf         : DWORD;
+      pAdvSink     : LPADVISESINK;
+      dwConnection : DWORD;
+   end record;
 
-   type IEnumSTATDATAVtbl is                               --  objbase.h :6596
-      record
-         QueryInterface : af_6599_QueryInterface;         --  objbase.h :6599
-         AddRef : af_6604_AddRef;                 --  objbase.h :6604
-         Release : af_6607_Release;                --  objbase.h :6607
-         Next : af_6610_Next;                   --  objbase.h :6610
-         Skip : af_6616_Skip;                   --  objbase.h :6616
-         Reset : af_6620_Reset;                  --  objbase.h :6620
-         Clone : af_6623_Clone;                  --  objbase.h :6623
-      end record;
+   type IEnumSTATDATAVtbl is record
+      QueryInterface : af_6599_QueryInterface;
+      AddRef         : af_6604_AddRef;
+      Release        : af_6607_Release;
+      Next           : af_6610_Next;
+      Skip           : af_6616_Skip;
+      Reset          : af_6620_Reset;
+      Clone          : af_6623_Clone;
+   end record;
 
-   type IRootStorageVtbl is                                --  objbase.h :6750
-      record
-         QueryInterface : af_6753_QueryInterface;         --  objbase.h :6753
-         AddRef : af_6758_AddRef;                 --  objbase.h :6758
-         Release : af_6761_Release;                --  objbase.h :6761
-         SwitchToFile : af_6764_SwitchToFile;           --  objbase.h :6764
-      end record;
+   type IRootStorageVtbl is record
+      QueryInterface : af_6753_QueryInterface;
+      AddRef         : af_6758_AddRef;
+      Release        : af_6761_Release;
+      SwitchToFile   : af_6764_SwitchToFile;
+   end record;
 
-   type RemSTGMEDIUM is                                    --  objbase.h :6845
-      record
-         tymed : DWORD;                          --  objbase.h :6847
-         dwHandleType : DWORD;                          --  objbase.h :6848
-         pData : Win32.UINT;                     --  objbase.h :6849
-         pUnkForRelease : Win32.UINT;                     --  objbase.h :6850
-         cbData : Win32.UINT;                     --  objbase.h :6851
-         data : Win32.BYTE_Array (0 .. Win32.ANYSIZE_ARRAY);
-         --  objbase.h :6852
-      end record;
+   type RemSTGMEDIUM is record
+      tymed          : DWORD;
+      dwHandleType   : DWORD;
+      pData          : Win32.UINT;
+      pUnkForRelease : Win32.UINT;
+      cbData         : Win32.UINT;
+      data           : Win32.BYTE_Array (0 .. Win32.ANYSIZE_ARRAY);
+   end record;
 
-   type union_anonymous7_t_kind is ( --  objbase.h :6867
-     hBitmap_kind,
-     hMetaFilePict_kind,
-     hEnhMetaFile_kind,
-     hGlobal_kind,
-     lpszFileName_kind,
-     pstm_kind,
-     pstg_kind
-                                   );
+   type union_anonymous7_t_kind is (
+      hBitmap_kind,
+      hMetaFilePict_kind,
+      hEnhMetaFile_kind,
+      hGlobal_kind,
+      lpszFileName_kind,
+      pstm_kind,
+      pstg_kind);
 
-   type union_anonymous7_t (Which : union_anonymous7_t_kind :=  hBitmap_kind)
-   is
-      --  objbase.h :6867
+   type union_anonymous7_t (Which : union_anonymous7_t_kind := hBitmap_kind) is
       record
          case Which is
             when hBitmap_kind =>
-               hBitmap : Win32.Windef.HBITMAP;          --  objbase.h :6860
+               hBitmap : Win32.Windef.HBITMAP;
             when hMetaFilePict_kind =>
-               hMetaFilePict : Objbase.HMETAFILEPICT;   --  objbase.h :6861
+               hMetaFilePict : Objbase.HMETAFILEPICT;
             when hEnhMetaFile_kind =>
-               hEnhMetaFile : Win32.Windef.HENHMETAFILE; --  objbase.h :6862
+               hEnhMetaFile : Win32.Windef.HENHMETAFILE;
             when hGlobal_kind =>
-               hGlobal : Win32.Windef.HGLOBAL;          --  objbase.h :6863
+               hGlobal : Win32.Windef.HGLOBAL;
             when lpszFileName_kind =>
-               lpszFileName : LPOLESTR;                 --  objbase.h :6864
+               lpszFileName : LPOLESTR;
             when pstm_kind =>
-               pstm : LPSTREAM;                        --  objbase.h :6865
+               pstm : LPSTREAM;
             when pstg_kind =>
-               pstg : LPSTORAGE;                       --  objbase.h :6866
+               pstg : LPSTORAGE;
          end case;
       end record;
 
@@ -2966,4463 +2788,4650 @@ package Win32.Objbase is
 
    pragma Unchecked_Union (union_anonymous7_t);
 
-   type STGMEDIUM is                                       --  objbase.h :6857
-      record
-         tymed : DWORD;                          --  objbase.h :6858
-         u : union_anonymous7_t;             --  objbase.h :6867
-         pUnkForRelease : LPUNKNOWN;                      --  objbase.h :6868
-      end record;
+   type STGMEDIUM is record
+      tymed          : DWORD;
+      u              : union_anonymous7_t;
+      pUnkForRelease : LPUNKNOWN;
+   end record;
 
-   type IAdviseSinkVtbl is                                 --  objbase.h :6920
-      record
-         QueryInterface : af_6923_QueryInterface;         --  objbase.h :6923
-         AddRef : af_6928_AddRef;                 --  objbase.h :6928
-         Release : af_6931_Release;                --  objbase.h :6931
-         OnDataChange : ap_6934_OnDataChange;           --  objbase.h :6934
-         OnViewChange : ap_6939_OnViewChange;           --  objbase.h :6939
-         OnRename : ap_6944_OnRename;               --  objbase.h :6944
-         OnSave : ap_6948_OnSave;                 --  objbase.h :6948
-         OnClose : ap_6951_OnClose;                --  objbase.h :6951
-      end record;
+   type IAdviseSinkVtbl is record
+      QueryInterface : af_6923_QueryInterface;
+      AddRef         : af_6928_AddRef;
+      Release        : af_6931_Release;
+      OnDataChange   : ap_6934_OnDataChange;
+      OnViewChange   : ap_6939_OnViewChange;
+      OnRename       : ap_6944_OnRename;
+      OnSave         : ap_6948_OnSave;
+      OnClose        : ap_6951_OnClose;
+   end record;
 
-   type IAdviseSink2Vtbl is                                --  objbase.h :7091
-      record
-         QueryInterface : af_7094_QueryInterface;        --  objbase.h :7094
-         AddRef : af_7099_AddRef;                --  objbase.h :7099
-         Release : af_7102_Release;               --  objbase.h :7102
-         OnDataChange : ap_7105_OnDataChange;          --  objbase.h :7105
-         OnViewChange : ap_7110_OnViewChange;          --  objbase.h :7110
-         OnRename : ap_7115_OnRename;              --  objbase.h :7115
-         OnSave : ap_7119_OnSave;                --  objbase.h :7119
-         OnClose : ap_7122_OnClose;               --  objbase.h :7122
-         OnLinkSrcChange : ap_7125_OnLinkSrcChange;       --  objbase.h :7125
-      end record;
+   type IAdviseSink2Vtbl is record
+      QueryInterface  : af_7094_QueryInterface;
+      AddRef          : af_7099_AddRef;
+      Release         : af_7102_Release;
+      OnDataChange    : ap_7105_OnDataChange;
+      OnViewChange    : ap_7110_OnViewChange;
+      OnRename        : ap_7115_OnRename;
+      OnSave          : ap_7119_OnSave;
+      OnClose         : ap_7122_OnClose;
+      OnLinkSrcChange : ap_7125_OnLinkSrcChange;
+   end record;
 
-   type IDataObjectVtbl is                                 --  objbase.h :7262
-      record
-         QueryInterface : af_7265_QueryInterface;  --  objbase.h :7265
-         AddRef : af_7270_AddRef;          --  objbase.h :7270
-         Release : af_7273_Release;         --  objbase.h :7273
-         GetData : af_7276_GetData;         --  objbase.h :7276
-         GetDataHere : af_7281_GetDataHere;     --  objbase.h :7281
-         QueryGetData : af_7286_QueryGetData;    --  objbase.h :7286
-         GetCanonicalFormatEtc : af_7290_GetCanonicalFormatEtc;
-         --  objbase.h :7290
-         SetData : af_7295_SetData;         --  objbase.h :7295
-         EnumFormatEtc : af_7301_EnumFormatEtc;   --  objbase.h :7301
-         DAdvise : af_7306_DAdvise;         --  objbase.h :7306
-         DUnadvise : af_7313_DUnadvise;       --  objbase.h :7313
-         EnumDAdvise : af_7317_EnumDAdvise;     --  objbase.h :7317
-      end record;
+   type IDataObjectVtbl is record
+      QueryInterface        : af_7265_QueryInterface;
+      AddRef                : af_7270_AddRef;
+      Release               : af_7273_Release;
+      GetData               : af_7276_GetData;
+      GetDataHere           : af_7281_GetDataHere;
+      QueryGetData          : af_7286_QueryGetData;
+      GetCanonicalFormatEtc : af_7290_GetCanonicalFormatEtc;
+      SetData               : af_7295_SetData;
+      EnumFormatEtc         : af_7301_EnumFormatEtc;
+      DAdvise               : af_7306_DAdvise;
+      DUnadvise             : af_7313_DUnadvise;
+      EnumDAdvise           : af_7317_EnumDAdvise;
+   end record;
 
-   type IDataAdviseHolderVtbl is                           --  objbase.h :7542
-      record
-         QueryInterface : af_7545_QueryInterface;       --  objbase.h :7545
-         AddRef : af_7550_AddRef;               --  objbase.h :7550
-         Release : af_7553_Release;              --  objbase.h :7553
-         Advise : af_7556_Advise;               --  objbase.h :7556
-         Unadvise : af_7564_Unadvise;             --  objbase.h :7564
-         EnumAdvise : af_7568_EnumAdvise;           --  objbase.h :7568
-         SendOnDataChange : af_7572_SendOnDataChange;     --  objbase.h :7572
-      end record;
+   type IDataAdviseHolderVtbl is record
+      QueryInterface   : af_7545_QueryInterface;
+      AddRef           : af_7550_AddRef;
+      Release          : af_7553_Release;
+      Advise           : af_7556_Advise;
+      Unadvise         : af_7564_Unadvise;
+      EnumAdvise       : af_7568_EnumAdvise;
+      SendOnDataChange : af_7572_SendOnDataChange;
+   end record;
 
-   type INTERFACEINFO is                                   --  objbase.h :7725
-      record
-         pUnk : LPUNKNOWN;                             --  objbase.h :7727
-         iid : Objbase.IID;                           --  objbase.h :7728
-         wMethod : WORD;                                  --  objbase.h :7729
-      end record;
+   type INTERFACEINFO is record
+      pUnk    : LPUNKNOWN;
+      iid     : Objbase.IID;
+      wMethod : WORD;
+   end record;
 
-   type IMessageFilterVtbl is                              --  objbase.h :7763
-      record
-         QueryInterface : af_7766_QueryInterface;     --  objbase.h :7766
-         AddRef : af_7771_AddRef;             --  objbase.h :7771
-         Release : af_7774_Release;            --  objbase.h :7774
-         HandleInComingCall : af_7777_HandleInComingCall; --  objbase.h :7777
-         RetryRejectedCall : af_7784_RetryRejectedCall;  --  objbase.h :7784
-         MessagePending : af_7790_MessagePending;     --  objbase.h :7790
-      end record;
+   type IMessageFilterVtbl is record
+      QueryInterface     : af_7766_QueryInterface;
+      AddRef             : af_7771_AddRef;
+      Release            : af_7774_Release;
+      HandleInComingCall : af_7777_HandleInComingCall;
+      RetryRejectedCall  : af_7784_RetryRejectedCall;
+      MessagePending     : af_7790_MessagePending;
+   end record;
 
    type PVOID_Array is array (Natural range <>) of Win32.PVOID;
-   --  objbase.h :7903
-   type RPCOLEMESSAGE is                                   --  objbase.h :7896
-      record
-         reserved1 : Win32.PVOID;                --  objbase.h :7898
-         dataRepresentation : RPCOLEDATAREP;              --  objbase.h :7899
-         Buffer : Win32.PVOID;                --  objbase.h :7900
-         cbBuffer : Win32.ULONG;                --  objbase.h :7901
-         iMethod : Win32.ULONG;                --  objbase.h :7902
-         reserved2 : PVOID_Array (0 .. 4);          --  objbase.h :7903
-         rpcFlags : Win32.ULONG;                --  objbase.h :7904
-      end record;
+   type RPCOLEMESSAGE is record
+      reserved1          : Win32.PVOID;
+      dataRepresentation : RPCOLEDATAREP;
+      Buffer             : Win32.PVOID;
+      cbBuffer           : Win32.ULONG;
+      iMethod            : Win32.ULONG;
+      reserved2          : PVOID_Array (0 .. 4);
+      rpcFlags           : Win32.ULONG;
+   end record;
 
-   type IRpcChannelBufferVtbl is                           --  objbase.h :7939
-      record
-         QueryInterface : af_7942_QueryInterface;         --  objbase.h :7942
-         AddRef : af_7947_AddRef;                 --  objbase.h :7947
-         Release : af_7950_Release;                --  objbase.h :7950
-         GetBuffer : af_7953_GetBuffer;              --  objbase.h :7953
-         SendReceive : af_7958_SendReceive;            --  objbase.h :7958
-         FreeBuffer : af_7963_FreeBuffer;             --  objbase.h :7963
-         GetDestCtx : af_7967_GetDestCtx;             --  objbase.h :7967
-         IsConnected : af_7972_IsConnected;            --  objbase.h :7972
-      end record;
+   type IRpcChannelBufferVtbl is record
+      QueryInterface : af_7942_QueryInterface;
+      AddRef         : af_7947_AddRef;
+      Release        : af_7950_Release;
+      GetBuffer      : af_7953_GetBuffer;
+      SendReceive    : af_7958_SendReceive;
+      FreeBuffer     : af_7963_FreeBuffer;
+      GetDestCtx     : af_7967_GetDestCtx;
+      IsConnected    : af_7972_IsConnected;
+   end record;
 
-   type IRpcChannelBuffer is                               --  objbase.h :7977
-      record
-         lpVtbl : a_IRpcChannelBufferVtbl;
-         --  objbase.h :7979
-      end record;
+   type IRpcChannelBuffer is record
+      lpVtbl : a_IRpcChannelBufferVtbl;
+   end record;
 
+   type IRpcProxyBufferVtbl is record
+      QueryInterface : af_8116_QueryInterface;
+      AddRef         : af_8121_AddRef;
+      Release        : af_8124_Release;
+      Connect        : af_8127_Connect;
+      Disconnect     : ap_8131_Disconnect;
+   end record;
 
-   type IRpcProxyBufferVtbl is                             --  objbase.h :8113
-      record
-         QueryInterface : af_8116_QueryInterface;         --  objbase.h :8116
-         AddRef : af_8121_AddRef;                 --  objbase.h :8121
-         Release : af_8124_Release;                --  objbase.h :8124
-         Connect : af_8127_Connect;                --  objbase.h :8127
-         Disconnect : ap_8131_Disconnect;             --  objbase.h :8131
-      end record;
+   type IRpcStubBufferVtbl is record
+      QueryInterface : af_8242_QueryInterface;
+      AddRef         : af_8247_AddRef;
+      Release        : af_8250_Release;
+      Connect        : af_8253_Connect;
+      Disconnect     : ap_8257_Disconnect;
+      Invoke         : af_8260_Invoke;
+      IsIIDSupported : af_8265_IsIIDSupported;
+      CountRefs      : af_8269_CountRefs;
+   end record;
 
-   type IRpcStubBufferVtbl is                              --  objbase.h :8239
-      record
-         QueryInterface : af_8242_QueryInterface;
-         --  objbase.h :8242
-         AddRef : af_8247_AddRef;      --  objbase.h :8247
-         Release : af_8250_Release;     --  objbase.h :8250
-         Connect : af_8253_Connect;     --  objbase.h :8253
-         Disconnect : ap_8257_Disconnect;  --  objbase.h :8257
-         Invoke : af_8260_Invoke;      --  objbase.h :8260
-         IsIIDSupported : af_8265_IsIIDSupported;
-         --  objbase.h :8265
-         CountRefs : af_8269_CountRefs;   --  objbase.h :8269
-      end record;
+   type IRpcStubBuffer is record
+      lpVtbl : a_IRpcStubBufferVtbl;
+   end record;
 
-   type IRpcStubBuffer is                                  --  objbase.h :8282
-      record
-         lpVtbl : a_IRpcStubBufferVtbl;                   --  objbase.h :8284
-      end record;
-
-   type IPSFactoryBufferVtbl is                            --  objbase.h :8451
-      record
-         QueryInterface : af_8454_QueryInterface;         --  objbase.h :8454
-         AddRef : af_8459_AddRef;                 --  objbase.h :8459
-         Release : af_8462_Release;                --  objbase.h :8462
-         CreateProxy : af_8465_CreateProxy;            --  objbase.h :8465
-         CreateStub : af_8472_CreateStub;             --  objbase.h :8472
-      end record;
+   type IPSFactoryBufferVtbl is record
+      QueryInterface : af_8454_QueryInterface;
+      AddRef         : af_8459_AddRef;
+      Release        : af_8462_Release;
+      CreateProxy    : af_8465_CreateProxy;
+      CreateStub     : af_8472_CreateStub;
+   end record;
 
    type LPFNGETCLASSOBJECT is access function
      (rclsid : REFCLSID;
-                      riid : REFIID;
-                      ppv : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :9055
+      riid   : REFIID;
+      ppv    : access Win32.PVOID)
+      return HRESULT;
    pragma Convention (Stdcall, LPFNGETCLASSOBJECT);
 
-   type LPFNCANUNLOADNOW is access function  return HRESULT;
-   pragma Convention (Stdcall, LPFNCANUNLOADNOW);  --  objbase.h :9061
+   type LPFNCANUNLOADNOW is access function return HRESULT;
+   pragma Convention (Stdcall, LPFNCANUNLOADNOW);
 
-   IWinTypes_v0_1_c_ifspec : Win32.Rpcdce.RPC_IF_HANDLE;
-   --  objbase.h :1110
-   IWinTypes_v0_1_s_ifspec : Win32.Rpcdce.RPC_IF_HANDLE;
-   --  objbase.h :1111
+   IWinTypes_v0_1_c_ifspec      : Win32.Rpcdce.RPC_IF_HANDLE;
+   IWinTypes_v0_1_s_ifspec      : Win32.Rpcdce.RPC_IF_HANDLE;
    MIDL_intf_0000_v0_0_c_ifspec : Win32.Rpcdce.RPC_IF_HANDLE;
-   --  objbase.h :1147
    MIDL_intf_0000_v0_0_s_ifspec : Win32.Rpcdce.RPC_IF_HANDLE;
-   --  objbase.h :1148
 
-   GUID_NULL : IID;                      --  cguid.h :35
-   IID_NULL : constant IID :=  GUID_NULL; --  objbase.h :952
-   CLSID_NULL : constant IID :=  GUID_NULL; --  objbase.h :960
+   GUID_NULL  : IID;
+   IID_NULL   : constant IID := GUID_NULL;
+   CLSID_NULL : constant IID := GUID_NULL;
 
-   IID_IUnknown : IID;                      --  objbase.h :1432
-   IID_IClassFactory : IID;                      --  objbase.h :1547
-   IID_IMarshal : IID;                      --  objbase.h :1669
-   IID_IMalloc : IID;                      --  objbase.h :1925
-   IID_IStdMarshalInfo : IID;                      --  objbase.h :2130
-   IID_IExternalConnection : IID;                      --  objbase.h :2239
-   IID_IWeakRef : IID;                      --  objbase.h :2365
-   IID_IEnumUnknown : IID;                      --  objbase.h :2485
-   IID_IBindCtx : IID;                      --  objbase.h :2671
-   IID_IParseDisplayName : IID;                      --  objbase.h :2967
-   IID_IEnumMoniker : IID;                      --  objbase.h :3071
-   IID_IRunnableObject : IID;                      --  objbase.h :3235
-   IID_IRunningObjectTable : IID;                      --  objbase.h :3418
-   IID_IPersist : IID;                      --  objbase.h :3663
-   IID_IPersistStream : IID;                      --  objbase.h :3758
-   IID_IMoniker : IID;                      --  objbase.h :3947
-   IID_IEnumString : IID;                      --  objbase.h :4459
-   IID_IStream : IID;                      --  objbase.h :4664
-   IID_IEnumSTATSTG : IID;                      --  objbase.h :5018
-   IID_IStorage : IID;                      --  objbase.h :5195
-   IID_IPersistFile : IID;                      --  objbase.h :5693
-   IID_IPersistStorage : IID;                      --  objbase.h :5887
-   IID_ILockBytes : IID;                      --  objbase.h :6097
-   IID_IEnumFORMATETC : IID;                      --  objbase.h :6384
-   IID_IEnumSTATDATA : IID;                      --  objbase.h :6572
-   IID_IRootStorage : IID;                      --  objbase.h :6736
-   IID_IAdviseSink : IID;                      --  objbase.h :6894
-   IID_IAdviseSink2 : IID;                      --  objbase.h :7077
-   IID_IDataObject : IID;                      --  objbase.h :7215
-   IID_IDataAdviseHolder : IID;                      --  objbase.h :7513
-   IID_IMessageFilter : IID;                      --  objbase.h :7736
-   IID_IRpcChannelBuffer : IID;                      --  objbase.h :7911
-   IID_IRpcProxyBuffer : IID;                      --  objbase.h :8097
-   IID_IRpcStubBuffer : IID;                      --  objbase.h :8208
-   IID_IPSFactoryBuffer : IID;                      --  objbase.h :8429
+   IID_IUnknown            : IID;
+   IID_IClassFactory       : IID;
+   IID_IMarshal            : IID;
+   IID_IMalloc             : IID;
+   IID_IStdMarshalInfo     : IID;
+   IID_IExternalConnection : IID;
+   IID_IWeakRef            : IID;
+   IID_IEnumUnknown        : IID;
+   IID_IBindCtx            : IID;
+   IID_IParseDisplayName   : IID;
+   IID_IEnumMoniker        : IID;
+   IID_IRunnableObject     : IID;
+   IID_IRunningObjectTable : IID;
+   IID_IPersist            : IID;
+   IID_IPersistStream      : IID;
+   IID_IMoniker            : IID;
+   IID_IEnumString         : IID;
+   IID_IStream             : IID;
+   IID_IEnumSTATSTG        : IID;
+   IID_IStorage            : IID;
+   IID_IPersistFile        : IID;
+   IID_IPersistStorage     : IID;
+   IID_ILockBytes          : IID;
+   IID_IEnumFORMATETC      : IID;
+   IID_IEnumSTATDATA       : IID;
+   IID_IRootStorage        : IID;
+   IID_IAdviseSink         : IID;
+   IID_IAdviseSink2        : IID;
+   IID_IDataObject         : IID;
+   IID_IDataAdviseHolder   : IID;
+   IID_IMessageFilter      : IID;
+   IID_IRpcChannelBuffer   : IID;
+   IID_IRpcProxyBuffer     : IID;
+   IID_IRpcStubBuffer      : IID;
+   IID_IPSFactoryBuffer    : IID;
 
-   function CLSCTX_ALL return Win32.UINT;                  --  objbase.h :254
-   function CLSCTX_INPROC return Win32.UINT;               --  objbase.h :258
-   function CLSCTX_SERVER return Win32.UINT;               --  objbase.h :260
+   function CLSCTX_ALL return Win32.UINT;
+   function CLSCTX_INPROC return Win32.UINT;
+   function CLSCTX_SERVER return Win32.UINT;
 
-   procedure LISet32 (li : in out Win32.Winnt.anonymous1_t;
-                     v : in Win32.DWORD);                 --  objbase.h : 245
+   procedure LISet32
+     (li : in out Win32.Winnt.anonymous1_t;
+      v  : in Win32.DWORD);
 
-   procedure ULISet32 (li : in out Win32.Winnt.anonymous1_t;
-                      v : in Win32.DWORD);                --  objbase.h : 247
+   procedure ULISet32
+     (li : in out Win32.Winnt.anonymous1_t;
+      v  : in Win32.DWORD);
 
    procedure HGLOBAL_to_xmit
      (phGlobal : access Win32.Windef.HGLOBAL;
-                      p2 : access a_RemHGLOBAL_t);       --  objbase.h :1084
+      p2       : access a_RemHGLOBAL_t);
 
    procedure HGLOBAL_from_xmit
-     (p1 : a_RemHGLOBAL_t;
+     (p1       : a_RemHGLOBAL_t;
       phGlobal : access Win32.Windef.HGLOBAL);
-   --  objbase.h :1085
 
-   procedure HGLOBAL_free_inst
-     (phGlobal : access Win32.Windef.HGLOBAL);     --  objbase.h :1086
+   procedure HGLOBAL_free_inst (phGlobal : access Win32.Windef.HGLOBAL);
 
-   procedure HGLOBAL_free_xmit
-     (p1 : a_RemHGLOBAL_t);                        --  objbase.h :1087
+   procedure HGLOBAL_free_xmit (p1 : a_RemHGLOBAL_t);
 
    procedure HBITMAP_to_xmit
      (phBitmap : access Win32.Windef.HBITMAP;
-                      p2 : access a_RemHBITMAP_t);          --  objbase.h :1088
+      p2       : access a_RemHBITMAP_t);
 
    procedure HBITMAP_from_xmit
-     (p1 : a_RemHBITMAP_t;
+     (p1       : a_RemHBITMAP_t;
       phBitmap : access Win32.Windef.HBITMAP);
-   --  objbase.h :1089
 
-   procedure HBITMAP_free_inst
-     (phBitmap : access Win32.Windef.HBITMAP);     --  objbase.h :1090
+   procedure HBITMAP_free_inst (phBitmap : access Win32.Windef.HBITMAP);
 
-   procedure HBITMAP_free_xmit
-     (p1 : a_RemHBITMAP_t);                        --  objbase.h :1091
+   procedure HBITMAP_free_xmit (p1 : a_RemHBITMAP_t);
 
    procedure HPALETTE_to_xmit
      (phPalette : access Win32.Windef.HPALETTE;
-                      p2 : access a_RemHPALETTE_t);         --  objbase.h :1092
+      p2        : access a_RemHPALETTE_t);
 
    procedure HPALETTE_from_xmit
-     (p1 : a_RemHPALETTE_t;
-      phPalette : access Win32.Windef.HPALETTE);     --  objbase.h :1093
+     (p1        : a_RemHPALETTE_t;
+      phPalette : access Win32.Windef.HPALETTE);
 
-   procedure HPALETTE_free_inst
-     (phPalette : access Win32.Windef.HPALETTE);   --  objbase.h :1094
+   procedure HPALETTE_free_inst (phPalette : access Win32.Windef.HPALETTE);
 
-   procedure HPALETTE_free_xmit
-     (p1 : a_RemHPALETTE_t);                       --  objbase.h :1095
+   procedure HPALETTE_free_xmit (p1 : a_RemHPALETTE_t);
 
    procedure HBRUSH_to_xmit
      (phBrush : access Win32.Windef.HBRUSH;
-      p2 : access a_RemHBRUSH_t);                  --  objbase.h :1096
+      p2      : access a_RemHBRUSH_t);
 
    procedure HBRUSH_from_xmit
-     (p1 : a_RemHBRUSH_t;
-      phBrush : access Win32.Windef.HBRUSH);       --  objbase.h :1097
+     (p1      : a_RemHBRUSH_t;
+      phBrush : access Win32.Windef.HBRUSH);
 
-   procedure HBRUSH_free_inst
-     (phBrush : access Win32.Windef.HBRUSH);       --  objbase.h :1098
+   procedure HBRUSH_free_inst (phBrush : access Win32.Windef.HBRUSH);
 
-   procedure HBRUSH_free_xmit
-     (p1 : a_RemHBRUSH_t);                         --  objbase.h :1099
+   procedure HBRUSH_free_xmit (p1 : a_RemHBRUSH_t);
 
    procedure HMETAFILEPICT_to_xmit
      (phMetaFilePict : access HMETAFILEPICT;
-                      p2 : access a_RemHMETAFILEPICT_t);
-   --  objbase.h :1100
+      p2             : access a_RemHMETAFILEPICT_t);
 
    procedure HMETAFILEPICT_from_xmit
-     (p1 : a_RemHMETAFILEPICT_t;
-      phMetaFilePict : access HMETAFILEPICT);      --  objbase.h :1101
+     (p1             : a_RemHMETAFILEPICT_t;
+      phMetaFilePict : access HMETAFILEPICT);
 
    procedure HMETAFILEPICT_free_inst
-     (phMetaFilePict : access HMETAFILEPICT);      --  objbase.h :1102
+     (phMetaFilePict : access HMETAFILEPICT);
 
-   procedure HMETAFILEPICT_free_xmit
-     (p1 : a_RemHMETAFILEPICT_t);                 --  objbase.h :1103
+   procedure HMETAFILEPICT_free_xmit (p1 : a_RemHMETAFILEPICT_t);
 
    procedure HENHMETAFILE_to_xmit
      (phEnhMetaFile : access Win32.Windef.HENHMETAFILE;
-                      p2 : access a_RemHENHMETAFILE_t);
-   --  objbase.h :1104
+      p2            : access a_RemHENHMETAFILE_t);
 
    procedure HENHMETAFILE_from_xmit
-     (p1 : a_RemHENHMETAFILE_t;
-                      phEnhMetaFile : access Win32.Windef.HENHMETAFILE);
-   --  objbase.h :1105
+     (p1            : a_RemHENHMETAFILE_t;
+      phEnhMetaFile : access Win32.Windef.HENHMETAFILE);
 
    procedure HENHMETAFILE_free_inst
      (phEnhMetaFile : access Win32.Windef.HENHMETAFILE);
-   --  objbase.h :1106
 
-   procedure HENHMETAFILE_free_xmit
-     (p1 : a_RemHENHMETAFILE_t);                   --  objbase.h :1107
+   procedure HENHMETAFILE_free_xmit (p1 : a_RemHENHMETAFILE_t);
 
    function IUnknown_QueryInterface_Proxy
-     (This : access IUnknown;
-                      riid : REFIID;
-                      ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :1493
+     (This      : access IUnknown;
+      riid      : REFIID;
+      ppvObject : access Win32.PVOID)
+      return HRESULT;
 
    procedure IUnknown_QueryInterface_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :1499
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
-   function IUnknown_AddRef_Proxy
-     (This : access IUnknown)
-     return ULONG;                                --  objbase.h :1506
+   function IUnknown_AddRef_Proxy (This : access IUnknown) return ULONG;
 
    procedure IUnknown_AddRef_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :1510
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
-   function IUnknown_Release_Proxy
-     (This : access IUnknown)
-     return ULONG;                                --  objbase.h :1517
+   function IUnknown_Release_Proxy (This : access IUnknown) return ULONG;
 
    procedure IUnknown_Release_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :1521
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IClassFactory_RemoteCreateInstance_Proxy
-     (This : access IClassFactory;
-                      riid : REFIID;
-                      ppvObject : access LPUNKNOWN)
-     return HRESULT;                              --  objbase.h :1625
+     (This      : access IClassFactory;
+      riid      : REFIID;
+      ppvObject : access LPUNKNOWN)
+      return HRESULT;
 
    procedure IClassFactory_RemoteCreateInstance_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :1631
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IClassFactory_LockServer_Proxy
-     (This : access IClassFactory;
+     (This  : access IClassFactory;
       fLock : BOOL)
-     return HRESULT;                              --  objbase.h :1638
+      return HRESULT;
 
    procedure IClassFactory_LockServer_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :1643
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMarshal_GetUnmarshalClass_Proxy
-     (This : access IMarshal;
-      riid : REFIID;
-      pv : Win32.PVOID;
+     (This          : access IMarshal;
+      riid          : REFIID;
+      pv            : Win32.PVOID;
       dwDestContext : DWORD;
       pvDestContext : Win32.PVOID;
-      mshlflags : DWORD;
-      pCid : access CLSID)
-     return HRESULT;                              --  objbase.h :1817
+      mshlflags     : DWORD;
+      pCid          : access CLSID)
+      return HRESULT;
 
    procedure IMarshal_GetUnmarshalClass_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :1827
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMarshal_GetMarshalSizeMax_Proxy
-     (This : access IMarshal;
-      riid : REFIID;
-      pv : Win32.PVOID;
+     (This          : access IMarshal;
+      riid          : REFIID;
+      pv            : Win32.PVOID;
       dwDestContext : DWORD;
       pvDestContext : Win32.PVOID;
-      mshlflags : DWORD;
-      pSize : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :1834
+      mshlflags     : DWORD;
+      pSize         : Win32.PDWORD)
+      return HRESULT;
 
    procedure IMarshal_GetMarshalSizeMax_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :1844
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMarshal_MarshalInterface_Proxy
-     (This : access IMarshal;
-      pStm : access IStream;
-      riid : REFIID;
-      pv : Win32.PVOID;
+     (This          : access IMarshal;
+      pStm          : access IStream;
+      riid          : REFIID;
+      pv            : Win32.PVOID;
       dwDestContext : DWORD;
       pvDestContext : Win32.PVOID;
-      mshlflags : DWORD)
-     return HRESULT;                              --  objbase.h :1851
+      mshlflags     : DWORD)
+      return HRESULT;
 
    procedure IMarshal_MarshalInterface_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :1861
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMarshal_UnmarshalInterface_Proxy
      (This : access IMarshal;
       pStm : access IStream;
       riid : REFIID;
-      ppv : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :1868
+      ppv  : access Win32.PVOID)
+      return HRESULT;
 
    procedure IMarshal_UnmarshalInterface_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :1875
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMarshal_ReleaseMarshalData_Proxy
      (This : access IMarshal;
       pStm : access IStream)
-     return HRESULT;                              --  objbase.h :1882
+      return HRESULT;
 
    procedure IMarshal_ReleaseMarshalData_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :1887
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMarshal_DisconnectObject_Proxy
-     (This : access IMarshal;
+     (This       : access IMarshal;
       dwReserved : DWORD)
-     return HRESULT;                              --  objbase.h :1894
+      return HRESULT;
 
    procedure IMarshal_DisconnectObject_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :1899
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMalloc_Alloc_Proxy
      (This : access IMalloc;
-                      cb : Win32.ULONG)
-     return Win32.PVOID;                          --  objbase.h :2039
+      cb   : Win32.ULONG)
+      return Win32.PVOID;
 
    procedure IMalloc_Alloc_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2044
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMalloc_Realloc_Proxy
      (This : access IMalloc;
-      pv : Win32.PVOID;
-      cb : Win32.ULONG)
-     return Win32.PVOID;                          --  objbase.h :2051
+      pv   : Win32.PVOID;
+      cb   : Win32.ULONG)
+      return Win32.PVOID;
 
    procedure IMalloc_Realloc_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2057
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
-   procedure IMalloc_Free_Proxy
-     (This : access IMalloc;
-      pv : Win32.PVOID);                         --  objbase.h :2064
+   procedure IMalloc_Free_Proxy (This : access IMalloc; pv : Win32.PVOID);
 
    procedure IMalloc_Free_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2069
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMalloc_GetSize_Proxy
      (This : access IMalloc;
-      pv : Win32.PVOID)
-     return ULONG;                                --  objbase.h :2076
+      pv   : Win32.PVOID)
+      return ULONG;
 
    procedure IMalloc_GetSize_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2081
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMalloc_DidAlloc_Proxy
      (This : access IMalloc;
-      pv : Win32.PVOID)
-     return Win32.INT;                            --  objbase.h :2088
+      pv   : Win32.PVOID)
+      return Win32.INT;
 
    procedure IMalloc_DidAlloc_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2093
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
-   procedure IMalloc_HeapMinimize_Proxy
-     (This : access IMalloc);                      --  objbase.h :2100
+   procedure IMalloc_HeapMinimize_Proxy (This : access IMalloc);
 
    procedure IMalloc_HeapMinimize_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2104
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStdMarshalInfo_GetClassForHandler_Proxy
-     (This : access IStdMarshalInfo;
+     (This          : access IStdMarshalInfo;
       dwDestContext : DWORD;
       pvDestContext : Win32.PVOID;
-      pClsid : access CLSID)
-     return HRESULT;                              --  objbase.h :2198
+      pClsid        : access CLSID)
+      return HRESULT;
 
    procedure IStdMarshalInfo_GetClassForHandler_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2205
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IExternalConnection_AddConnection_Proxy
-     (This : access IExternalConnection;
-      extconn : DWORD;
+     (This     : access IExternalConnection;
+      extconn  : DWORD;
       reserved : DWORD)
-     return DWORD;                                --  objbase.h :2319
+      return DWORD;
 
    procedure IExternalConnection_AddConnection_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2325
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IExternalConnection_ReleaseConnection_Proxy
-     (This : access IExternalConnection;
-      extconn : DWORD;
-      reserved : DWORD;
+     (This               : access IExternalConnection;
+      extconn            : DWORD;
+      reserved           : DWORD;
       fLastReleaseCloses : BOOL)
-     return DWORD;                                --  objbase.h :2332
+      return DWORD;
 
    procedure IExternalConnection_ReleaseConnection_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2339
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IWeakRef_ChangeWeakCount_Proxy
-     (This : access IWeakRef;
+     (This    : access IWeakRef;
       c_delta : LONG)
-     return ULONG;                                --  objbase.h :2441
+      return ULONG;
 
    procedure IWeakRef_ChangeWeakCount_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2446
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IWeakRef_ReleaseKeepAlive_Proxy
-     (This : access IWeakRef;
+     (This         : access IWeakRef;
       pUnkReleased : access IUnknown;
-      reserved : DWORD)
-     return ULONG;                                --  objbase.h :2453
+      reserved     : DWORD)
+      return ULONG;
 
    procedure IWeakRef_ReleaseKeepAlive_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2459
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IEnumUnknown_RemoteNext_Proxy
-     (This : access IEnumUnknown;
-      celt : Win32.ULONG;
-      rgelt : access LPUNKNOWN;
+     (This         : access IEnumUnknown;
+      celt         : Win32.ULONG;
+      rgelt        : access LPUNKNOWN;
       pceltFetched : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :2581
+      return HRESULT;
 
    procedure IEnumUnknown_RemoteNext_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2588
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IEnumUnknown_Skip_Proxy
      (This : access IEnumUnknown;
       celt : Win32.ULONG)
-     return HRESULT;                              --  objbase.h :2595
+      return HRESULT;
 
    procedure IEnumUnknown_Skip_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2600
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IEnumUnknown_Reset_Proxy
      (This : access IEnumUnknown)
-     return HRESULT;                              --  objbase.h :2607
+      return HRESULT;
 
    procedure IEnumUnknown_Reset_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2611
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IEnumUnknown_Clone_Proxy
-     (This : access IEnumUnknown;
-                      ppenum : access LPENUMUNKNOWN)
-     return HRESULT;                              --  objbase.h :2618
+     (This   : access IEnumUnknown;
+      ppenum : access LPENUMUNKNOWN)
+      return HRESULT;
 
    procedure IEnumUnknown_Clone_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2623
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IBindCtx_RegisterObjectBound_Proxy
      (This : access IBindCtx;
-                      punk : access IUnknown)
-     return HRESULT;                              --  objbase.h :2827
+      punk : access IUnknown)
+      return HRESULT;
 
    procedure IBindCtx_RegisterObjectBound_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2832
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IBindCtx_RevokeObjectBound_Proxy
      (This : access IBindCtx;
-                      punk : access IUnknown)
-     return HRESULT;                              --  objbase.h :2839
+      punk : access IUnknown)
+      return HRESULT;
 
    procedure IBindCtx_RevokeObjectBound_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2844
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IBindCtx_ReleaseBoundObjects_Proxy
      (This : access IBindCtx)
-     return HRESULT;                              --  objbase.h :2851
+      return HRESULT;
 
    procedure IBindCtx_ReleaseBoundObjects_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2855
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IBindCtx_SetBindOptions_Proxy
-     (This : access IBindCtx;
-                      pbindopts : LPBIND_OPTS)
-     return HRESULT;                              --  objbase.h :2862
+     (This      : access IBindCtx;
+      pbindopts : LPBIND_OPTS)
+      return HRESULT;
 
    procedure IBindCtx_SetBindOptions_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2867
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IBindCtx_GetBindOptions_Proxy
-     (This : access IBindCtx;
-                      pbindopts : LPBIND_OPTS)
-     return HRESULT;                              --  objbase.h :2874
+     (This      : access IBindCtx;
+      pbindopts : LPBIND_OPTS)
+      return HRESULT;
 
    procedure IBindCtx_GetBindOptions_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2879
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IBindCtx_GetRunningObjectTable_Proxy
-     (This : access IBindCtx;
-                      pprot : access LPRUNNINGOBJECTTABLE)
-     return HRESULT;                              --  objbase.h :2886
+     (This  : access IBindCtx;
+      pprot : access LPRUNNINGOBJECTTABLE)
+      return HRESULT;
 
    procedure IBindCtx_GetRunningObjectTable_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2891
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IBindCtx_RegisterObjectParam_Proxy
-     (This : access IBindCtx;
-                      pszKey : LPOLESTR;
-                      punk : access IUnknown)
-     return HRESULT;                              --  objbase.h :2898
+     (This   : access IBindCtx;
+      pszKey : LPOLESTR;
+      punk   : access IUnknown)
+      return HRESULT;
 
    procedure IBindCtx_RegisterObjectParam_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2904
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IBindCtx_GetObjectParam_Proxy
-     (This : access IBindCtx;
+     (This   : access IBindCtx;
       pszKey : LPOLESTR;
-      ppunk : access LPUNKNOWN)
-     return HRESULT;                              --  objbase.h :2911
+      ppunk  : access LPUNKNOWN)
+      return HRESULT;
 
    procedure IBindCtx_GetObjectParam_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2917
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IBindCtx_EnumObjectParam_Proxy
-     (This : access IBindCtx;
+     (This   : access IBindCtx;
       ppenum : access LPENUMSTRING)
-     return HRESULT;                              --  objbase.h :2924
+      return HRESULT;
 
    procedure IBindCtx_EnumObjectParam_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2929
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IBindCtx_RevokeObjectParam_Proxy
-     (This : access IBindCtx;
-                      pszKey : LPOLESTR)
-     return HRESULT;                              --  objbase.h :2936
+     (This   : access IBindCtx;
+      pszKey : LPOLESTR)
+      return HRESULT;
 
    procedure IBindCtx_RevokeObjectParam_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :2941
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IParseDisplayName_ParseDisplayName_Proxy
-     (This : access IParseDisplayName;
-      pbc : access IBindCtx;
+     (This           : access IParseDisplayName;
+      pbc            : access IBindCtx;
       pszDisplayName : LPOLESTR;
-      pchEaten : Win32.PDWORD;
-      ppmkOut : access LPMONIKER)
-     return HRESULT;                              --  objbase.h :3037
+      pchEaten       : Win32.PDWORD;
+      ppmkOut        : access LPMONIKER)
+      return HRESULT;
 
    procedure IParseDisplayName_ParseDisplayName_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :3045
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IEnumMoniker_RemoteNext_Proxy
-     (This : access IEnumMoniker;
-      celt : Win32.ULONG;
-      rgelt : access LPMONIKER;
+     (This         : access IEnumMoniker;
+      celt         : Win32.ULONG;
+      rgelt        : access LPMONIKER;
       pceltFetched : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :3167
+      return HRESULT;
 
    procedure IEnumMoniker_RemoteNext_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :3174
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IEnumMoniker_Skip_Proxy
      (This : access IEnumMoniker;
       celt : Win32.ULONG)
-     return HRESULT;                              --  objbase.h :3181
+      return HRESULT;
 
    procedure IEnumMoniker_Skip_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :3186
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IEnumMoniker_Reset_Proxy
      (This : access IEnumMoniker)
-     return HRESULT;                              --  objbase.h :3193
+      return HRESULT;
 
    procedure IEnumMoniker_Reset_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :3197
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IEnumMoniker_Clone_Proxy
-     (This : access IEnumMoniker;
+     (This   : access IEnumMoniker;
       ppenum : access LPENUMMONIKER)
-     return HRESULT;                              --  objbase.h :3204
+      return HRESULT;
 
    procedure IEnumMoniker_Clone_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :3209
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IRunnableObject_GetRunningClass_Proxy
-     (This : access IRunnableObject;
+     (This    : access IRunnableObject;
       lpClsid : access CLSID)
-     return HRESULT;                              --  objbase.h :3339
+      return HRESULT;
 
    procedure IRunnableObject_GetRunningClass_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :3344
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IRunnableObject_Run_Proxy
      (This : access IRunnableObject;
-      pbc : LPBINDCTX)
-     return HRESULT;                              --  objbase.h :3351
+      pbc  : LPBINDCTX)
+      return HRESULT;
 
    procedure IRunnableObject_Run_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :3356
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IRunnableObject_IsRunning_Proxy
      (This : access IRunnableObject)
-     return BOOL;                                 --  objbase.h :3363
+      return BOOL;
 
    procedure IRunnableObject_IsRunning_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :3367
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IRunnableObject_LockRunning_Proxy
-     (This : access IRunnableObject;
-                      fLock : BOOL;
-                      fLastUnlockCloses : BOOL)
-     return HRESULT;                              --  objbase.h :3374
+     (This              : access IRunnableObject;
+      fLock             : BOOL;
+      fLastUnlockCloses : BOOL)
+      return HRESULT;
 
    procedure IRunnableObject_LockRunning_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :3380
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IRunnableObject_SetContainedObject_Proxy
-     (This : access IRunnableObject;
-                      fContained : BOOL)
-     return HRESULT;                              --  objbase.h :3387
+     (This       : access IRunnableObject;
+      fContained : BOOL)
+      return HRESULT;
 
    procedure IRunnableObject_SetContainedObject_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :3392
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IRunningObjectTable_Register_Proxy
-     (This : access IRunningObjectTable;
-                      grfFlags : DWORD;
-                      punkObject : access IUnknown;
-                      pmkObjectName : access IMoniker;
-                      pdwRegister : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :3554
+     (This          : access IRunningObjectTable;
+      grfFlags      : DWORD;
+      punkObject    : access IUnknown;
+      pmkObjectName : access IMoniker;
+      pdwRegister   : Win32.PDWORD)
+      return HRESULT;
 
    procedure IRunningObjectTable_Register_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :3562
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IRunningObjectTable_Revoke_Proxy
-     (This : access IRunningObjectTable;
-                      dwRegister : DWORD)
-     return HRESULT;                              --  objbase.h :3569
+     (This       : access IRunningObjectTable;
+      dwRegister : DWORD)
+      return HRESULT;
 
    procedure IRunningObjectTable_Revoke_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :3574
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IRunningObjectTable_IsRunning_Proxy
-     (This : access IRunningObjectTable;
-                      pmkObjectName : access IMoniker)
-     return HRESULT;                              --  objbase.h :3581
+     (This          : access IRunningObjectTable;
+      pmkObjectName : access IMoniker)
+      return HRESULT;
 
    procedure IRunningObjectTable_IsRunning_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :3586
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IRunningObjectTable_GetObject_Proxy
-     (This : access IRunningObjectTable;
-                      pmkObjectName : access IMoniker;
-                      ppunkObject : access LPUNKNOWN)
-     return HRESULT;                              --  objbase.h :3593
+     (This          : access IRunningObjectTable;
+      pmkObjectName : access IMoniker;
+      ppunkObject   : access LPUNKNOWN)
+      return HRESULT;
 
    procedure IRunningObjectTable_GetObject_Stub
      (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
       pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase      : Win32.PDWORD); --  objbase.h :3599
+      pdwStubPhase      : Win32.PDWORD);
 
    function IRunningObjectTable_NoteChangeTime_Proxy
-     (This : access IRunningObjectTable;
+     (This       : access IRunningObjectTable;
       dwRegister : DWORD;
-      pfiletime : access Win32.Winbase.FILETIME)
-     return HRESULT;                              --  objbase.h :3606
+      pfiletime  : access Win32.Winbase.FILETIME)
+      return HRESULT;
 
    procedure IRunningObjectTable_NoteChangeTime_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :3612
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IRunningObjectTable_GetTimeOfLastChange_Proxy
-     (This : access IRunningObjectTable;
-                      pmkObjectName : access IMoniker;
-                      pfiletime : access Win32.Winbase.FILETIME)
-     return HRESULT;                              --  objbase.h :3619
+     (This          : access IRunningObjectTable;
+      pmkObjectName : access IMoniker;
+      pfiletime     : access Win32.Winbase.FILETIME)
+      return HRESULT;
 
    procedure IRunningObjectTable_GetTimeOfLastChange_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :3625
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IRunningObjectTable_EnumRunning_Proxy
-     (This : access IRunningObjectTable;
+     (This          : access IRunningObjectTable;
       ppenumMoniker : access LPENUMMONIKER)
-     return HRESULT;                              --  objbase.h :3632
+      return HRESULT;
 
    procedure IRunningObjectTable_EnumRunning_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :3637
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IPersist_GetClassID_Proxy
-     (This : access IPersist;
+     (This     : access IPersist;
       pClassID : access CLSID)
-     return HRESULT;                              --  objbase.h :3727
+      return HRESULT;
 
    procedure IPersist_GetClassID_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :3732
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
-   type IPersistStreamVtbl is                              --  objbase.h :3781
-      record
-         QueryInterface : af_3784_QueryInterface;         --  objbase.h :3784
-         AddRef : af_3789_AddRef;                 --  objbase.h :3789
-         Release : af_3792_Release;                --  objbase.h :3792
-         GetClassID : af_3795_GetClassID;             --  objbase.h :3795
-         IsDirty : af_3799_IsDirty;                --  objbase.h :3799
-         Load : af_3802_Load;                   --  objbase.h :3802
-         Save : af_3806_Save;                   --  objbase.h :3806
-         GetSizeMax : af_3811_GetSizeMax;             --  objbase.h :3811
-      end record;
+   type IPersistStreamVtbl is record
+      QueryInterface : af_3784_QueryInterface;
+      AddRef         : af_3789_AddRef;
+      Release        : af_3792_Release;
+      GetClassID     : af_3795_GetClassID;
+      IsDirty        : af_3799_IsDirty;
+      Load           : af_3802_Load;
+      Save           : af_3806_Save;
+      GetSizeMax     : af_3811_GetSizeMax;
+   end record;
 
-   type IMonikerVtbl is                                    --  objbase.h :4027
-      record
-         QueryInterface : af_4030_QueryInterface;    --  objbase.h :4030
-         AddRef : af_4035_AddRef;            --  objbase.h :4035
-         Release : af_4038_Release;           --  objbase.h :4038
-         GetClassID : af_4041_GetClassID;        --  objbase.h :4041
-         IsDirty : af_4045_IsDirty;           --  objbase.h :4045
-         Load : af_4048_Load;              --  objbase.h :4048
-         Save : af_4052_Save;              --  objbase.h :4052
-         GetSizeMax : af_4057_GetSizeMax;        --  objbase.h :4057
-         BindToObject : af_4061_BindToObject;      --  objbase.h :4061
-         BindToStorage : af_4068_BindToStorage;     --  objbase.h :4068
-         Reduce : af_4075_Reduce;            --  objbase.h :4075
-         ComposeWith : af_4082_ComposeWith;       --  objbase.h :4082
-         Enum : af_4088_Enum;              --  objbase.h :4088
-         IsEqual : af_4093_IsEqual;           --  objbase.h :4093
-         Hash : af_4097_Hash;              --  objbase.h :4097
-         IsRunning : af_4101_IsRunning;         --  objbase.h :4101
-         GetTimeOfLastChange : af_4107_GetTimeOfLastChange;
-         --  objbase.h :4107
-         Inverse : af_4113_Inverse;           --  objbase.h :4113
-         CommonPrefixWith : af_4117_CommonPrefixWith;  --  objbase.h :4117
-         RelativePathTo : af_4122_RelativePathTo;    --  objbase.h :4122
-         GetDisplayName : af_4127_GetDisplayName;    --  objbase.h :4127
-         ParseDisplayName : af_4133_ParseDisplayName;  --  objbase.h :4133
-         IsSystemMoniker : af_4141_IsSystemMoniker;   --  objbase.h :4141
-      end record;
-
-
+   type IMonikerVtbl is record
+      QueryInterface      : af_4030_QueryInterface;
+      AddRef              : af_4035_AddRef;
+      Release             : af_4038_Release;
+      GetClassID          : af_4041_GetClassID;
+      IsDirty             : af_4045_IsDirty;
+      Load                : af_4048_Load;
+      Save                : af_4052_Save;
+      GetSizeMax          : af_4057_GetSizeMax;
+      BindToObject        : af_4061_BindToObject;
+      BindToStorage       : af_4068_BindToStorage;
+      Reduce              : af_4075_Reduce;
+      ComposeWith         : af_4082_ComposeWith;
+      Enum                : af_4088_Enum;
+      IsEqual             : af_4093_IsEqual;
+      Hash                : af_4097_Hash;
+      IsRunning           : af_4101_IsRunning;
+      GetTimeOfLastChange : af_4107_GetTimeOfLastChange;
+      Inverse             : af_4113_Inverse;
+      CommonPrefixWith    : af_4117_CommonPrefixWith;
+      RelativePathTo      : af_4122_RelativePathTo;
+      GetDisplayName      : af_4127_GetDisplayName;
+      ParseDisplayName    : af_4133_ParseDisplayName;
+      IsSystemMoniker     : af_4141_IsSystemMoniker;
+   end record;
 
    function IPersistStream_IsDirty_Proxy
      (This : access IPersistStream)
-     return HRESULT;                              --  objbase.h :3860
+      return HRESULT;
 
    procedure IPersistStream_IsDirty_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :3864
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IPersistStream_Load_Proxy
      (This : access IPersistStream;
-                      pStm : access IStream)
-     return HRESULT;                              --  objbase.h :3871
+      pStm : access IStream)
+      return HRESULT;
 
    procedure IPersistStream_Load_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :3876
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IPersistStream_Save_Proxy
-     (This : access IPersistStream;
-      pStm : access IStream;
+     (This        : access IPersistStream;
+      pStm        : access IStream;
       fClearDirty : BOOL)
-     return HRESULT;                              --  objbase.h :3883
+      return HRESULT;
 
    procedure IPersistStream_Save_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :3889
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IPersistStream_GetSizeMax_Proxy
-     (This : access IPersistStream;
+     (This    : access IPersistStream;
       pcbSize : access Win32.Winnt.ULARGE_INTEGER)
-     return HRESULT;                              --  objbase.h :3896
+      return HRESULT;
 
    procedure IPersistStream_GetSizeMax_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :3901
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMoniker_RemoteBindToObject_Proxy
-     (This : access IMoniker;
-      pbc : access IBindCtx;
-      pmkToLeft : access IMoniker;
+     (This       : access IMoniker;
+      pbc        : access IBindCtx;
+      pmkToLeft  : access IMoniker;
       riidResult : access IID;
-      ppvResult : access LPUNKNOWN)
-     return HRESULT;                              --  objbase.h :4236
+      ppvResult  : access LPUNKNOWN)
+      return HRESULT;
 
    procedure IMoniker_RemoteBindToObject_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4244
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMoniker_RemoteBindToStorage_Proxy
-     (This : access IMoniker;
-      pbc : access IBindCtx;
+     (This      : access IMoniker;
+      pbc       : access IBindCtx;
       pmkToLeft : access IMoniker;
-      riid : REFIID;
-      ppvObj : access LPUNKNOWN)
-     return HRESULT;                              --  objbase.h :4251
+      riid      : REFIID;
+      ppvObj    : access LPUNKNOWN)
+      return HRESULT;
 
    procedure IMoniker_RemoteBindToStorage_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4259
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMoniker_Reduce_Proxy
-     (This : access IMoniker;
-      pbc : access IBindCtx;
+     (This           : access IMoniker;
+      pbc            : access IBindCtx;
       dwReduceHowFar : DWORD;
-      ppmkToLeft : access LPMONIKER;
-      ppmkReduced : access LPMONIKER)
-     return HRESULT;                              --  objbase.h :4266
+      ppmkToLeft     : access LPMONIKER;
+      ppmkReduced    : access LPMONIKER)
+      return HRESULT;
 
    procedure IMoniker_Reduce_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4274
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMoniker_ComposeWith_Proxy
-     (This : access IMoniker;
-      pmkRight : access IMoniker;
+     (This              : access IMoniker;
+      pmkRight          : access IMoniker;
       fOnlyIfNotGeneric : BOOL;
-      ppmkComposite : access LPMONIKER)
-     return HRESULT;                              --  objbase.h :4281
+      ppmkComposite     : access LPMONIKER)
+      return HRESULT;
 
    procedure IMoniker_ComposeWith_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4288
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMoniker_Enum_Proxy
-     (This : access IMoniker;
-      fForward : BOOL;
+     (This          : access IMoniker;
+      fForward      : BOOL;
       ppenumMoniker : access LPENUMMONIKER)
-     return HRESULT;                              --  objbase.h :4295
+      return HRESULT;
 
    procedure IMoniker_Enum_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4301
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMoniker_IsEqual_Proxy
-     (This : access IMoniker;
+     (This            : access IMoniker;
       pmkOtherMoniker : access IMoniker)
-     return HRESULT;                              --  objbase.h :4308
+      return HRESULT;
 
    procedure IMoniker_IsEqual_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4313
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMoniker_Hash_Proxy
-     (This : access IMoniker;
+     (This    : access IMoniker;
       pdwHash : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :4320
+      return HRESULT;
 
    procedure IMoniker_Hash_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4325
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMoniker_IsRunning_Proxy
-     (This : access IMoniker;
-      pbc : access IBindCtx;
-      pmkToLeft : access IMoniker;
+     (This            : access IMoniker;
+      pbc             : access IBindCtx;
+      pmkToLeft       : access IMoniker;
       pmkNewlyRunning : access IMoniker)
-     return HRESULT;                              --  objbase.h :4332
+      return HRESULT;
 
    procedure IMoniker_IsRunning_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4339
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMoniker_GetTimeOfLastChange_Proxy
-     (This : access IMoniker;
-      pbc : access IBindCtx;
+     (This      : access IMoniker;
+      pbc       : access IBindCtx;
       pmkToLeft : access IMoniker;
       pFileTime : access Win32.Winbase.FILETIME)
-     return HRESULT;                              --  objbase.h :4346
+      return HRESULT;
 
    procedure IMoniker_GetTimeOfLastChange_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4353
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMoniker_Inverse_Proxy
      (This : access IMoniker;
       ppmk : access LPMONIKER)
-     return HRESULT;                              --  objbase.h :4360
+      return HRESULT;
 
    procedure IMoniker_Inverse_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4365
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMoniker_CommonPrefixWith_Proxy
-     (This : access IMoniker;
-      pmkOther : access IMoniker;
+     (This       : access IMoniker;
+      pmkOther   : access IMoniker;
       ppmkPrefix : access LPMONIKER)
-     return HRESULT;                              --  objbase.h :4372
+      return HRESULT;
 
    procedure IMoniker_CommonPrefixWith_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4378
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMoniker_RelativePathTo_Proxy
-     (This : access IMoniker;
-      pmkOther : access IMoniker;
+     (This        : access IMoniker;
+      pmkOther    : access IMoniker;
       ppmkRelPath : access LPMONIKER)
-     return HRESULT;                              --  objbase.h :4385
+      return HRESULT;
 
    procedure IMoniker_RelativePathTo_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4391
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMoniker_GetDisplayName_Proxy
-     (This : access IMoniker;
-      pbc : access IBindCtx;
-      pmkToLeft : access IMoniker;
+     (This            : access IMoniker;
+      pbc             : access IBindCtx;
+      pmkToLeft       : access IMoniker;
       ppszDisplayName : access LPOLESTR)
-     return HRESULT;                              --  objbase.h :4398
+      return HRESULT;
 
    procedure IMoniker_GetDisplayName_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4405
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMoniker_ParseDisplayName_Proxy
-     (This : access IMoniker;
-      pbc : access IBindCtx;
-      pmkToLeft : access IMoniker;
+     (This           : access IMoniker;
+      pbc            : access IBindCtx;
+      pmkToLeft      : access IMoniker;
       pszDisplayName : LPOLESTR;
-      pchEaten : Win32.PDWORD;
-      ppmkOut : access LPMONIKER)
-     return HRESULT;                              --  objbase.h :4412
+      pchEaten       : Win32.PDWORD;
+      ppmkOut        : access LPMONIKER)
+      return HRESULT;
 
    procedure IMoniker_ParseDisplayName_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4421
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMoniker_IsSystemMoniker_Proxy
-     (This : access IMoniker;
+     (This     : access IMoniker;
       pdwMksys : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :4428
+      return HRESULT;
 
    procedure IMoniker_IsSystemMoniker_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4433
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IEnumString_RemoteNext_Proxy
-     (This : access IEnumString;
-      celt : Win32.ULONG;
-      rgelt : access LPOLESTR;
+     (This         : access IEnumString;
+      celt         : Win32.ULONG;
+      rgelt        : access LPOLESTR;
       pceltFetched : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :4555
+      return HRESULT;
 
    procedure IEnumString_RemoteNext_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4562
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IEnumString_Skip_Proxy
      (This : access IEnumString;
       celt : Win32.ULONG)
-     return HRESULT;                              --  objbase.h :4569
+      return HRESULT;
 
    procedure IEnumString_Skip_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4574
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IEnumString_Reset_Proxy
      (This : access IEnumString)
-     return HRESULT;                              --  objbase.h :4581
+      return HRESULT;
 
    procedure IEnumString_Reset_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4585
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IEnumString_Clone_Proxy
-     (This : access IEnumString;
+     (This   : access IEnumString;
       ppenum : access LPENUMSTRING)
-     return HRESULT;                              --  objbase.h :4592
+      return HRESULT;
 
    procedure IEnumString_Clone_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4597
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStream_RemoteRead_Proxy
-     (This : access IStream;
-      pv : Win32.PBYTE;
-      cb : Win32.ULONG;
+     (This    : access IStream;
+      pv      : Win32.PBYTE;
+      cb      : Win32.ULONG;
       pcbRead : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :4854
+      return HRESULT;
 
    procedure IStream_RemoteRead_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4861
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStream_RemoteWrite_Proxy
-     (This : access IStream;
-      pv : Win32.PCBYTE;
-      cb : Win32.ULONG;
+     (This       : access IStream;
+      pv         : Win32.PCBYTE;
+      cb         : Win32.ULONG;
       pcbWritten : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :4868
+      return HRESULT;
 
    procedure IStream_RemoteWrite_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4875
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStream_RemoteSeek_Proxy
-     (This : access IStream;
-      dlibMove : Win32.Winnt.LARGE_INTEGER;
-      dwOrigin : DWORD;
+     (This            : access IStream;
+      dlibMove        : Win32.Winnt.LARGE_INTEGER;
+      dwOrigin        : DWORD;
       plibNewPosition : access Win32.Winnt.ULARGE_INTEGER)
-     return HRESULT;                              --  objbase.h :4882
+      return HRESULT;
 
    procedure IStream_RemoteSeek_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4889
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStream_SetSize_Proxy
-     (This : access IStream;
+     (This       : access IStream;
       libNewSize : Win32.Winnt.ULARGE_INTEGER)
-     return HRESULT;                              --  objbase.h :4896
+      return HRESULT;
 
    procedure IStream_SetSize_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4901
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStream_RemoteCopyTo_Proxy
-     (This : access IStream;
-      pstm : access IStream;
-      cb : Win32.Winnt.ULARGE_INTEGER;
-      pcbRead : access Win32.Winnt.ULARGE_INTEGER;
+     (This       : access IStream;
+      pstm       : access IStream;
+      cb         : Win32.Winnt.ULARGE_INTEGER;
+      pcbRead    : access Win32.Winnt.ULARGE_INTEGER;
       pcbWritten : access Win32.Winnt.ULARGE_INTEGER)
-     return HRESULT;                              --  objbase.h :4908
+      return HRESULT;
 
    procedure IStream_RemoteCopyTo_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4916
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStream_Commit_Proxy
-     (This : access IStream;
+     (This           : access IStream;
       grfCommitFlags : DWORD)
-     return HRESULT;                              --  objbase.h :4923
+      return HRESULT;
 
    procedure IStream_Commit_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4928
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
-   function IStream_Revert_Proxy
-     (This : access IStream)
-     return HRESULT;                              --  objbase.h :4935
+   function IStream_Revert_Proxy (This : access IStream) return HRESULT;
 
    procedure IStream_Revert_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4939
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStream_LockRegion_Proxy
-     (This : access IStream;
-      libOffset : Win32.Winnt.ULARGE_INTEGER;
-      cb : Win32.Winnt.ULARGE_INTEGER;
+     (This       : access IStream;
+      libOffset  : Win32.Winnt.ULARGE_INTEGER;
+      cb         : Win32.Winnt.ULARGE_INTEGER;
       dwLockType : DWORD)
-     return HRESULT;                              --  objbase.h :4946
+      return HRESULT;
 
    procedure IStream_LockRegion_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4953
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStream_UnlockRegion_Proxy
-     (This : access IStream;
-      libOffset : Win32.Winnt.ULARGE_INTEGER;
-      cb : Win32.Winnt.ULARGE_INTEGER;
+     (This       : access IStream;
+      libOffset  : Win32.Winnt.ULARGE_INTEGER;
+      cb         : Win32.Winnt.ULARGE_INTEGER;
       dwLockType : DWORD)
-     return HRESULT;                              --  objbase.h :4960
+      return HRESULT;
 
    procedure IStream_UnlockRegion_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4967
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStream_Stat_Proxy
-     (This : access IStream;
-      pstatstg : access STATSTG;
+     (This        : access IStream;
+      pstatstg    : access STATSTG;
       grfStatFlag : DWORD)
-     return HRESULT;                              --  objbase.h :4974
+      return HRESULT;
 
    procedure IStream_Stat_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4980
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStream_Clone_Proxy
-     (This : access IStream;
+     (This  : access IStream;
       ppstm : access LPSTREAM)
-     return HRESULT;                              --  objbase.h :4987
+      return HRESULT;
 
    procedure IStream_Clone_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :4992
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IEnumSTATSTG_RemoteNext_Proxy
-     (This : access IEnumSTATSTG;
-      celt : Win32.ULONG;
-      rgelt : access STATSTG;
+     (This         : access IEnumSTATSTG;
+      celt         : Win32.ULONG;
+      rgelt        : access STATSTG;
       pceltFetched : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :5114
+      return HRESULT;
 
    procedure IEnumSTATSTG_RemoteNext_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :5121
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IEnumSTATSTG_Skip_Proxy
      (This : access IEnumSTATSTG;
       celt : Win32.ULONG)
-     return HRESULT;                              --  objbase.h :5128
+      return HRESULT;
 
    procedure IEnumSTATSTG_Skip_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :5133
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IEnumSTATSTG_Reset_Proxy
      (This : access IEnumSTATSTG)
-     return HRESULT;                              --  objbase.h :5140
+      return HRESULT;
 
    procedure IEnumSTATSTG_Reset_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :5144
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IEnumSTATSTG_Clone_Proxy
-     (This : access IEnumSTATSTG;
+     (This   : access IEnumSTATSTG;
       ppenum : access LPENUMSTATSTG)
-     return HRESULT;                              --  objbase.h :5151
+      return HRESULT;
 
    procedure IEnumSTATSTG_Clone_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :5156
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStorage_CreateStream_Proxy
-     (This : access IStorage;
-      pwcsName : PCWSTR;
-      grfMode : DWORD;
+     (This      : access IStorage;
+      pwcsName  : PCWSTR;
+      grfMode   : DWORD;
       reserved1 : DWORD;
       reserved2 : DWORD;
-      ppstm : access LPSTREAM)
-     return HRESULT;                              --  objbase.h :5461
+      ppstm     : access LPSTREAM)
+      return HRESULT;
 
    procedure IStorage_CreateStream_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :5470
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStorage_RemoteOpenStream_Proxy
-     (This : access IStorage;
-      pwcsName : PCWSTR;
+     (This        : access IStorage;
+      pwcsName    : PCWSTR;
       cbReserved1 : Win32.UINT;
-      reserved1 : Win32.PBYTE;
-      grfMode : DWORD;
-      reserved2 : DWORD;
-      ppstm : access LPSTREAM)
-     return HRESULT;                              --  objbase.h :5477
+      reserved1   : Win32.PBYTE;
+      grfMode     : DWORD;
+      reserved2   : DWORD;
+      ppstm       : access LPSTREAM)
+      return HRESULT;
 
    procedure IStorage_RemoteOpenStream_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :5487
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStorage_CreateStorage_Proxy
-     (This : access IStorage;
-      pwcsName : PCWSTR;
-      grfMode : DWORD;
-      dwStgFmt : DWORD;
+     (This      : access IStorage;
+      pwcsName  : PCWSTR;
+      grfMode   : DWORD;
+      dwStgFmt  : DWORD;
       reserved2 : DWORD;
-      ppstg : access LPSTORAGE)
-     return HRESULT;                              --  objbase.h :5494
+      ppstg     : access LPSTORAGE)
+      return HRESULT;
 
    procedure IStorage_CreateStorage_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :5503
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStorage_OpenStorage_Proxy
-     (This : access IStorage;
-      pwcsName : PCWSTR;
+     (This         : access IStorage;
+      pwcsName     : PCWSTR;
       pstgPriority : access IStorage;
-      grfMode : DWORD;
-      snbExclude : SNB;
-      reserved : DWORD;
-      ppstg : access LPSTORAGE)
-     return HRESULT;                              --  objbase.h :5510
+      grfMode      : DWORD;
+      snbExclude   : SNB;
+      reserved     : DWORD;
+      ppstg        : access LPSTORAGE)
+      return HRESULT;
 
    procedure IStorage_OpenStorage_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :5520
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStorage_CopyTo_Proxy
-     (This : access IStorage;
-      ciidExclude : DWORD;
+     (This         : access IStorage;
+      ciidExclude  : DWORD;
       rgiidExclude : access IID;
-      snbExclude : SNB;
-      pstgDest : access IStorage)
-     return HRESULT;                              --  objbase.h :5527
+      snbExclude   : SNB;
+      pstgDest     : access IStorage)
+      return HRESULT;
 
    procedure IStorage_CopyTo_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :5535
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStorage_MoveElementTo_Proxy
-     (This : access IStorage;
-      pwcsName : PCWSTR;
-      pstgDest : access IStorage;
+     (This        : access IStorage;
+      pwcsName    : PCWSTR;
+      pstgDest    : access IStorage;
       pwcsNewName : PCWSTR;
-      grfFlags : DWORD)
-     return HRESULT;                              --  objbase.h :5542
+      grfFlags    : DWORD)
+      return HRESULT;
 
    procedure IStorage_MoveElementTo_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :5550
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStorage_Commit_Proxy
-     (This : access IStorage;
+     (This           : access IStorage;
       grfCommitFlags : DWORD)
-     return HRESULT;                              --  objbase.h :5557
+      return HRESULT;
 
    procedure IStorage_Commit_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :5562
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
-   function IStorage_Revert_Proxy
-     (This : access IStorage)
-     return HRESULT;                              --  objbase.h :5569
+   function IStorage_Revert_Proxy (This : access IStorage) return HRESULT;
 
    procedure IStorage_Revert_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :5573
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStorage_RemoteEnumElements_Proxy
-     (This : access IStorage;
-      reserved1 : DWORD;
+     (This        : access IStorage;
+      reserved1   : DWORD;
       cbReserved2 : Win32.UINT;
-      reserved2 : Win32.PBYTE;
-      reserved3 : DWORD;
-      ppenum : access LPENUMSTATSTG)
-     return HRESULT;                              --  objbase.h :5580
+      reserved2   : Win32.PBYTE;
+      reserved3   : DWORD;
+      ppenum      : access LPENUMSTATSTG)
+      return HRESULT;
 
    procedure IStorage_RemoteEnumElements_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :5589
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStorage_DestroyElement_Proxy
-     (This : access IStorage;
+     (This     : access IStorage;
       pwcsName : PCWSTR)
-     return HRESULT;                              --  objbase.h :5596
+      return HRESULT;
 
    procedure IStorage_DestroyElement_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :5601
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStorage_RenameElement_Proxy
-     (This : access IStorage;
+     (This        : access IStorage;
       pwcsOldName : PCWSTR;
       pwcsNewName : PCWSTR)
-     return HRESULT;                              --  objbase.h :5608
+      return HRESULT;
 
    procedure IStorage_RenameElement_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :5614
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStorage_SetElementTimes_Proxy
-     (This : access IStorage;
+     (This     : access IStorage;
       pwcsName : PCWSTR;
-      pctime : Win32.Winbase.ac_FILETIME_t;
-      patime : Win32.Winbase.ac_FILETIME_t;
-      pmtime : Win32.Winbase.ac_FILETIME_t)
-     return HRESULT;                              --  objbase.h :5621
+      pctime   : Win32.Winbase.ac_FILETIME_t;
+      patime   : Win32.Winbase.ac_FILETIME_t;
+      pmtime   : Win32.Winbase.ac_FILETIME_t)
+      return HRESULT;
 
    procedure IStorage_SetElementTimes_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :5629
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStorage_SetClass_Proxy
-     (This : access IStorage;
+     (This  : access IStorage;
       clsid : REFCLSID)
-     return HRESULT;                              --  objbase.h :5636
+      return HRESULT;
 
    procedure IStorage_SetClass_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :5641
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStorage_SetStateBits_Proxy
-     (This : access IStorage;
+     (This         : access IStorage;
       grfStateBits : DWORD;
-      grfMask : DWORD)
-     return HRESULT;                              --  objbase.h :5648
+      grfMask      : DWORD)
+      return HRESULT;
 
    procedure IStorage_SetStateBits_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :5654
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IStorage_Stat_Proxy
-     (This : access IStorage;
-      pstatstg : access STATSTG;
+     (This        : access IStorage;
+      pstatstg    : access STATSTG;
       grfStatFlag : DWORD)
-     return HRESULT;                              --  objbase.h :5661
+      return HRESULT;
 
    procedure IStorage_Stat_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :5667
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IPersistFile_IsDirty_Proxy
      (This : access IPersistFile)
-     return HRESULT;                              --  objbase.h :5807
+      return HRESULT;
 
    procedure IPersistFile_IsDirty_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :5811
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IPersistFile_Load_Proxy
-     (This : access IPersistFile;
+     (This        : access IPersistFile;
       pszFileName : LPCOLESTR;
-      dwMode : DWORD)
-     return HRESULT;                              --  objbase.h :5818
+      dwMode      : DWORD)
+      return HRESULT;
 
    procedure IPersistFile_Load_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :5824
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IPersistFile_Save_Proxy
-     (This : access IPersistFile;
+     (This        : access IPersistFile;
       pszFileName : LPCOLESTR;
-      fRemember : BOOL)
-     return HRESULT;                              --  objbase.h :5831
+      fRemember   : BOOL)
+      return HRESULT;
 
    procedure IPersistFile_Save_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :5837
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IPersistFile_SaveCompleted_Proxy
-     (This : access IPersistFile;
+     (This        : access IPersistFile;
       pszFileName : LPCOLESTR)
-     return HRESULT;                              --  objbase.h :5844
+      return HRESULT;
 
    procedure IPersistFile_SaveCompleted_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :5849
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IPersistFile_GetCurFile_Proxy
-     (This : access IPersistFile;
+     (This         : access IPersistFile;
       ppszFileName : access LPOLESTR)
-     return HRESULT;                              --  objbase.h :5856
+      return HRESULT;
 
    procedure IPersistFile_GetCurFile_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :5861
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IPersistStorage_IsDirty_Proxy
      (This : access IPersistStorage)
-     return HRESULT;                              --  objbase.h :6007
+      return HRESULT;
 
    procedure IPersistStorage_IsDirty_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :6011
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IPersistStorage_InitNew_Proxy
      (This : access IPersistStorage;
       pStg : access IStorage)
-     return HRESULT;                              --  objbase.h :6018
+      return HRESULT;
 
    procedure IPersistStorage_InitNew_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :6023
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IPersistStorage_Load_Proxy
      (This : access IPersistStorage;
       pStg : access IStorage)
-     return HRESULT;                              --  objbase.h :6030
+      return HRESULT;
 
    procedure IPersistStorage_Load_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :6035
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IPersistStorage_Save_Proxy
-     (This : access IPersistStorage;
-      pStgSave : access IStorage;
+     (This        : access IPersistStorage;
+      pStgSave    : access IStorage;
       fSameAsLoad : BOOL)
-     return HRESULT;                              --  objbase.h :6042
+      return HRESULT;
 
    procedure IPersistStorage_Save_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :6048
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IPersistStorage_SaveCompleted_Proxy
-     (This : access IPersistStorage;
+     (This    : access IPersistStorage;
       pStgNew : access IStorage)
-     return HRESULT;                              --  objbase.h :6055
+      return HRESULT;
 
    procedure IPersistStorage_SaveCompleted_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :6060
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IPersistStorage_HandsOffStorage_Proxy
      (This : access IPersistStorage)
-     return HRESULT;                              --  objbase.h :6067
+      return HRESULT;
 
    procedure IPersistStorage_HandsOffStorage_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :6071
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function ILockBytes_RemoteReadAt_Proxy
-     (This : access ILockBytes;
+     (This     : access ILockBytes;
       ulOffset : Win32.Winnt.ULARGE_INTEGER;
-      pv : Win32.PBYTE;
-      cb : Win32.ULONG;
-      pcbRead : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :6241
+      pv       : Win32.PBYTE;
+      cb       : Win32.ULONG;
+      pcbRead  : Win32.PDWORD)
+      return HRESULT;
 
    procedure ILockBytes_RemoteReadAt_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :6249
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function ILockBytes_RemoteWriteAt_Proxy
-     (This : access ILockBytes;
-      ulOffset : Win32.Winnt.ULARGE_INTEGER;
-      pv : Win32.PCBYTE;
-      cb : Win32.ULONG;
+     (This       : access ILockBytes;
+      ulOffset   : Win32.Winnt.ULARGE_INTEGER;
+      pv         : Win32.PCBYTE;
+      cb         : Win32.ULONG;
       pcbWritten : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :6256
+      return HRESULT;
 
    procedure ILockBytes_RemoteWriteAt_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :6264
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function ILockBytes_Flush_Proxy
      (This : access ILockBytes)
-     return HRESULT;                              --  objbase.h :6271
+      return HRESULT;
 
    procedure ILockBytes_Flush_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :6275
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function ILockBytes_SetSize_Proxy
      (This : access ILockBytes;
-      cb : Win32.Winnt.ULARGE_INTEGER)
-     return HRESULT;                              --  objbase.h :6282
+      cb   : Win32.Winnt.ULARGE_INTEGER)
+      return HRESULT;
 
    procedure ILockBytes_SetSize_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :6287
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function ILockBytes_LockRegion_Proxy
-     (This : access ILockBytes;
-      libOffset : Win32.Winnt.ULARGE_INTEGER;
-      cb : Win32.Winnt.ULARGE_INTEGER;
+     (This       : access ILockBytes;
+      libOffset  : Win32.Winnt.ULARGE_INTEGER;
+      cb         : Win32.Winnt.ULARGE_INTEGER;
       dwLockType : DWORD)
-     return HRESULT;                              --  objbase.h :6294
+      return HRESULT;
 
    procedure ILockBytes_LockRegion_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :6301
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function ILockBytes_UnlockRegion_Proxy
-     (This : access ILockBytes;
-      libOffset : Win32.Winnt.ULARGE_INTEGER;
-      cb : Win32.Winnt.ULARGE_INTEGER;
+     (This       : access ILockBytes;
+      libOffset  : Win32.Winnt.ULARGE_INTEGER;
+      cb         : Win32.Winnt.ULARGE_INTEGER;
       dwLockType : DWORD)
-     return HRESULT;                              --  objbase.h :6308
+      return HRESULT;
 
    procedure ILockBytes_UnlockRegion_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :6315
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function ILockBytes_Stat_Proxy
-     (This : access ILockBytes;
-      pstatstg : access STATSTG;
+     (This        : access ILockBytes;
+      pstatstg    : access STATSTG;
       grfStatFlag : DWORD)
-     return HRESULT;                              --  objbase.h :6322
+      return HRESULT;
 
    procedure ILockBytes_Stat_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :6328
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IEnumFORMATETC_RemoteNext_Proxy
-     (This : access IEnumFORMATETC;
-      celt : Win32.ULONG;
-      rgelt : access FORMATETC;
+     (This         : access IEnumFORMATETC;
+      celt         : Win32.ULONG;
+      rgelt        : access FORMATETC;
       pceltFetched : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :6480
+      return HRESULT;
 
    procedure IEnumFORMATETC_RemoteNext_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :6487
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IEnumFORMATETC_Skip_Proxy
      (This : access IEnumFORMATETC;
       celt : Win32.ULONG)
-     return HRESULT;                              --  objbase.h :6494
+      return HRESULT;
 
    procedure IEnumFORMATETC_Skip_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :6499
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IEnumFORMATETC_Reset_Proxy
      (This : access IEnumFORMATETC)
-     return HRESULT;                              --  objbase.h :6506
+      return HRESULT;
 
    procedure IEnumFORMATETC_Reset_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :6510
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IEnumFORMATETC_Clone_Proxy
-     (This : access IEnumFORMATETC;
+     (This   : access IEnumFORMATETC;
       ppenum : access LPENUMFORMATETC)
-     return HRESULT;                              --  objbase.h :6517
+      return HRESULT;
 
    procedure IEnumFORMATETC_Clone_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :6522
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IEnumSTATDATA_RemoteNext_Proxy
-     (This : access IEnumSTATDATA;
-      celt : Win32.ULONG;
-      rgelt : access STATDATA;
+     (This         : access IEnumSTATDATA;
+      celt         : Win32.ULONG;
+      rgelt        : access STATDATA;
       pceltFetched : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :6668
+      return HRESULT;
 
    procedure IEnumSTATDATA_RemoteNext_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :6675
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IEnumSTATDATA_Skip_Proxy
      (This : access IEnumSTATDATA;
       celt : Win32.ULONG)
-     return HRESULT;                              --  objbase.h :6682
+      return HRESULT;
 
    procedure IEnumSTATDATA_Skip_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :6687
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IEnumSTATDATA_Reset_Proxy
      (This : access IEnumSTATDATA)
-     return HRESULT;                              --  objbase.h :6694
+      return HRESULT;
 
    procedure IEnumSTATDATA_Reset_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :6698
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IEnumSTATDATA_Clone_Proxy
-     (This : access IEnumSTATDATA;
+     (This   : access IEnumSTATDATA;
       ppenum : access LPENUMSTATDATA)
-     return HRESULT;                              --  objbase.h :6705
+      return HRESULT;
 
    procedure IEnumSTATDATA_Clone_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :6710
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IRootStorage_SwitchToFile_Proxy
-     (This : access IRootStorage;
+     (This    : access IRootStorage;
       pszFile : LPOLESTR)
-     return HRESULT;                              --  objbase.h :6800
+      return HRESULT;
 
    procedure IRootStorage_SwitchToFile_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :6805
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    procedure IAdviseSink_RemoteOnDataChange_Proxy
-     (This : access IAdviseSink;
+     (This       : access IAdviseSink;
       pFormatetc : access FORMATETC;
-      pStgmed : access RemSTGMEDIUM);           --  objbase.h :6998
+      pStgmed    : access RemSTGMEDIUM);
 
    procedure IAdviseSink_RemoteOnDataChange_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :7004
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    procedure IAdviseSink_RemoteOnViewChange_Proxy
-     (This : access IAdviseSink;
+     (This     : access IAdviseSink;
       dwAspect : DWORD;
-      lindex : LONG);                            --  objbase.h :7011
+      lindex   : LONG);
 
    procedure IAdviseSink_RemoteOnViewChange_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :7017
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    procedure IAdviseSink_RemoteOnRename_Proxy
      (This : access IAdviseSink;
-      pmk : access IMoniker);                     --  objbase.h :7024
+      pmk  : access IMoniker);
 
    procedure IAdviseSink_RemoteOnRename_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :7029
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
-   procedure IAdviseSink_RemoteOnSave_Proxy
-     (This : access IAdviseSink);                  --  objbase.h :7036
+   procedure IAdviseSink_RemoteOnSave_Proxy (This : access IAdviseSink);
 
    procedure IAdviseSink_RemoteOnSave_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :7040
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
-   procedure IAdviseSink_RemoteOnClose_Proxy
-     (This : access IAdviseSink);                  --  objbase.h :7047
+   procedure IAdviseSink_RemoteOnClose_Proxy (This : access IAdviseSink);
 
    procedure IAdviseSink_RemoteOnClose_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :7051
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    procedure IAdviseSink2_RemoteOnLinkSrcChange_Proxy
      (This : access IAdviseSink2;
-      pmk : access IMoniker);                     --  objbase.h :7177
+      pmk  : access IMoniker);
 
    procedure IAdviseSink2_RemoteOnLinkSrcChange_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :7182
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IDataObject_RemoteGetData_Proxy
-     (This : access IDataObject;
-      pformatetcIn : access FORMATETC;
+     (This           : access IDataObject;
+      pformatetcIn   : access FORMATETC;
       ppRemoteMedium : access a_RemSTGMEDIUM_t)
-     return HRESULT;                              --  objbase.h :7377
+      return HRESULT;
 
    procedure IDataObject_RemoteGetData_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :7383
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IDataObject_RemoteGetDataHere_Proxy
-     (This : access IDataObject;
-      pformatetc : access FORMATETC;
+     (This           : access IDataObject;
+      pformatetc     : access FORMATETC;
       ppRemoteMedium : access a_RemSTGMEDIUM_t)
-     return HRESULT;                              --  objbase.h :7390
+      return HRESULT;
 
    procedure IDataObject_RemoteGetDataHere_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :7396
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IDataObject_QueryGetData_Proxy
-     (This : access IDataObject;
+     (This       : access IDataObject;
       pformatetc : access FORMATETC)
-     return HRESULT;                              --  objbase.h :7403
+      return HRESULT;
 
    procedure IDataObject_QueryGetData_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :7408
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IDataObject_GetCanonicalFormatEtc_Proxy
-     (This : access IDataObject;
-      pformatectIn : access FORMATETC;
+     (This          : access IDataObject;
+      pformatectIn  : access FORMATETC;
       pformatetcOut : access FORMATETC)
-     return HRESULT;                              --  objbase.h :7415
+      return HRESULT;
 
    procedure IDataObject_GetCanonicalFormatEtc_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :7421
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IDataObject_RemoteSetData_Proxy
-     (This : access IDataObject;
+     (This       : access IDataObject;
       pformatetc : access FORMATETC;
-      pmedium : a_RemSTGMEDIUM_t;
-      fRelease : BOOL)
-     return HRESULT;                              --  objbase.h :7428
+      pmedium    : a_RemSTGMEDIUM_t;
+      fRelease   : BOOL)
+      return HRESULT;
 
    procedure IDataObject_RemoteSetData_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :7435
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IDataObject_EnumFormatEtc_Proxy
-     (This : access IDataObject;
-      dwDirection : DWORD;
+     (This            : access IDataObject;
+      dwDirection     : DWORD;
       ppenumFormatEtc : access LPENUMFORMATETC)
-     return HRESULT;                              --  objbase.h :7442
+      return HRESULT;
 
    procedure IDataObject_EnumFormatEtc_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :7448
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IDataObject_DAdvise_Proxy
-     (This : access IDataObject;
-      pformatetc : access FORMATETC;
-      advf : DWORD;
-      pAdvSink : access IAdviseSink;
+     (This          : access IDataObject;
+      pformatetc    : access FORMATETC;
+      advf          : DWORD;
+      pAdvSink      : access IAdviseSink;
       pdwConnection : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :7455
+      return HRESULT;
 
    procedure IDataObject_DAdvise_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :7463
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IDataObject_DUnadvise_Proxy
-     (This : access IDataObject;
+     (This         : access IDataObject;
       dwConnection : DWORD)
-     return HRESULT;                              --  objbase.h :7470
+      return HRESULT;
 
    procedure IDataObject_DUnadvise_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :7475
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IDataObject_EnumDAdvise_Proxy
-     (This : access IDataObject;
+     (This         : access IDataObject;
       ppenumAdvise : access LPENUMSTATDATA)
-     return HRESULT;                              --  objbase.h :7482
+      return HRESULT;
 
    procedure IDataObject_EnumDAdvise_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :7487
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IDataAdviseHolder_Advise_Proxy
-     (This : access IDataAdviseHolder;
-      pDataObject : access IDataObject;
-      pFetc : access FORMATETC;
-      advf : DWORD;
-      pAdvise : access IAdviseSink;
+     (This          : access IDataAdviseHolder;
+      pDataObject   : access IDataObject;
+      pFetc         : access FORMATETC;
+      advf          : DWORD;
+      pAdvise       : access IAdviseSink;
       pdwConnection : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :7619
+      return HRESULT;
 
    procedure IDataAdviseHolder_Advise_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :7628
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IDataAdviseHolder_Unadvise_Proxy
-     (This : access IDataAdviseHolder;
+     (This         : access IDataAdviseHolder;
       dwConnection : DWORD)
-     return HRESULT;                              --  objbase.h :7635
+      return HRESULT;
 
    procedure IDataAdviseHolder_Unadvise_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :7640
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IDataAdviseHolder_EnumAdvise_Proxy
-     (This : access IDataAdviseHolder;
+     (This         : access IDataAdviseHolder;
       ppenumAdvise : access LPENUMSTATDATA)
-     return HRESULT;                              --  objbase.h :7647
+      return HRESULT;
 
    procedure IDataAdviseHolder_EnumAdvise_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :7652
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IDataAdviseHolder_SendOnDataChange_Proxy
-     (This : access IDataAdviseHolder;
+     (This        : access IDataAdviseHolder;
       pDataObject : access IDataObject;
-      dwReserved : DWORD;
-      advf : DWORD)
-     return HRESULT;                              --  objbase.h :7659
+      dwReserved  : DWORD;
+      advf        : DWORD)
+      return HRESULT;
 
    procedure IDataAdviseHolder_SendOnDataChange_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :7666
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMessageFilter_HandleInComingCall_Proxy
-     (This : access IMessageFilter;
-      dwCallType : DWORD;
-      htaskCaller : Win32.Windef.HTASK;
-      dwTickCount : DWORD;
+     (This            : access IMessageFilter;
+      dwCallType      : DWORD;
+      htaskCaller     : Win32.Windef.HTASK;
+      dwTickCount     : DWORD;
       lpInterfaceInfo : Win32.Objbase.LPINTERFACEINFO)
-     return DWORD;                                --  objbase.h :7834
+      return DWORD;
 
    procedure IMessageFilter_HandleInComingCall_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :7842
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMessageFilter_RetryRejectedCall_Proxy
-     (This : access IMessageFilter;
-      htaskCallee : Win32.Windef.HTASK;
-      dwTickCount : DWORD;
+     (This         : access IMessageFilter;
+      htaskCallee  : Win32.Windef.HTASK;
+      dwTickCount  : DWORD;
       dwRejectType : DWORD)
-     return DWORD;                                --  objbase.h :7849
+      return DWORD;
 
    procedure IMessageFilter_RetryRejectedCall_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :7856
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IMessageFilter_MessagePending_Proxy
-     (This : access IMessageFilter;
-      htaskCallee : Win32.Windef.HTASK;
-      dwTickCount : DWORD;
+     (This          : access IMessageFilter;
+      htaskCallee   : Win32.Windef.HTASK;
+      dwTickCount   : DWORD;
       dwPendingType : DWORD)
-     return DWORD;                                --  objbase.h :7863
+      return DWORD;
 
    procedure IMessageFilter_MessagePending_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :7870
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IRpcChannelBuffer_GetBuffer_Proxy
-     (This : access IRpcChannelBuffer;
+     (This     : access IRpcChannelBuffer;
       pMessage : access RPCOLEMESSAGE;
-      riid : REFIID)
-     return HRESULT;                              --  objbase.h :8019
+      riid     : REFIID)
+      return HRESULT;
 
    procedure IRpcChannelBuffer_GetBuffer_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :8025
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IRpcChannelBuffer_SendReceive_Proxy
-     (This : access IRpcChannelBuffer;
+     (This     : access IRpcChannelBuffer;
       pMessage : access RPCOLEMESSAGE;
-      pStatus : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :8032
+      pStatus  : Win32.PDWORD)
+      return HRESULT;
 
    procedure IRpcChannelBuffer_SendReceive_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :8038
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IRpcChannelBuffer_FreeBuffer_Proxy
-     (This : access IRpcChannelBuffer;
+     (This     : access IRpcChannelBuffer;
       pMessage : access RPCOLEMESSAGE)
-     return HRESULT;                              --  objbase.h :8045
+      return HRESULT;
 
    procedure IRpcChannelBuffer_FreeBuffer_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :8050
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IRpcChannelBuffer_GetDestCtx_Proxy
-     (This : access IRpcChannelBuffer;
+     (This           : access IRpcChannelBuffer;
       pdwDestContext : Win32.PDWORD;
       ppvDestContext : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :8057
+      return HRESULT;
 
    procedure IRpcChannelBuffer_GetDestCtx_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :8063
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IRpcChannelBuffer_IsConnected_Proxy
      (This : access IRpcChannelBuffer)
-     return HRESULT;                              --  objbase.h :8070
+      return HRESULT;
 
    procedure IRpcChannelBuffer_IsConnected_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :8074
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IRpcProxyBuffer_Connect_Proxy
-     (This : access IRpcProxyBuffer;
+     (This              : access IRpcProxyBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer)
-     return HRESULT;                              --  objbase.h :8169
+      return HRESULT;
 
    procedure IRpcProxyBuffer_Connect_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :8174
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    procedure IRpcProxyBuffer_Disconnect_Proxy
-     (This : access IRpcProxyBuffer);              --  objbase.h :8181
+     (This : access IRpcProxyBuffer);
 
    procedure IRpcProxyBuffer_Disconnect_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :8185
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IRpcStubBuffer_Connect_Proxy
-     (This : access IRpcStubBuffer;
+     (This       : access IRpcStubBuffer;
       pUnkServer : access IUnknown)
-     return HRESULT;                              --  objbase.h :8330
+      return HRESULT;
 
    procedure IRpcStubBuffer_Connect_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :8335
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
-   procedure IRpcStubBuffer_Disconnect_Proxy
-     (This : access IRpcStubBuffer);               --  objbase.h :8342
+   procedure IRpcStubBuffer_Disconnect_Proxy (This : access IRpcStubBuffer);
 
    procedure IRpcStubBuffer_Disconnect_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :8346
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IRpcStubBuffer_Invoke_Proxy
-     (This : access IRpcStubBuffer;
-      prpcmsg : access RPCOLEMESSAGE;
+     (This              : access IRpcStubBuffer;
+      prpcmsg           : access RPCOLEMESSAGE;
       pRpcChannelBuffer : access IRpcChannelBuffer)
-     return HRESULT;                              --  objbase.h :8353
+      return HRESULT;
 
    procedure IRpcStubBuffer_Invoke_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :8359
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IRpcStubBuffer_IsIIDSupported_Proxy
      (This : access IRpcStubBuffer;
       riid : REFIID)
-     return a_IRpcStubBuffer_t;                   --  objbase.h :8366
+      return a_IRpcStubBuffer_t;
 
    procedure IRpcStubBuffer_IsIIDSupported_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :8371
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IRpcStubBuffer_CountRefs_Proxy
      (This : access IRpcStubBuffer)
-     return ULONG;                                --  objbase.h :8378
+      return ULONG;
 
    procedure IRpcStubBuffer_CountRefs_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :8382
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IRpcStubBuffer_DebugServerQueryInterface_Proxy
      (This : access IRpcStubBuffer;
-      ppv : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :8389
+      ppv  : access Win32.PVOID)
+      return HRESULT;
 
    procedure IRpcStubBuffer_DebugServerQueryInterface_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :8394
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    procedure IRpcStubBuffer_DebugServerRelease_Proxy
      (This : access IRpcStubBuffer;
-      pv : Win32.PVOID);                         --  objbase.h :8401
+      pv   : Win32.PVOID);
 
    procedure IRpcStubBuffer_DebugServerRelease_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :8406
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IPSFactoryBuffer_CreateProxy_Proxy
-     (This : access IPSFactoryBuffer;
+     (This      : access IPSFactoryBuffer;
       pUnkOuter : access IUnknown;
-      riid : REFIID;
-      ppProxy : access PIRpcProxyBuffer;
-      ppv : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :8513
+      riid      : REFIID;
+      ppProxy   : access PIRpcProxyBuffer;
+      ppv       : access Win32.PVOID)
+      return HRESULT;
 
    procedure IPSFactoryBuffer_CreateProxy_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :8521
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
    function IPSFactoryBuffer_CreateStub_Proxy
-     (This : access IPSFactoryBuffer;
-                      riid : REFIID;
-                      pUnkServer : access IUnknown;
-                      ppStub : access a_IRpcStubBuffer_t)
-     return HRESULT;                              --  objbase.h :8528
+     (This       : access IPSFactoryBuffer;
+      riid       : REFIID;
+      pUnkServer : access IUnknown;
+      ppStub     : access a_IRpcStubBuffer_t)
+      return HRESULT;
 
    procedure IPSFactoryBuffer_CreateStub_Stub
-     (This : access IRpcStubBuffer;
+     (This              : access IRpcStubBuffer;
       pRpcChannelBuffer : access IRpcChannelBuffer;
-      pRpcMessage : Win32.Rpcdcep.PRPC_MESSAGE;
-      pdwStubPhase : Win32.PDWORD);           --  objbase.h :8535
+      pRpcMessage       : Win32.Rpcdcep.PRPC_MESSAGE;
+      pdwStubPhase      : Win32.PDWORD);
 
-   procedure SNB_to_xmit
-     (p1 : access SNB;
-      p2 : access a_RemSNB_t);                     --  objbase.h :8549
+   procedure SNB_to_xmit (p1 : access SNB; p2 : access a_RemSNB_t);
 
-   procedure SNB_from_xmit
-     (p1 : a_RemSNB_t;
-      p2 : access SNB);                            --  objbase.h :8550
+   procedure SNB_from_xmit (p1 : a_RemSNB_t; p2 : access SNB);
 
-   procedure SNB_free_inst
-     (p1 : access SNB);                            --  objbase.h :8551
+   procedure SNB_free_inst (p1 : access SNB);
 
-   procedure SNB_free_xmit
-     (p1 : a_RemSNB_t);                            --  objbase.h :8552
+   procedure SNB_free_xmit (p1 : a_RemSNB_t);
 
    function IClassFactory_CreateInstance_Proxy
-     (This : access IClassFactory;
+     (This      : access IClassFactory;
       pUnkOuter : access IUnknown;
-      riid : REFIID;
+      riid      : REFIID;
       ppvObject : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :8553
+      return HRESULT;
 
    function IClassFactory_CreateInstance_Stub
-     (This : access IRpcStubBuffer;
-      riid : REFIID;
+     (This      : access IRpcStubBuffer;
+      riid      : REFIID;
       ppvObject : access LPUNKNOWN)
-     return HRESULT;                              --  objbase.h :8560
+      return HRESULT;
 
    function IEnumUnknown_Next_Proxy
-     (This : access IEnumUnknown;
-      celt : Win32.ULONG;
-      rgelt : access LPMONIKER;
+     (This         : access IEnumUnknown;
+      celt         : Win32.ULONG;
+      rgelt        : access LPMONIKER;
       pceltFetched : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :8565
+      return HRESULT;
 
    function IEnumUnknown_Next_Stub
-     (This : access IRpcStubBuffer;
-      celt : Win32.ULONG;
-      rgelt : access LPMONIKER;
+     (This         : access IRpcStubBuffer;
+      celt         : Win32.ULONG;
+      rgelt        : access LPMONIKER;
       pceltFetched : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :8572
+      return HRESULT;
 
    function IEnumMoniker_Next_Proxy
-     (This : access IEnumMoniker;
-      celt : Win32.ULONG;
-      rgelt : access LPMONIKER;
+     (This         : access IEnumMoniker;
+      celt         : Win32.ULONG;
+      rgelt        : access LPMONIKER;
       pceltFetched : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :8578
+      return HRESULT;
 
    function IEnumMoniker_Next_Stub
-     (This : access IRpcStubBuffer;
-      celt : Win32.ULONG;
-      rgelt : access LPMONIKER;
+     (This         : access IRpcStubBuffer;
+      celt         : Win32.ULONG;
+      rgelt        : access LPMONIKER;
       pceltFetched : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :8585
+      return HRESULT;
 
    function IMoniker_BindToObject_Proxy
-     (This : access IMoniker;
-      pbc : access IBindCtx;
-      pmkToLeft : access IMoniker;
+     (This       : access IMoniker;
+      pbc        : access IBindCtx;
+      pmkToLeft  : access IMoniker;
       riidResult : access IID;
-      ppvResult : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :8591
+      ppvResult  : access Win32.PVOID)
+      return HRESULT;
 
    function IMoniker_BindToObject_Stub
-     (This : access IRpcStubBuffer;
-      pbc : access IBindCtx;
-      pmkToLeft : access IMoniker;
+     (This       : access IRpcStubBuffer;
+      pbc        : access IBindCtx;
+      pmkToLeft  : access IMoniker;
       riidResult : access IID;
-      ppvResult : access LPUNKNOWN)
-     return HRESULT;                              --  objbase.h :8599
+      ppvResult  : access LPUNKNOWN)
+      return HRESULT;
 
    function IMoniker_BindToStorage_Proxy
-     (This : access IMoniker;
-      pbc : access IBindCtx;
+     (This      : access IMoniker;
+      pbc       : access IBindCtx;
       pmkToLeft : access IMoniker;
-      riid : REFIID;
-      ppvObj : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :8606
+      riid      : REFIID;
+      ppvObj    : access Win32.PVOID)
+      return HRESULT;
 
    function IMoniker_BindToStorage_Stub
-     (This : access IRpcStubBuffer;
-      pbc : access IBindCtx;
+     (This      : access IRpcStubBuffer;
+      pbc       : access IBindCtx;
       pmkToLeft : access IMoniker;
-      riid : REFIID;
-      ppvObj : access LPUNKNOWN)
-     return HRESULT;                              --  objbase.h :8614
+      riid      : REFIID;
+      ppvObj    : access LPUNKNOWN)
+      return HRESULT;
 
    function IEnumString_Next_Proxy
-     (This : access IEnumString;
-      celt : Win32.ULONG;
-      rgelt : access LPOLESTR;
+     (This         : access IEnumString;
+      celt         : Win32.ULONG;
+      rgelt        : access LPOLESTR;
       pceltFetched : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :8621
+      return HRESULT;
 
    function IEnumString_Next_Stub
-     (This : access IRpcStubBuffer;
-      celt : Win32.ULONG;
-      rgelt : access LPOLESTR;
+     (This         : access IRpcStubBuffer;
+      celt         : Win32.ULONG;
+      rgelt        : access LPOLESTR;
       pceltFetched : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :8628
+      return HRESULT;
 
    function IStream_Read_Proxy
-     (This : access IStream;
-      pv : Win32.PVOID;
-      cb : Win32.ULONG;
+     (This    : access IStream;
+      pv      : Win32.PVOID;
+      cb      : Win32.ULONG;
       pcbRead : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :8634
+      return HRESULT;
 
    function IStream_Read_Stub
-     (This : access IRpcStubBuffer;
-      pv : Win32.PBYTE;
-      cb : Win32.ULONG;
+     (This    : access IRpcStubBuffer;
+      pv      : Win32.PBYTE;
+      cb      : Win32.ULONG;
       pcbRead : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :8641
+      return HRESULT;
 
    function IStream_Write_Proxy
-     (This : access IStream;
-      pv : PCVOID;
-      cb : Win32.ULONG;
+     (This       : access IStream;
+      pv         : PCVOID;
+      cb         : Win32.ULONG;
       pcbWritten : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :8647
+      return HRESULT;
 
    function IStream_Write_Stub
-     (This : access IRpcStubBuffer;
-      pv : Win32.PCBYTE;
-      cb : Win32.ULONG;
+     (This       : access IRpcStubBuffer;
+      pv         : Win32.PCBYTE;
+      cb         : Win32.ULONG;
       pcbWritten : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :8654
+      return HRESULT;
 
    function IStream_Seek_Proxy
-     (This : access IStream;
-      dlibMove : Win32.Winnt.LARGE_INTEGER;
-      dwOrigin : DWORD;
+     (This            : access IStream;
+      dlibMove        : Win32.Winnt.LARGE_INTEGER;
+      dwOrigin        : DWORD;
       plibNewPosition : access Win32.Winnt.ULARGE_INTEGER)
-     return HRESULT;                              --  objbase.h :8660
+      return HRESULT;
 
    function IStream_Seek_Stub
-     (This : access IRpcStubBuffer;
-      dlibMove : Win32.Winnt.LARGE_INTEGER;
-      dwOrigin : DWORD;
+     (This            : access IRpcStubBuffer;
+      dlibMove        : Win32.Winnt.LARGE_INTEGER;
+      dwOrigin        : DWORD;
       plibNewPosition : access Win32.Winnt.ULARGE_INTEGER)
-     return HRESULT;                              --  objbase.h :8667
+      return HRESULT;
 
    function IStream_CopyTo_Proxy
-     (This : access IStream;
-      pstm : access IStream;
-      cb : Win32.Winnt.ULARGE_INTEGER;
-      pcbRead : access Win32.Winnt.ULARGE_INTEGER;
+     (This       : access IStream;
+      pstm       : access IStream;
+      cb         : Win32.Winnt.ULARGE_INTEGER;
+      pcbRead    : access Win32.Winnt.ULARGE_INTEGER;
       pcbWritten : access Win32.Winnt.ULARGE_INTEGER)
-     return HRESULT;                              --  objbase.h :8673
+      return HRESULT;
 
    function IStream_CopyTo_Stub
-     (This : access IRpcStubBuffer;
-      pstm : access IStream;
-      cb : Win32.Winnt.ULARGE_INTEGER;
-      pcbRead : access Win32.Winnt.ULARGE_INTEGER;
+     (This       : access IRpcStubBuffer;
+      pstm       : access IStream;
+      cb         : Win32.Winnt.ULARGE_INTEGER;
+      pcbRead    : access Win32.Winnt.ULARGE_INTEGER;
       pcbWritten : access Win32.Winnt.ULARGE_INTEGER)
-     return HRESULT;                              --  objbase.h :8681
+      return HRESULT;
 
    function IEnumSTATSTG_Next_Proxy
-     (This : access IEnumSTATSTG;
-      celt : Win32.ULONG;
-      rgelt : access STATSTG;
+     (This         : access IEnumSTATSTG;
+      celt         : Win32.ULONG;
+      rgelt        : access STATSTG;
       pceltFetched : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :8688
+      return HRESULT;
 
    function IEnumSTATSTG_Next_Stub
-     (This : access IRpcStubBuffer;
-      celt : Win32.ULONG;
-      rgelt : access STATSTG;
+     (This         : access IRpcStubBuffer;
+      celt         : Win32.ULONG;
+      rgelt        : access STATSTG;
       pceltFetched : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :8695
+      return HRESULT;
 
    function IStorage_OpenStream_Proxy
-     (This : access IStorage;
-      pwcsName : PCWSTR;
+     (This      : access IStorage;
+      pwcsName  : PCWSTR;
       reserved1 : Win32.PVOID;
-      grfMode : DWORD;
+      grfMode   : DWORD;
       reserved2 : DWORD;
-      ppstm : access LPSTREAM)
-     return HRESULT;                              --  objbase.h :8701
+      ppstm     : access LPSTREAM)
+      return HRESULT;
 
    function IStorage_OpenStream_Stub
-     (This : access IRpcStubBuffer;
-      pwcsName : PCWSTR;
+     (This        : access IRpcStubBuffer;
+      pwcsName    : PCWSTR;
       cbReserved1 : Win32.UINT;
-      reserved1 : Win32.PBYTE;
-      grfMode : DWORD;
-      reserved2 : DWORD;
-      ppstm : access LPSTREAM)
-     return HRESULT;                              --  objbase.h :8710
+      reserved1   : Win32.PBYTE;
+      grfMode     : DWORD;
+      reserved2   : DWORD;
+      ppstm       : access LPSTREAM)
+      return HRESULT;
 
    function IStorage_EnumElements_Proxy
-     (This : access IStorage;
+     (This      : access IStorage;
       reserved1 : DWORD;
       reserved2 : Win32.PVOID;
       reserved3 : DWORD;
-      ppenum : access LPENUMSTATSTG)
-     return HRESULT;                              --  objbase.h :8719
+      ppenum    : access LPENUMSTATSTG)
+      return HRESULT;
 
    function IStorage_EnumElements_Stub
-     (This : access IRpcStubBuffer;
-      reserved1 : DWORD;
+     (This        : access IRpcStubBuffer;
+      reserved1   : DWORD;
       cbReserved2 : Win32.UINT;
-      reserved2 : Win32.PBYTE;
-      reserved3 : DWORD;
-      ppenum : access LPENUMSTATSTG)
-     return HRESULT;                              --  objbase.h :8727
+      reserved2   : Win32.PBYTE;
+      reserved3   : DWORD;
+      ppenum      : access LPENUMSTATSTG)
+      return HRESULT;
 
    function ILockBytes_ReadAt_Proxy
-     (This : access ILockBytes;
+     (This     : access ILockBytes;
       ulOffset : Win32.Winnt.ULARGE_INTEGER;
-      pv : Win32.PVOID;
-      cb : Win32.ULONG;
-      pcbRead : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :8735
+      pv       : Win32.PVOID;
+      cb       : Win32.ULONG;
+      pcbRead  : Win32.PDWORD)
+      return HRESULT;
 
    function ILockBytes_ReadAt_Stub
-     (This : access IRpcStubBuffer;
+     (This     : access IRpcStubBuffer;
       ulOffset : Win32.Winnt.ULARGE_INTEGER;
-      pv : Win32.PBYTE;
-      cb : Win32.ULONG;
-      pcbRead : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :8743
+      pv       : Win32.PBYTE;
+      cb       : Win32.ULONG;
+      pcbRead  : Win32.PDWORD)
+      return HRESULT;
 
    function ILockBytes_WriteAt_Proxy
-     (This : access ILockBytes;
-      ulOffset : Win32.Winnt.ULARGE_INTEGER;
-      pv : PCVOID;
-      cb : Win32.ULONG;
+     (This       : access ILockBytes;
+      ulOffset   : Win32.Winnt.ULARGE_INTEGER;
+      pv         : PCVOID;
+      cb         : Win32.ULONG;
       pcbWritten : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :8750
+      return HRESULT;
 
    function ILockBytes_WriteAt_Stub
-     (This : access IRpcStubBuffer;
-      ulOffset : Win32.Winnt.ULARGE_INTEGER;
-      pv : Win32.PCBYTE;
-      cb : Win32.ULONG;
+     (This       : access IRpcStubBuffer;
+      ulOffset   : Win32.Winnt.ULARGE_INTEGER;
+      pv         : Win32.PCBYTE;
+      cb         : Win32.ULONG;
       pcbWritten : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :8758
+      return HRESULT;
 
    function IEnumFORMATETC_Next_Proxy
-     (This : access IEnumFORMATETC;
-      celt : Win32.ULONG;
-      rgelt : access FORMATETC;
+     (This         : access IEnumFORMATETC;
+      celt         : Win32.ULONG;
+      rgelt        : access FORMATETC;
       pceltFetched : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :8765
+      return HRESULT;
 
    function IEnumFORMATETC_Next_Stub
-     (This : access IRpcStubBuffer;
-      celt : Win32.ULONG;
-      rgelt : access FORMATETC;
+     (This         : access IRpcStubBuffer;
+      celt         : Win32.ULONG;
+      rgelt        : access FORMATETC;
       pceltFetched : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :8772
+      return HRESULT;
 
    function IEnumSTATDATA_Next_Proxy
-     (This : access IEnumSTATDATA;
-      celt : Win32.ULONG;
-      rgelt : access STATDATA;
+     (This         : access IEnumSTATDATA;
+      celt         : Win32.ULONG;
+      rgelt        : access STATDATA;
       pceltFetched : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :8778
+      return HRESULT;
 
    function IEnumSTATDATA_Next_Stub
-     (This : access IRpcStubBuffer;
-      celt : Win32.ULONG;
-      rgelt : access STATDATA;
+     (This         : access IRpcStubBuffer;
+      celt         : Win32.ULONG;
+      rgelt        : access STATDATA;
       pceltFetched : Win32.PDWORD)
-     return HRESULT;                              --  objbase.h :8785
+      return HRESULT;
 
    procedure IAdviseSink_OnDataChange_Proxy
-     (This : access IAdviseSink;
+     (This       : access IAdviseSink;
       pFormatetc : access FORMATETC;
-      pStgmed : access STGMEDIUM);              --  objbase.h :8791
+      pStgmed    : access STGMEDIUM);
 
    procedure IAdviseSink_OnDataChange_Stub
-     (This : access IRpcStubBuffer;
+     (This       : access IRpcStubBuffer;
       pFormatetc : access FORMATETC;
-      pStgmed : access RemSTGMEDIUM);           --  objbase.h :8797
+      pStgmed    : access RemSTGMEDIUM);
 
    procedure IAdviseSink_OnViewChange_Proxy
-     (This : access IAdviseSink;
+     (This     : access IAdviseSink;
       dwAspect : DWORD;
-      lindex : LONG);                            --  objbase.h :8802
+      lindex   : LONG);
 
    procedure IAdviseSink_OnViewChange_Stub
-     (This : access IRpcStubBuffer;
+     (This     : access IRpcStubBuffer;
       dwAspect : DWORD;
-      lindex : LONG);                            --  objbase.h :8808
+      lindex   : LONG);
 
    procedure IAdviseSink_OnRename_Proxy
      (This : access IAdviseSink;
-      pmk : access IMoniker);                     --  objbase.h :8813
+      pmk  : access IMoniker);
 
    procedure IAdviseSink_OnRename_Stub
      (This : access IRpcStubBuffer;
-      pmk : access IMoniker);                     --  objbase.h :8818
+      pmk  : access IMoniker);
 
-   procedure IAdviseSink_OnSave_Proxy
-     (This : access IAdviseSink);                  --  objbase.h :8822
+   procedure IAdviseSink_OnSave_Proxy (This : access IAdviseSink);
 
-   procedure IAdviseSink_OnSave_Stub
-     (This : access IRpcStubBuffer);               --  objbase.h :8826
+   procedure IAdviseSink_OnSave_Stub (This : access IRpcStubBuffer);
 
-   procedure IAdviseSink_OnClose_Proxy
-     (This : access IAdviseSink);                  --  objbase.h :8829
+   procedure IAdviseSink_OnClose_Proxy (This : access IAdviseSink);
 
-   procedure IAdviseSink_OnClose_Stub
-     (This : access IRpcStubBuffer);               --  objbase.h :8833
+   procedure IAdviseSink_OnClose_Stub (This : access IRpcStubBuffer);
 
    procedure IAdviseSink2_OnLinkSrcChange_Proxy
      (This : access IAdviseSink2;
-      pmk : access IMoniker);                     --  objbase.h :8836
+      pmk  : access IMoniker);
 
    procedure IAdviseSink2_OnLinkSrcChange_Stub
      (This : access IRpcStubBuffer;
-      pmk : access IMoniker);                     --  objbase.h :8841
+      pmk  : access IMoniker);
 
    function IDataObject_GetData_Proxy
-     (This : access IDataObject;
+     (This         : access IDataObject;
       pformatetcIn : access FORMATETC;
-      pmedium : access STGMEDIUM)
-     return HRESULT;                              --  objbase.h :8845
+      pmedium      : access STGMEDIUM)
+      return HRESULT;
 
    function IDataObject_GetData_Stub
-     (This : access IRpcStubBuffer;
-      pformatetcIn : access FORMATETC;
+     (This           : access IRpcStubBuffer;
+      pformatetcIn   : access FORMATETC;
       ppRemoteMedium : access a_RemSTGMEDIUM_t)
-     return HRESULT;                              --  objbase.h :8851
+      return HRESULT;
 
    function IDataObject_GetDataHere_Proxy
-     (This : access IDataObject;
+     (This       : access IDataObject;
       pformatetc : access FORMATETC;
-      pmedium : access STGMEDIUM)
-     return HRESULT;                              --  objbase.h :8856
+      pmedium    : access STGMEDIUM)
+      return HRESULT;
 
    function IDataObject_GetDataHere_Stub
-     (This : access IRpcStubBuffer;
-      pformatetc : access FORMATETC;
+     (This           : access IRpcStubBuffer;
+      pformatetc     : access FORMATETC;
       ppRemoteMedium : access a_RemSTGMEDIUM_t)
-     return HRESULT;                              --  objbase.h :8862
+      return HRESULT;
 
    function IDataObject_SetData_Proxy
-     (This : access IDataObject;
+     (This       : access IDataObject;
       pformatetc : access FORMATETC;
-      pmedium : access STGMEDIUM;
-      fRelease : BOOL)
-     return HRESULT;                              --  objbase.h :8867
+      pmedium    : access STGMEDIUM;
+      fRelease   : BOOL)
+      return HRESULT;
 
    function IDataObject_SetData_Stub
-     (This : access IRpcStubBuffer;
+     (This       : access IRpcStubBuffer;
       pformatetc : access FORMATETC;
-      pmedium : a_RemSTGMEDIUM_t;
-      fRelease : BOOL)
-     return HRESULT;                              --  objbase.h :8874
+      pmedium    : a_RemSTGMEDIUM_t;
+      fRelease   : BOOL)
+      return HRESULT;
 
    function IsEqualGUID
      (rguid1 : REFGUID;
       rguid2 : REFGUID)
-     return Win32.BOOL;                 --  objbase.h :8923
+      return Win32.BOOL;
 
-   function IsEqualIID (riid1 : REFGUID;
-                        riid2 : REFGUID)
-                       return Win32.BOOL
-     renames IsEqualGUID;                --  objbase.h :953, 8926
+   function IsEqualIID (riid1 : REFGUID; riid2 : REFGUID) return Win32.BOOL
+      renames IsEqualGUID;
 
    function IsEqualCLSID
      (rclsid1 : REFCLSID;
       rclsid2 : REFCLSID)
-     return Win32.BOOL;                --  objbase.h :961, 8927
+      return Win32.BOOL;
 
-   function CoBuildVersion return DWORD;                   --  objbase.h :8959
+   function CoBuildVersion return DWORD;
 
-   function CoInitialize
-     (pvReserved : Win32.LPVOID)
-     return HRESULT;                              --  objbase.h :8963
+   function CoInitialize (pvReserved : Win32.LPVOID) return HRESULT;
 
-   procedure CoUninitialize;                               --  objbase.h :8964
+   procedure CoUninitialize;
 
    function CoGetMalloc
      (dwMemContext : DWORD;
-                      ppMalloc : access LPMALLOC)
-     return HRESULT;                              --  objbase.h :8965
+      ppMalloc     : access LPMALLOC)
+      return HRESULT;
 
-   function CoGetCurrentProcess return DWORD;              --  objbase.h :8966
+   function CoGetCurrentProcess return DWORD;
 
    function CoCreateStandardMalloc
-     (memctx : DWORD;
-                      ppMalloc : access LPMALLOC)
-     return HRESULT;                              --  objbase.h :8967
+     (memctx   : DWORD;
+      ppMalloc : access LPMALLOC)
+      return HRESULT;
 
    function CoGetClassObject
-     (rclsid : REFCLSID;
-                      dwClsContext : DWORD;
-                      pvReserved : Win32.LPVOID;
-                      riid : REFIID;
-                      ppv : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :8976
+     (rclsid       : REFCLSID;
+      dwClsContext : DWORD;
+      pvReserved   : Win32.LPVOID;
+      riid         : REFIID;
+      ppv          : access Win32.PVOID)
+      return HRESULT;
 
    function CoRegisterClassObject
-     (rclsid : REFCLSID;
-                      pUnk : LPUNKNOWN;
-                      dwClsContext : DWORD;
-                      flags : DWORD;
-                      lpdwRegister : LPDWORD)
-     return HRESULT;                              --  objbase.h :8978
+     (rclsid       : REFCLSID;
+      pUnk         : LPUNKNOWN;
+      dwClsContext : DWORD;
+      flags        : DWORD;
+      lpdwRegister : LPDWORD)
+      return HRESULT;
 
-   function CoRevokeClassObject
-     (dwRegister : DWORD)
-     return HRESULT;                              --  objbase.h :8980
+   function CoRevokeClassObject (dwRegister : DWORD) return HRESULT;
 
    function CoGetMarshalSizeMax
-     (pulSize : Win32.PDWORD;
-                      riid : REFIID;
-                      pUnk : LPUNKNOWN;
-                      dwDestContext : DWORD;
-                      pvDestContext : Win32.LPVOID;
-                      mshlflags : DWORD)
-     return HRESULT;                              --  objbase.h :8985
+     (pulSize       : Win32.PDWORD;
+      riid          : REFIID;
+      pUnk          : LPUNKNOWN;
+      dwDestContext : DWORD;
+      pvDestContext : Win32.LPVOID;
+      mshlflags     : DWORD)
+      return HRESULT;
 
    function CoMarshalInterface
-     (pStm : access IStream;
-                      riid : REFIID;
-                      pUnk : LPUNKNOWN;
-                      dwDestContext : DWORD;
-                      pvDestContext : Win32.LPVOID;
-                      mshlflags : DWORD)
-     return HRESULT;                              --  objbase.h :8987
+     (pStm          : access IStream;
+      riid          : REFIID;
+      pUnk          : LPUNKNOWN;
+      dwDestContext : DWORD;
+      pvDestContext : Win32.LPVOID;
+      mshlflags     : DWORD)
+      return HRESULT;
 
    function CoUnmarshalInterface
      (pStm : access IStream;
-                      riid : REFIID;
-                      ppv : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :8989
+      riid : REFIID;
+      ppv  : access Win32.PVOID)
+      return HRESULT;
 
    function CoMarshalHresult
-     (pstm : access IStream;
-                      hresult : Win32.Objbase.HRESULT)
-     return Win32.Objbase.HRESULT;                --  objbase.h :8990
+     (pstm    : access IStream;
+      hresult : Win32.Objbase.HRESULT)
+      return Win32.Objbase.HRESULT;
 
    function CoUnmarshalHresult
-     (pstm : access IStream;
-                      phresult : access Win32.Objbase.HRESULT)
-     return HRESULT;                              --  objbase.h :8991
+     (pstm     : access IStream;
+      phresult : access Win32.Objbase.HRESULT)
+      return HRESULT;
 
-   function CoReleaseMarshalData
-     (pStm : access IStream)
-     return HRESULT;                              --  objbase.h :8992
+   function CoReleaseMarshalData (pStm : access IStream) return HRESULT;
 
    function CoDisconnectObject
-     (pUnk : LPUNKNOWN;
-                      dwReserved : DWORD)
-     return HRESULT;                              --  objbase.h :8993
+     (pUnk       : LPUNKNOWN;
+      dwReserved : DWORD)
+      return HRESULT;
 
    function CoLockObjectExternal
-     (pUnk : LPUNKNOWN;
-                      fLock : BOOL;
-                      fLastUnlockReleases : BOOL)
-     return HRESULT;                              --  objbase.h :8994
+     (pUnk                : LPUNKNOWN;
+      fLock               : BOOL;
+      fLastUnlockReleases : BOOL)
+      return HRESULT;
 
    function CoGetStandardMarshal
-     (riid : REFIID;
-                      pUnk : LPUNKNOWN;
-                      dwDestContext : DWORD;
-                      pvDestContext : Win32.LPVOID;
-                      mshlflags : DWORD;
-                      ppMarshal : access LPMARSHAL)
-     return HRESULT;                              --  objbase.h :8995
+     (riid          : REFIID;
+      pUnk          : LPUNKNOWN;
+      dwDestContext : DWORD;
+      pvDestContext : Win32.LPVOID;
+      mshlflags     : DWORD;
+      ppMarshal     : access LPMARSHAL)
+      return HRESULT;
 
-   function CoIsHandlerConnected
-     (pUnk : LPUNKNOWN)
-     return BOOL;                                 --  objbase.h :8999
+   function CoIsHandlerConnected (pUnk : LPUNKNOWN) return BOOL;
 
-   function CoHasStrongExternalConnections
-     (pUnk : LPUNKNOWN)
-     return BOOL;                                 --  objbase.h :9000
+   function CoHasStrongExternalConnections (pUnk : LPUNKNOWN) return BOOL;
 
    function CoLoadLibrary
      (lpszLibName : LPOLESTR;
-                      bAutoFree : BOOL)
-     return Win32.Windef.HINSTANCE;               --  objbase.h :9005
+      bAutoFree   : BOOL)
+      return Win32.Windef.HINSTANCE;
 
-   procedure CoFreeLibrary
-     (hInst : Win32.Windef.HINSTANCE);             --  objbase.h :9006
+   procedure CoFreeLibrary (hInst : Win32.Windef.HINSTANCE);
 
-   procedure CoFreeAllLibraries;                           --  objbase.h :9007
+   procedure CoFreeAllLibraries;
 
-   procedure CoFreeUnusedLibraries;                        --  objbase.h :9008
+   procedure CoFreeUnusedLibraries;
 
    function CoCreateInstance
-     (rclsid : REFCLSID;
-                      pUnkOuter : LPUNKNOWN;
-                      dwClsContext : DWORD;
-                      riid : REFIID;
-                      ppv : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :9013
+     (rclsid       : REFCLSID;
+      pUnkOuter    : LPUNKNOWN;
+      dwClsContext : DWORD;
+      riid         : REFIID;
+      ppv          : access Win32.PVOID)
+      return HRESULT;
 
    function StringFromCLSID
      (rclsid : REFCLSID;
-                      lplpsz : access LPOLESTR)
-     return HRESULT;                              --  objbase.h :9019
+      lplpsz : access LPOLESTR)
+      return HRESULT;
 
    function CLSIDFromString
-     (lpsz : LPOLESTR;
-                      pclsid : access CLSID)
-     return HRESULT;                              --  objbase.h :9020
+     (lpsz   : LPOLESTR;
+      pclsid : access CLSID)
+      return HRESULT;
 
    function StringFromIID
      (rclsid : REFIID;
-                      lplpsz : access LPOLESTR)
-     return HRESULT;                              --  objbase.h :9021
+      lplpsz : access LPOLESTR)
+      return HRESULT;
 
    function IIDFromString
-     (lpsz : LPOLESTR;
-                      lpiid : Win32.Objbase.LPIID)
-     return HRESULT;                              --  objbase.h :9022
+     (lpsz  : LPOLESTR;
+      lpiid : Win32.Objbase.LPIID)
+      return HRESULT;
 
-   function CoIsOle1Class
-     (rclsid : REFCLSID)
-     return BOOL;                                 --  objbase.h :9023
+   function CoIsOle1Class (rclsid : REFCLSID) return BOOL;
 
    function ProgIDFromCLSID
-     (clsid : REFCLSID;
-                      lplpszProgID : access LPOLESTR)
-     return HRESULT;                              --  objbase.h :9024
+     (clsid        : REFCLSID;
+      lplpszProgID : access LPOLESTR)
+      return HRESULT;
 
    function CLSIDFromProgID
      (lpszProgID : LPCOLESTR;
-                      lpclsid : access CLSID)
-     return HRESULT;                              --  objbase.h :9025
+      lpclsid    : access CLSID)
+      return HRESULT;
 
    function StringFromGUID2
      (rguid : access IID;
-                      lpsz : LPOLESTR;
-                      cbMax : Win32.INT)
-     return Win32.INT;                            --  objbase.h :9026
+      lpsz  : LPOLESTR;
+      cbMax : Win32.INT)
+      return Win32.INT;
 
-   function CoCreateGuid
-     (pguid : access Win32.Rpcdce.GUID)
-     return HRESULT;                              --  objbase.h :9028
+   function CoCreateGuid (pguid : access Win32.Rpcdce.GUID) return HRESULT;
 
    function CoFileTimeToDosDateTime
      (lpFileTime : access Win32.Winbase.FILETIME;
-                      lpDosDate : LPWORD;
-                      lpDosTime : LPWORD)
-     return BOOL;                                 --  objbase.h :9030
+      lpDosDate  : LPWORD;
+      lpDosTime  : LPWORD)
+      return BOOL;
 
    function CoDosDateTimeToFileTime
-     (nDosDate : WORD;
-                      nDosTime : WORD;
-                      lpFileTime : access Win32.Winbase.FILETIME)
-     return BOOL;                                 --  objbase.h :9032
+     (nDosDate   : WORD;
+      nDosTime   : WORD;
+      lpFileTime : access Win32.Winbase.FILETIME)
+      return BOOL;
 
    function CoFileTimeNow
      (lpFileTime : access Win32.Winbase.FILETIME)
-     return HRESULT;                              --  objbase.h :9034
+      return HRESULT;
 
    function CoRegisterMessageFilter
-     (lpMessageFilter : Win32.Objbase.LPMESSAGEFILTER;
-                      lplpMessageFilter : access Win32.Objbase.LPMESSAGEFILTER)
-     return HRESULT;                              --  objbase.h :9037
+     (lpMessageFilter   : Win32.Objbase.LPMESSAGEFILTER;
+      lplpMessageFilter : access Win32.Objbase.LPMESSAGEFILTER)
+      return HRESULT;
 
    function CoGetTreatAsClass
-     (clsidOld : REFCLSID;
-                      pClsidNew : access CLSID)
-     return HRESULT;                              --  objbase.h :9043
+     (clsidOld  : REFCLSID;
+      pClsidNew : access CLSID)
+      return HRESULT;
 
    function CoTreatAsClass
      (clsidOld : REFCLSID;
-                      clsidNew : access IID)
-     return HRESULT;                              --  objbase.h :9044
+      clsidNew : access IID)
+      return HRESULT;
 
    function DllGetClassObject
      (rclsid : REFCLSID;
-                      riid : REFIID;
-                      ppv : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :9064
+      riid   : REFIID;
+      ppv    : access Win32.PVOID)
+      return HRESULT;
 
-   function DllCanUnloadNow return HRESULT;                --  objbase.h :9066
+   function DllCanUnloadNow return HRESULT;
 
-   function CoTaskMemAlloc
-     (cb : Win32.ULONG)
-     return LPVOID;                               --  objbase.h :9070
+   function CoTaskMemAlloc (cb : Win32.ULONG) return LPVOID;
 
    function CoTaskMemRealloc
-     (pv : Win32.LPVOID;
-                      cb : Win32.ULONG)
-     return LPVOID;                               --  objbase.h :9071
+     (pv   : Win32.LPVOID;
+      cb   : Win32.ULONG)
+      return LPVOID;
 
-   procedure CoTaskMemFree
-     (pv : Win32.LPVOID);                          --  objbase.h :9072
+   procedure CoTaskMemFree (pv : Win32.LPVOID);
 
    function CreateDataAdviseHolder
      (ppDAHolder : access LPDATAADVISEHOLDER)
-     return HRESULT;                              --  objbase.h :9077
+      return HRESULT;
 
    function CreateDataCache
      (pUnkOuter : LPUNKNOWN;
-                      rclsid : REFCLSID;
-                      iid : access Win32.Objbase.IID;
-                      ppv : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :9079
+      rclsid    : REFCLSID;
+      iid       : access Win32.Objbase.IID;
+      ppv       : access Win32.PVOID)
+      return HRESULT;
 
    function StgCreateDocfile
-     (pwcsName : PCWSTR;
-                      grfMode : DWORD;
-                      reserved : DWORD;
-                      ppstgOpen : access LPSTORAGE)
-     return HRESULT;                              --  objbase.h :9088
+     (pwcsName  : PCWSTR;
+      grfMode   : DWORD;
+      reserved  : DWORD;
+      ppstgOpen : access LPSTORAGE)
+      return HRESULT;
 
    function StgCreateDocfileOnILockBytes
-     (plkbyt : access ILockBytes;
-                      grfMode : DWORD;
-                      reserved : DWORD;
-                      ppstgOpen : access LPSTORAGE)
-     return HRESULT;                              --  objbase.h :9093
+     (plkbyt    : access ILockBytes;
+      grfMode   : DWORD;
+      reserved  : DWORD;
+      ppstgOpen : access LPSTORAGE)
+      return HRESULT;
 
    function StgOpenStorage
-     (pwcsName : PCWSTR;
-                      pstgPriority : access IStorage;
-                      grfMode : DWORD;
-                      snbExclude : SNB;
-                      reserved : DWORD;
-                      ppstgOpen : access LPSTORAGE)
-     return HRESULT;                              --  objbase.h :9098
+     (pwcsName     : PCWSTR;
+      pstgPriority : access IStorage;
+      grfMode      : DWORD;
+      snbExclude   : SNB;
+      reserved     : DWORD;
+      ppstgOpen    : access LPSTORAGE)
+      return HRESULT;
 
    function StgOpenStorageOnILockBytes
-     (plkbyt : access ILockBytes;
-                      pstgPriority : access IStorage;
-                      grfMode : DWORD;
-                      snbExclude : SNB;
-                      reserved : DWORD;
-                      ppstgOpen : access LPSTORAGE)
-     return HRESULT;                              --  objbase.h :9104
+     (plkbyt       : access ILockBytes;
+      pstgPriority : access IStorage;
+      grfMode      : DWORD;
+      snbExclude   : SNB;
+      reserved     : DWORD;
+      ppstgOpen    : access LPSTORAGE)
+      return HRESULT;
 
-   function StgIsStorageFile
-     (pwcsName : PCWSTR)
-     return HRESULT;                              --  objbase.h :9111
+   function StgIsStorageFile (pwcsName : PCWSTR) return HRESULT;
 
    function StgIsStorageILockBytes
      (plkbyt : access ILockBytes)
-     return HRESULT;                              --  objbase.h :9112
+      return HRESULT;
 
    function StgSetTimes
      (lpszName : PCWSTR;
-                      pctime : Win32.Winbase.ac_FILETIME_t;
-                      patime : Win32.Winbase.ac_FILETIME_t;
-                      pmtime : Win32.Winbase.ac_FILETIME_t)
-     return HRESULT;                              --  objbase.h :9114
+      pctime   : Win32.Winbase.ac_FILETIME_t;
+      patime   : Win32.Winbase.ac_FILETIME_t;
+      pmtime   : Win32.Winbase.ac_FILETIME_t)
+      return HRESULT;
 
    function BindMoniker
-     (pmk : LPMONIKER;
-                      grfOpt : DWORD;
-                      iidResult : access IID;
-                      ppvResult : access Win32.PVOID)
-     return HRESULT;                              --  objbase.h :9124
+     (pmk       : LPMONIKER;
+      grfOpt    : DWORD;
+      iidResult : access IID;
+      ppvResult : access Win32.PVOID)
+      return HRESULT;
 
    function MkParseDisplayName
-     (pbc : LPBC;
-                      szUserName : LPCOLESTR;
-                      pchEaten : Win32.PDWORD;
-                      ppmk : access LPMONIKER)
-     return HRESULT;                              --  objbase.h :9125
+     (pbc        : LPBC;
+      szUserName : LPCOLESTR;
+      pchEaten   : Win32.PDWORD;
+      ppmk       : access LPMONIKER)
+      return HRESULT;
 
    function MonikerRelativePathTo
-     (pmkSrc : LPMONIKER;
-                      pmkDest : LPMONIKER;
-                      ppmkRelPath : access LPMONIKER;
-                      fCalledFromMethod : BOOL)
-     return HRESULT;                              --  objbase.h :9127
+     (pmkSrc            : LPMONIKER;
+      pmkDest           : LPMONIKER;
+      ppmkRelPath       : access LPMONIKER;
+      fCalledFromMethod : BOOL)
+      return HRESULT;
 
    function MonikerCommonPrefixWith
-     (pmkThis : LPMONIKER;
-                      pmkOther : LPMONIKER;
-                      ppmkCommon : access LPMONIKER)
-     return HRESULT;                              --  objbase.h :9129
+     (pmkThis    : LPMONIKER;
+      pmkOther   : LPMONIKER;
+      ppmkCommon : access LPMONIKER)
+      return HRESULT;
 
    function CreateBindCtx
      (reserved : DWORD;
-                      ppbc : access LPBC)
-     return HRESULT;                              --  objbase.h :9131
+      ppbc     : access LPBC)
+      return HRESULT;
 
    function CreateGenericComposite
-     (pmkFirst : LPMONIKER;
-                      pmkRest : LPMONIKER;
-                      ppmkComposite : access LPMONIKER)
-     return HRESULT;                              --  objbase.h :9132
+     (pmkFirst      : LPMONIKER;
+      pmkRest       : LPMONIKER;
+      ppmkComposite : access LPMONIKER)
+      return HRESULT;
 
    function GetClassFile
      (szFilename : LPCOLESTR;
-                      pclsid : access CLSID)
-     return HRESULT;                              --  objbase.h :9134
+      pclsid     : access CLSID)
+      return HRESULT;
 
    function CreateFileMoniker
      (lpszPathName : LPCOLESTR;
-                      ppmk : access LPMONIKER)
-     return HRESULT;                              --  objbase.h :9136
+      ppmk         : access LPMONIKER)
+      return HRESULT;
 
    function CreateItemMoniker
      (lpszDelim : LPCOLESTR;
-                      lpszItem : LPCOLESTR;
-                      ppmk : access LPMONIKER)
-     return HRESULT;                              --  objbase.h :9138
+      lpszItem  : LPCOLESTR;
+      ppmk      : access LPMONIKER)
+      return HRESULT;
 
-   function CreateAntiMoniker
-     (ppmk : access LPMONIKER)
-     return HRESULT;                              --  objbase.h :9140
+   function CreateAntiMoniker (ppmk : access LPMONIKER) return HRESULT;
 
    function CreatePointerMoniker
      (punk : LPUNKNOWN;
-                      ppmk : access LPMONIKER)
-     return HRESULT;                              --  objbase.h :9141
+      ppmk : access LPMONIKER)
+      return HRESULT;
 
    function GetRunningObjectTable
      (reserved : DWORD;
-                      pprot : access LPRUNNINGOBJECTTABLE)
-     return HRESULT;                              --  objbase.h :9143
+      pprot    : access LPRUNNINGOBJECTTABLE)
+      return HRESULT;
 
 private
 
-   pragma Convention (C_Pass_By_Copy, RemHGLOBAL);          --  objbase.h :331
-   pragma Convention (C, RemHMETAFILEPICT);                 --  objbase.h :339
-   pragma Convention (C_Pass_By_Copy, RemHENHMETAFILE);     --  objbase.h :352
-   pragma Convention (C_Pass_By_Copy, RemHBITMAP);          --  objbase.h :359
-   pragma Convention (C_Pass_By_Copy, RemHPALETTE);         --  objbase.h :366
-   pragma Convention (C_Pass_By_Copy, RemBRUSH);            --  objbase.h :373
-   pragma Convention (C, OBJECTID);                         --  objbase.h :937
-   pragma Convention (C_Pass_By_Copy, IUnknown);            --  objbase.h :1173
-   pragma Convention (C_Pass_By_Copy, IClassFactory);       --  objbase.h :1179
-   pragma Convention (C_Pass_By_Copy, IMarshal);            --  objbase.h :1185
-   pragma Convention (C_Pass_By_Copy, IMalloc);             --  objbase.h :1191
-   pragma Convention (C_Pass_By_Copy, IStdMarshalInfo);     --  objbase.h :1197
-   pragma Convention (C_Pass_By_Copy, IExternalConnection); --  objbase.h :1203
-   pragma Convention (C_Pass_By_Copy, IWeakRef);            --  objbase.h :1209
-   pragma Convention (C_Pass_By_Copy, IEnumUnknown);        --  objbase.h :1215
-   pragma Convention (C_Pass_By_Copy, IBindCtx);            --  objbase.h :1221
-   pragma Convention (C_Pass_By_Copy, IParseDisplayName);   --  objbase.h :1227
-   pragma Convention (C_Pass_By_Copy, IEnumMoniker);        --  objbase.h :1233
-   pragma Convention (C_Pass_By_Copy, IRunnableObject);     --  objbase.h :1239
-   pragma Convention (C_Pass_By_Copy, IRunningObjectTable); --  objbase.h :1245
-   pragma Convention (C_Pass_By_Copy, IPersist);            --  objbase.h :1251
-   pragma Convention (C_Pass_By_Copy, IPersistStream);      --  objbase.h :1257
-   pragma Convention (C_Pass_By_Copy, IMoniker);            --  objbase.h :1263
-   pragma Convention (C_Pass_By_Copy, IEnumString);         --  objbase.h :1269
-   pragma Convention (C_Pass_By_Copy, IStream);             --  objbase.h :1275
-   pragma Convention (C_Pass_By_Copy, IEnumSTATSTG);        --  objbase.h :1281
-   pragma Convention (C_Pass_By_Copy, IStorage);            --  objbase.h :1287
-   pragma Convention (C_Pass_By_Copy, IPersistFile);        --  objbase.h :1293
-   pragma Convention (C_Pass_By_Copy, IPersistStorage);     --  objbase.h :1299
-   pragma Convention (C_Pass_By_Copy, ILockBytes);          --  objbase.h :1305
-   pragma Convention (C_Pass_By_Copy, IEnumFORMATETC);      --  objbase.h :1311
-   pragma Convention (C_Pass_By_Copy, IEnumSTATDATA);       --  objbase.h :1317
-   pragma Convention (C_Pass_By_Copy, IRootStorage);        --  objbase.h :1323
-   pragma Convention (C_Pass_By_Copy, IAdviseSink);         --  objbase.h :1329
-   pragma Convention (C_Pass_By_Copy, IAdviseSink2);        --  objbase.h :1335
-   pragma Convention (C_Pass_By_Copy, IDataObject);         --  objbase.h :1341
-   pragma Convention (C_Pass_By_Copy, IDataAdviseHolder);   --  objbase.h :1347
-   pragma Convention (C_Pass_By_Copy, IMessageFilter);      --  objbase.h :1353
-   pragma Convention (C_Pass_By_Copy, IRpcProxyBuffer);     --  objbase.h :1365
-   pragma Convention (C_Pass_By_Copy, IPSFactoryBuffer);    --  objbase.h :1377
-   pragma Convention (C_Pass_By_Copy, IUnknownVtbl);        --  objbase.h :1451
-   pragma Convention (C, IClassFactoryVtbl);                --  objbase.h :1566
-   pragma Convention (C, IMarshalVtbl);                     --  objbase.h :1715
-   pragma Convention (C, IMallocVtbl);                      --  objbase.h :1954
-   pragma Convention (C_Pass_By_Copy, IStdMarshalInfoVtbl); --  objbase.h :2146
-   pragma Convention (C, IExternalConnectionVtbl);          --  objbase.h :2259
-   pragma Convention (C, IWeakRefVtbl);                     --  objbase.h :2383
-   pragma Convention (C, IEnumUnknownVtbl);                 --  objbase.h :2509
-   pragma Convention (C_Pass_By_Copy, BIND_OPTS);           --  objbase.h :2652
-   pragma Convention (C, IBindCtxVtbl);                     --  objbase.h :2713
+   pragma Convention (C_Pass_By_Copy, RemHGLOBAL);
+   pragma Convention (C, RemHMETAFILEPICT);
+   pragma Convention (C_Pass_By_Copy, RemHENHMETAFILE);
+   pragma Convention (C_Pass_By_Copy, RemHBITMAP);
+   pragma Convention (C_Pass_By_Copy, RemHPALETTE);
+   pragma Convention (C_Pass_By_Copy, RemBRUSH);
+   pragma Convention (C, OBJECTID);
+   pragma Convention (C_Pass_By_Copy, IUnknown);
+   pragma Convention (C_Pass_By_Copy, IClassFactory);
+   pragma Convention (C_Pass_By_Copy, IMarshal);
+   pragma Convention (C_Pass_By_Copy, IMalloc);
+   pragma Convention (C_Pass_By_Copy, IStdMarshalInfo);
+   pragma Convention (C_Pass_By_Copy, IExternalConnection);
+   pragma Convention (C_Pass_By_Copy, IWeakRef);
+   pragma Convention (C_Pass_By_Copy, IEnumUnknown);
+   pragma Convention (C_Pass_By_Copy, IBindCtx);
+   pragma Convention (C_Pass_By_Copy, IParseDisplayName);
+   pragma Convention (C_Pass_By_Copy, IEnumMoniker);
+   pragma Convention (C_Pass_By_Copy, IRunnableObject);
+   pragma Convention (C_Pass_By_Copy, IRunningObjectTable);
+   pragma Convention (C_Pass_By_Copy, IPersist);
+   pragma Convention (C_Pass_By_Copy, IPersistStream);
+   pragma Convention (C_Pass_By_Copy, IMoniker);
+   pragma Convention (C_Pass_By_Copy, IEnumString);
+   pragma Convention (C_Pass_By_Copy, IStream);
+   pragma Convention (C_Pass_By_Copy, IEnumSTATSTG);
+   pragma Convention (C_Pass_By_Copy, IStorage);
+   pragma Convention (C_Pass_By_Copy, IPersistFile);
+   pragma Convention (C_Pass_By_Copy, IPersistStorage);
+   pragma Convention (C_Pass_By_Copy, ILockBytes);
+   pragma Convention (C_Pass_By_Copy, IEnumFORMATETC);
+   pragma Convention (C_Pass_By_Copy, IEnumSTATDATA);
+   pragma Convention (C_Pass_By_Copy, IRootStorage);
+   pragma Convention (C_Pass_By_Copy, IAdviseSink);
+   pragma Convention (C_Pass_By_Copy, IAdviseSink2);
+   pragma Convention (C_Pass_By_Copy, IDataObject);
+   pragma Convention (C_Pass_By_Copy, IDataAdviseHolder);
+   pragma Convention (C_Pass_By_Copy, IMessageFilter);
+   pragma Convention (C_Pass_By_Copy, IRpcProxyBuffer);
+   pragma Convention (C_Pass_By_Copy, IPSFactoryBuffer);
+   pragma Convention (C_Pass_By_Copy, IUnknownVtbl);
+   pragma Convention (C, IClassFactoryVtbl);
+   pragma Convention (C, IMarshalVtbl);
+   pragma Convention (C, IMallocVtbl);
+   pragma Convention (C_Pass_By_Copy, IStdMarshalInfoVtbl);
+   pragma Convention (C, IExternalConnectionVtbl);
+   pragma Convention (C, IWeakRefVtbl);
+   pragma Convention (C, IEnumUnknownVtbl);
+   pragma Convention (C_Pass_By_Copy, BIND_OPTS);
+   pragma Convention (C, IBindCtxVtbl);
    pragma Convention (C_Pass_By_Copy, IParseDisplayNameVtbl);
-   --  objbase.h :2984
-   pragma Convention (C, IEnumMonikerVtbl);                 --  objbase.h :3095
-   pragma Convention (C, IRunnableObjectVtbl);              --  objbase.h :3261
-   pragma Convention (C, IRunningObjectTableVtbl);          --  objbase.h :3456
-   pragma Convention (C_Pass_By_Copy, IPersistVtbl);        --  objbase.h :3677
-   pragma Convention (C, IEnumStringVtbl);                  --  objbase.h :4483
-   pragma Convention (C, STATSTG);                          --  objbase.h :4623
-   pragma Convention (C, IStreamVtbl);                      --  objbase.h :4721
-   pragma Convention (C, IEnumSTATSTGVtbl);                 --  objbase.h :5042
-   pragma Convention (C_Pass_By_Copy, RemSNB);              --  objbase.h :5182
-   pragma Convention (C, IStorageVtbl);                     --  objbase.h :5282
-   pragma Convention (C, IPersistFileVtbl);                 --  objbase.h :5720
-   pragma Convention (C, IPersistStorageVtbl);              --  objbase.h :5915
-   pragma Convention (C, ILockBytesVtbl);                   --  objbase.h :6139
-   pragma Convention (C_Pass_By_Copy, DVTARGETDEVICE);      --  objbase.h :6354
-   pragma Convention (C, FORMATETC);                        --  objbase.h :6371
-   pragma Convention (C, IEnumFORMATETCVtbl);               --  objbase.h :6408
-   pragma Convention (C, STATDATA);                         --  objbase.h :6560
-   pragma Convention (C, IEnumSTATDATAVtbl);                --  objbase.h :6596
-   pragma Convention (C_Pass_By_Copy, IRootStorageVtbl);    --  objbase.h :6750
-   pragma Convention (C_Pass_By_Copy, RemSTGMEDIUM);        --  objbase.h :6845
-   pragma Convention (C_Pass_By_Copy, STGMEDIUM);           --  objbase.h :6857
-   pragma Convention (C, IAdviseSinkVtbl);                  --  objbase.h :6920
-   pragma Convention (C, IAdviseSink2Vtbl);                 --  objbase.h :7091
-   pragma Convention (C, IDataObjectVtbl);                  --  objbase.h :7262
-   pragma Convention (C, IDataAdviseHolderVtbl);            --  objbase.h :7542
-   pragma Convention (C, INTERFACEINFO);                    --  objbase.h :7725
-   pragma Convention (C, IMessageFilterVtbl);               --  objbase.h :7763
-   pragma Convention (C, RPCOLEMESSAGE);                    --  objbase.h :7896
+   pragma Convention (C, IEnumMonikerVtbl);
+   pragma Convention (C, IRunnableObjectVtbl);
+   pragma Convention (C, IRunningObjectTableVtbl);
+   pragma Convention (C_Pass_By_Copy, IPersistVtbl);
+   pragma Convention (C, IEnumStringVtbl);
+   pragma Convention (C, STATSTG);
+   pragma Convention (C, IStreamVtbl);
+   pragma Convention (C, IEnumSTATSTGVtbl);
+   pragma Convention (C_Pass_By_Copy, RemSNB);
+   pragma Convention (C, IStorageVtbl);
+   pragma Convention (C, IPersistFileVtbl);
+   pragma Convention (C, IPersistStorageVtbl);
+   pragma Convention (C, ILockBytesVtbl);
+   pragma Convention (C_Pass_By_Copy, DVTARGETDEVICE);
+   pragma Convention (C, FORMATETC);
+   pragma Convention (C, IEnumFORMATETCVtbl);
+   pragma Convention (C, STATDATA);
+   pragma Convention (C, IEnumSTATDATAVtbl);
+   pragma Convention (C_Pass_By_Copy, IRootStorageVtbl);
+   pragma Convention (C_Pass_By_Copy, RemSTGMEDIUM);
+   pragma Convention (C_Pass_By_Copy, STGMEDIUM);
+   pragma Convention (C, IAdviseSinkVtbl);
+   pragma Convention (C, IAdviseSink2Vtbl);
+   pragma Convention (C, IDataObjectVtbl);
+   pragma Convention (C, IDataAdviseHolderVtbl);
+   pragma Convention (C, INTERFACEINFO);
+   pragma Convention (C, IMessageFilterVtbl);
+   pragma Convention (C, RPCOLEMESSAGE);
    pragma Convention (C_Pass_By_Copy, IRpcChannelBufferVtbl);
-   --  objbase.h :7939
-   pragma Convention (C_Pass_By_Copy, IRpcChannelBuffer);   --  objbase.h :7977
-   pragma Convention (C, IRpcProxyBufferVtbl);              --  objbase.h :8113
-   pragma Convention (C_Pass_By_Copy, IRpcStubBufferVtbl);  --  objbase.h :8239
-   pragma Convention (C_Pass_By_Copy, IRpcStubBuffer);      --  objbase.h :8282
-   pragma Convention (C, IPSFactoryBufferVtbl);             --  objbase.h :8451
-   pragma Convention (C, IPersistStreamVtbl);               --  objbase.h :3781
-   pragma Convention (C, IMonikerVtbl);                     --  objbase.h :4027
+   pragma Convention (C_Pass_By_Copy, IRpcChannelBuffer);
+   pragma Convention (C, IRpcProxyBufferVtbl);
+   pragma Convention (C_Pass_By_Copy, IRpcStubBufferVtbl);
+   pragma Convention (C_Pass_By_Copy, IRpcStubBuffer);
+   pragma Convention (C, IPSFactoryBufferVtbl);
+   pragma Convention (C, IPersistStreamVtbl);
+   pragma Convention (C, IMonikerVtbl);
 
-   pragma Import (Stdcall, IWinTypes_v0_1_c_ifspec, "IWinTypes_v0_1_c_ifspec");
-   --  objbase.h :1110
-   pragma Import (Stdcall, IWinTypes_v0_1_s_ifspec, "IWinTypes_v0_1_s_ifspec");
-   --  objbase.h :1111
-   pragma Import (Stdcall, MIDL_intf_0000_v0_0_c_ifspec,
-                   "__MIDL__intf_0000_v0_0_c_ifspec");
-   --  objbase.h :1147
-   pragma Import (Stdcall, MIDL_intf_0000_v0_0_s_ifspec,
-                   "__MIDL__intf_0000_v0_0_s_ifspec");
-   --  objbase.h :1148
-   pragma Import (Stdcall, IID_IUnknown, "IID_IUnknown");   --  objbase.h :1432
+   pragma Import
+     (Stdcall,
+      IWinTypes_v0_1_c_ifspec,
+      "IWinTypes_v0_1_c_ifspec");
+   pragma Import
+     (Stdcall,
+      IWinTypes_v0_1_s_ifspec,
+      "IWinTypes_v0_1_s_ifspec");
+   pragma Import
+     (Stdcall,
+      MIDL_intf_0000_v0_0_c_ifspec,
+      "__MIDL__intf_0000_v0_0_c_ifspec");
+   pragma Import
+     (Stdcall,
+      MIDL_intf_0000_v0_0_s_ifspec,
+      "__MIDL__intf_0000_v0_0_s_ifspec");
+   pragma Import (Stdcall, IID_IUnknown, "IID_IUnknown");
    pragma Import (Stdcall, IID_IClassFactory, "IID_IClassFactory");
-   --  objbase.h :1547
-   pragma Import (Stdcall, IID_IMarshal, "IID_IMarshal");   --  objbase.h :1669
-   pragma Import (Stdcall, IID_IMalloc, "IID_IMalloc");     --  objbase.h :1925
+   pragma Import (Stdcall, IID_IMarshal, "IID_IMarshal");
+   pragma Import (Stdcall, IID_IMalloc, "IID_IMalloc");
    pragma Import (Stdcall, IID_IStdMarshalInfo, "IID_IStdMarshalInfo");
-   --  objbase.h :2130
-   pragma Import (Stdcall, IID_IExternalConnection, "IID_IExternalConnection");
-   --  objbase.h :2239
-   pragma Import (Stdcall, IID_IWeakRef, "IID_IWeakRef");   --  objbase.h :2365
+   pragma Import
+     (Stdcall,
+      IID_IExternalConnection,
+      "IID_IExternalConnection");
+   pragma Import (Stdcall, IID_IWeakRef, "IID_IWeakRef");
    pragma Import (Stdcall, IID_IEnumUnknown, "IID_IEnumUnknown");
-   --  objbase.h :2485
-   pragma Import (Stdcall, IID_IBindCtx, "IID_IBindCtx");   --  objbase.h :2671
+   pragma Import (Stdcall, IID_IBindCtx, "IID_IBindCtx");
    pragma Import (Stdcall, IID_IParseDisplayName, "IID_IParseDisplayName");
-   --  objbase.h :2967
    pragma Import (Stdcall, IID_IEnumMoniker, "IID_IEnumMoniker");
-   --  objbase.h :3071
    pragma Import (Stdcall, IID_IRunnableObject, "IID_IRunnableObject");
-   --  objbase.h :3235
-   pragma Import (Stdcall, IID_IRunningObjectTable, "IID_IRunningObjectTable");
-   --  objbase.h :3418
-   pragma Import (Stdcall, IID_IPersist, "IID_IPersist");   --  objbase.h :3663
+   pragma Import
+     (Stdcall,
+      IID_IRunningObjectTable,
+      "IID_IRunningObjectTable");
+   pragma Import (Stdcall, IID_IPersist, "IID_IPersist");
    pragma Import (Stdcall, IID_IPersistStream, "IID_IPersistStream");
-   --  objbase.h :3758
-   pragma Import (Stdcall, IID_IMoniker, "IID_IMoniker");   --  objbase.h :3947
+   pragma Import (Stdcall, IID_IMoniker, "IID_IMoniker");
    pragma Import (Stdcall, IID_IEnumString, "IID_IEnumString");
-   --  objbase.h :4459
-   pragma Import (Stdcall, IID_IStream, "IID_IStream");     --  objbase.h :4664
+   pragma Import (Stdcall, IID_IStream, "IID_IStream");
    pragma Import (Stdcall, IID_IEnumSTATSTG, "IID_IEnumSTATSTG");
-   --  objbase.h :5018
-   pragma Import (Stdcall, IID_IStorage, "IID_IStorage");   --  objbase.h :5195
+   pragma Import (Stdcall, IID_IStorage, "IID_IStorage");
    pragma Import (Stdcall, IID_IPersistFile, "IID_IPersistFile");
-   --  objbase.h :5693
    pragma Import (Stdcall, IID_IPersistStorage, "IID_IPersistStorage");
-   --  objbase.h :5887
    pragma Import (Stdcall, IID_ILockBytes, "IID_ILockBytes");
-   --  objbase.h :6097
    pragma Import (Stdcall, IID_IEnumFORMATETC, "IID_IEnumFORMATETC");
-   --  objbase.h :6384
    pragma Import (Stdcall, IID_IEnumSTATDATA, "IID_IEnumSTATDATA");
-   --  objbase.h :6572
    pragma Import (Stdcall, IID_IRootStorage, "IID_IRootStorage");
-   --  objbase.h :6736
    pragma Import (Stdcall, IID_IAdviseSink, "IID_IAdviseSink");
-   --  objbase.h :6894
    pragma Import (Stdcall, IID_IAdviseSink2, "IID_IAdviseSink2");
-   --  objbase.h :7077
    pragma Import (Stdcall, IID_IDataObject, "IID_IDataObject");
-   --  objbase.h :7215
    pragma Import (Stdcall, IID_IDataAdviseHolder, "IID_IDataAdviseHolder");
-   --  objbase.h :7513
    pragma Import (Stdcall, IID_IMessageFilter, "IID_IMessageFilter");
-   --  objbase.h :7736
    pragma Import (Stdcall, IID_IRpcChannelBuffer, "IID_IRpcChannelBuffer");
-   --  objbase.h :7911
    pragma Import (Stdcall, IID_IRpcProxyBuffer, "IID_IRpcProxyBuffer");
-   --  objbase.h :8097
    pragma Import (Stdcall, IID_IRpcStubBuffer, "IID_IRpcStubBuffer");
-   --  objbase.h :8208
    pragma Import (Stdcall, IID_IPSFactoryBuffer, "IID_IPSFactoryBuffer");
-   --  objbase.h :8429
    pragma Import (Stdcall, HGLOBAL_to_xmit, "HGLOBAL_to_xmit");
-   --  objbase.h :1084
    pragma Import (Stdcall, HGLOBAL_from_xmit, "HGLOBAL_from_xmit");
-   --  objbase.h :1085
    pragma Import (Stdcall, HGLOBAL_free_inst, "HGLOBAL_free_inst");
-   --  objbase.h :1086
    pragma Import (Stdcall, HGLOBAL_free_xmit, "HGLOBAL_free_xmit");
-   --  objbase.h :1087
    pragma Import (Stdcall, HBITMAP_to_xmit, "HBITMAP_to_xmit");
-   --  objbase.h :1088
    pragma Import (Stdcall, HBITMAP_from_xmit, "HBITMAP_from_xmit");
-   --  objbase.h :1089
    pragma Import (Stdcall, HBITMAP_free_inst, "HBITMAP_free_inst");
-   --  objbase.h :1090
    pragma Import (Stdcall, HBITMAP_free_xmit, "HBITMAP_free_xmit");
-   --  objbase.h :1091
    pragma Import (Stdcall, HPALETTE_to_xmit, "HPALETTE_to_xmit");
-   --  objbase.h :1092
    pragma Import (Stdcall, HPALETTE_from_xmit, "HPALETTE_from_xmit");
-   --  objbase.h :1093
    pragma Import (Stdcall, HPALETTE_free_inst, "HPALETTE_free_inst");
-   --  objbase.h :1094
    pragma Import (Stdcall, HPALETTE_free_xmit, "HPALETTE_free_xmit");
-   --  objbase.h :1095
    pragma Import (Stdcall, HBRUSH_to_xmit, "HBRUSH_to_xmit");
-   --  objbase.h :1096
    pragma Import (Stdcall, HBRUSH_from_xmit, "HBRUSH_from_xmit");
-   --  objbase.h :1097
    pragma Import (Stdcall, HBRUSH_free_inst, "HBRUSH_free_inst");
-   --  objbase.h :1098
    pragma Import (Stdcall, HBRUSH_free_xmit, "HBRUSH_free_xmit");
-   --  objbase.h :1099
    pragma Import (Stdcall, HMETAFILEPICT_to_xmit, "HMETAFILEPICT_to_xmit");
-   --  objbase.h :1100
-   pragma Import (Stdcall, HMETAFILEPICT_from_xmit, "HMETAFILEPICT_from_xmit");
-   --  objbase.h :1101
-   pragma Import (Stdcall, HMETAFILEPICT_free_inst, "HMETAFILEPICT_free_inst");
-   --  objbase.h :1102
-   pragma Import (Stdcall, HMETAFILEPICT_free_xmit, "HMETAFILEPICT_free_xmit");
-   --  objbase.h :1103
+   pragma Import
+     (Stdcall,
+      HMETAFILEPICT_from_xmit,
+      "HMETAFILEPICT_from_xmit");
+   pragma Import
+     (Stdcall,
+      HMETAFILEPICT_free_inst,
+      "HMETAFILEPICT_free_inst");
+   pragma Import
+     (Stdcall,
+      HMETAFILEPICT_free_xmit,
+      "HMETAFILEPICT_free_xmit");
    pragma Import (Stdcall, HENHMETAFILE_to_xmit, "HENHMETAFILE_to_xmit");
-   --  objbase.h :1104
    pragma Import (Stdcall, HENHMETAFILE_from_xmit, "HENHMETAFILE_from_xmit");
-   --  objbase.h :1105
    pragma Import (Stdcall, HENHMETAFILE_free_inst, "HENHMETAFILE_free_inst");
-   --  objbase.h :1106
    pragma Import (Stdcall, HENHMETAFILE_free_xmit, "HENHMETAFILE_free_xmit");
-   --  objbase.h :1107
-   pragma Import (Stdcall, IUnknown_QueryInterface_Proxy,
-                   "IUnknown_QueryInterface_Proxy");      --  objbase.h :1493
-   pragma Import (Stdcall, IUnknown_QueryInterface_Stub,
-                   "IUnknown_QueryInterface_Stub");       --  objbase.h :1499
+   pragma Import
+     (Stdcall,
+      IUnknown_QueryInterface_Proxy,
+      "IUnknown_QueryInterface_Proxy");
+   pragma Import
+     (Stdcall,
+      IUnknown_QueryInterface_Stub,
+      "IUnknown_QueryInterface_Stub");
    pragma Import (Stdcall, IUnknown_AddRef_Proxy, "IUnknown_AddRef_Proxy");
-   --  objbase.h :1506
    pragma Import (Stdcall, IUnknown_AddRef_Stub, "IUnknown_AddRef_Stub");
-   --  objbase.h :1510
    pragma Import (Stdcall, IUnknown_Release_Proxy, "IUnknown_Release_Proxy");
-   --  objbase.h :1517
    pragma Import (Stdcall, IUnknown_Release_Stub, "IUnknown_Release_Stub");
-   --  objbase.h :1521
-   pragma Import (Stdcall, IClassFactory_RemoteCreateInstance_Proxy,
-                   "IClassFactory_RemoteCreateInstance_Proxy");
-   --  objbase.h :1625
-   pragma Import (Stdcall, IClassFactory_RemoteCreateInstance_Stub,
-                   "IClassFactory_RemoteCreateInstance_Stub");
-   --  objbase.h :1631
-   pragma Import (Stdcall, IClassFactory_LockServer_Proxy,
-                   "IClassFactory_LockServer_Proxy");     --  objbase.h :1638
-   pragma Import (Stdcall, IClassFactory_LockServer_Stub,
-                   "IClassFactory_LockServer_Stub");      --  objbase.h :1643
-   pragma Import (Stdcall, IMarshal_GetUnmarshalClass_Proxy,
-                   "IMarshal_GetUnmarshalClass_Proxy");   --  objbase.h :1817
-   pragma Import (Stdcall, IMarshal_GetUnmarshalClass_Stub,
-                   "IMarshal_GetUnmarshalClass_Stub");    --  objbase.h :1827
-   pragma Import (Stdcall, IMarshal_GetMarshalSizeMax_Proxy,
-                   "IMarshal_GetMarshalSizeMax_Proxy");   --  objbase.h :1834
-   pragma Import (Stdcall, IMarshal_GetMarshalSizeMax_Stub,
-                   "IMarshal_GetMarshalSizeMax_Stub");    --  objbase.h :1844
-   pragma Import (Stdcall, IMarshal_MarshalInterface_Proxy,
-                   "IMarshal_MarshalInterface_Proxy");    --  objbase.h :1851
-   pragma Import (Stdcall, IMarshal_MarshalInterface_Stub,
-                   "IMarshal_MarshalInterface_Stub");     --  objbase.h :1861
-   pragma Import (Stdcall, IMarshal_UnmarshalInterface_Proxy,
-                   "IMarshal_UnmarshalInterface_Proxy");  --  objbase.h :1868
-   pragma Import (Stdcall, IMarshal_UnmarshalInterface_Stub,
-                   "IMarshal_UnmarshalInterface_Stub");   --  objbase.h :1875
-   pragma Import (Stdcall, IMarshal_ReleaseMarshalData_Proxy,
-                   "IMarshal_ReleaseMarshalData_Proxy");  --  objbase.h :1882
-   pragma Import (Stdcall, IMarshal_ReleaseMarshalData_Stub,
-                   "IMarshal_ReleaseMarshalData_Stub");   --  objbase.h :1887
-   pragma Import (Stdcall, IMarshal_DisconnectObject_Proxy,
-                   "IMarshal_DisconnectObject_Proxy");    --  objbase.h :1894
-   pragma Import (Stdcall, IMarshal_DisconnectObject_Stub,
-                   "IMarshal_DisconnectObject_Stub");     --  objbase.h :1899
-   pragma Import (Stdcall, IMalloc_Alloc_Proxy,
-                   "IMalloc_Alloc_Proxy");                --  objbase.h :2039
+   pragma Import
+     (Stdcall,
+      IClassFactory_RemoteCreateInstance_Proxy,
+      "IClassFactory_RemoteCreateInstance_Proxy");
+   pragma Import
+     (Stdcall,
+      IClassFactory_RemoteCreateInstance_Stub,
+      "IClassFactory_RemoteCreateInstance_Stub");
+   pragma Import
+     (Stdcall,
+      IClassFactory_LockServer_Proxy,
+      "IClassFactory_LockServer_Proxy");
+   pragma Import
+     (Stdcall,
+      IClassFactory_LockServer_Stub,
+      "IClassFactory_LockServer_Stub");
+   pragma Import
+     (Stdcall,
+      IMarshal_GetUnmarshalClass_Proxy,
+      "IMarshal_GetUnmarshalClass_Proxy");
+   pragma Import
+     (Stdcall,
+      IMarshal_GetUnmarshalClass_Stub,
+      "IMarshal_GetUnmarshalClass_Stub");
+   pragma Import
+     (Stdcall,
+      IMarshal_GetMarshalSizeMax_Proxy,
+      "IMarshal_GetMarshalSizeMax_Proxy");
+   pragma Import
+     (Stdcall,
+      IMarshal_GetMarshalSizeMax_Stub,
+      "IMarshal_GetMarshalSizeMax_Stub");
+   pragma Import
+     (Stdcall,
+      IMarshal_MarshalInterface_Proxy,
+      "IMarshal_MarshalInterface_Proxy");
+   pragma Import
+     (Stdcall,
+      IMarshal_MarshalInterface_Stub,
+      "IMarshal_MarshalInterface_Stub");
+   pragma Import
+     (Stdcall,
+      IMarshal_UnmarshalInterface_Proxy,
+      "IMarshal_UnmarshalInterface_Proxy");
+   pragma Import
+     (Stdcall,
+      IMarshal_UnmarshalInterface_Stub,
+      "IMarshal_UnmarshalInterface_Stub");
+   pragma Import
+     (Stdcall,
+      IMarshal_ReleaseMarshalData_Proxy,
+      "IMarshal_ReleaseMarshalData_Proxy");
+   pragma Import
+     (Stdcall,
+      IMarshal_ReleaseMarshalData_Stub,
+      "IMarshal_ReleaseMarshalData_Stub");
+   pragma Import
+     (Stdcall,
+      IMarshal_DisconnectObject_Proxy,
+      "IMarshal_DisconnectObject_Proxy");
+   pragma Import
+     (Stdcall,
+      IMarshal_DisconnectObject_Stub,
+      "IMarshal_DisconnectObject_Stub");
+   pragma Import (Stdcall, IMalloc_Alloc_Proxy, "IMalloc_Alloc_Proxy");
    pragma Import (Stdcall, IMalloc_Alloc_Stub, "IMalloc_Alloc_Stub");
-   --  objbase.h :2044
    pragma Import (Stdcall, IMalloc_Realloc_Proxy, "IMalloc_Realloc_Proxy");
-   --  objbase.h :2051
    pragma Import (Stdcall, IMalloc_Realloc_Stub, "IMalloc_Realloc_Stub");
-   --  objbase.h :2057
    pragma Import (Stdcall, IMalloc_Free_Proxy, "IMalloc_Free_Proxy");
-   --  objbase.h :2064
    pragma Import (Stdcall, IMalloc_Free_Stub, "IMalloc_Free_Stub");
-   --  objbase.h :2069
    pragma Import (Stdcall, IMalloc_GetSize_Proxy, "IMalloc_GetSize_Proxy");
-   --  objbase.h :2076
    pragma Import (Stdcall, IMalloc_GetSize_Stub, "IMalloc_GetSize_Stub");
-   --  objbase.h :2081
    pragma Import (Stdcall, IMalloc_DidAlloc_Proxy, "IMalloc_DidAlloc_Proxy");
-   --  objbase.h :2088
    pragma Import (Stdcall, IMalloc_DidAlloc_Stub, "IMalloc_DidAlloc_Stub");
-   --  objbase.h :2093
-   pragma Import (Stdcall, IMalloc_HeapMinimize_Proxy,
-                  "IMalloc_HeapMinimize_Proxy");
-   --  objbase.h :2100
-   pragma Import (Stdcall, IMalloc_HeapMinimize_Stub,
-                  "IMalloc_HeapMinimize_Stub");
-   --  objbase.h :2104
-   pragma Import (Stdcall, IStdMarshalInfo_GetClassForHandler_Proxy,
-                  "IStdMarshalInfo_GetClassForHandler_Proxy");
-   --  objbase.h :2198
-   pragma Import (Stdcall, IStdMarshalInfo_GetClassForHandler_Stub,
-                  "IStdMarshalInfo_GetClassForHandler_Stub");
-   --  objbase.h :2205
-   pragma Import (Stdcall, IExternalConnection_AddConnection_Proxy,
-                  "IExternalConnection_AddConnection_Proxy");
-   --  objbase.h :2319
-   pragma Import (Stdcall, IExternalConnection_AddConnection_Stub,
-                  "IExternalConnection_AddConnection_Stub");
-   --  objbase.h :2325
-   pragma Import (Stdcall, IExternalConnection_ReleaseConnection_Proxy,
-                  "IExternalConnection_ReleaseConnection_Proxy");
-   --  objbase.h :2332
-   pragma Import (Stdcall, IExternalConnection_ReleaseConnection_Stub,
-                   "IExternalConnection_ReleaseConnection_Stub");
-   --  objbase.h :2339
-   pragma Import (Stdcall, IWeakRef_ChangeWeakCount_Proxy,
-                   "IWeakRef_ChangeWeakCount_Proxy");     --  objbase.h :2441
-   pragma Import (Stdcall, IWeakRef_ChangeWeakCount_Stub,
-                   "IWeakRef_ChangeWeakCount_Stub");      --  objbase.h :2446
-   pragma Import (Stdcall, IWeakRef_ReleaseKeepAlive_Proxy,
-                   "IWeakRef_ReleaseKeepAlive_Proxy");    --  objbase.h :2453
-   pragma Import (Stdcall, IWeakRef_ReleaseKeepAlive_Stub,
-                   "IWeakRef_ReleaseKeepAlive_Stub");     --  objbase.h :2459
-   pragma Import (Stdcall, IEnumUnknown_RemoteNext_Proxy,
-                   "IEnumUnknown_RemoteNext_Proxy");      --  objbase.h :2581
-   pragma Import (Stdcall, IEnumUnknown_RemoteNext_Stub,
-                   "IEnumUnknown_RemoteNext_Stub");       --  objbase.h :2588
-   pragma Import (Stdcall, IEnumUnknown_Skip_Proxy, "IEnumUnknown_Skip_Proxy");
-   --  objbase.h :2595
+   pragma Import
+     (Stdcall,
+      IMalloc_HeapMinimize_Proxy,
+      "IMalloc_HeapMinimize_Proxy");
+   pragma Import
+     (Stdcall,
+      IMalloc_HeapMinimize_Stub,
+      "IMalloc_HeapMinimize_Stub");
+   pragma Import
+     (Stdcall,
+      IStdMarshalInfo_GetClassForHandler_Proxy,
+      "IStdMarshalInfo_GetClassForHandler_Proxy");
+   pragma Import
+     (Stdcall,
+      IStdMarshalInfo_GetClassForHandler_Stub,
+      "IStdMarshalInfo_GetClassForHandler_Stub");
+   pragma Import
+     (Stdcall,
+      IExternalConnection_AddConnection_Proxy,
+      "IExternalConnection_AddConnection_Proxy");
+   pragma Import
+     (Stdcall,
+      IExternalConnection_AddConnection_Stub,
+      "IExternalConnection_AddConnection_Stub");
+   pragma Import
+     (Stdcall,
+      IExternalConnection_ReleaseConnection_Proxy,
+      "IExternalConnection_ReleaseConnection_Proxy");
+   pragma Import
+     (Stdcall,
+      IExternalConnection_ReleaseConnection_Stub,
+      "IExternalConnection_ReleaseConnection_Stub");
+   pragma Import
+     (Stdcall,
+      IWeakRef_ChangeWeakCount_Proxy,
+      "IWeakRef_ChangeWeakCount_Proxy");
+   pragma Import
+     (Stdcall,
+      IWeakRef_ChangeWeakCount_Stub,
+      "IWeakRef_ChangeWeakCount_Stub");
+   pragma Import
+     (Stdcall,
+      IWeakRef_ReleaseKeepAlive_Proxy,
+      "IWeakRef_ReleaseKeepAlive_Proxy");
+   pragma Import
+     (Stdcall,
+      IWeakRef_ReleaseKeepAlive_Stub,
+      "IWeakRef_ReleaseKeepAlive_Stub");
+   pragma Import
+     (Stdcall,
+      IEnumUnknown_RemoteNext_Proxy,
+      "IEnumUnknown_RemoteNext_Proxy");
+   pragma Import
+     (Stdcall,
+      IEnumUnknown_RemoteNext_Stub,
+      "IEnumUnknown_RemoteNext_Stub");
+   pragma Import
+     (Stdcall,
+      IEnumUnknown_Skip_Proxy,
+      "IEnumUnknown_Skip_Proxy");
    pragma Import (Stdcall, IEnumUnknown_Skip_Stub, "IEnumUnknown_Skip_Stub");
-   --  objbase.h :2600
-   pragma Import (Stdcall, IEnumUnknown_Reset_Proxy,
-                    "IEnumUnknown_Reset_Proxy");
-   --  objbase.h :2607
-   pragma Import (Stdcall, IEnumUnknown_Reset_Stub, "IEnumUnknown_Reset_Stub");
-   --  objbase.h :2611
-   pragma Import (Stdcall, IEnumUnknown_Clone_Proxy,
-                    "IEnumUnknown_Clone_Proxy");
-   --  objbase.h :2618
-   pragma Import (Stdcall, IEnumUnknown_Clone_Stub, "IEnumUnknown_Clone_Stub");
-   --  objbase.h :2623
-   pragma Import (Stdcall, IBindCtx_RegisterObjectBound_Proxy,
-                   "IBindCtx_RegisterObjectBound_Proxy"); --  objbase.h :2827
-   pragma Import (Stdcall, IBindCtx_RegisterObjectBound_Stub,
-                   "IBindCtx_RegisterObjectBound_Stub");  --  objbase.h :2832
-   pragma Import (Stdcall, IBindCtx_RevokeObjectBound_Proxy,
-                   "IBindCtx_RevokeObjectBound_Proxy");   --  objbase.h :2839
-   pragma Import (Stdcall, IBindCtx_RevokeObjectBound_Stub,
-                   "IBindCtx_RevokeObjectBound_Stub");    --  objbase.h :2844
-   pragma Import (Stdcall, IBindCtx_ReleaseBoundObjects_Proxy,
-                   "IBindCtx_ReleaseBoundObjects_Proxy"); --  objbase.h :2851
-   pragma Import (Stdcall, IBindCtx_ReleaseBoundObjects_Stub,
-                   "IBindCtx_ReleaseBoundObjects_Stub");  --  objbase.h :2855
-   pragma Import (Stdcall, IBindCtx_SetBindOptions_Proxy,
-                   "IBindCtx_SetBindOptions_Proxy");      --  objbase.h :2862
-   pragma Import (Stdcall, IBindCtx_SetBindOptions_Stub,
-                   "IBindCtx_SetBindOptions_Stub");       --  objbase.h :2867
-   pragma Import (Stdcall, IBindCtx_GetBindOptions_Proxy,
-                   "IBindCtx_GetBindOptions_Proxy");      --  objbase.h :2874
-   pragma Import (Stdcall, IBindCtx_GetBindOptions_Stub,
-                   "IBindCtx_GetBindOptions_Stub");       --  objbase.h :2879
-   pragma Import (Stdcall, IBindCtx_GetRunningObjectTable_Proxy,
-                   "IBindCtx_GetRunningObjectTable_Proxy");
-   --  objbase.h :2886
-   pragma Import (Stdcall, IBindCtx_GetRunningObjectTable_Stub,
-                   "IBindCtx_GetRunningObjectTable_Stub"); --  objbase.h :2891
-   pragma Import (Stdcall, IBindCtx_RegisterObjectParam_Proxy,
-                   "IBindCtx_RegisterObjectParam_Proxy"); --  objbase.h :2898
-   pragma Import (Stdcall, IBindCtx_RegisterObjectParam_Stub,
-                   "IBindCtx_RegisterObjectParam_Stub");  --  objbase.h :2904
-   pragma Import (Stdcall, IBindCtx_GetObjectParam_Proxy,
-                   "IBindCtx_GetObjectParam_Proxy");      --  objbase.h :2911
-   pragma Import (Stdcall, IBindCtx_GetObjectParam_Stub,
-                   "IBindCtx_GetObjectParam_Stub");       --  objbase.h :2917
-   pragma Import (Stdcall, IBindCtx_EnumObjectParam_Proxy,
-                   "IBindCtx_EnumObjectParam_Proxy");     --  objbase.h :2924
-   pragma Import (Stdcall, IBindCtx_EnumObjectParam_Stub,
-                   "IBindCtx_EnumObjectParam_Stub");      --  objbase.h :2929
-   pragma Import (Stdcall, IBindCtx_RevokeObjectParam_Proxy,
-                   "IBindCtx_RevokeObjectParam_Proxy");   --  objbase.h :2936
-   pragma Import (Stdcall, IBindCtx_RevokeObjectParam_Stub,
-                   "IBindCtx_RevokeObjectParam_Stub");    --  objbase.h :2941
-   pragma Import (Stdcall, IParseDisplayName_ParseDisplayName_Proxy,
-                   "IParseDisplayName_ParseDisplayName_Proxy");
-   --  objbase.h :3037
-   pragma Import (Stdcall, IParseDisplayName_ParseDisplayName_Stub,
-                   "IParseDisplayName_ParseDisplayName_Stub");
-   --  objbase.h :3045
-   pragma Import (Stdcall, IEnumMoniker_RemoteNext_Proxy,
-                   "IEnumMoniker_RemoteNext_Proxy");      --  objbase.h :3167
-   pragma Import (Stdcall, IEnumMoniker_RemoteNext_Stub,
-                   "IEnumMoniker_RemoteNext_Stub");       --  objbase.h :3174
-   pragma Import (Stdcall, IEnumMoniker_Skip_Proxy, "IEnumMoniker_Skip_Proxy");
-   --  objbase.h :3181
+   pragma Import
+     (Stdcall,
+      IEnumUnknown_Reset_Proxy,
+      "IEnumUnknown_Reset_Proxy");
+   pragma Import
+     (Stdcall,
+      IEnumUnknown_Reset_Stub,
+      "IEnumUnknown_Reset_Stub");
+   pragma Import
+     (Stdcall,
+      IEnumUnknown_Clone_Proxy,
+      "IEnumUnknown_Clone_Proxy");
+   pragma Import
+     (Stdcall,
+      IEnumUnknown_Clone_Stub,
+      "IEnumUnknown_Clone_Stub");
+   pragma Import
+     (Stdcall,
+      IBindCtx_RegisterObjectBound_Proxy,
+      "IBindCtx_RegisterObjectBound_Proxy");
+   pragma Import
+     (Stdcall,
+      IBindCtx_RegisterObjectBound_Stub,
+      "IBindCtx_RegisterObjectBound_Stub");
+   pragma Import
+     (Stdcall,
+      IBindCtx_RevokeObjectBound_Proxy,
+      "IBindCtx_RevokeObjectBound_Proxy");
+   pragma Import
+     (Stdcall,
+      IBindCtx_RevokeObjectBound_Stub,
+      "IBindCtx_RevokeObjectBound_Stub");
+   pragma Import
+     (Stdcall,
+      IBindCtx_ReleaseBoundObjects_Proxy,
+      "IBindCtx_ReleaseBoundObjects_Proxy");
+   pragma Import
+     (Stdcall,
+      IBindCtx_ReleaseBoundObjects_Stub,
+      "IBindCtx_ReleaseBoundObjects_Stub");
+   pragma Import
+     (Stdcall,
+      IBindCtx_SetBindOptions_Proxy,
+      "IBindCtx_SetBindOptions_Proxy");
+   pragma Import
+     (Stdcall,
+      IBindCtx_SetBindOptions_Stub,
+      "IBindCtx_SetBindOptions_Stub");
+   pragma Import
+     (Stdcall,
+      IBindCtx_GetBindOptions_Proxy,
+      "IBindCtx_GetBindOptions_Proxy");
+   pragma Import
+     (Stdcall,
+      IBindCtx_GetBindOptions_Stub,
+      "IBindCtx_GetBindOptions_Stub");
+   pragma Import
+     (Stdcall,
+      IBindCtx_GetRunningObjectTable_Proxy,
+      "IBindCtx_GetRunningObjectTable_Proxy");
+   pragma Import
+     (Stdcall,
+      IBindCtx_GetRunningObjectTable_Stub,
+      "IBindCtx_GetRunningObjectTable_Stub");
+   pragma Import
+     (Stdcall,
+      IBindCtx_RegisterObjectParam_Proxy,
+      "IBindCtx_RegisterObjectParam_Proxy");
+   pragma Import
+     (Stdcall,
+      IBindCtx_RegisterObjectParam_Stub,
+      "IBindCtx_RegisterObjectParam_Stub");
+   pragma Import
+     (Stdcall,
+      IBindCtx_GetObjectParam_Proxy,
+      "IBindCtx_GetObjectParam_Proxy");
+   pragma Import
+     (Stdcall,
+      IBindCtx_GetObjectParam_Stub,
+      "IBindCtx_GetObjectParam_Stub");
+   pragma Import
+     (Stdcall,
+      IBindCtx_EnumObjectParam_Proxy,
+      "IBindCtx_EnumObjectParam_Proxy");
+   pragma Import
+     (Stdcall,
+      IBindCtx_EnumObjectParam_Stub,
+      "IBindCtx_EnumObjectParam_Stub");
+   pragma Import
+     (Stdcall,
+      IBindCtx_RevokeObjectParam_Proxy,
+      "IBindCtx_RevokeObjectParam_Proxy");
+   pragma Import
+     (Stdcall,
+      IBindCtx_RevokeObjectParam_Stub,
+      "IBindCtx_RevokeObjectParam_Stub");
+   pragma Import
+     (Stdcall,
+      IParseDisplayName_ParseDisplayName_Proxy,
+      "IParseDisplayName_ParseDisplayName_Proxy");
+   pragma Import
+     (Stdcall,
+      IParseDisplayName_ParseDisplayName_Stub,
+      "IParseDisplayName_ParseDisplayName_Stub");
+   pragma Import
+     (Stdcall,
+      IEnumMoniker_RemoteNext_Proxy,
+      "IEnumMoniker_RemoteNext_Proxy");
+   pragma Import
+     (Stdcall,
+      IEnumMoniker_RemoteNext_Stub,
+      "IEnumMoniker_RemoteNext_Stub");
+   pragma Import
+     (Stdcall,
+      IEnumMoniker_Skip_Proxy,
+      "IEnumMoniker_Skip_Proxy");
    pragma Import (Stdcall, IEnumMoniker_Skip_Stub, "IEnumMoniker_Skip_Stub");
-   --  objbase.h :3186
-   pragma Import (Stdcall, IEnumMoniker_Reset_Proxy,
-                    "IEnumMoniker_Reset_Proxy");
-   --  objbase.h :3193
-   pragma Import (Stdcall, IEnumMoniker_Reset_Stub, "IEnumMoniker_Reset_Stub");
-   --  objbase.h :3197
-   pragma Import (Stdcall, IEnumMoniker_Clone_Proxy,
-                    "IEnumMoniker_Clone_Proxy");
-   --  objbase.h :3204
-   pragma Import (Stdcall, IEnumMoniker_Clone_Stub, "IEnumMoniker_Clone_Stub");
-   --  objbase.h :3209
-   pragma Import (Stdcall, IRunnableObject_GetRunningClass_Proxy,
-                   "IRunnableObject_GetRunningClass_Proxy");
-   --  objbase.h :3339
-   pragma Import (Stdcall, IRunnableObject_GetRunningClass_Stub,
-                   "IRunnableObject_GetRunningClass_Stub");
-   --  objbase.h :3344
-   pragma Import (Stdcall, IRunnableObject_Run_Proxy,
-                    "IRunnableObject_Run_Proxy");
-   --  objbase.h :3351
-   pragma Import (Stdcall, IRunnableObject_Run_Stub,
-                    "IRunnableObject_Run_Stub");
-   --  objbase.h :3356
-   pragma Import (Stdcall, IRunnableObject_IsRunning_Proxy,
-                   "IRunnableObject_IsRunning_Proxy");    --  objbase.h :3363
-   pragma Import (Stdcall, IRunnableObject_IsRunning_Stub,
-                   "IRunnableObject_IsRunning_Stub");     --  objbase.h :3367
-   pragma Import (Stdcall, IRunnableObject_LockRunning_Proxy,
-                   "IRunnableObject_LockRunning_Proxy");  --  objbase.h :3374
-   pragma Import (Stdcall, IRunnableObject_LockRunning_Stub,
-                   "IRunnableObject_LockRunning_Stub");   --  objbase.h :3380
-   pragma Import (Stdcall, IRunnableObject_SetContainedObject_Proxy,
-                   "IRunnableObject_SetContainedObject_Proxy");
-   --  objbase.h :3387
-   pragma Import (Stdcall, IRunnableObject_SetContainedObject_Stub,
-                   "IRunnableObject_SetContainedObject_Stub");
-   --  objbase.h :3392
-   pragma Import (Stdcall, IRunningObjectTable_Register_Proxy,
-                   "IRunningObjectTable_Register_Proxy"); --  objbase.h :3554
-   pragma Import (Stdcall, IRunningObjectTable_Register_Stub,
-                   "IRunningObjectTable_Register_Stub");  --  objbase.h :3562
-   pragma Import (Stdcall, IRunningObjectTable_Revoke_Proxy,
-                   "IRunningObjectTable_Revoke_Proxy");   --  objbase.h :3569
-   pragma Import (Stdcall, IRunningObjectTable_Revoke_Stub,
-                   "IRunningObjectTable_Revoke_Stub");    --  objbase.h :3574
-   pragma Import (Stdcall, IRunningObjectTable_IsRunning_Proxy,
-                   "IRunningObjectTable_IsRunning_Proxy"); --  objbase.h :3581
-   pragma Import (Stdcall, IRunningObjectTable_IsRunning_Stub,
-                   "IRunningObjectTable_IsRunning_Stub"); --  objbase.h :3586
-   pragma Import (Stdcall, IRunningObjectTable_GetObject_Proxy,
-                   "IRunningObjectTable_GetObject_Proxy"); --  objbase.h :3593
-   pragma Import (Stdcall, IRunningObjectTable_GetObject_Stub,
-                   "IRunningObjectTable_GetObject_Stub"); --  objbase.h :3599
-   pragma Import (Stdcall, IRunningObjectTable_NoteChangeTime_Proxy,
-                   "IRunningObjectTable_NoteChangeTime_Proxy");
-   --  objbase.h :3606
-   pragma Import (Stdcall, IRunningObjectTable_NoteChangeTime_Stub,
-                   "IRunningObjectTable_NoteChangeTime_Stub");
-   --  objbase.h :3612
-   pragma Import (Stdcall, IRunningObjectTable_GetTimeOfLastChange_Proxy,
-                   "IRunningObjectTable_GetTimeOfLastChange_Proxy");
-   --  objbase.h :3619
-   pragma Import (Stdcall, IRunningObjectTable_GetTimeOfLastChange_Stub,
-                   "IRunningObjectTable_GetTimeOfLastChange_Stub");
-   --  objbase.h :3625
-   pragma Import (Stdcall, IRunningObjectTable_EnumRunning_Proxy,
-                   "IRunningObjectTable_EnumRunning_Proxy");
-   --  objbase.h :3632
-   pragma Import (Stdcall, IRunningObjectTable_EnumRunning_Stub,
-                   "IRunningObjectTable_EnumRunning_Stub");
-   --  objbase.h :3637
-   pragma Import (Stdcall, IPersist_GetClassID_Proxy,
-                    "IPersist_GetClassID_Proxy");
-   --  objbase.h :3727
-   pragma Import (Stdcall, IPersist_GetClassID_Stub,
-                    "IPersist_GetClassID_Stub");
-   --  objbase.h :3732
-   pragma Import (Stdcall, IPersistStream_IsDirty_Proxy,
-                   "IPersistStream_IsDirty_Proxy");       --  objbase.h :3860
-   pragma Import (Stdcall, IPersistStream_IsDirty_Stub,
-                   "IPersistStream_IsDirty_Stub");        --  objbase.h :3864
-   pragma Import (Stdcall, IPersistStream_Load_Proxy,
-                    "IPersistStream_Load_Proxy");
-   --  objbase.h :3871
-   pragma Import (Stdcall, IPersistStream_Load_Stub,
-                    "IPersistStream_Load_Stub");
-   --  objbase.h :3876
-   pragma Import (Stdcall, IPersistStream_Save_Proxy,
-                    "IPersistStream_Save_Proxy");
-   --  objbase.h :3883
-   pragma Import (Stdcall, IPersistStream_Save_Stub,
-                    "IPersistStream_Save_Stub");
-   --  objbase.h :3889
-   pragma Import (Stdcall, IPersistStream_GetSizeMax_Proxy,
-                   "IPersistStream_GetSizeMax_Proxy");    --  objbase.h :3896
-   pragma Import (Stdcall, IPersistStream_GetSizeMax_Stub,
-                   "IPersistStream_GetSizeMax_Stub");     --  objbase.h :3901
-   pragma Import (Stdcall, IMoniker_RemoteBindToObject_Proxy,
-                   "IMoniker_RemoteBindToObject_Proxy");  --  objbase.h :4236
-   pragma Import (Stdcall, IMoniker_RemoteBindToObject_Stub,
-                   "IMoniker_RemoteBindToObject_Stub");   --  objbase.h :4244
-   pragma Import (Stdcall, IMoniker_RemoteBindToStorage_Proxy,
-                   "IMoniker_RemoteBindToStorage_Proxy"); --  objbase.h :4251
-   pragma Import (Stdcall, IMoniker_RemoteBindToStorage_Stub,
-                   "IMoniker_RemoteBindToStorage_Stub");  --  objbase.h :4259
+   pragma Import
+     (Stdcall,
+      IEnumMoniker_Reset_Proxy,
+      "IEnumMoniker_Reset_Proxy");
+   pragma Import
+     (Stdcall,
+      IEnumMoniker_Reset_Stub,
+      "IEnumMoniker_Reset_Stub");
+   pragma Import
+     (Stdcall,
+      IEnumMoniker_Clone_Proxy,
+      "IEnumMoniker_Clone_Proxy");
+   pragma Import
+     (Stdcall,
+      IEnumMoniker_Clone_Stub,
+      "IEnumMoniker_Clone_Stub");
+   pragma Import
+     (Stdcall,
+      IRunnableObject_GetRunningClass_Proxy,
+      "IRunnableObject_GetRunningClass_Proxy");
+   pragma Import
+     (Stdcall,
+      IRunnableObject_GetRunningClass_Stub,
+      "IRunnableObject_GetRunningClass_Stub");
+   pragma Import
+     (Stdcall,
+      IRunnableObject_Run_Proxy,
+      "IRunnableObject_Run_Proxy");
+   pragma Import
+     (Stdcall,
+      IRunnableObject_Run_Stub,
+      "IRunnableObject_Run_Stub");
+   pragma Import
+     (Stdcall,
+      IRunnableObject_IsRunning_Proxy,
+      "IRunnableObject_IsRunning_Proxy");
+   pragma Import
+     (Stdcall,
+      IRunnableObject_IsRunning_Stub,
+      "IRunnableObject_IsRunning_Stub");
+   pragma Import
+     (Stdcall,
+      IRunnableObject_LockRunning_Proxy,
+      "IRunnableObject_LockRunning_Proxy");
+   pragma Import
+     (Stdcall,
+      IRunnableObject_LockRunning_Stub,
+      "IRunnableObject_LockRunning_Stub");
+   pragma Import
+     (Stdcall,
+      IRunnableObject_SetContainedObject_Proxy,
+      "IRunnableObject_SetContainedObject_Proxy");
+   pragma Import
+     (Stdcall,
+      IRunnableObject_SetContainedObject_Stub,
+      "IRunnableObject_SetContainedObject_Stub");
+   pragma Import
+     (Stdcall,
+      IRunningObjectTable_Register_Proxy,
+      "IRunningObjectTable_Register_Proxy");
+   pragma Import
+     (Stdcall,
+      IRunningObjectTable_Register_Stub,
+      "IRunningObjectTable_Register_Stub");
+   pragma Import
+     (Stdcall,
+      IRunningObjectTable_Revoke_Proxy,
+      "IRunningObjectTable_Revoke_Proxy");
+   pragma Import
+     (Stdcall,
+      IRunningObjectTable_Revoke_Stub,
+      "IRunningObjectTable_Revoke_Stub");
+   pragma Import
+     (Stdcall,
+      IRunningObjectTable_IsRunning_Proxy,
+      "IRunningObjectTable_IsRunning_Proxy");
+   pragma Import
+     (Stdcall,
+      IRunningObjectTable_IsRunning_Stub,
+      "IRunningObjectTable_IsRunning_Stub");
+   pragma Import
+     (Stdcall,
+      IRunningObjectTable_GetObject_Proxy,
+      "IRunningObjectTable_GetObject_Proxy");
+   pragma Import
+     (Stdcall,
+      IRunningObjectTable_GetObject_Stub,
+      "IRunningObjectTable_GetObject_Stub");
+   pragma Import
+     (Stdcall,
+      IRunningObjectTable_NoteChangeTime_Proxy,
+      "IRunningObjectTable_NoteChangeTime_Proxy");
+   pragma Import
+     (Stdcall,
+      IRunningObjectTable_NoteChangeTime_Stub,
+      "IRunningObjectTable_NoteChangeTime_Stub");
+   pragma Import
+     (Stdcall,
+      IRunningObjectTable_GetTimeOfLastChange_Proxy,
+      "IRunningObjectTable_GetTimeOfLastChange_Proxy");
+   pragma Import
+     (Stdcall,
+      IRunningObjectTable_GetTimeOfLastChange_Stub,
+      "IRunningObjectTable_GetTimeOfLastChange_Stub");
+   pragma Import
+     (Stdcall,
+      IRunningObjectTable_EnumRunning_Proxy,
+      "IRunningObjectTable_EnumRunning_Proxy");
+   pragma Import
+     (Stdcall,
+      IRunningObjectTable_EnumRunning_Stub,
+      "IRunningObjectTable_EnumRunning_Stub");
+   pragma Import
+     (Stdcall,
+      IPersist_GetClassID_Proxy,
+      "IPersist_GetClassID_Proxy");
+   pragma Import
+     (Stdcall,
+      IPersist_GetClassID_Stub,
+      "IPersist_GetClassID_Stub");
+   pragma Import
+     (Stdcall,
+      IPersistStream_IsDirty_Proxy,
+      "IPersistStream_IsDirty_Proxy");
+   pragma Import
+     (Stdcall,
+      IPersistStream_IsDirty_Stub,
+      "IPersistStream_IsDirty_Stub");
+   pragma Import
+     (Stdcall,
+      IPersistStream_Load_Proxy,
+      "IPersistStream_Load_Proxy");
+   pragma Import
+     (Stdcall,
+      IPersistStream_Load_Stub,
+      "IPersistStream_Load_Stub");
+   pragma Import
+     (Stdcall,
+      IPersistStream_Save_Proxy,
+      "IPersistStream_Save_Proxy");
+   pragma Import
+     (Stdcall,
+      IPersistStream_Save_Stub,
+      "IPersistStream_Save_Stub");
+   pragma Import
+     (Stdcall,
+      IPersistStream_GetSizeMax_Proxy,
+      "IPersistStream_GetSizeMax_Proxy");
+   pragma Import
+     (Stdcall,
+      IPersistStream_GetSizeMax_Stub,
+      "IPersistStream_GetSizeMax_Stub");
+   pragma Import
+     (Stdcall,
+      IMoniker_RemoteBindToObject_Proxy,
+      "IMoniker_RemoteBindToObject_Proxy");
+   pragma Import
+     (Stdcall,
+      IMoniker_RemoteBindToObject_Stub,
+      "IMoniker_RemoteBindToObject_Stub");
+   pragma Import
+     (Stdcall,
+      IMoniker_RemoteBindToStorage_Proxy,
+      "IMoniker_RemoteBindToStorage_Proxy");
+   pragma Import
+     (Stdcall,
+      IMoniker_RemoteBindToStorage_Stub,
+      "IMoniker_RemoteBindToStorage_Stub");
    pragma Import (Stdcall, IMoniker_Reduce_Proxy, "IMoniker_Reduce_Proxy");
-   --  objbase.h :4266
    pragma Import (Stdcall, IMoniker_Reduce_Stub, "IMoniker_Reduce_Stub");
-   --  objbase.h :4274
-   pragma Import (Stdcall, IMoniker_ComposeWith_Proxy,
-                    "IMoniker_ComposeWith_Proxy");
-   --  objbase.h :4281
-   pragma Import (Stdcall, IMoniker_ComposeWith_Stub,
-                    "IMoniker_ComposeWith_Stub");
-   --  objbase.h :4288
+   pragma Import
+     (Stdcall,
+      IMoniker_ComposeWith_Proxy,
+      "IMoniker_ComposeWith_Proxy");
+   pragma Import
+     (Stdcall,
+      IMoniker_ComposeWith_Stub,
+      "IMoniker_ComposeWith_Stub");
    pragma Import (Stdcall, IMoniker_Enum_Proxy, "IMoniker_Enum_Proxy");
-   --  objbase.h :4295
    pragma Import (Stdcall, IMoniker_Enum_Stub, "IMoniker_Enum_Stub");
-   --  objbase.h :4301
    pragma Import (Stdcall, IMoniker_IsEqual_Proxy, "IMoniker_IsEqual_Proxy");
-   --  objbase.h :4308
    pragma Import (Stdcall, IMoniker_IsEqual_Stub, "IMoniker_IsEqual_Stub");
-   --  objbase.h :4313
    pragma Import (Stdcall, IMoniker_Hash_Proxy, "IMoniker_Hash_Proxy");
-   --  objbase.h :4320
    pragma Import (Stdcall, IMoniker_Hash_Stub, "IMoniker_Hash_Stub");
-   --  objbase.h :4325
-   pragma Import (Stdcall, IMoniker_IsRunning_Proxy,
-                    "IMoniker_IsRunning_Proxy");
-   --  objbase.h :4332
-   pragma Import (Stdcall, IMoniker_IsRunning_Stub, "IMoniker_IsRunning_Stub");
-   --  objbase.h :4339
-   pragma Import (Stdcall, IMoniker_GetTimeOfLastChange_Proxy,
-                   "IMoniker_GetTimeOfLastChange_Proxy"); --  objbase.h :4346
-   pragma Import (Stdcall, IMoniker_GetTimeOfLastChange_Stub,
-                   "IMoniker_GetTimeOfLastChange_Stub");  --  objbase.h :4353
+   pragma Import
+     (Stdcall,
+      IMoniker_IsRunning_Proxy,
+      "IMoniker_IsRunning_Proxy");
+   pragma Import
+     (Stdcall,
+      IMoniker_IsRunning_Stub,
+      "IMoniker_IsRunning_Stub");
+   pragma Import
+     (Stdcall,
+      IMoniker_GetTimeOfLastChange_Proxy,
+      "IMoniker_GetTimeOfLastChange_Proxy");
+   pragma Import
+     (Stdcall,
+      IMoniker_GetTimeOfLastChange_Stub,
+      "IMoniker_GetTimeOfLastChange_Stub");
    pragma Import (Stdcall, IMoniker_Inverse_Proxy, "IMoniker_Inverse_Proxy");
-   --  objbase.h :4360
    pragma Import (Stdcall, IMoniker_Inverse_Stub, "IMoniker_Inverse_Stub");
-   --  objbase.h :4365
-   pragma Import (Stdcall, IMoniker_CommonPrefixWith_Proxy,
-                   "IMoniker_CommonPrefixWith_Proxy");    --  objbase.h :4372
-   pragma Import (Stdcall, IMoniker_CommonPrefixWith_Stub,
-                   "IMoniker_CommonPrefixWith_Stub");     --  objbase.h :4378
-   pragma Import (Stdcall, IMoniker_RelativePathTo_Proxy,
-                   "IMoniker_RelativePathTo_Proxy");      --  objbase.h :4385
-   pragma Import (Stdcall, IMoniker_RelativePathTo_Stub,
-                   "IMoniker_RelativePathTo_Stub");       --  objbase.h :4391
-   pragma Import (Stdcall, IMoniker_GetDisplayName_Proxy,
-                   "IMoniker_GetDisplayName_Proxy");      --  objbase.h :4398
-   pragma Import (Stdcall, IMoniker_GetDisplayName_Stub,
-                   "IMoniker_GetDisplayName_Stub");       --  objbase.h :4405
-   pragma Import (Stdcall, IMoniker_ParseDisplayName_Proxy,
-                   "IMoniker_ParseDisplayName_Proxy");    --  objbase.h :4412
-   pragma Import (Stdcall, IMoniker_ParseDisplayName_Stub,
-                   "IMoniker_ParseDisplayName_Stub");     --  objbase.h :4421
-   pragma Import (Stdcall, IMoniker_IsSystemMoniker_Proxy,
-                   "IMoniker_IsSystemMoniker_Proxy");     --  objbase.h :4428
-   pragma Import (Stdcall, IMoniker_IsSystemMoniker_Stub,
-                   "IMoniker_IsSystemMoniker_Stub");      --  objbase.h :4433
-   pragma Import (Stdcall, IEnumString_RemoteNext_Proxy,
-                   "IEnumString_RemoteNext_Proxy");       --  objbase.h :4555
-   pragma Import (Stdcall, IEnumString_RemoteNext_Stub,
-                   "IEnumString_RemoteNext_Stub");        --  objbase.h :4562
+   pragma Import
+     (Stdcall,
+      IMoniker_CommonPrefixWith_Proxy,
+      "IMoniker_CommonPrefixWith_Proxy");
+   pragma Import
+     (Stdcall,
+      IMoniker_CommonPrefixWith_Stub,
+      "IMoniker_CommonPrefixWith_Stub");
+   pragma Import
+     (Stdcall,
+      IMoniker_RelativePathTo_Proxy,
+      "IMoniker_RelativePathTo_Proxy");
+   pragma Import
+     (Stdcall,
+      IMoniker_RelativePathTo_Stub,
+      "IMoniker_RelativePathTo_Stub");
+   pragma Import
+     (Stdcall,
+      IMoniker_GetDisplayName_Proxy,
+      "IMoniker_GetDisplayName_Proxy");
+   pragma Import
+     (Stdcall,
+      IMoniker_GetDisplayName_Stub,
+      "IMoniker_GetDisplayName_Stub");
+   pragma Import
+     (Stdcall,
+      IMoniker_ParseDisplayName_Proxy,
+      "IMoniker_ParseDisplayName_Proxy");
+   pragma Import
+     (Stdcall,
+      IMoniker_ParseDisplayName_Stub,
+      "IMoniker_ParseDisplayName_Stub");
+   pragma Import
+     (Stdcall,
+      IMoniker_IsSystemMoniker_Proxy,
+      "IMoniker_IsSystemMoniker_Proxy");
+   pragma Import
+     (Stdcall,
+      IMoniker_IsSystemMoniker_Stub,
+      "IMoniker_IsSystemMoniker_Stub");
+   pragma Import
+     (Stdcall,
+      IEnumString_RemoteNext_Proxy,
+      "IEnumString_RemoteNext_Proxy");
+   pragma Import
+     (Stdcall,
+      IEnumString_RemoteNext_Stub,
+      "IEnumString_RemoteNext_Stub");
    pragma Import (Stdcall, IEnumString_Skip_Proxy, "IEnumString_Skip_Proxy");
-   --  objbase.h :4569
    pragma Import (Stdcall, IEnumString_Skip_Stub, "IEnumString_Skip_Stub");
-   --  objbase.h :4574
-   pragma Import (Stdcall, IEnumString_Reset_Proxy, "IEnumString_Reset_Proxy");
-   --  objbase.h :4581
+   pragma Import
+     (Stdcall,
+      IEnumString_Reset_Proxy,
+      "IEnumString_Reset_Proxy");
    pragma Import (Stdcall, IEnumString_Reset_Stub, "IEnumString_Reset_Stub");
-   --  objbase.h :4585
-   pragma Import (Stdcall, IEnumString_Clone_Proxy, "IEnumString_Clone_Proxy");
-   --  objbase.h :4592
+   pragma Import
+     (Stdcall,
+      IEnumString_Clone_Proxy,
+      "IEnumString_Clone_Proxy");
    pragma Import (Stdcall, IEnumString_Clone_Stub, "IEnumString_Clone_Stub");
-   --  objbase.h :4597
-   pragma Import (Stdcall, IStream_RemoteRead_Proxy,
-                    "IStream_RemoteRead_Proxy");
-   --  objbase.h :4854
-   pragma Import (Stdcall, IStream_RemoteRead_Stub, "IStream_RemoteRead_Stub");
-   --  objbase.h :4861
-   pragma Import (Stdcall, IStream_RemoteWrite_Proxy,
-                    "IStream_RemoteWrite_Proxy");
-   --  objbase.h :4868
-   pragma Import (Stdcall, IStream_RemoteWrite_Stub,
-                    "IStream_RemoteWrite_Stub");
-   --  objbase.h :4875
-   pragma Import (Stdcall, IStream_RemoteSeek_Proxy,
-                    "IStream_RemoteSeek_Proxy");
-   --  objbase.h :4882
-   pragma Import (Stdcall, IStream_RemoteSeek_Stub, "IStream_RemoteSeek_Stub");
-   --  objbase.h :4889
+   pragma Import
+     (Stdcall,
+      IStream_RemoteRead_Proxy,
+      "IStream_RemoteRead_Proxy");
+   pragma Import
+     (Stdcall,
+      IStream_RemoteRead_Stub,
+      "IStream_RemoteRead_Stub");
+   pragma Import
+     (Stdcall,
+      IStream_RemoteWrite_Proxy,
+      "IStream_RemoteWrite_Proxy");
+   pragma Import
+     (Stdcall,
+      IStream_RemoteWrite_Stub,
+      "IStream_RemoteWrite_Stub");
+   pragma Import
+     (Stdcall,
+      IStream_RemoteSeek_Proxy,
+      "IStream_RemoteSeek_Proxy");
+   pragma Import
+     (Stdcall,
+      IStream_RemoteSeek_Stub,
+      "IStream_RemoteSeek_Stub");
    pragma Import (Stdcall, IStream_SetSize_Proxy, "IStream_SetSize_Proxy");
-   --  objbase.h :4896
    pragma Import (Stdcall, IStream_SetSize_Stub, "IStream_SetSize_Stub");
-   --  objbase.h :4901
-   pragma Import (Stdcall, IStream_RemoteCopyTo_Proxy,
-                    "IStream_RemoteCopyTo_Proxy");
-   --  objbase.h :4908
-   pragma Import (Stdcall, IStream_RemoteCopyTo_Stub,
-                    "IStream_RemoteCopyTo_Stub");
-   --  objbase.h :4916
+   pragma Import
+     (Stdcall,
+      IStream_RemoteCopyTo_Proxy,
+      "IStream_RemoteCopyTo_Proxy");
+   pragma Import
+     (Stdcall,
+      IStream_RemoteCopyTo_Stub,
+      "IStream_RemoteCopyTo_Stub");
    pragma Import (Stdcall, IStream_Commit_Proxy, "IStream_Commit_Proxy");
-   --  objbase.h :4923
    pragma Import (Stdcall, IStream_Commit_Stub, "IStream_Commit_Stub");
-   --  objbase.h :4928
    pragma Import (Stdcall, IStream_Revert_Proxy, "IStream_Revert_Proxy");
-   --  objbase.h :4935
    pragma Import (Stdcall, IStream_Revert_Stub, "IStream_Revert_Stub");
-   --  objbase.h :4939
-   pragma Import (Stdcall, IStream_LockRegion_Proxy,
-                    "IStream_LockRegion_Proxy");
-   --  objbase.h :4946
-   pragma Import (Stdcall, IStream_LockRegion_Stub, "IStream_LockRegion_Stub");
-   --  objbase.h :4953
-   pragma Import (Stdcall, IStream_UnlockRegion_Proxy,
-                    "IStream_UnlockRegion_Proxy");
-   --  objbase.h :4960
-   pragma Import (Stdcall, IStream_UnlockRegion_Stub,
-                    "IStream_UnlockRegion_Stub");
-   --  objbase.h :4967
+   pragma Import
+     (Stdcall,
+      IStream_LockRegion_Proxy,
+      "IStream_LockRegion_Proxy");
+   pragma Import
+     (Stdcall,
+      IStream_LockRegion_Stub,
+      "IStream_LockRegion_Stub");
+   pragma Import
+     (Stdcall,
+      IStream_UnlockRegion_Proxy,
+      "IStream_UnlockRegion_Proxy");
+   pragma Import
+     (Stdcall,
+      IStream_UnlockRegion_Stub,
+      "IStream_UnlockRegion_Stub");
    pragma Import (Stdcall, IStream_Stat_Proxy, "IStream_Stat_Proxy");
-   --  objbase.h :4974
    pragma Import (Stdcall, IStream_Stat_Stub, "IStream_Stat_Stub");
-   --  objbase.h :4980
    pragma Import (Stdcall, IStream_Clone_Proxy, "IStream_Clone_Proxy");
-   --  objbase.h :4987
    pragma Import (Stdcall, IStream_Clone_Stub, "IStream_Clone_Stub");
-   --  objbase.h :4992
-   pragma Import (Stdcall, IEnumSTATSTG_RemoteNext_Proxy,
-                   "IEnumSTATSTG_RemoteNext_Proxy");
-   --  objbase.h :5114
-   pragma Import (Stdcall, IEnumSTATSTG_RemoteNext_Stub,
-                   "IEnumSTATSTG_RemoteNext_Stub");
-   --  objbase.h :5121
-   pragma Import (Stdcall, IEnumSTATSTG_Skip_Proxy, "IEnumSTATSTG_Skip_Proxy");
-   --  objbase.h :5128
+   pragma Import
+     (Stdcall,
+      IEnumSTATSTG_RemoteNext_Proxy,
+      "IEnumSTATSTG_RemoteNext_Proxy");
+   pragma Import
+     (Stdcall,
+      IEnumSTATSTG_RemoteNext_Stub,
+      "IEnumSTATSTG_RemoteNext_Stub");
+   pragma Import
+     (Stdcall,
+      IEnumSTATSTG_Skip_Proxy,
+      "IEnumSTATSTG_Skip_Proxy");
    pragma Import (Stdcall, IEnumSTATSTG_Skip_Stub, "IEnumSTATSTG_Skip_Stub");
-   --  objbase.h :5133
-   pragma Import (Stdcall, IEnumSTATSTG_Reset_Proxy,
-                    "IEnumSTATSTG_Reset_Proxy");
-   --  objbase.h :5140
-   pragma Import (Stdcall, IEnumSTATSTG_Reset_Stub, "IEnumSTATSTG_Reset_Stub");
-   --  objbase.h :5144
-   pragma Import (Stdcall, IEnumSTATSTG_Clone_Proxy,
-                    "IEnumSTATSTG_Clone_Proxy");
-   --  objbase.h :5151
-   pragma Import (Stdcall, IEnumSTATSTG_Clone_Stub, "IEnumSTATSTG_Clone_Stub");
-   --  objbase.h :5156
-   pragma Import (Stdcall, IStorage_CreateStream_Proxy,
-                   "IStorage_CreateStream_Proxy");
-   --  objbase.h :5461
-   pragma Import (Stdcall, IStorage_CreateStream_Stub,
-                    "IStorage_CreateStream_Stub");
-   --  objbase.h :5470
-   pragma Import (Stdcall, IStorage_RemoteOpenStream_Proxy,
-                   "IStorage_RemoteOpenStream_Proxy");    --  objbase.h :5477
-   pragma Import (Stdcall, IStorage_RemoteOpenStream_Stub,
-                   "IStorage_RemoteOpenStream_Stub");     --  objbase.h :5487
-   pragma Import (Stdcall, IStorage_CreateStorage_Proxy,
-                   "IStorage_CreateStorage_Proxy");       --  objbase.h :5494
-   pragma Import (Stdcall, IStorage_CreateStorage_Stub,
-                   "IStorage_CreateStorage_Stub");        --  objbase.h :5503
-   pragma Import (Stdcall, IStorage_OpenStorage_Proxy,
-                    "IStorage_OpenStorage_Proxy");
-   --  objbase.h :5510
-   pragma Import (Stdcall, IStorage_OpenStorage_Stub,
-                    "IStorage_OpenStorage_Stub");
-   --  objbase.h :5520
+   pragma Import
+     (Stdcall,
+      IEnumSTATSTG_Reset_Proxy,
+      "IEnumSTATSTG_Reset_Proxy");
+   pragma Import
+     (Stdcall,
+      IEnumSTATSTG_Reset_Stub,
+      "IEnumSTATSTG_Reset_Stub");
+   pragma Import
+     (Stdcall,
+      IEnumSTATSTG_Clone_Proxy,
+      "IEnumSTATSTG_Clone_Proxy");
+   pragma Import
+     (Stdcall,
+      IEnumSTATSTG_Clone_Stub,
+      "IEnumSTATSTG_Clone_Stub");
+   pragma Import
+     (Stdcall,
+      IStorage_CreateStream_Proxy,
+      "IStorage_CreateStream_Proxy");
+   pragma Import
+     (Stdcall,
+      IStorage_CreateStream_Stub,
+      "IStorage_CreateStream_Stub");
+   pragma Import
+     (Stdcall,
+      IStorage_RemoteOpenStream_Proxy,
+      "IStorage_RemoteOpenStream_Proxy");
+   pragma Import
+     (Stdcall,
+      IStorage_RemoteOpenStream_Stub,
+      "IStorage_RemoteOpenStream_Stub");
+   pragma Import
+     (Stdcall,
+      IStorage_CreateStorage_Proxy,
+      "IStorage_CreateStorage_Proxy");
+   pragma Import
+     (Stdcall,
+      IStorage_CreateStorage_Stub,
+      "IStorage_CreateStorage_Stub");
+   pragma Import
+     (Stdcall,
+      IStorage_OpenStorage_Proxy,
+      "IStorage_OpenStorage_Proxy");
+   pragma Import
+     (Stdcall,
+      IStorage_OpenStorage_Stub,
+      "IStorage_OpenStorage_Stub");
    pragma Import (Stdcall, IStorage_CopyTo_Proxy, "IStorage_CopyTo_Proxy");
-   --  objbase.h :5527
    pragma Import (Stdcall, IStorage_CopyTo_Stub, "IStorage_CopyTo_Stub");
-   --  objbase.h :5535
-   pragma Import (Stdcall, IStorage_MoveElementTo_Proxy,
-                   "IStorage_MoveElementTo_Proxy");       --  objbase.h :5542
-   pragma Import (Stdcall, IStorage_MoveElementTo_Stub,
-                   "IStorage_MoveElementTo_Stub");        --  objbase.h :5550
+   pragma Import
+     (Stdcall,
+      IStorage_MoveElementTo_Proxy,
+      "IStorage_MoveElementTo_Proxy");
+   pragma Import
+     (Stdcall,
+      IStorage_MoveElementTo_Stub,
+      "IStorage_MoveElementTo_Stub");
    pragma Import (Stdcall, IStorage_Commit_Proxy, "IStorage_Commit_Proxy");
-   --  objbase.h :5557
    pragma Import (Stdcall, IStorage_Commit_Stub, "IStorage_Commit_Stub");
-   --  objbase.h :5562
    pragma Import (Stdcall, IStorage_Revert_Proxy, "IStorage_Revert_Proxy");
-   --  objbase.h :5569
    pragma Import (Stdcall, IStorage_Revert_Stub, "IStorage_Revert_Stub");
-   --  objbase.h :5573
-   pragma Import (Stdcall, IStorage_RemoteEnumElements_Proxy,
-                   "IStorage_RemoteEnumElements_Proxy");
-   --  objbase.h :5580
-   pragma Import (Stdcall, IStorage_RemoteEnumElements_Stub,
-                   "IStorage_RemoteEnumElements_Stub");
-   --  objbase.h :5589
-   pragma Import (Stdcall, IStorage_DestroyElement_Proxy,
-                   "IStorage_DestroyElement_Proxy");
-   --  objbase.h :5596
-   pragma Import (Stdcall, IStorage_DestroyElement_Stub,
-                   "IStorage_DestroyElement_Stub");
-   --  objbase.h :5601
-   pragma Import (Stdcall, IStorage_RenameElement_Proxy,
-                   "IStorage_RenameElement_Proxy");
-   --  objbase.h :5608
-   pragma Import (Stdcall, IStorage_RenameElement_Stub,
-                   "IStorage_RenameElement_Stub");
-   --  objbase.h :5614
-   pragma Import (Stdcall, IStorage_SetElementTimes_Proxy,
-                   "IStorage_SetElementTimes_Proxy");
-   --  objbase.h :5621
-   pragma Import (Stdcall, IStorage_SetElementTimes_Stub,
-                   "IStorage_SetElementTimes_Stub");
-   --  objbase.h :5629
-   pragma Import (Stdcall, IStorage_SetClass_Proxy, "IStorage_SetClass_Proxy");
-   --  objbase.h :5636
+   pragma Import
+     (Stdcall,
+      IStorage_RemoteEnumElements_Proxy,
+      "IStorage_RemoteEnumElements_Proxy");
+   pragma Import
+     (Stdcall,
+      IStorage_RemoteEnumElements_Stub,
+      "IStorage_RemoteEnumElements_Stub");
+   pragma Import
+     (Stdcall,
+      IStorage_DestroyElement_Proxy,
+      "IStorage_DestroyElement_Proxy");
+   pragma Import
+     (Stdcall,
+      IStorage_DestroyElement_Stub,
+      "IStorage_DestroyElement_Stub");
+   pragma Import
+     (Stdcall,
+      IStorage_RenameElement_Proxy,
+      "IStorage_RenameElement_Proxy");
+   pragma Import
+     (Stdcall,
+      IStorage_RenameElement_Stub,
+      "IStorage_RenameElement_Stub");
+   pragma Import
+     (Stdcall,
+      IStorage_SetElementTimes_Proxy,
+      "IStorage_SetElementTimes_Proxy");
+   pragma Import
+     (Stdcall,
+      IStorage_SetElementTimes_Stub,
+      "IStorage_SetElementTimes_Stub");
+   pragma Import
+     (Stdcall,
+      IStorage_SetClass_Proxy,
+      "IStorage_SetClass_Proxy");
    pragma Import (Stdcall, IStorage_SetClass_Stub, "IStorage_SetClass_Stub");
-   --  objbase.h :5641
-   pragma Import (Stdcall, IStorage_SetStateBits_Proxy,
-                   "IStorage_SetStateBits_Proxy");
-   --  objbase.h :5648
-   pragma Import (Stdcall, IStorage_SetStateBits_Stub,
-                    "IStorage_SetStateBits_Stub");
-   --  objbase.h :5654
+   pragma Import
+     (Stdcall,
+      IStorage_SetStateBits_Proxy,
+      "IStorage_SetStateBits_Proxy");
+   pragma Import
+     (Stdcall,
+      IStorage_SetStateBits_Stub,
+      "IStorage_SetStateBits_Stub");
    pragma Import (Stdcall, IStorage_Stat_Proxy, "IStorage_Stat_Proxy");
-   --  objbase.h :5661
    pragma Import (Stdcall, IStorage_Stat_Stub, "IStorage_Stat_Stub");
-   --  objbase.h :5667
-   pragma Import (Stdcall, IPersistFile_IsDirty_Proxy,
-                    "IPersistFile_IsDirty_Proxy");
-   --  objbase.h :5807
-   pragma Import (Stdcall, IPersistFile_IsDirty_Stub,
-                    "IPersistFile_IsDirty_Stub");
-   --  objbase.h :5811
-   pragma Import (Stdcall, IPersistFile_Load_Proxy, "IPersistFile_Load_Proxy");
-   --  objbase.h :5818
+   pragma Import
+     (Stdcall,
+      IPersistFile_IsDirty_Proxy,
+      "IPersistFile_IsDirty_Proxy");
+   pragma Import
+     (Stdcall,
+      IPersistFile_IsDirty_Stub,
+      "IPersistFile_IsDirty_Stub");
+   pragma Import
+     (Stdcall,
+      IPersistFile_Load_Proxy,
+      "IPersistFile_Load_Proxy");
    pragma Import (Stdcall, IPersistFile_Load_Stub, "IPersistFile_Load_Stub");
-   --  objbase.h :5824
-   pragma Import (Stdcall, IPersistFile_Save_Proxy, "IPersistFile_Save_Proxy");
-   --  objbase.h :5831
+   pragma Import
+     (Stdcall,
+      IPersistFile_Save_Proxy,
+      "IPersistFile_Save_Proxy");
    pragma Import (Stdcall, IPersistFile_Save_Stub, "IPersistFile_Save_Stub");
-   --  objbase.h :5837
-   pragma Import (Stdcall, IPersistFile_SaveCompleted_Proxy,
-                   "IPersistFile_SaveCompleted_Proxy");
-   --  objbase.h :5844
-   pragma Import (Stdcall, IPersistFile_SaveCompleted_Stub,
-                   "IPersistFile_SaveCompleted_Stub");
-   --  objbase.h :5849
-   pragma Import (Stdcall, IPersistFile_GetCurFile_Proxy,
-                   "IPersistFile_GetCurFile_Proxy");
-   --  objbase.h :5856
-   pragma Import (Stdcall, IPersistFile_GetCurFile_Stub,
-                   "IPersistFile_GetCurFile_Stub");
-   --  objbase.h :5861
-   pragma Import (Stdcall, IPersistStorage_IsDirty_Proxy,
-                   "IPersistStorage_IsDirty_Proxy");
-   --  objbase.h :6007
-   pragma Import (Stdcall, IPersistStorage_IsDirty_Stub,
-                   "IPersistStorage_IsDirty_Stub");
-   --  objbase.h :6011
-   pragma Import (Stdcall, IPersistStorage_InitNew_Proxy,
-                   "IPersistStorage_InitNew_Proxy");
-   --  objbase.h :6018
-   pragma Import (Stdcall, IPersistStorage_InitNew_Stub,
-                   "IPersistStorage_InitNew_Stub");
-   --  objbase.h :6023
-   pragma Import (Stdcall, IPersistStorage_Load_Proxy,
-                    "IPersistStorage_Load_Proxy");
-   --  objbase.h :6030
-   pragma Import (Stdcall, IPersistStorage_Load_Stub,
-                    "IPersistStorage_Load_Stub");
-   --  objbase.h :6035
-   pragma Import (Stdcall, IPersistStorage_Save_Proxy,
-                    "IPersistStorage_Save_Proxy");
-   --  objbase.h :6042
-   pragma Import (Stdcall, IPersistStorage_Save_Stub,
-                    "IPersistStorage_Save_Stub");
-   --  objbase.h :6048
-   pragma Import (Stdcall, IPersistStorage_SaveCompleted_Proxy,
-                   "IPersistStorage_SaveCompleted_Proxy");
-   --  objbase.h :6055
-   pragma Import (Stdcall, IPersistStorage_SaveCompleted_Stub,
-                   "IPersistStorage_SaveCompleted_Stub");
-   --  objbase.h :6060
-   pragma Import (Stdcall, IPersistStorage_HandsOffStorage_Proxy,
-                   "IPersistStorage_HandsOffStorage_Proxy");
-   --  objbase.h :6067
-   pragma Import (Stdcall, IPersistStorage_HandsOffStorage_Stub,
-                   "IPersistStorage_HandsOffStorage_Stub");
-   --  objbase.h :6071
-   pragma Import (Stdcall, ILockBytes_RemoteReadAt_Proxy,
-                   "ILockBytes_RemoteReadAt_Proxy");
-   --  objbase.h :6241
-   pragma Import (Stdcall, ILockBytes_RemoteReadAt_Stub,
-                   "ILockBytes_RemoteReadAt_Stub");
-   --  objbase.h :6249
-   pragma Import (Stdcall, ILockBytes_RemoteWriteAt_Proxy,
-                   "ILockBytes_RemoteWriteAt_Proxy");
-   --  objbase.h :6256
-   pragma Import (Stdcall, ILockBytes_RemoteWriteAt_Stub,
-                   "ILockBytes_RemoteWriteAt_Stub");
-   --  objbase.h :6264
+   pragma Import
+     (Stdcall,
+      IPersistFile_SaveCompleted_Proxy,
+      "IPersistFile_SaveCompleted_Proxy");
+   pragma Import
+     (Stdcall,
+      IPersistFile_SaveCompleted_Stub,
+      "IPersistFile_SaveCompleted_Stub");
+   pragma Import
+     (Stdcall,
+      IPersistFile_GetCurFile_Proxy,
+      "IPersistFile_GetCurFile_Proxy");
+   pragma Import
+     (Stdcall,
+      IPersistFile_GetCurFile_Stub,
+      "IPersistFile_GetCurFile_Stub");
+   pragma Import
+     (Stdcall,
+      IPersistStorage_IsDirty_Proxy,
+      "IPersistStorage_IsDirty_Proxy");
+   pragma Import
+     (Stdcall,
+      IPersistStorage_IsDirty_Stub,
+      "IPersistStorage_IsDirty_Stub");
+   pragma Import
+     (Stdcall,
+      IPersistStorage_InitNew_Proxy,
+      "IPersistStorage_InitNew_Proxy");
+   pragma Import
+     (Stdcall,
+      IPersistStorage_InitNew_Stub,
+      "IPersistStorage_InitNew_Stub");
+   pragma Import
+     (Stdcall,
+      IPersistStorage_Load_Proxy,
+      "IPersistStorage_Load_Proxy");
+   pragma Import
+     (Stdcall,
+      IPersistStorage_Load_Stub,
+      "IPersistStorage_Load_Stub");
+   pragma Import
+     (Stdcall,
+      IPersistStorage_Save_Proxy,
+      "IPersistStorage_Save_Proxy");
+   pragma Import
+     (Stdcall,
+      IPersistStorage_Save_Stub,
+      "IPersistStorage_Save_Stub");
+   pragma Import
+     (Stdcall,
+      IPersistStorage_SaveCompleted_Proxy,
+      "IPersistStorage_SaveCompleted_Proxy");
+   pragma Import
+     (Stdcall,
+      IPersistStorage_SaveCompleted_Stub,
+      "IPersistStorage_SaveCompleted_Stub");
+   pragma Import
+     (Stdcall,
+      IPersistStorage_HandsOffStorage_Proxy,
+      "IPersistStorage_HandsOffStorage_Proxy");
+   pragma Import
+     (Stdcall,
+      IPersistStorage_HandsOffStorage_Stub,
+      "IPersistStorage_HandsOffStorage_Stub");
+   pragma Import
+     (Stdcall,
+      ILockBytes_RemoteReadAt_Proxy,
+      "ILockBytes_RemoteReadAt_Proxy");
+   pragma Import
+     (Stdcall,
+      ILockBytes_RemoteReadAt_Stub,
+      "ILockBytes_RemoteReadAt_Stub");
+   pragma Import
+     (Stdcall,
+      ILockBytes_RemoteWriteAt_Proxy,
+      "ILockBytes_RemoteWriteAt_Proxy");
+   pragma Import
+     (Stdcall,
+      ILockBytes_RemoteWriteAt_Stub,
+      "ILockBytes_RemoteWriteAt_Stub");
    pragma Import (Stdcall, ILockBytes_Flush_Proxy, "ILockBytes_Flush_Proxy");
-   --  objbase.h :6271
    pragma Import (Stdcall, ILockBytes_Flush_Stub, "ILockBytes_Flush_Stub");
-   --  objbase.h :6275
-   pragma Import (Stdcall, ILockBytes_SetSize_Proxy,
-                    "ILockBytes_SetSize_Proxy");
-   --  objbase.h :6282
-   pragma Import (Stdcall, ILockBytes_SetSize_Stub, "ILockBytes_SetSize_Stub");
-   --  objbase.h :6287
-   pragma Import (Stdcall, ILockBytes_LockRegion_Proxy,
-                   "ILockBytes_LockRegion_Proxy");
-   --  objbase.h :6294
-   pragma Import (Stdcall, ILockBytes_LockRegion_Stub,
-                    "ILockBytes_LockRegion_Stub");
-   --  objbase.h :6301
-   pragma Import (Stdcall, ILockBytes_UnlockRegion_Proxy,
-                   "ILockBytes_UnlockRegion_Proxy");
-   --  objbase.h :6308
-   pragma Import (Stdcall, ILockBytes_UnlockRegion_Stub,
-                   "ILockBytes_UnlockRegion_Stub");
-   --  objbase.h :6315
+   pragma Import
+     (Stdcall,
+      ILockBytes_SetSize_Proxy,
+      "ILockBytes_SetSize_Proxy");
+   pragma Import
+     (Stdcall,
+      ILockBytes_SetSize_Stub,
+      "ILockBytes_SetSize_Stub");
+   pragma Import
+     (Stdcall,
+      ILockBytes_LockRegion_Proxy,
+      "ILockBytes_LockRegion_Proxy");
+   pragma Import
+     (Stdcall,
+      ILockBytes_LockRegion_Stub,
+      "ILockBytes_LockRegion_Stub");
+   pragma Import
+     (Stdcall,
+      ILockBytes_UnlockRegion_Proxy,
+      "ILockBytes_UnlockRegion_Proxy");
+   pragma Import
+     (Stdcall,
+      ILockBytes_UnlockRegion_Stub,
+      "ILockBytes_UnlockRegion_Stub");
    pragma Import (Stdcall, ILockBytes_Stat_Proxy, "ILockBytes_Stat_Proxy");
-   --  objbase.h :6322
    pragma Import (Stdcall, ILockBytes_Stat_Stub, "ILockBytes_Stat_Stub");
-   --  objbase.h :6328
-   pragma Import (Stdcall, IEnumFORMATETC_RemoteNext_Proxy,
-                   "IEnumFORMATETC_RemoteNext_Proxy");
-   --  objbase.h :6480
-   pragma Import (Stdcall, IEnumFORMATETC_RemoteNext_Stub,
-                   "IEnumFORMATETC_RemoteNext_Stub");
-   --  objbase.h :6487
-   pragma Import (Stdcall, IEnumFORMATETC_Skip_Proxy,
-                    "IEnumFORMATETC_Skip_Proxy");
-   --  objbase.h :6494
-   pragma Import (Stdcall, IEnumFORMATETC_Skip_Stub,
-                    "IEnumFORMATETC_Skip_Stub");
-   --  objbase.h :6499
-   pragma Import (Stdcall, IEnumFORMATETC_Reset_Proxy,
-                    "IEnumFORMATETC_Reset_Proxy");
-   --  objbase.h :6506
-   pragma Import (Stdcall, IEnumFORMATETC_Reset_Stub,
-                    "IEnumFORMATETC_Reset_Stub");
-   --  objbase.h :6510
-   pragma Import (Stdcall, IEnumFORMATETC_Clone_Proxy,
-                    "IEnumFORMATETC_Clone_Proxy");
-   --  objbase.h :6517
-   pragma Import (Stdcall, IEnumFORMATETC_Clone_Stub,
-                    "IEnumFORMATETC_Clone_Stub");
-   --  objbase.h :6522
-   pragma Import (Stdcall, IEnumSTATDATA_RemoteNext_Proxy,
-                   "IEnumSTATDATA_RemoteNext_Proxy");
-   --  objbase.h :6668
-   pragma Import (Stdcall, IEnumSTATDATA_RemoteNext_Stub,
-                   "IEnumSTATDATA_RemoteNext_Stub");
-   --  objbase.h :6675
-   pragma Import (Stdcall, IEnumSTATDATA_Skip_Proxy,
-                    "IEnumSTATDATA_Skip_Proxy");
-   --  objbase.h :6682
-   pragma Import (Stdcall, IEnumSTATDATA_Skip_Stub,
-                    "IEnumSTATDATA_Skip_Stub");
-   --  objbase.h :6687
-   pragma Import (Stdcall, IEnumSTATDATA_Reset_Proxy,
-                    "IEnumSTATDATA_Reset_Proxy");
-   --  objbase.h :6694
-   pragma Import (Stdcall, IEnumSTATDATA_Reset_Stub,
-                    "IEnumSTATDATA_Reset_Stub");
-   --  objbase.h :6698
-   pragma Import (Stdcall, IEnumSTATDATA_Clone_Proxy,
-                    "IEnumSTATDATA_Clone_Proxy");
-   --  objbase.h :6705
-   pragma Import (Stdcall, IEnumSTATDATA_Clone_Stub,
-                    "IEnumSTATDATA_Clone_Stub");
-   --  objbase.h :6710
-   pragma Import (Stdcall, IRootStorage_SwitchToFile_Proxy,
-                   "IRootStorage_SwitchToFile_Proxy");
-   --  objbase.h :6800
-   pragma Import (Stdcall, IRootStorage_SwitchToFile_Stub,
-                   "IRootStorage_SwitchToFile_Stub");
-   --  objbase.h :6805
-   pragma Import (Stdcall, IAdviseSink_RemoteOnDataChange_Proxy,
-                   "IAdviseSink_RemoteOnDataChange_Proxy");
-   --  objbase.h :6998
-   pragma Import (Stdcall, IAdviseSink_RemoteOnDataChange_Stub,
-                   "IAdviseSink_RemoteOnDataChange_Stub");
-   --  objbase.h :7004
-   pragma Import (Stdcall, IAdviseSink_RemoteOnViewChange_Proxy,
-                   "IAdviseSink_RemoteOnViewChange_Proxy");
-   --  objbase.h :7011
-   pragma Import (Stdcall, IAdviseSink_RemoteOnViewChange_Stub,
-                   "IAdviseSink_RemoteOnViewChange_Stub");
-   --  objbase.h :7017
-   pragma Import (Stdcall, IAdviseSink_RemoteOnRename_Proxy,
-                   "IAdviseSink_RemoteOnRename_Proxy");
-   --  objbase.h :7024
-   pragma Import (Stdcall, IAdviseSink_RemoteOnRename_Stub,
-                   "IAdviseSink_RemoteOnRename_Stub");
-   --  objbase.h :7029
-   pragma Import (Stdcall, IAdviseSink_RemoteOnSave_Proxy,
-                   "IAdviseSink_RemoteOnSave_Proxy");
-   --  objbase.h :7036
-   pragma Import (Stdcall, IAdviseSink_RemoteOnSave_Stub,
-                   "IAdviseSink_RemoteOnSave_Stub");
-   --  objbase.h :7040
-   pragma Import (Stdcall, IAdviseSink_RemoteOnClose_Proxy,
-                   "IAdviseSink_RemoteOnClose_Proxy");
-   --  objbase.h :7047
-   pragma Import (Stdcall, IAdviseSink_RemoteOnClose_Stub,
-                   "IAdviseSink_RemoteOnClose_Stub");
-   --  objbase.h :7051
-   pragma Import (Stdcall, IAdviseSink2_RemoteOnLinkSrcChange_Proxy,
-                   "IAdviseSink2_RemoteOnLinkSrcChange_Proxy");
-   --  objbase.h :7177
-   pragma Import (Stdcall, IAdviseSink2_RemoteOnLinkSrcChange_Stub,
-                   "IAdviseSink2_RemoteOnLinkSrcChange_Stub");
-   --  objbase.h :7182
-   pragma Import (Stdcall, IDataObject_RemoteGetData_Proxy,
-                   "IDataObject_RemoteGetData_Proxy");
-   --  objbase.h :7377
-   pragma Import (Stdcall, IDataObject_RemoteGetData_Stub,
-                   "IDataObject_RemoteGetData_Stub");
-   --  objbase.h :7383
-   pragma Import (Stdcall, IDataObject_RemoteGetDataHere_Proxy,
-                   "IDataObject_RemoteGetDataHere_Proxy");
-   --  objbase.h :7390
-   pragma Import (Stdcall, IDataObject_RemoteGetDataHere_Stub,
-                   "IDataObject_RemoteGetDataHere_Stub");
-   --  objbase.h :7396
-   pragma Import (Stdcall, IDataObject_QueryGetData_Proxy,
-                   "IDataObject_QueryGetData_Proxy");
-   --  objbase.h :7403
-   pragma Import (Stdcall, IDataObject_QueryGetData_Stub,
-                   "IDataObject_QueryGetData_Stub");
-   --  objbase.h :7408
-   pragma Import (Stdcall, IDataObject_GetCanonicalFormatEtc_Proxy,
-                   "IDataObject_GetCanonicalFormatEtc_Proxy");
-   --  objbase.h :7415
-   pragma Import (Stdcall, IDataObject_GetCanonicalFormatEtc_Stub,
-                   "IDataObject_GetCanonicalFormatEtc_Stub");
-   --  objbase.h :7421
-   pragma Import (Stdcall, IDataObject_RemoteSetData_Proxy,
-                   "IDataObject_RemoteSetData_Proxy");
-   --  objbase.h :7428
-   pragma Import (Stdcall, IDataObject_RemoteSetData_Stub,
-                   "IDataObject_RemoteSetData_Stub");
-   --  objbase.h :7435
-   pragma Import (Stdcall, IDataObject_EnumFormatEtc_Proxy,
-                   "IDataObject_EnumFormatEtc_Proxy");
-   --  objbase.h :7442
-   pragma Import (Stdcall, IDataObject_EnumFormatEtc_Stub,
-                   "IDataObject_EnumFormatEtc_Stub");
-   --  objbase.h :7448
-   pragma Import (Stdcall, IDataObject_DAdvise_Proxy,
-                    "IDataObject_DAdvise_Proxy");
-   --  objbase.h :7455
-   pragma Import (Stdcall, IDataObject_DAdvise_Stub,
-                    "IDataObject_DAdvise_Stub");
-   --  objbase.h :7463
-   pragma Import (Stdcall, IDataObject_DUnadvise_Proxy,
-                   "IDataObject_DUnadvise_Proxy");
-   --  objbase.h :7470
-   pragma Import (Stdcall, IDataObject_DUnadvise_Stub,
-                    "IDataObject_DUnadvise_Stub");
-   --  objbase.h :7475
-   pragma Import (Stdcall, IDataObject_EnumDAdvise_Proxy,
-                   "IDataObject_EnumDAdvise_Proxy");
-   --  objbase.h :7482
-   pragma Import (Stdcall, IDataObject_EnumDAdvise_Stub,
-                   "IDataObject_EnumDAdvise_Stub");
-   --  objbase.h :7487
-   pragma Import (Stdcall, IDataAdviseHolder_Advise_Proxy,
-                   "IDataAdviseHolder_Advise_Proxy");
-   --  objbase.h :7619
-   pragma Import (Stdcall, IDataAdviseHolder_Advise_Stub,
-                   "IDataAdviseHolder_Advise_Stub");
-   --  objbase.h :7628
-   pragma Import (Stdcall, IDataAdviseHolder_Unadvise_Proxy,
-                   "IDataAdviseHolder_Unadvise_Proxy");
-   --  objbase.h :7635
-   pragma Import (Stdcall, IDataAdviseHolder_Unadvise_Stub,
-                   "IDataAdviseHolder_Unadvise_Stub");
-   --  objbase.h :7640
-   pragma Import (Stdcall, IDataAdviseHolder_EnumAdvise_Proxy,
-                   "IDataAdviseHolder_EnumAdvise_Proxy");
-   --  objbase.h :7647
-   pragma Import (Stdcall, IDataAdviseHolder_EnumAdvise_Stub,
-                   "IDataAdviseHolder_EnumAdvise_Stub");
-   --  objbase.h :7652
-   pragma Import (Stdcall, IDataAdviseHolder_SendOnDataChange_Proxy,
-                   "IDataAdviseHolder_SendOnDataChange_Proxy");
-   --  objbase.h :7659
-   pragma Import (Stdcall, IDataAdviseHolder_SendOnDataChange_Stub,
-                   "IDataAdviseHolder_SendOnDataChange_Stub");
-   --  objbase.h :7666
-   pragma Import (Stdcall, IMessageFilter_HandleInComingCall_Proxy,
-                   "IMessageFilter_HandleInComingCall_Proxy");
-   --  objbase.h :7834
-   pragma Import (Stdcall, IMessageFilter_HandleInComingCall_Stub,
-                   "IMessageFilter_HandleInComingCall_Stub");
-   --  objbase.h :7842
-   pragma Import (Stdcall, IMessageFilter_RetryRejectedCall_Proxy,
-                   "IMessageFilter_RetryRejectedCall_Proxy");
-   --  objbase.h :7849
-   pragma Import (Stdcall, IMessageFilter_RetryRejectedCall_Stub,
-                   "IMessageFilter_RetryRejectedCall_Stub");
-   --  objbase.h :7856
-   pragma Import (Stdcall, IMessageFilter_MessagePending_Proxy,
-                   "IMessageFilter_MessagePending_Proxy");
-   --  objbase.h :7863
-   pragma Import (Stdcall, IMessageFilter_MessagePending_Stub,
-                   "IMessageFilter_MessagePending_Stub");
-   --  objbase.h :7870
-   pragma Import (Stdcall, IRpcChannelBuffer_GetBuffer_Proxy,
-                   "IRpcChannelBuffer_GetBuffer_Proxy");
-   --  objbase.h :8019
-   pragma Import (Stdcall, IRpcChannelBuffer_GetBuffer_Stub,
-                   "IRpcChannelBuffer_GetBuffer_Stub");
-   --  objbase.h :8025
-   pragma Import (Stdcall, IRpcChannelBuffer_SendReceive_Proxy,
-                   "IRpcChannelBuffer_SendReceive_Proxy");
-   --  objbase.h :8032
-   pragma Import (Stdcall, IRpcChannelBuffer_SendReceive_Stub,
-                   "IRpcChannelBuffer_SendReceive_Stub");
-   --  objbase.h :8038
-   pragma Import (Stdcall, IRpcChannelBuffer_FreeBuffer_Proxy,
-                   "IRpcChannelBuffer_FreeBuffer_Proxy");
-   --  objbase.h :8045
-   pragma Import (Stdcall, IRpcChannelBuffer_FreeBuffer_Stub,
-                   "IRpcChannelBuffer_FreeBuffer_Stub");
-   --  objbase.h :8050
-   pragma Import (Stdcall, IRpcChannelBuffer_GetDestCtx_Proxy,
-                   "IRpcChannelBuffer_GetDestCtx_Proxy");
-   --  objbase.h :8057
-   pragma Import (Stdcall, IRpcChannelBuffer_GetDestCtx_Stub,
-                   "IRpcChannelBuffer_GetDestCtx_Stub");
-   --  objbase.h :8063
-   pragma Import (Stdcall, IRpcChannelBuffer_IsConnected_Proxy,
-                   "IRpcChannelBuffer_IsConnected_Proxy");
-   --  objbase.h :8070
-   pragma Import (Stdcall, IRpcChannelBuffer_IsConnected_Stub,
-                   "IRpcChannelBuffer_IsConnected_Stub");
-   --  objbase.h :8074
-   pragma Import (Stdcall, IRpcProxyBuffer_Connect_Proxy,
-                   "IRpcProxyBuffer_Connect_Proxy");
-   --  objbase.h :8169
-   pragma Import (Stdcall, IRpcProxyBuffer_Connect_Stub,
-                   "IRpcProxyBuffer_Connect_Stub");
-   --  objbase.h :8174
-   pragma Import (Stdcall, IRpcProxyBuffer_Disconnect_Proxy,
-                   "IRpcProxyBuffer_Disconnect_Proxy");
-   --  objbase.h :8181
-   pragma Import (Stdcall, IRpcProxyBuffer_Disconnect_Stub,
-                   "IRpcProxyBuffer_Disconnect_Stub");
-   --  objbase.h :8185
-   pragma Import (Stdcall, IRpcStubBuffer_Connect_Proxy,
-                   "IRpcStubBuffer_Connect_Proxy");
-   --  objbase.h :8330
-   pragma Import (Stdcall, IRpcStubBuffer_Connect_Stub,
-                   "IRpcStubBuffer_Connect_Stub");
-   --  objbase.h :8335
-   pragma Import (Stdcall, IRpcStubBuffer_Disconnect_Proxy,
-                   "IRpcStubBuffer_Disconnect_Proxy");
-   --  objbase.h :8342
-   pragma Import (Stdcall, IRpcStubBuffer_Disconnect_Stub,
-                   "IRpcStubBuffer_Disconnect_Stub");
-   --  objbase.h :8346
-   pragma Import (Stdcall, IRpcStubBuffer_Invoke_Proxy,
-                   "IRpcStubBuffer_Invoke_Proxy");
-   --  objbase.h :8353
-   pragma Import (Stdcall, IRpcStubBuffer_Invoke_Stub,
-                    "IRpcStubBuffer_Invoke_Stub");
-   --  objbase.h :8359
-   pragma Import (Stdcall, IRpcStubBuffer_IsIIDSupported_Proxy,
-                   "IRpcStubBuffer_IsIIDSupported_Proxy");
-   --  objbase.h :8366
-   pragma Import (Stdcall, IRpcStubBuffer_IsIIDSupported_Stub,
-                   "IRpcStubBuffer_IsIIDSupported_Stub");
-   --  objbase.h :8371
-   pragma Import (Stdcall, IRpcStubBuffer_CountRefs_Proxy,
-                   "IRpcStubBuffer_CountRefs_Proxy");
-   --  objbase.h :8378
-   pragma Import (Stdcall, IRpcStubBuffer_CountRefs_Stub,
-                   "IRpcStubBuffer_CountRefs_Stub");
-   --  objbase.h :8382
-   pragma Import (Stdcall, IRpcStubBuffer_DebugServerQueryInterface_Proxy,
-                   "IRpcStubBuffer_DebugServerQueryInterface_Proxy");
-   --  objbase.h :8389
-   pragma Import (Stdcall, IRpcStubBuffer_DebugServerQueryInterface_Stub,
-                   "IRpcStubBuffer_DebugServerQueryInterface_Stub");
-   --  objbase.h :8394
-   pragma Import (Stdcall, IRpcStubBuffer_DebugServerRelease_Proxy,
-                   "IRpcStubBuffer_DebugServerRelease_Proxy");
-   --  objbase.h :8401
-   pragma Import (Stdcall, IRpcStubBuffer_DebugServerRelease_Stub,
-                   "IRpcStubBuffer_DebugServerRelease_Stub");
-   --  objbase.h :8406
-   pragma Import (Stdcall, IPSFactoryBuffer_CreateProxy_Proxy,
-                   "IPSFactoryBuffer_CreateProxy_Proxy");
-   --  objbase.h :8513
-   pragma Import (Stdcall, IPSFactoryBuffer_CreateProxy_Stub,
-                   "IPSFactoryBuffer_CreateProxy_Stub");
-   --  objbase.h :8521
-   pragma Import (Stdcall, IPSFactoryBuffer_CreateStub_Proxy,
-                   "IPSFactoryBuffer_CreateStub_Proxy");
-   --  objbase.h :8528
-   pragma Import (Stdcall, IPSFactoryBuffer_CreateStub_Stub,
-                   "IPSFactoryBuffer_CreateStub_Stub");
-   --  objbase.h :8535
-   pragma Import (Stdcall, SNB_to_xmit, "SNB_to_xmit");     --  objbase.h :8549
-   pragma Import (Stdcall, SNB_from_xmit, "SNB_from_xmit"); --  objbase.h :8550
-   pragma Import (Stdcall, SNB_free_inst, "SNB_free_inst"); --  objbase.h :8551
-   pragma Import (Stdcall, SNB_free_xmit, "SNB_free_xmit"); --  objbase.h :8552
-   pragma Import (Stdcall, IClassFactory_CreateInstance_Proxy,
-                   "IClassFactory_CreateInstance_Proxy");
-   --  objbase.h :8553
-   pragma Import (Stdcall, IClassFactory_CreateInstance_Stub,
-                   "IClassFactory_CreateInstance_Stub");
-   --  objbase.h :8560
-   pragma Import (Stdcall, IEnumUnknown_Next_Proxy, "IEnumUnknown_Next_Proxy");
-   --  objbase.h :8565
+   pragma Import
+     (Stdcall,
+      IEnumFORMATETC_RemoteNext_Proxy,
+      "IEnumFORMATETC_RemoteNext_Proxy");
+   pragma Import
+     (Stdcall,
+      IEnumFORMATETC_RemoteNext_Stub,
+      "IEnumFORMATETC_RemoteNext_Stub");
+   pragma Import
+     (Stdcall,
+      IEnumFORMATETC_Skip_Proxy,
+      "IEnumFORMATETC_Skip_Proxy");
+   pragma Import
+     (Stdcall,
+      IEnumFORMATETC_Skip_Stub,
+      "IEnumFORMATETC_Skip_Stub");
+   pragma Import
+     (Stdcall,
+      IEnumFORMATETC_Reset_Proxy,
+      "IEnumFORMATETC_Reset_Proxy");
+   pragma Import
+     (Stdcall,
+      IEnumFORMATETC_Reset_Stub,
+      "IEnumFORMATETC_Reset_Stub");
+   pragma Import
+     (Stdcall,
+      IEnumFORMATETC_Clone_Proxy,
+      "IEnumFORMATETC_Clone_Proxy");
+   pragma Import
+     (Stdcall,
+      IEnumFORMATETC_Clone_Stub,
+      "IEnumFORMATETC_Clone_Stub");
+   pragma Import
+     (Stdcall,
+      IEnumSTATDATA_RemoteNext_Proxy,
+      "IEnumSTATDATA_RemoteNext_Proxy");
+   pragma Import
+     (Stdcall,
+      IEnumSTATDATA_RemoteNext_Stub,
+      "IEnumSTATDATA_RemoteNext_Stub");
+   pragma Import
+     (Stdcall,
+      IEnumSTATDATA_Skip_Proxy,
+      "IEnumSTATDATA_Skip_Proxy");
+   pragma Import
+     (Stdcall,
+      IEnumSTATDATA_Skip_Stub,
+      "IEnumSTATDATA_Skip_Stub");
+   pragma Import
+     (Stdcall,
+      IEnumSTATDATA_Reset_Proxy,
+      "IEnumSTATDATA_Reset_Proxy");
+   pragma Import
+     (Stdcall,
+      IEnumSTATDATA_Reset_Stub,
+      "IEnumSTATDATA_Reset_Stub");
+   pragma Import
+     (Stdcall,
+      IEnumSTATDATA_Clone_Proxy,
+      "IEnumSTATDATA_Clone_Proxy");
+   pragma Import
+     (Stdcall,
+      IEnumSTATDATA_Clone_Stub,
+      "IEnumSTATDATA_Clone_Stub");
+   pragma Import
+     (Stdcall,
+      IRootStorage_SwitchToFile_Proxy,
+      "IRootStorage_SwitchToFile_Proxy");
+   pragma Import
+     (Stdcall,
+      IRootStorage_SwitchToFile_Stub,
+      "IRootStorage_SwitchToFile_Stub");
+   pragma Import
+     (Stdcall,
+      IAdviseSink_RemoteOnDataChange_Proxy,
+      "IAdviseSink_RemoteOnDataChange_Proxy");
+   pragma Import
+     (Stdcall,
+      IAdviseSink_RemoteOnDataChange_Stub,
+      "IAdviseSink_RemoteOnDataChange_Stub");
+   pragma Import
+     (Stdcall,
+      IAdviseSink_RemoteOnViewChange_Proxy,
+      "IAdviseSink_RemoteOnViewChange_Proxy");
+   pragma Import
+     (Stdcall,
+      IAdviseSink_RemoteOnViewChange_Stub,
+      "IAdviseSink_RemoteOnViewChange_Stub");
+   pragma Import
+     (Stdcall,
+      IAdviseSink_RemoteOnRename_Proxy,
+      "IAdviseSink_RemoteOnRename_Proxy");
+   pragma Import
+     (Stdcall,
+      IAdviseSink_RemoteOnRename_Stub,
+      "IAdviseSink_RemoteOnRename_Stub");
+   pragma Import
+     (Stdcall,
+      IAdviseSink_RemoteOnSave_Proxy,
+      "IAdviseSink_RemoteOnSave_Proxy");
+   pragma Import
+     (Stdcall,
+      IAdviseSink_RemoteOnSave_Stub,
+      "IAdviseSink_RemoteOnSave_Stub");
+   pragma Import
+     (Stdcall,
+      IAdviseSink_RemoteOnClose_Proxy,
+      "IAdviseSink_RemoteOnClose_Proxy");
+   pragma Import
+     (Stdcall,
+      IAdviseSink_RemoteOnClose_Stub,
+      "IAdviseSink_RemoteOnClose_Stub");
+   pragma Import
+     (Stdcall,
+      IAdviseSink2_RemoteOnLinkSrcChange_Proxy,
+      "IAdviseSink2_RemoteOnLinkSrcChange_Proxy");
+   pragma Import
+     (Stdcall,
+      IAdviseSink2_RemoteOnLinkSrcChange_Stub,
+      "IAdviseSink2_RemoteOnLinkSrcChange_Stub");
+   pragma Import
+     (Stdcall,
+      IDataObject_RemoteGetData_Proxy,
+      "IDataObject_RemoteGetData_Proxy");
+   pragma Import
+     (Stdcall,
+      IDataObject_RemoteGetData_Stub,
+      "IDataObject_RemoteGetData_Stub");
+   pragma Import
+     (Stdcall,
+      IDataObject_RemoteGetDataHere_Proxy,
+      "IDataObject_RemoteGetDataHere_Proxy");
+   pragma Import
+     (Stdcall,
+      IDataObject_RemoteGetDataHere_Stub,
+      "IDataObject_RemoteGetDataHere_Stub");
+   pragma Import
+     (Stdcall,
+      IDataObject_QueryGetData_Proxy,
+      "IDataObject_QueryGetData_Proxy");
+   pragma Import
+     (Stdcall,
+      IDataObject_QueryGetData_Stub,
+      "IDataObject_QueryGetData_Stub");
+   pragma Import
+     (Stdcall,
+      IDataObject_GetCanonicalFormatEtc_Proxy,
+      "IDataObject_GetCanonicalFormatEtc_Proxy");
+   pragma Import
+     (Stdcall,
+      IDataObject_GetCanonicalFormatEtc_Stub,
+      "IDataObject_GetCanonicalFormatEtc_Stub");
+   pragma Import
+     (Stdcall,
+      IDataObject_RemoteSetData_Proxy,
+      "IDataObject_RemoteSetData_Proxy");
+   pragma Import
+     (Stdcall,
+      IDataObject_RemoteSetData_Stub,
+      "IDataObject_RemoteSetData_Stub");
+   pragma Import
+     (Stdcall,
+      IDataObject_EnumFormatEtc_Proxy,
+      "IDataObject_EnumFormatEtc_Proxy");
+   pragma Import
+     (Stdcall,
+      IDataObject_EnumFormatEtc_Stub,
+      "IDataObject_EnumFormatEtc_Stub");
+   pragma Import
+     (Stdcall,
+      IDataObject_DAdvise_Proxy,
+      "IDataObject_DAdvise_Proxy");
+   pragma Import
+     (Stdcall,
+      IDataObject_DAdvise_Stub,
+      "IDataObject_DAdvise_Stub");
+   pragma Import
+     (Stdcall,
+      IDataObject_DUnadvise_Proxy,
+      "IDataObject_DUnadvise_Proxy");
+   pragma Import
+     (Stdcall,
+      IDataObject_DUnadvise_Stub,
+      "IDataObject_DUnadvise_Stub");
+   pragma Import
+     (Stdcall,
+      IDataObject_EnumDAdvise_Proxy,
+      "IDataObject_EnumDAdvise_Proxy");
+   pragma Import
+     (Stdcall,
+      IDataObject_EnumDAdvise_Stub,
+      "IDataObject_EnumDAdvise_Stub");
+   pragma Import
+     (Stdcall,
+      IDataAdviseHolder_Advise_Proxy,
+      "IDataAdviseHolder_Advise_Proxy");
+   pragma Import
+     (Stdcall,
+      IDataAdviseHolder_Advise_Stub,
+      "IDataAdviseHolder_Advise_Stub");
+   pragma Import
+     (Stdcall,
+      IDataAdviseHolder_Unadvise_Proxy,
+      "IDataAdviseHolder_Unadvise_Proxy");
+   pragma Import
+     (Stdcall,
+      IDataAdviseHolder_Unadvise_Stub,
+      "IDataAdviseHolder_Unadvise_Stub");
+   pragma Import
+     (Stdcall,
+      IDataAdviseHolder_EnumAdvise_Proxy,
+      "IDataAdviseHolder_EnumAdvise_Proxy");
+   pragma Import
+     (Stdcall,
+      IDataAdviseHolder_EnumAdvise_Stub,
+      "IDataAdviseHolder_EnumAdvise_Stub");
+   pragma Import
+     (Stdcall,
+      IDataAdviseHolder_SendOnDataChange_Proxy,
+      "IDataAdviseHolder_SendOnDataChange_Proxy");
+   pragma Import
+     (Stdcall,
+      IDataAdviseHolder_SendOnDataChange_Stub,
+      "IDataAdviseHolder_SendOnDataChange_Stub");
+   pragma Import
+     (Stdcall,
+      IMessageFilter_HandleInComingCall_Proxy,
+      "IMessageFilter_HandleInComingCall_Proxy");
+   pragma Import
+     (Stdcall,
+      IMessageFilter_HandleInComingCall_Stub,
+      "IMessageFilter_HandleInComingCall_Stub");
+   pragma Import
+     (Stdcall,
+      IMessageFilter_RetryRejectedCall_Proxy,
+      "IMessageFilter_RetryRejectedCall_Proxy");
+   pragma Import
+     (Stdcall,
+      IMessageFilter_RetryRejectedCall_Stub,
+      "IMessageFilter_RetryRejectedCall_Stub");
+   pragma Import
+     (Stdcall,
+      IMessageFilter_MessagePending_Proxy,
+      "IMessageFilter_MessagePending_Proxy");
+   pragma Import
+     (Stdcall,
+      IMessageFilter_MessagePending_Stub,
+      "IMessageFilter_MessagePending_Stub");
+   pragma Import
+     (Stdcall,
+      IRpcChannelBuffer_GetBuffer_Proxy,
+      "IRpcChannelBuffer_GetBuffer_Proxy");
+   pragma Import
+     (Stdcall,
+      IRpcChannelBuffer_GetBuffer_Stub,
+      "IRpcChannelBuffer_GetBuffer_Stub");
+   pragma Import
+     (Stdcall,
+      IRpcChannelBuffer_SendReceive_Proxy,
+      "IRpcChannelBuffer_SendReceive_Proxy");
+   pragma Import
+     (Stdcall,
+      IRpcChannelBuffer_SendReceive_Stub,
+      "IRpcChannelBuffer_SendReceive_Stub");
+   pragma Import
+     (Stdcall,
+      IRpcChannelBuffer_FreeBuffer_Proxy,
+      "IRpcChannelBuffer_FreeBuffer_Proxy");
+   pragma Import
+     (Stdcall,
+      IRpcChannelBuffer_FreeBuffer_Stub,
+      "IRpcChannelBuffer_FreeBuffer_Stub");
+   pragma Import
+     (Stdcall,
+      IRpcChannelBuffer_GetDestCtx_Proxy,
+      "IRpcChannelBuffer_GetDestCtx_Proxy");
+   pragma Import
+     (Stdcall,
+      IRpcChannelBuffer_GetDestCtx_Stub,
+      "IRpcChannelBuffer_GetDestCtx_Stub");
+   pragma Import
+     (Stdcall,
+      IRpcChannelBuffer_IsConnected_Proxy,
+      "IRpcChannelBuffer_IsConnected_Proxy");
+   pragma Import
+     (Stdcall,
+      IRpcChannelBuffer_IsConnected_Stub,
+      "IRpcChannelBuffer_IsConnected_Stub");
+   pragma Import
+     (Stdcall,
+      IRpcProxyBuffer_Connect_Proxy,
+      "IRpcProxyBuffer_Connect_Proxy");
+   pragma Import
+     (Stdcall,
+      IRpcProxyBuffer_Connect_Stub,
+      "IRpcProxyBuffer_Connect_Stub");
+   pragma Import
+     (Stdcall,
+      IRpcProxyBuffer_Disconnect_Proxy,
+      "IRpcProxyBuffer_Disconnect_Proxy");
+   pragma Import
+     (Stdcall,
+      IRpcProxyBuffer_Disconnect_Stub,
+      "IRpcProxyBuffer_Disconnect_Stub");
+   pragma Import
+     (Stdcall,
+      IRpcStubBuffer_Connect_Proxy,
+      "IRpcStubBuffer_Connect_Proxy");
+   pragma Import
+     (Stdcall,
+      IRpcStubBuffer_Connect_Stub,
+      "IRpcStubBuffer_Connect_Stub");
+   pragma Import
+     (Stdcall,
+      IRpcStubBuffer_Disconnect_Proxy,
+      "IRpcStubBuffer_Disconnect_Proxy");
+   pragma Import
+     (Stdcall,
+      IRpcStubBuffer_Disconnect_Stub,
+      "IRpcStubBuffer_Disconnect_Stub");
+   pragma Import
+     (Stdcall,
+      IRpcStubBuffer_Invoke_Proxy,
+      "IRpcStubBuffer_Invoke_Proxy");
+   pragma Import
+     (Stdcall,
+      IRpcStubBuffer_Invoke_Stub,
+      "IRpcStubBuffer_Invoke_Stub");
+   pragma Import
+     (Stdcall,
+      IRpcStubBuffer_IsIIDSupported_Proxy,
+      "IRpcStubBuffer_IsIIDSupported_Proxy");
+   pragma Import
+     (Stdcall,
+      IRpcStubBuffer_IsIIDSupported_Stub,
+      "IRpcStubBuffer_IsIIDSupported_Stub");
+   pragma Import
+     (Stdcall,
+      IRpcStubBuffer_CountRefs_Proxy,
+      "IRpcStubBuffer_CountRefs_Proxy");
+   pragma Import
+     (Stdcall,
+      IRpcStubBuffer_CountRefs_Stub,
+      "IRpcStubBuffer_CountRefs_Stub");
+   pragma Import
+     (Stdcall,
+      IRpcStubBuffer_DebugServerQueryInterface_Proxy,
+      "IRpcStubBuffer_DebugServerQueryInterface_Proxy");
+   pragma Import
+     (Stdcall,
+      IRpcStubBuffer_DebugServerQueryInterface_Stub,
+      "IRpcStubBuffer_DebugServerQueryInterface_Stub");
+   pragma Import
+     (Stdcall,
+      IRpcStubBuffer_DebugServerRelease_Proxy,
+      "IRpcStubBuffer_DebugServerRelease_Proxy");
+   pragma Import
+     (Stdcall,
+      IRpcStubBuffer_DebugServerRelease_Stub,
+      "IRpcStubBuffer_DebugServerRelease_Stub");
+   pragma Import
+     (Stdcall,
+      IPSFactoryBuffer_CreateProxy_Proxy,
+      "IPSFactoryBuffer_CreateProxy_Proxy");
+   pragma Import
+     (Stdcall,
+      IPSFactoryBuffer_CreateProxy_Stub,
+      "IPSFactoryBuffer_CreateProxy_Stub");
+   pragma Import
+     (Stdcall,
+      IPSFactoryBuffer_CreateStub_Proxy,
+      "IPSFactoryBuffer_CreateStub_Proxy");
+   pragma Import
+     (Stdcall,
+      IPSFactoryBuffer_CreateStub_Stub,
+      "IPSFactoryBuffer_CreateStub_Stub");
+   pragma Import (Stdcall, SNB_to_xmit, "SNB_to_xmit");
+   pragma Import (Stdcall, SNB_from_xmit, "SNB_from_xmit");
+   pragma Import (Stdcall, SNB_free_inst, "SNB_free_inst");
+   pragma Import (Stdcall, SNB_free_xmit, "SNB_free_xmit");
+   pragma Import
+     (Stdcall,
+      IClassFactory_CreateInstance_Proxy,
+      "IClassFactory_CreateInstance_Proxy");
+   pragma Import
+     (Stdcall,
+      IClassFactory_CreateInstance_Stub,
+      "IClassFactory_CreateInstance_Stub");
+   pragma Import
+     (Stdcall,
+      IEnumUnknown_Next_Proxy,
+      "IEnumUnknown_Next_Proxy");
    pragma Import (Stdcall, IEnumUnknown_Next_Stub, "IEnumUnknown_Next_Stub");
-   --  objbase.h :8572
-   pragma Import (Stdcall, IEnumMoniker_Next_Proxy, "IEnumMoniker_Next_Proxy");
-   --  objbase.h :8578
+   pragma Import
+     (Stdcall,
+      IEnumMoniker_Next_Proxy,
+      "IEnumMoniker_Next_Proxy");
    pragma Import (Stdcall, IEnumMoniker_Next_Stub, "IEnumMoniker_Next_Stub");
-   --  objbase.h :8585
-   pragma Import (Stdcall, IMoniker_BindToObject_Proxy,
-                   "IMoniker_BindToObject_Proxy");
-   --  objbase.h :8591
-   pragma Import (Stdcall, IMoniker_BindToObject_Stub,
-                    "IMoniker_BindToObject_Stub");
-   --  objbase.h :8599
-   pragma Import (Stdcall, IMoniker_BindToStorage_Proxy,
-                   "IMoniker_BindToStorage_Proxy");
-   --  objbase.h :8606
-   pragma Import (Stdcall, IMoniker_BindToStorage_Stub,
-                   "IMoniker_BindToStorage_Stub");
-   --  objbase.h :8614
+   pragma Import
+     (Stdcall,
+      IMoniker_BindToObject_Proxy,
+      "IMoniker_BindToObject_Proxy");
+   pragma Import
+     (Stdcall,
+      IMoniker_BindToObject_Stub,
+      "IMoniker_BindToObject_Stub");
+   pragma Import
+     (Stdcall,
+      IMoniker_BindToStorage_Proxy,
+      "IMoniker_BindToStorage_Proxy");
+   pragma Import
+     (Stdcall,
+      IMoniker_BindToStorage_Stub,
+      "IMoniker_BindToStorage_Stub");
    pragma Import (Stdcall, IEnumString_Next_Proxy, "IEnumString_Next_Proxy");
-   --  objbase.h :8621
    pragma Import (Stdcall, IEnumString_Next_Stub, "IEnumString_Next_Stub");
-   --  objbase.h :8628
    pragma Import (Stdcall, IStream_Read_Proxy, "IStream_Read_Proxy");
-   --  objbase.h :8634
    pragma Import (Stdcall, IStream_Read_Stub, "IStream_Read_Stub");
-   --  objbase.h :8641
    pragma Import (Stdcall, IStream_Write_Proxy, "IStream_Write_Proxy");
-   --  objbase.h :8647
    pragma Import (Stdcall, IStream_Write_Stub, "IStream_Write_Stub");
-   --  objbase.h :8654
    pragma Import (Stdcall, IStream_Seek_Proxy, "IStream_Seek_Proxy");
-   --  objbase.h :8660
    pragma Import (Stdcall, IStream_Seek_Stub, "IStream_Seek_Stub");
-   --  objbase.h :8667
    pragma Import (Stdcall, IStream_CopyTo_Proxy, "IStream_CopyTo_Proxy");
-   --  objbase.h :8673
    pragma Import (Stdcall, IStream_CopyTo_Stub, "IStream_CopyTo_Stub");
-   --  objbase.h :8681
-   pragma Import (Stdcall, IEnumSTATSTG_Next_Proxy, "IEnumSTATSTG_Next_Proxy");
-   --  objbase.h :8688
+   pragma Import
+     (Stdcall,
+      IEnumSTATSTG_Next_Proxy,
+      "IEnumSTATSTG_Next_Proxy");
    pragma Import (Stdcall, IEnumSTATSTG_Next_Stub, "IEnumSTATSTG_Next_Stub");
-   --  objbase.h :8695
-   pragma Import (Stdcall, IStorage_OpenStream_Proxy,
-                    "IStorage_OpenStream_Proxy");
-   --  objbase.h :8701
-   pragma Import (Stdcall, IStorage_OpenStream_Stub,
-                    "IStorage_OpenStream_Stub");
-   --  objbase.h :8710
-   pragma Import (Stdcall, IStorage_EnumElements_Proxy,
-                   "IStorage_EnumElements_Proxy");
-   --  objbase.h :8719
-   pragma Import (Stdcall, IStorage_EnumElements_Stub,
-                    "IStorage_EnumElements_Stub");
-   --  objbase.h :8727
-   pragma Import (Stdcall, ILockBytes_ReadAt_Proxy, "ILockBytes_ReadAt_Proxy");
-   --  objbase.h :8735
+   pragma Import
+     (Stdcall,
+      IStorage_OpenStream_Proxy,
+      "IStorage_OpenStream_Proxy");
+   pragma Import
+     (Stdcall,
+      IStorage_OpenStream_Stub,
+      "IStorage_OpenStream_Stub");
+   pragma Import
+     (Stdcall,
+      IStorage_EnumElements_Proxy,
+      "IStorage_EnumElements_Proxy");
+   pragma Import
+     (Stdcall,
+      IStorage_EnumElements_Stub,
+      "IStorage_EnumElements_Stub");
+   pragma Import
+     (Stdcall,
+      ILockBytes_ReadAt_Proxy,
+      "ILockBytes_ReadAt_Proxy");
    pragma Import (Stdcall, ILockBytes_ReadAt_Stub, "ILockBytes_ReadAt_Stub");
-   --  objbase.h :8743
-   pragma Import (Stdcall, ILockBytes_WriteAt_Proxy,
-                    "ILockBytes_WriteAt_Proxy");
-   --  objbase.h :8750
-   pragma Import (Stdcall, ILockBytes_WriteAt_Stub, "ILockBytes_WriteAt_Stub");
-   --  objbase.h :8758
-   pragma Import (Stdcall, IEnumFORMATETC_Next_Proxy,
-                    "IEnumFORMATETC_Next_Proxy");
-   --  objbase.h :8765
-   pragma Import (Stdcall, IEnumFORMATETC_Next_Stub,
-                    "IEnumFORMATETC_Next_Stub");
-   --  objbase.h :8772
-   pragma Import (Stdcall, IEnumSTATDATA_Next_Proxy,
-                    "IEnumSTATDATA_Next_Proxy");
-   --  objbase.h :8778
-   pragma Import (Stdcall, IEnumSTATDATA_Next_Stub,
-                    "IEnumSTATDATA_Next_Stub");
-   --  objbase.h :8785
-   pragma Import (Stdcall, IAdviseSink_OnDataChange_Proxy,
-                   "IAdviseSink_OnDataChange_Proxy");     --  objbase.h :8791
-   pragma Import (Stdcall, IAdviseSink_OnDataChange_Stub,
-                   "IAdviseSink_OnDataChange_Stub");      --  objbase.h :8797
-   pragma Import (Stdcall, IAdviseSink_OnViewChange_Proxy,
-                   "IAdviseSink_OnViewChange_Proxy");     --  objbase.h :8802
-   pragma Import (Stdcall, IAdviseSink_OnViewChange_Stub,
-                   "IAdviseSink_OnViewChange_Stub");      --  objbase.h :8808
-   pragma Import (Stdcall, IAdviseSink_OnRename_Proxy,
-                    "IAdviseSink_OnRename_Proxy");
-   --  objbase.h :8813
-   pragma Import (Stdcall, IAdviseSink_OnRename_Stub,
-                    "IAdviseSink_OnRename_Stub");
-   --  objbase.h :8818
-   pragma Import (Stdcall, IAdviseSink_OnSave_Proxy,
-                    "IAdviseSink_OnSave_Proxy");
-   --  objbase.h :8822
-   pragma Import (Stdcall, IAdviseSink_OnSave_Stub,
-                    "IAdviseSink_OnSave_Stub");
-   --  objbase.h :8826
-   pragma Import (Stdcall, IAdviseSink_OnClose_Proxy,
-                    "IAdviseSink_OnClose_Proxy");
-   --  objbase.h :8829
-   pragma Import (Stdcall, IAdviseSink_OnClose_Stub,
-                    "IAdviseSink_OnClose_Stub");
-   --  objbase.h :8833
-   pragma Import (Stdcall, IAdviseSink2_OnLinkSrcChange_Proxy,
-                   "IAdviseSink2_OnLinkSrcChange_Proxy");
-   --  objbase.h :8836
-   pragma Import (Stdcall, IAdviseSink2_OnLinkSrcChange_Stub,
-                   "IAdviseSink2_OnLinkSrcChange_Stub");
-   --  objbase.h :8841
-   pragma Import (Stdcall, IDataObject_GetData_Proxy,
-                    "IDataObject_GetData_Proxy");
-   --  objbase.h :8845
-   pragma Import (Stdcall, IDataObject_GetData_Stub,
-                    "IDataObject_GetData_Stub");
-   --  objbase.h :8851
-   pragma Import (Stdcall, IDataObject_GetDataHere_Proxy,
-                   "IDataObject_GetDataHere_Proxy");      --  objbase.h :8856
-   pragma Import (Stdcall, IDataObject_GetDataHere_Stub,
-                   "IDataObject_GetDataHere_Stub");       --  objbase.h :8862
-   pragma Import (Stdcall, IDataObject_SetData_Proxy,
-                    "IDataObject_SetData_Proxy");
-   --  objbase.h :8867
-   pragma Import (Stdcall, IDataObject_SetData_Stub,
-                    "IDataObject_SetData_Stub");
-   --  objbase.h :8874
+   pragma Import
+     (Stdcall,
+      ILockBytes_WriteAt_Proxy,
+      "ILockBytes_WriteAt_Proxy");
+   pragma Import
+     (Stdcall,
+      ILockBytes_WriteAt_Stub,
+      "ILockBytes_WriteAt_Stub");
+   pragma Import
+     (Stdcall,
+      IEnumFORMATETC_Next_Proxy,
+      "IEnumFORMATETC_Next_Proxy");
+   pragma Import
+     (Stdcall,
+      IEnumFORMATETC_Next_Stub,
+      "IEnumFORMATETC_Next_Stub");
+   pragma Import
+     (Stdcall,
+      IEnumSTATDATA_Next_Proxy,
+      "IEnumSTATDATA_Next_Proxy");
+   pragma Import
+     (Stdcall,
+      IEnumSTATDATA_Next_Stub,
+      "IEnumSTATDATA_Next_Stub");
+   pragma Import
+     (Stdcall,
+      IAdviseSink_OnDataChange_Proxy,
+      "IAdviseSink_OnDataChange_Proxy");
+   pragma Import
+     (Stdcall,
+      IAdviseSink_OnDataChange_Stub,
+      "IAdviseSink_OnDataChange_Stub");
+   pragma Import
+     (Stdcall,
+      IAdviseSink_OnViewChange_Proxy,
+      "IAdviseSink_OnViewChange_Proxy");
+   pragma Import
+     (Stdcall,
+      IAdviseSink_OnViewChange_Stub,
+      "IAdviseSink_OnViewChange_Stub");
+   pragma Import
+     (Stdcall,
+      IAdviseSink_OnRename_Proxy,
+      "IAdviseSink_OnRename_Proxy");
+   pragma Import
+     (Stdcall,
+      IAdviseSink_OnRename_Stub,
+      "IAdviseSink_OnRename_Stub");
+   pragma Import
+     (Stdcall,
+      IAdviseSink_OnSave_Proxy,
+      "IAdviseSink_OnSave_Proxy");
+   pragma Import
+     (Stdcall,
+      IAdviseSink_OnSave_Stub,
+      "IAdviseSink_OnSave_Stub");
+   pragma Import
+     (Stdcall,
+      IAdviseSink_OnClose_Proxy,
+      "IAdviseSink_OnClose_Proxy");
+   pragma Import
+     (Stdcall,
+      IAdviseSink_OnClose_Stub,
+      "IAdviseSink_OnClose_Stub");
+   pragma Import
+     (Stdcall,
+      IAdviseSink2_OnLinkSrcChange_Proxy,
+      "IAdviseSink2_OnLinkSrcChange_Proxy");
+   pragma Import
+     (Stdcall,
+      IAdviseSink2_OnLinkSrcChange_Stub,
+      "IAdviseSink2_OnLinkSrcChange_Stub");
+   pragma Import
+     (Stdcall,
+      IDataObject_GetData_Proxy,
+      "IDataObject_GetData_Proxy");
+   pragma Import
+     (Stdcall,
+      IDataObject_GetData_Stub,
+      "IDataObject_GetData_Stub");
+   pragma Import
+     (Stdcall,
+      IDataObject_GetDataHere_Proxy,
+      "IDataObject_GetDataHere_Proxy");
+   pragma Import
+     (Stdcall,
+      IDataObject_GetDataHere_Stub,
+      "IDataObject_GetDataHere_Stub");
+   pragma Import
+     (Stdcall,
+      IDataObject_SetData_Proxy,
+      "IDataObject_SetData_Proxy");
+   pragma Import
+     (Stdcall,
+      IDataObject_SetData_Stub,
+      "IDataObject_SetData_Stub");
    pragma Import (Stdcall, CoBuildVersion, "CoBuildVersion");
-   --  objbase.h :8959
-   pragma Import (Stdcall, CoInitialize, "CoInitialize");   --  objbase.h :8963
+   pragma Import (Stdcall, CoInitialize, "CoInitialize");
    pragma Import (Stdcall, CoUninitialize, "CoUninitialize");
-   --  objbase.h :8964
-   pragma Import (Stdcall, CoGetMalloc, "CoGetMalloc");     --  objbase.h :8965
+   pragma Import (Stdcall, CoGetMalloc, "CoGetMalloc");
    pragma Import (Stdcall, CoGetCurrentProcess, "CoGetCurrentProcess");
-   --  objbase.h :8966
    pragma Import (Stdcall, CoCreateStandardMalloc, "CoCreateStandardMalloc");
-   --  objbase.h :8967
    pragma Import (Stdcall, CoGetClassObject, "CoGetClassObject");
-   --  objbase.h :8976
    pragma Import (Stdcall, CoRegisterClassObject, "CoRegisterClassObject");
-   --  objbase.h :8978
    pragma Import (Stdcall, CoRevokeClassObject, "CoRevokeClassObject");
-   --  objbase.h :8980
    pragma Import (Stdcall, CoGetMarshalSizeMax, "CoGetMarshalSizeMax");
-   --  objbase.h :8985
    pragma Import (Stdcall, CoMarshalInterface, "CoMarshalInterface");
-   --  objbase.h :8987
    pragma Import (Stdcall, CoUnmarshalInterface, "CoUnmarshalInterface");
-   --  objbase.h :8989
    pragma Import (Stdcall, CoMarshalHresult, "CoMarshalHresult");
-   --  objbase.h :8990
    pragma Import (Stdcall, CoUnmarshalHresult, "CoUnmarshalHresult");
-   --  objbase.h :8991
    pragma Import (Stdcall, CoReleaseMarshalData, "CoReleaseMarshalData");
-   --  objbase.h :8992
    pragma Import (Stdcall, CoDisconnectObject, "CoDisconnectObject");
-   --  objbase.h :8993
    pragma Import (Stdcall, CoLockObjectExternal, "CoLockObjectExternal");
-   --  objbase.h :8994
    pragma Import (Stdcall, CoGetStandardMarshal, "CoGetStandardMarshal");
-   --  objbase.h :8995
    pragma Import (Stdcall, CoIsHandlerConnected, "CoIsHandlerConnected");
-   --  objbase.h :8999
-   pragma Import (Stdcall, CoHasStrongExternalConnections,
-                   "CoHasStrongExternalConnections");     --  objbase.h :9000
+   pragma Import
+     (Stdcall,
+      CoHasStrongExternalConnections,
+      "CoHasStrongExternalConnections");
    pragma Import (Stdcall, CoLoadLibrary, "CoLoadLibrary");
-   --  objbase.h :9005
    pragma Import (Stdcall, CoFreeLibrary, "CoFreeLibrary");
-   --  objbase.h :9006
    pragma Import (Stdcall, CoFreeAllLibraries, "CoFreeAllLibraries");
-   --  objbase.h :9007
    pragma Import (Stdcall, CoFreeUnusedLibraries, "CoFreeUnusedLibraries");
-   --  objbase.h :9008
    pragma Import (Stdcall, CoCreateInstance, "CoCreateInstance");
-   --  objbase.h :9013
    pragma Import (Stdcall, StringFromCLSID, "StringFromCLSID");
-   --  objbase.h :9019
    pragma Import (Stdcall, CLSIDFromString, "CLSIDFromString");
-   --  objbase.h :9020
    pragma Import (Stdcall, StringFromIID, "StringFromIID");
-   --  objbase.h :9021
    pragma Import (Stdcall, IIDFromString, "IIDFromString");
-   --  objbase.h :9022
    pragma Import (Stdcall, CoIsOle1Class, "CoIsOle1Class");
-   --  objbase.h :9023
    pragma Import (Stdcall, ProgIDFromCLSID, "ProgIDFromCLSID");
-   --  objbase.h :9024
    pragma Import (Stdcall, CLSIDFromProgID, "CLSIDFromProgID");
-   --  objbase.h :9025
    pragma Import (Stdcall, StringFromGUID2, "StringFromGUID2");
-   --  objbase.h :9026
    pragma Import (Stdcall, CoCreateGuid, "CoCreateGuid");
-   --  objbase.h :9028
-   pragma Import (Stdcall, CoFileTimeToDosDateTime, "CoFileTimeToDosDateTime");
-   --  objbase.h :9030
-   pragma Import (Stdcall, CoDosDateTimeToFileTime, "CoDosDateTimeToFileTime");
-   --  objbase.h :9032
+   pragma Import
+     (Stdcall,
+      CoFileTimeToDosDateTime,
+      "CoFileTimeToDosDateTime");
+   pragma Import
+     (Stdcall,
+      CoDosDateTimeToFileTime,
+      "CoDosDateTimeToFileTime");
    pragma Import (Stdcall, CoFileTimeNow, "CoFileTimeNow");
-   --  objbase.h :9034
-   pragma Import (Stdcall, CoRegisterMessageFilter, "CoRegisterMessageFilter");
-   --  objbase.h :9037
+   pragma Import
+     (Stdcall,
+      CoRegisterMessageFilter,
+      "CoRegisterMessageFilter");
    pragma Import (Stdcall, CoGetTreatAsClass, "CoGetTreatAsClass");
-   --  objbase.h :9043
    pragma Import (Stdcall, CoTreatAsClass, "CoTreatAsClass");
-   --  objbase.h :9044
    pragma Import (Stdcall, DllGetClassObject, "DllGetClassObject");
-   --  objbase.h :9064
    pragma Import (Stdcall, DllCanUnloadNow, "DllCanUnloadNow");
-   --  objbase.h :9066
    pragma Import (Stdcall, CoTaskMemAlloc, "CoTaskMemAlloc");
-   --  objbase.h :9070
    pragma Import (Stdcall, CoTaskMemRealloc, "CoTaskMemRealloc");
-   --  objbase.h :9071
    pragma Import (Stdcall, CoTaskMemFree, "CoTaskMemFree");
-   --  objbase.h :9072
    pragma Import (Stdcall, CreateDataAdviseHolder, "CreateDataAdviseHolder");
-   --  objbase.h :9077
    pragma Import (Stdcall, CreateDataCache, "CreateDataCache");
-   --  objbase.h :9079
    pragma Import (Stdcall, StgCreateDocfile, "StgCreateDocfile");
-   --  objbase.h :9088
-   pragma Import (Stdcall, StgCreateDocfileOnILockBytes,
-                   "StgCreateDocfileOnILockBytes");
-   --  objbase.h :9093
+   pragma Import
+     (Stdcall,
+      StgCreateDocfileOnILockBytes,
+      "StgCreateDocfileOnILockBytes");
    pragma Import (Stdcall, StgOpenStorage, "StgOpenStorage");
-   --  objbase.h :9098
-   pragma Import (Stdcall, StgOpenStorageOnILockBytes,
-                    "StgOpenStorageOnILockBytes");
-   --  objbase.h :9104
+   pragma Import
+     (Stdcall,
+      StgOpenStorageOnILockBytes,
+      "StgOpenStorageOnILockBytes");
    pragma Import (Stdcall, StgIsStorageFile, "StgIsStorageFile");
-   --  objbase.h :9111
    pragma Import (Stdcall, StgIsStorageILockBytes, "StgIsStorageILockBytes");
-   --  objbase.h :9112
-   pragma Import (Stdcall, StgSetTimes, "StgSetTimes");     --  objbase.h :9114
-   pragma Import (Stdcall, BindMoniker, "BindMoniker");     --  objbase.h :9124
+   pragma Import (Stdcall, StgSetTimes, "StgSetTimes");
+   pragma Import (Stdcall, BindMoniker, "BindMoniker");
    pragma Import (Stdcall, MkParseDisplayName, "MkParseDisplayName");
-   --  objbase.h :9125
    pragma Import (Stdcall, MonikerRelativePathTo, "MonikerRelativePathTo");
-   --  objbase.h :9127
-   pragma Import (Stdcall, MonikerCommonPrefixWith, "MonikerCommonPrefixWith");
-   --  objbase.h :9129
-   pragma Import (Stdcall, CreateBindCtx, "CreateBindCtx"); --  objbase.h :9131
+   pragma Import
+     (Stdcall,
+      MonikerCommonPrefixWith,
+      "MonikerCommonPrefixWith");
+   pragma Import (Stdcall, CreateBindCtx, "CreateBindCtx");
    pragma Import (Stdcall, CreateGenericComposite, "CreateGenericComposite");
-   --  objbase.h :9132
-   pragma Import (Stdcall, GetClassFile, "GetClassFile");   --  objbase.h :9134
+   pragma Import (Stdcall, GetClassFile, "GetClassFile");
    pragma Import (Stdcall, CreateFileMoniker, "CreateFileMoniker");
-   --  objbase.h :9136
    pragma Import (Stdcall, CreateItemMoniker, "CreateItemMoniker");
-   --  objbase.h :9138
    pragma Import (Stdcall, CreateAntiMoniker, "CreateAntiMoniker");
-   --  objbase.h :9140
    pragma Import (Stdcall, CreatePointerMoniker, "CreatePointerMoniker");
-   --  objbase.h :9141
    pragma Import (Stdcall, GetRunningObjectTable, "GetRunningObjectTable");
-   --  objbase.h :9143
-
--------------------------------------------------------------------------------
---
---  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS PROVIDED WITHOUT CHARGE
---  "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
---  BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR
---  FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the entire risk as to
---  the accuracy and the use of this file.  This file may be used, copied,
---  modified and distributed only by licensees of Microsoft Corporation's
---  WIN32 Software Development Kit in accordance with the terms of the
---  licensee's End-User License Agreement for Microsoft Software for the
---  WIN32 Development Kit.
---
---  Copyright (c) Intermetrics, Inc. 1995
---  Portions (c) 1985-1994 Microsoft Corporation with permission.
---  Microsoft is a registered trademark and Windows and Windows NT are
---  trademarks of Microsoft Corporation.
---
--------------------------------------------------------------------------------
 
 end Win32.Objbase;

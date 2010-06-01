@@ -6,20 +6,20 @@
 --  AND/OR FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the
 --  entire risk as to the accuracy and the use of this file.
 --
---  Copyright (c) Intermetrics, Inc. 1995
+--  Copyright (C) Intermetrics, Inc. 1995
 --  Royalty-free, unlimited, worldwide, non-exclusive use, modification,
 --  reproduction and further distribution of this file is permitted.
+--
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (C) 2000-2010, AdaCore
 --
 -------------------------------------------------------------------------------
 
 with Interfaces.C.Pointers, System;
 
 package Stdarg.Impl is
-
-   --  *******************************************************
-   --  Getting arguments out of lists, for use by implementers
-   --  of variable-parameter functions
-   --  *******************************************************
 
    subtype Int is Interfaces.C.int;
 
@@ -33,22 +33,24 @@ package Stdarg.Impl is
 
    function "&" (Left, Right : ArgList) return ArgList;
 
-   procedure Do_Varargs (Proc     : in System.Address;
-                         Nb_Args  : Int;
-                         Arg_Addr : Param_Access);
+   procedure Do_Varargs
+     (Proc     : in System.Address;
+      Nb_Args  : Int;
+      Arg_Addr : Param_Access);
 
-   function F_Varargs (Func     : in System.Address;
-                       Nb_Args  : Int;
-                       Arg_Addr : Param_Access) return Stdarg.C_Param;
-
-   --  debugging
-   --  procedure Dump (Addr : Param_Access; Nb_Args  : Stdarg.Int);
-   --  pragma Import (C, Dump, "dump");
+   function F_Varargs
+     (Func     : in System.Address;
+      Nb_Args  : Int;
+      Arg_Addr : Param_Access)
+      return Stdarg.C_Param;
 
 private
 
-   package Arith is new Interfaces.C.Pointers
-     (Integer, C_Param, Stdarg.ArgVector, 0);
+   package Arith is new Interfaces.C.Pointers (
+      Integer,
+      C_Param,
+      Stdarg.ArgVector,
+      0);
 
    type Param_Access is new Arith.Pointer;
 

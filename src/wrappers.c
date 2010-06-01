@@ -4,7 +4,7 @@
 /* This file is now maintained and made available by AdaCore under       */
 /* the same terms.                                                       */
 /*                                                                       */
-/* Copyright (c) AdaCore 2000-2010, AdaCore                              */
+/* Copyright (C) 2000-2010, AdaCore                                      */
 /*************************************************************************/
 
 #include <windows.h>

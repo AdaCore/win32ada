@@ -1,14 +1,19 @@
 -------------------------------------------------------------------------------
 --
---  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS FURNISHED "AS IS" WITHOUT
---  WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
---  TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
---  PARTICULAR PURPOSE.  The user assumes the entire risk as to the accuracy
---  and the use of this file.
+--  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS FURNISHED "AS IS"
+--  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
+--  BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY
+--  AND/OR FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the
+--  entire risk as to the accuracy and the use of this file.
 --
---  Copyright (c) Intermetrics, Inc. 1995
+--  Copyright (C) Intermetrics, Inc. 1995
 --  Royalty-free, unlimited, worldwide, non-exclusive use, modification,
 --  reproduction and further distribution of this file is permitted.
+--
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (C) 2000-2010, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -46,27 +51,30 @@ package body Win32.Winerror is
 
    function HRESULT_SEVERITY (H : HRESULT) return WORD is
    begin
-      if H < 0 then return 1; else return 0; end if;
+      if H < 0 then
+         return 1;
+      else
+         return 0;
+      end if;
    end HRESULT_SEVERITY;
 
    function MAKE_HRESULT (sev, fac, code : WORD) return HRESULT is
       use Win32.Utils;
       use Interfaces;
    begin
-      return HRESULT
-        (Shift_Left (Unsigned_32 (sev), 31) or
-        Shift_Left (Unsigned_32 (fac), 16) or
-        Unsigned_32 (LONG (code)));
+      return HRESULT (Shift_Left (Unsigned_32 (sev), 31) or
+                      Shift_Left (Unsigned_32 (fac), 16) or
+                      Unsigned_32 (LONG (code)));
    end MAKE_HRESULT;
 
    function HRESULT_FROM_WIN32 (X : DWORD) return HRESULT is
       use Win32.Utils;
       use type Interfaces.C.unsigned_short;
    begin
-      if X  /=  0 then
+      if X /= 0 then
          return HRESULT (Win32.Utils.MAKELONG
-           (Low  => LOWORD (X),
-           High => FACILITY_WIN32 or 16#8000#));
+                            (Low  => LOWORD (X),
+                             High => FACILITY_WIN32 or 16#8000#));
       else
          return 0;
       end if;
@@ -79,5 +87,3 @@ package body Win32.Winerror is
    end HRESULT_FROM_NT;
 
 end Win32.Winerror;
-
-

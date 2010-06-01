@@ -1,19 +1,19 @@
 -------------------------------------------------------------------------------
 --
---  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS PROVIDED WITHOUT CHARGE
---  "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
---  BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR
---  FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the entire risk as to
---  the accuracy and the use of this file.  This file may be used, copied,
---  modified and distributed only by licensees of Microsoft Corporation's
---  WIN32 Software Development Kit in accordance with the terms of the
---  licensee's End-User License Agreement for Microsoft Software for the
---  WIN32 Development Kit.
+--  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS FURNISHED "AS IS"
+--  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
+--  BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY
+--  AND/OR FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the
+--  entire risk as to the accuracy and the use of this file.
 --
---  Copyright (c) Intermetrics, Inc. 1995
---  Portions (c) 1985-1994 Microsoft Corporation with permission.
---  Microsoft is a registered trademark and Windows and Windows NT are
---  trademarks of Microsoft Corporation.
+--  Copyright (C) Intermetrics, Inc. 1995
+--  Royalty-free, unlimited, worldwide, non-exclusive use, modification,
+--  reproduction and further distribution of this file is permitted.
+--
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (C) 2000-2010, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -22,154 +22,140 @@ with Win32.Winnt;
 
 package Win32.Custcntl is
 
-   CCHCCCLASS : constant := 32;                            --  custcntl.h:20
-   CCHCCDESC : constant := 32;                            --  custcntl.h:21
-   CCHCCTEXT : constant := 256;                           --  custcntl.h:22
-   CCF_NOTEXT : constant := 16#1#;                         --  custcntl.h:123
+   CCHCCCLASS : constant := 32;
+   CCHCCDESC  : constant := 32;
+   CCHCCTEXT  : constant := 256;
+   CCF_NOTEXT : constant := 16#1#;
 
-   type CCSTYLEA;                                          --  custcntl.h:30
-   type CCSTYLEW;                                          --  custcntl.h:38
-   type CCSTYLEFLAGA;                                      --  custcntl.h:97
-   type CCSTYLEFLAGW;                                      --  custcntl.h:103
-   type CCINFOA;                                           --  custcntl.h:131
-   type CCINFOW;                                           --  custcntl.h:149
+   type CCSTYLEA;
+   type CCSTYLEW;
+   type CCSTYLEFLAGA;
+   type CCSTYLEFLAGW;
+   type CCINFOA;
+   type CCINFOW;
 
-   type LPCCSTYLEA is access all CCSTYLEA;                 --  custcntl.h:36
-   subtype LPCCSTYLE is LPCCSTYLEA;                        --  custcntl.h:51
-   type LPCCSTYLEW is access all CCSTYLEW;                 --  custcntl.h:44
-   type LPCCSTYLEFLAGA is access all CCSTYLEFLAGA;         --  custcntl.h:101
-   subtype LPCCSTYLEFLAG is LPCCSTYLEFLAGA;                --  custcntl.h:114
-   type LPCCSTYLEFLAGW is access all CCSTYLEFLAGW;         --  custcntl.h:107
-   type LPCCINFOA is access all CCINFOA;                   --  custcntl.h:147
-   subtype LPCCINFO is LPCCINFOA;                          --  custcntl.h:172
-   type LPCCINFOW is access all CCINFOW;                   --  custcntl.h:165
+   type LPCCSTYLEA is access all CCSTYLEA;
+   subtype LPCCSTYLE is LPCCSTYLEA;
+   type LPCCSTYLEW is access all CCSTYLEW;
+   type LPCCSTYLEFLAGA is access all CCSTYLEFLAGA;
+   subtype LPCCSTYLEFLAG is LPCCSTYLEFLAGA;
+   type LPCCSTYLEFLAGW is access all CCSTYLEFLAGW;
+   type LPCCINFOA is access all CCINFOA;
+   subtype LPCCINFO is LPCCINFOA;
+   type LPCCINFOW is access all CCINFOW;
 
-   type CCSTYLEA is                                        --  custcntl.h:30
-      record
-         flStyle : Win32.DWORD;                        --  custcntl.h:31
-         flExtStyle : Win32.DWORD;                        --  custcntl.h:32
-         szText : Win32.CHAR_Array (0 .. CCHCCTEXT - 1);   --  custcntl.h:33
-         lgid : Win32.Winnt.LANGID;                 --  custcntl.h:34
-         wReserved1 : Win32.WORD;                         --  custcntl.h:35
-      end record;
+   type CCSTYLEA is record
+      flStyle    : Win32.DWORD;
+      flExtStyle : Win32.DWORD;
+      szText     : Win32.CHAR_Array (0 .. CCHCCTEXT - 1);
+      lgid       : Win32.Winnt.LANGID;
+      wReserved1 : Win32.WORD;
+   end record;
 
-   subtype CCSTYLE is CCSTYLEA;                            --  custcntl.h:50
+   subtype CCSTYLE is CCSTYLEA;
 
-   type CCSTYLEW is                                        --  custcntl.h:38
-      record
-         flStyle : Win32.DWORD;                        --  custcntl.h:39
-         flExtStyle : Win32.DWORD;                        --  custcntl.h:40
-         szText : Win32.WCHAR_Array (0 .. CCHCCTEXT - 1);  --  custcntl.h:41
-         lgid : Win32.Winnt.LANGID;                 --  custcntl.h:42
-         wReserved1 : Win32.WORD;                         --  custcntl.h:43
-      end record;
+   type CCSTYLEW is record
+      flStyle    : Win32.DWORD;
+      flExtStyle : Win32.DWORD;
+      szText     : Win32.WCHAR_Array (0 .. CCHCCTEXT - 1);
+      lgid       : Win32.Winnt.LANGID;
+      wReserved1 : Win32.WORD;
+   end record;
 
    type LPFNCCSTYLEA is access function
      (hwndParent : Win32.Windef.HWND;
-      pccs : LPCCSTYLEA)
-     return Win32.BOOL;                           --  custcntl.h:62
+      pccs       : LPCCSTYLEA)
+      return Win32.BOOL;
    pragma Convention (Stdcall, LPFNCCSTYLEA);
-   subtype LPFNCCSTYLE is LPFNCCSTYLEA;                    --  custcntl.h:68
+   subtype LPFNCCSTYLE is LPFNCCSTYLEA;
    type LPFNCCSTYLEW is access function
      (hwndParent : Win32.Windef.HWND;
-      pccs : LPCCSTYLEW)
-     return Win32.BOOL;                           --  custcntl.h:63
+      pccs       : LPCCSTYLEW)
+      return Win32.BOOL;
    pragma Convention (Stdcall, LPFNCCSTYLEW);
    type LPFNCCSIZETOTEXTA is access function
-     (flStyle : Win32.DWORD;
+     (flStyle    : Win32.DWORD;
       flExtStyle : Win32.DWORD;
-      hfont : Win32.Windef.HFONT;
-      pszText : Win32.LPSTR)
-     return Win32.INT;                            --  custcntl.h:80
+      hfont      : Win32.Windef.HFONT;
+      pszText    : Win32.LPSTR)
+      return Win32.INT;
    pragma Convention (Stdcall, LPFNCCSIZETOTEXTA);
-   subtype LPFNCCSIZETOTEXT is LPFNCCSIZETOTEXTA;          --  custcntl.h:88
+   subtype LPFNCCSIZETOTEXT is LPFNCCSIZETOTEXTA;
    type LPFNCCSIZETOTEXTW is access function
-     (flStyle : Win32.DWORD;
+     (flStyle    : Win32.DWORD;
       flExtStyle : Win32.DWORD;
-      hfont : Win32.Windef.HFONT;
-      pszText : Win32.LPWSTR)
-     return Win32.INT;                            --  custcntl.h:82
+      hfont      : Win32.Windef.HFONT;
+      pszText    : Win32.LPWSTR)
+      return Win32.INT;
    pragma Convention (Stdcall, LPFNCCSIZETOTEXTW);
 
-   type CCSTYLEFLAGA is                                    --  custcntl.h:97
-      record
-         flStyle : Win32.DWORD;                       --  custcntl.h:98
-         flStyleMask : Win32.DWORD;                       --  custcntl.h:99
-         pszStyle : Win32.LPSTR;                       --  custcntl.h:100
-      end record;
+   type CCSTYLEFLAGA is record
+      flStyle     : Win32.DWORD;
+      flStyleMask : Win32.DWORD;
+      pszStyle    : Win32.LPSTR;
+   end record;
 
-   subtype CCSTYLEFLAG is CCSTYLEFLAGA;                    --  custcntl.h:113
+   subtype CCSTYLEFLAG is CCSTYLEFLAGA;
 
-   type CCSTYLEFLAGW is                                    --  custcntl.h:103
-      record
-         flStyle : Win32.DWORD;                       --  custcntl.h:104
-         flStyleMask : Win32.DWORD;                       --  custcntl.h:105
-         pszStyle : Win32.LPWSTR;                      --  custcntl.h:106
-      end record;
+   type CCSTYLEFLAGW is record
+      flStyle     : Win32.DWORD;
+      flStyleMask : Win32.DWORD;
+      pszStyle    : Win32.LPWSTR;
+   end record;
 
-   type CCINFOA is                                         --  custcntl.h:131
-      record
-         szClass : Win32.CHAR_Array (0 .. 31);     --  custcntl.h:132
-         flOptions : Win32.DWORD;                 --  custcntl.h:133
-         szDesc : Win32.CHAR_Array (0 .. 31);     --  custcntl.h:134
-         cxDefault : Win32.UINT;                  --  custcntl.h:135
-         cyDefault : Win32.UINT;                  --  custcntl.h:136
-         flStyleDefault : Win32.DWORD;                 --  custcntl.h:137
-         flExtStyleDefault : Win32.DWORD;                 --  custcntl.h:138
-         flCtrlTypeMask : Win32.DWORD;                 --  custcntl.h:139
-         szTextDefault : Win32.CHAR_Array (0 .. CCHCCTEXT - 1);
-         --  custcntl.h:140
-         cStyleFlags : Win32.INT;                   --  custcntl.h:141
-         aStyleFlags : LPCCSTYLEFLAGA;              --  custcntl.h:142
-         lpfnStyle : LPFNCCSTYLEA;                --  custcntl.h:143
-         lpfnSizeToText : LPFNCCSIZETOTEXTA;           --  custcntl.h:144
-         dwReserved1 : Win32.DWORD;                 --  custcntl.h:145
-         dwReserved2 : Win32.DWORD;                 --  custcntl.h:146
-      end record;
+   type CCINFOA is record
+      szClass           : Win32.CHAR_Array (0 .. 31);
+      flOptions         : Win32.DWORD;
+      szDesc            : Win32.CHAR_Array (0 .. 31);
+      cxDefault         : Win32.UINT;
+      cyDefault         : Win32.UINT;
+      flStyleDefault    : Win32.DWORD;
+      flExtStyleDefault : Win32.DWORD;
+      flCtrlTypeMask    : Win32.DWORD;
+      szTextDefault     : Win32.CHAR_Array (0 .. CCHCCTEXT - 1);
+      cStyleFlags       : Win32.INT;
+      aStyleFlags       : LPCCSTYLEFLAGA;
+      lpfnStyle         : LPFNCCSTYLEA;
+      lpfnSizeToText    : LPFNCCSIZETOTEXTA;
+      dwReserved1       : Win32.DWORD;
+      dwReserved2       : Win32.DWORD;
+   end record;
 
-   subtype CCINFO is CCINFOA;                              --  custcntl.h:171
+   subtype CCINFO is CCINFOA;
 
-   type CCINFOW is                                         --  custcntl.h:149
-      record
-         szClass : Win32.WCHAR_Array (0 .. CCHCCCLASS - 1);
-         --  custcntl.h:150
-         flOptions : Win32.DWORD;                 --  custcntl.h:151
-         szDesc : Win32.WCHAR_Array (0 .. CCHCCDESC - 1);
-         --  custcntl.h:152
-         cxDefault : Win32.UINT;                  --  custcntl.h:153
-         cyDefault : Win32.UINT;                  --  custcntl.h:154
-         flStyleDefault : Win32.DWORD;                 --  custcntl.h:155
-         flExtStyleDefault : Win32.DWORD;                 --  custcntl.h:156
-         flCtrlTypeMask : Win32.DWORD;                 --  custcntl.h:157
-         cStyleFlags : Win32.INT;                   --  custcntl.h:158
-         aStyleFlags : LPCCSTYLEFLAGW;              --  custcntl.h:159
-         szTextDefault : Win32.WCHAR_Array (0 .. CCHCCTEXT - 1);
-         --  custcntl.h:160
-         lpfnStyle : LPFNCCSTYLEW;                --  custcntl.h:161
-         lpfnSizeToText : LPFNCCSIZETOTEXTW;           --  custcntl.h:162
-         dwReserved1 : Win32.DWORD;                 --  custcntl.h:163
-         dwReserved2 : Win32.DWORD;                 --  custcntl.h:164
-      end record;
+   type CCINFOW is record
+      szClass           : Win32.WCHAR_Array (0 .. CCHCCCLASS - 1);
+      flOptions         : Win32.DWORD;
+      szDesc            : Win32.WCHAR_Array (0 .. CCHCCDESC - 1);
+      cxDefault         : Win32.UINT;
+      cyDefault         : Win32.UINT;
+      flStyleDefault    : Win32.DWORD;
+      flExtStyleDefault : Win32.DWORD;
+      flCtrlTypeMask    : Win32.DWORD;
+      cStyleFlags       : Win32.INT;
+      aStyleFlags       : LPCCSTYLEFLAGW;
+      szTextDefault     : Win32.WCHAR_Array (0 .. CCHCCTEXT - 1);
+      lpfnStyle         : LPFNCCSTYLEW;
+      lpfnSizeToText    : LPFNCCSIZETOTEXTW;
+      dwReserved1       : Win32.DWORD;
+      dwReserved2       : Win32.DWORD;
+   end record;
 
-   type LPFNCCINFOA is access function
-     (acci : LPCCINFOA)
-     return Win32.UINT;                           --  custcntl.h:194
+   type LPFNCCINFOA is access function (acci : LPCCINFOA) return Win32.UINT;
    pragma Convention (Stdcall, LPFNCCINFOA);
 
-   subtype LPFNCCINFO is LPFNCCINFOA;                      --  custcntl.h:200
+   subtype LPFNCCINFO is LPFNCCINFOA;
 
-   type LPFNCCINFOW is access function
-     (acci : LPCCINFOW)
-     return Win32.UINT;                           --  custcntl.h:195
+   type LPFNCCINFOW is access function (acci : LPCCINFOW) return Win32.UINT;
    pragma Convention (Stdcall, LPFNCCINFOW);
 
 private
 
-   pragma Convention (C, CCSTYLEA);                         --  custcntl.h:30
-   pragma Convention (C, CCSTYLEW);                         --  custcntl.h:38
-   pragma Convention (C_Pass_By_Copy, CCSTYLEFLAGA);        --  custcntl.h:97
-   pragma Convention (C_Pass_By_Copy, CCSTYLEFLAGW);        --  custcntl.h:103
-   pragma Convention (C, CCINFOA);                          --  custcntl.h:131
-   pragma Convention (C, CCINFOW);                          --  custcntl.h:149
+   pragma Convention (C, CCSTYLEA);
+   pragma Convention (C, CCSTYLEW);
+   pragma Convention (C_Pass_By_Copy, CCSTYLEFLAGA);
+   pragma Convention (C_Pass_By_Copy, CCSTYLEFLAGW);
+   pragma Convention (C, CCINFOA);
+   pragma Convention (C, CCINFOW);
 
 end Win32.Custcntl;

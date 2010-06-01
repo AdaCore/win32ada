@@ -6,22 +6,19 @@
 --  AND/OR FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the
 --  entire risk as to the accuracy and the use of this file.
 --
---  Copyright (c) Intermetrics, Inc. 1995
+--  Copyright (C) Intermetrics, Inc. 1995
 --  Royalty-free, unlimited, worldwide, non-exclusive use, modification,
 --  reproduction and further distribution of this file is permitted.
+--
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (C) 2000-2010, AdaCore
 --
 -------------------------------------------------------------------------------
 
 with Win32.Windef;
 package Win32.Winmain is
-
-   --  **************************************************************
-   --  Functions which grab the parameters passed to WinMain by NT.
-   --  See also the Ada.Command_Line package, Ada 95 Reference Manual
-   --  section A.15.
-   --
-   --  Note:  There is one body for GNAT and one body for AdaMagic.
-   --  **************************************************************
 
    function Get_hInstance return Win32.Windef.HINSTANCE;
 

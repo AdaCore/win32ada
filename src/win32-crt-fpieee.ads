@@ -1,24 +1,19 @@
 -------------------------------------------------------------------------------
 --
---  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS PROVIDED WITHOUT CHARGE
---  "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
---  BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR
---  FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the entire risk as to
---  the accuracy and the use of this file.  This file may be used, copied,
---  modified and distributed only by licensees of Microsoft Corporation's
---  WIN32 Software Development Kit in accordance with the terms of the
---  licensee's End-User License Agreement for Microsoft Software for the
---  WIN32 Development Kit.
+--  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS FURNISHED "AS IS"
+--  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
+--  BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY
+--  AND/OR FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the
+--  entire risk as to the accuracy and the use of this file.
 --
---  Copyright (c) Intermetrics, Inc. 1995
---  Portions (c) 1985-1994 Microsoft Corporation with permission.
---  Microsoft is a registered trademark and Windows and Windows NT are
---  trademarks of Microsoft Corporation.
+--  Copyright (C) Intermetrics, Inc. 1995
+--  Royalty-free, unlimited, worldwide, non-exclusive use, modification,
+--  reproduction and further distribution of this file is permitted.
 --
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (c) AdaCore 2000-2010, AdaCore
+--  Copyright (C) 2000-2010, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -27,91 +22,79 @@ with Win32.Winnt;
 
 package Win32.crt.Fpieee is
 
-   --  fpieee.h - Definitions for floating point IEEE exception handling
-   --  Define floating point IEEE compare result values.
+   type FPIEEE_COMPARE_RESULT is (
+      FpCompareEqual,
+      FpCompareGreater,
+      FpCompareLess,
+      FpCompareUnordered);
 
-   type FPIEEE_COMPARE_RESULT is
-     (FpCompareEqual,
-     FpCompareGreater,
-     FpCompareLess,
-     FpCompareUnordered);
-
-   --  Define floating point format and result precision values
-
-   type FPIEEE_FORMAT is
-     (FpFormatFp32,
-     FpFormatFp64,
-     FpFormatFp80,
-     FpFormatFp128,
-     FpFormatI16,
-     FpFormatI32,
-     FpFormatI64,
-     FpFormatU16,
-     FpFormatU32,
-     FpFormatU64,
-     FpFormatBcd80,
-     FpFormatCompare,
-     FpFormatString);
+   type FPIEEE_FORMAT is (
+      FpFormatFp32,
+      FpFormatFp64,
+      FpFormatFp80,
+      FpFormatFp128,
+      FpFormatI16,
+      FpFormatI32,
+      FpFormatI64,
+      FpFormatU16,
+      FpFormatU32,
+      FpFormatU64,
+      FpFormatBcd80,
+      FpFormatCompare,
+      FpFormatString);
 
    pragma Convention (C, FPIEEE_FORMAT);
    for FPIEEE_FORMAT'Size use 4;
 
-   --  Define operation code values
+   type FP_OPERATION_CODE is (
+      FpCodeUnspecified,
+      FpCodeAdd,
+      FpCodeSubtract,
+      FpCodeMultiply,
+      FpCodeDivide,
+      FpCodeSquareRoot,
+      FpCodeRemainder,
+      FpCodeCompare,
+      FpCodeConvert,
+      FpCodeRound,
+      FpCodeTruncate,
+      FpCodeFloor,
+      FpCodeCeil,
+      FpCodeAcos,
+      FpCodeAsin,
+      FpCodeAtan,
+      FpCodeAtan2,
+      FpCodeCabs,
+      FpCodeCos,
+      FpCodeCosh,
+      FpCodeExp,
+      FpCodeFabs,
+      FpCodeFmod,
+      FpCodeFrexp,
+      FpCodeHypot,
+      FpCodeLdexp,
+      FpCodeLog,
+      FpCodeLog10,
+      FpCodeModf,
+      FpCodePow,
+      FpCodeSin,
+      FpCodeSinh,
+      FpCodeTan,
+      FpCodeTanh,
+      FpCodeY0,
+      FpCodeY1,
+      FpCodeYn,
+      FpCodeLogb,
+      FpCodeNextafter,
+      FpCodeNegate);
 
-   type FP_OPERATION_CODE is
-     (FpCodeUnspecified,
-     FpCodeAdd,
-     FpCodeSubtract,
-     FpCodeMultiply,
-     FpCodeDivide,
-     FpCodeSquareRoot,
-     FpCodeRemainder,
-     FpCodeCompare,
-     FpCodeConvert,
-     FpCodeRound,
-     FpCodeTruncate,
-     FpCodeFloor,
-     FpCodeCeil,
-     FpCodeAcos,
-     FpCodeAsin,
-     FpCodeAtan,
-     FpCodeAtan2,
-     FpCodeCabs,
-     FpCodeCos,
-     FpCodeCosh,
-     FpCodeExp,
-     FpCodeFabs,
-     FpCodeFmod,
-     FpCodeFrexp,
-     FpCodeHypot,
-     FpCodeLdexp,
-     FpCodeLog,
-     FpCodeLog10,
-     FpCodeModf,
-     FpCodePow,
-     FpCodeSin,
-     FpCodeSinh,
-     FpCodeTan,
-     FpCodeTanh,
-     FpCodeY0,
-     FpCodeY1,
-     FpCodeYn,
-     FpCodeLogb,
-     FpCodeNextafter,
-     FpCodeNegate);
+   type FPIEEE_ROUNDING_MODE is (
+      FpRoundNearest,
+      FpRoundMinusInfinity,
+      FpRoundPlusInfinity,
+      FpRoundChopped);
 
-   --  Define rounding modes
-
-   type FPIEEE_ROUNDING_MODE is
-     (FpRoundNearest,
-     FpRoundMinusInfinity,
-     FpRoundPlusInfinity,
-     FpRoundChopped);
-
-   type FPIEEE_PRECISION is
-     (FpPrecisionFull, FpPrecision53, FpPrecision24);
-
-   --  Define floating point context record
+   type FPIEEE_PRECISION is (FpPrecisionFull, FpPrecision53, FpPrecision24);
 
    subtype FP32 is Win32.FLOAT;
 
@@ -138,19 +121,32 @@ package Win32.crt.Fpieee is
    type FPIEEE_VALUE (Format : FPIEEE_FORMAT := FpFormatFp128) is record
       OperandValid : Boolean;
       case Format is
-         when FpFormatFp32   => Fp32Value : FP32;
-         when FpFormatFp64   => Fp64Value : FP64;
-         when FpFormatFp80   => Fp80Value : FP80;
-         when FpFormatFp128  => Fp128Value : FP128;
-         when FpFormatI16    => I16Value : I16;
-         when FpFormatI32    => I32Value : I32;
-         when FpFormatI64    => I64Value : I64;
-         when FpFormatU16    => U16Value : U16;
-         when FpFormatU32    => U32Value : U32;
-         when FpFormatU64    => U64Value : U64;
-         when FpFormatBcd80  => Bcd80Value : BCD80;
-         when FpFormatString => StringValue : Win32.PSTR;
-         when FpFormatCompare => CompareValue : Win32.INT;
+      when FpFormatFp32 =>
+         Fp32Value : FP32;
+      when FpFormatFp64 =>
+         Fp64Value : FP64;
+      when FpFormatFp80 =>
+         Fp80Value : FP80;
+      when FpFormatFp128 =>
+         Fp128Value : FP128;
+      when FpFormatI16 =>
+         I16Value : I16;
+      when FpFormatI32 =>
+         I32Value : I32;
+      when FpFormatI64 =>
+         I64Value : I64;
+      when FpFormatU16 =>
+         U16Value : U16;
+      when FpFormatU32 =>
+         U32Value : U32;
+      when FpFormatU64 =>
+         U64Value : U64;
+      when FpFormatBcd80 =>
+         Bcd80Value : BCD80;
+      when FpFormatString =>
+         StringValue : Win32.PSTR;
+      when FpFormatCompare =>
+         CompareValue : Win32.INT;
       end case;
    end record;
 
@@ -172,18 +168,14 @@ package Win32.crt.Fpieee is
       Format       at 16 range 1 .. 4;
    end record;
 
-   FVSIZE : constant := 24;                 --  why? looks like it should be 20
+   FVSIZE : constant := 24;
 
    pragma Warnings (Off);
    for FPIEEE_VALUE'Size use FVSIZE * 8;
    pragma Warnings (On);
 
    type FPIEEE_EXCEPTION_FLAGS is record
-      Inexact,
-      Underflow,
-      Overflow,
-      ZeroDivide,
-      InvalidOperation : Boolean;
+      Inexact, Underflow, Overflow, ZeroDivide, InvalidOperation : Boolean;
    end record;
 
    for FPIEEE_EXCEPTION_FLAGS use record
@@ -196,14 +188,14 @@ package Win32.crt.Fpieee is
 
    type FPIEEE_RECORD is record
       RoundingMode : Win32.Bits2;
-      Precision : Win32.Bits3;
-      Operation : Win32.Bits12;
-      Cause : FPIEEE_EXCEPTION_FLAGS;
-      Enable : FPIEEE_EXCEPTION_FLAGS;
-      Status : FPIEEE_EXCEPTION_FLAGS;
-      Operand1 : FPIEEE_VALUE;
-      Operand2 : FPIEEE_VALUE;
-      Result : FPIEEE_VALUE;
+      Precision    : Win32.Bits3;
+      Operation    : Win32.Bits12;
+      Cause        : FPIEEE_EXCEPTION_FLAGS;
+      Enable       : FPIEEE_EXCEPTION_FLAGS;
+      Status       : FPIEEE_EXCEPTION_FLAGS;
+      Operand1     : FPIEEE_VALUE;
+      Operand2     : FPIEEE_VALUE;
+      Result       : FPIEEE_VALUE;
    end record;
 
    for FPIEEE_RECORD use record
@@ -218,15 +210,16 @@ package Win32.crt.Fpieee is
       Result       at 16 + FVSIZE + FVSIZE range 0 .. (FVSIZE * 8 - 1);
    end record;
 
-   type handler_func is access function (reason : access FPIEEE_RECORD)
-                                        return Win32.INT;
+   type handler_func is access function
+     (reason : access FPIEEE_RECORD)
+      return Win32.INT;
    pragma Convention (Stdcall, handler_func);
 
    function fpieee_flt
      (exc_code : Win32.ULONG;
       exc_info : Win32.Winnt.PEXCEPTION_POINTERS;
-      handler : handler_func)
-     return Win32.INT;
+      handler  : handler_func)
+      return Win32.INT;
 
 private
 

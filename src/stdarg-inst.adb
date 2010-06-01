@@ -6,16 +6,24 @@
 --  AND/OR FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the
 --  entire risk as to the accuracy and the use of this file.
 --
---  Copyright (c) Intermetrics, Inc. 1995
+--  Copyright (C) Intermetrics, Inc. 1995
 --  Royalty-free, unlimited, worldwide, non-exclusive use, modification,
 --  reproduction and further distribution of this file is permitted.
+--
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (C) 2000-2010, AdaCore
 --
 -------------------------------------------------------------------------------
 
 package body Stdarg.Inst is
 
-   function "&" (Args : ArgList; Arg : Interfaces.C.char_array)
-                return ArgList is
+   function "&"
+     (Args : ArgList;
+      Arg  : Interfaces.C.char_array)
+      return ArgList
+   is
       type CP is access constant Interfaces.C.char;
       function "&" is new Stdarg.Concat (CP);
    begin
@@ -23,4 +31,3 @@ package body Stdarg.Inst is
    end "&";
 
 end Stdarg.Inst;
-

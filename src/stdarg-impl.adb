@@ -6,9 +6,14 @@
 --  AND/OR FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the
 --  entire risk as to the accuracy and the use of this file.
 --
---  Copyright (c) Intermetrics, Inc. 1995
+--  Copyright (C) Intermetrics, Inc. 1995
 --  Royalty-free, unlimited, worldwide, non-exclusive use, modification,
 --  reproduction and further distribution of this file is permitted.
+--
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (C) 2000-2010, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -18,20 +23,21 @@ package body Stdarg.Impl is
 
    use Stdarg.Machine;
 
-   --  ******************************
-   --  Getting arguments out of lists
-   --  ******************************
-
    type Which_Arg is (Ellipsis, VA_List);
-   function Address_of_Arg (Args : ArgList; Which : Which_Arg)
-                           return Param_Access;
+   function Address_of_Arg
+     (Args  : ArgList;
+      Which : Which_Arg)
+      return Param_Access;
 
-   function Address_of_Arg (Args : ArgList; Which : Which_Arg)
-                           return Param_Access is
-   pragma Warnings (Off);
+   function Address_of_Arg
+     (Args  : ArgList;
+      Which : Which_Arg)
+      return Param_Access
+   is
+      pragma Warnings (Off);
    begin
       if Args.Contents.CurrentArgs = 0 then
-         return null;                           --  might not be an error
+         return null;
       end if;
 
       if This_Arch = Stdarg.Machine.Alpha then
@@ -39,8 +45,9 @@ package body Stdarg.Impl is
       elsif Stack_Growth = Up then
          return Args.Contents.Vector (1)'Access;
       elsif Which = Ellipsis then
-         return Args.Contents.Vector
-           (MaxArguments - Args.Contents.CurrentArgs + 1)'Access;
+         return Args.Contents.Vector (MaxArguments -
+                                      Args.Contents.CurrentArgs +
+                                      1)'Access;
       else
          declare
             use Arith;
@@ -66,15 +73,10 @@ package body Stdarg.Impl is
       return Int (Args.Contents.CurrentArgs);
    end ArgCount;
 
-   --  **************
-   --  Concatenations
-   --  **************
-
    function "&" (Left, Right : ArgList) return ArgList is
-      Hole_Change : Integer := 0;
-      Incr        : Integer;
-      Left_Index,
-      Right_Index : Positive;
+      Hole_Change             : Integer := 0;
+      Incr                    : Integer;
+      Left_Index, Right_Index : Positive;
 
       procedure Do_Incr (Index : in out Natural);
       pragma Inline (Do_Incr);
@@ -86,7 +88,9 @@ package body Stdarg.Impl is
    begin
       if Left.Contents = null or else Left.Contents.CurrentArgs = 0 then
          return Right;
-      elsif Right.Contents = null or else Right.Contents.CurrentArgs = 0 then
+      elsif Right.Contents = null
+        or else Right.Contents.CurrentArgs = 0
+      then
          return Left;
       end if;
 
@@ -101,44 +105,31 @@ package body Stdarg.Impl is
               Right.Contents.Vector (Right_Index);
          end loop;
          Left.Contents.CurrentArgs := Left.Contents.CurrentArgs +
-           Right.Contents.CurrentArgs - 6;
-
-         --  Dump (Left.Contents.Vector (1)'access,
-         --  Int (Left.Contents.CurrentArgs));
+                                      Right.Contents.CurrentArgs -
+                                      6;
 
          return Left;
       elsif Stack_Growth = Up then
          Left_Index  := Left.Contents.CurrentArgs + 1;
          Right_Index := 1;
          Incr        := 1;
-         --  Dump (Left.Contents.Vector (1)'access,
-         --  Int (Left.Contents.CurrentArgs));
-         --  Dump (Right.Contents.Vector (1)'access,
-         --  Int (Right.Contents.CurrentArgs));
       else
          Left_Index  := MaxArguments - Left.Contents.CurrentArgs;
          Right_Index := MaxArguments;
          Incr        := -1;
-         --  Dump (Left.Contents.Vector (Left_Index + 1)'access,
-         --  Int (Left.Contents.CurrentArgs));
-         --  Dump (Right.Contents.Vector (
-         --  MaxArguments-Right.Contents.CurrentArgs + 1)'access,
-         --  Int (Right.Contents.CurrentArgs));
-         --  Text_IO.Put_Line ("Right first hole" &
-         --  Integer'Image (Right.Contents.FirstHole));
       end if;
 
       for I in 1 .. Right.Contents.CurrentArgs loop
-         if Right.Contents.FirstHole = I and then
-           Left.Contents.CurrentArgs mod 2 /= 0 then
+         if Right.Contents.FirstHole = I
+           and then Left.Contents.CurrentArgs mod 2 /= 0
+         then
             if Stdarg.Machine.Float_Param_Alignment >
-              Stdarg.Machine.Int_Param_Alignment then
+               Stdarg.Machine.Int_Param_Alignment
+            then
                if I mod 2 = 0 then
-                  --  remove hole
                   Do_Incr (Right_Index);
                   Hole_Change := -1;
                else
-                  --  add hole
                   Do_Incr (Left_Index);
                   Hole_Change := 1;
                end if;
@@ -151,14 +142,10 @@ package body Stdarg.Impl is
       end loop;
 
       Left.Contents.CurrentArgs := Left.Contents.CurrentArgs +
-        Right.Contents.CurrentArgs + Hole_Change;
-
-      --  Dump (Left.Contents.Vector (1)'access,
-      --  Int (Left.Contents.CurrentArgs));
+                                   Right.Contents.CurrentArgs +
+                                   Hole_Change;
 
       return Left;
    end "&";
 
 end Stdarg.Impl;
-
-

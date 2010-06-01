@@ -1,4 +1,3 @@
-
 -------------------------------------------------------------------------------
 --
 --  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS FURNISHED "AS IS"
@@ -7,18 +6,19 @@
 --  AND/OR FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the
 --  entire risk as to the accuracy and the use of this file.
 --
---  Copyright (c) Intermetrics, Inc. 1995
+--  Copyright (C) Intermetrics, Inc. 1995
 --  Royalty-free, unlimited, worldwide, non-exclusive use, modification,
 --  reproduction and further distribution of this file is permitted.
 --
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (C) 2000-2010, AdaCore
+--
 -------------------------------------------------------------------------------
 
-with Ada.Unchecked_Deallocation,
-  Stdarg.Machine,
-  System,
+with Ada.Unchecked_Deallocation, Stdarg.Machine, System,
   System.Storage_Elements;
-
---  with Ada.Unchecked_Conversion, Text_IO;           --  debugging
 
 pragma Warnings (Off);
 
@@ -26,20 +26,13 @@ package body Stdarg is
 
    use Stdarg.Machine;
 
-   --  ********
-   --  Internal
-   --  ********
    function RoundUp (Siz : Natural) return Natural;
    procedure put (s : String; a : System.Address);
 
    function RoundUp (Siz : Natural) return Natural is
       Slop : constant Natural := Siz mod Int_Param_Alignment;
-      Res : Natural;
+      Res  : Natural;
    begin
-      --  How many int's in this argument.
-      --  Round up size to 4, then divide by 4.
-      --  Processor-dependent, this is right for Intel,
-      --  more complicated for others, see va_arg in stdarg.h
       if Slop = 0 then
          Res := Siz;
       else
@@ -48,92 +41,63 @@ package body Stdarg is
       return Res / Stdarg.Machine.Param_Size;
    end RoundUp;
 
-   --  **************
-   --  Memory control
-   --  **************
-
    procedure Initialize (A : in out ArgList) is
    begin
       A.Contents := new ArgBlock;
    end Initialize;
 
-   --  LFN : constant string := ascii.lf & ascii.nul;
-
-   --  procedure printf (Format : String; P : ArgBlockP);
-   --  pragma import (c, printf, "printf");
-
    procedure Adjust (A : in out ArgList) is
    begin
-      --  printf ("adjusting %x" & LFN, A.Contents);
       A.Contents.RefCount := A.Contents.RefCount + 1;
    end Adjust;
 
-   --  null_counter : integer := 0;
-
    procedure Finalize (A : in out ArgList) is
-      procedure Free is new
-        Ada.Unchecked_Deallocation (ArgBlock, ArgBlockP);
+      procedure Free is new Ada.Unchecked_Deallocation (ArgBlock, ArgBlockP);
    begin
       if A.Contents = null then
          null;
-         --  printf ("finalizing null" & LFN, null);
-         --  null_counter := null_counter + 1;
       else
-         --  declare
-         --  msg1 : constant String := "finalizing %x, ref count" &
-         --  integer'image (A.Contents.RefCount) & LFN;
-         --  msg2 : constant string := "deallocating %x" & LFN;
-         --  msg3 : constant string := "after deallocation %x" & LFN;
-         --  begin
          A.Contents.RefCount := A.Contents.RefCount - 1;
-         --  printf (msg1, A.Contents);
          if A.Contents.RefCount <= 0 then
-            --  printf (msg2, A.Contents);
             Free (A.Contents);
-            --  printf (msg3, null);
          end if;
-         --  end;
       end if;
    end Finalize;
 
-   --  ************************
-   --  Visible - argument lists
-   --  ************************
-
    procedure put (s : String; a : System.Address) is
-      --  function to_int is new ada.unchecked_conversion (
-      --  system.address, integer);
    begin
       null;
-      --  text_io.put_line (s & integer'image (to_int (a)));
    end put;
 
    function Concat (Args : ArgList; Arg : T) return ArgList is
-      Nb_Int : Natural := RoundUp (T'Size / System.Storage_Unit);
-      Uncopied_Bytes  : Natural :=
-        (Nb_Int * Param_Size) - (T'Size / System.Storage_Unit);
+      Nb_Int         : Natural := RoundUp (T'Size / System.Storage_Unit);
+      Uncopied_Bytes : Natural :=
+         (Nb_Int * Param_Size) - (T'Size / System.Storage_Unit);
       use System.Storage_Elements;
-      Arg_Addr : System.Address := Arg'Address -
-        (Arg'Address mod Storage_Offset (Int_Param_Alignment));
-      Buf_Addr : System.Address;
-      Arg_Size : Integer := Arg'Size;
-      Index    : Integer;
+      Arg_Addr       : System.Address :=
+         Arg'Address -
+         (Arg'Address mod Storage_Offset (Int_Param_Alignment));
+      Buf_Addr       : System.Address;
+      Arg_Size       : Integer := Arg'Size;
+      Index          : Integer;
 
       procedure Memcpy (To, From : System.Address; Nbytes : Natural);
       pragma Import (C, Memcpy, "memcpy");
 
-      Double_Arg : Interfaces.C.double;
-      Long_Arg  : C_Param;
+      Double_Arg: Interfaces.C.double;
+      Long_Arg : C_Param;
 
-      function To_Double (Arg_Addr : System.Address;
-                          Arg_Size : Interfaces.C.int)
-                         return Interfaces.C.double;
+      function To_Double
+        (Arg_Addr : System.Address;
+         Arg_Size : Interfaces.C.int)
+         return Interfaces.C.double;
       pragma Import (C, To_Double, "to_double");
 
-      function To_Long (Arg_Addr  : System.Address;
-                        Arg_Size  : Interfaces.C.int;
-                        Is_Modular : Interfaces.C.int)
-                       return C_Param;
+      function To_Long
+        (Arg_Addr   : System.Address;
+         Arg_Size   : Interfaces.C.int;
+         Is_Modular : Interfaces.C.int)
+         return C_Param;
       pragma Import (C, To_Long, "to_long");
 
    begin
@@ -144,8 +108,8 @@ package body Stdarg is
          Uncopied_Bytes := 0;
          Arg_Size       := Double_Arg'Size;
       elsif T'Size < C_Param'Size then
-         Long_Arg       := To_Long (Arg'Address, Arg'Size,
-                                   Boolean'Pos (T_Is_Modular));
+         Long_Arg       :=
+            To_Long (Arg'Address, Arg'Size, Boolean'Pos (T_Is_Modular));
          Arg_Addr       := Long_Arg'Address;
          Nb_Int         := RoundUp (Long_Arg'Size / System.Storage_Unit);
          Uncopied_Bytes := 0;
@@ -156,14 +120,14 @@ package body Stdarg is
          raise Constraint_Error;
       end if;
 
-      --  Impossible to make this common, just try to do the right
-      --  thing for each machine, one at a time!
       case This_Arch is
          when Stdarg.Machine.I386 =>
-            Buf_Addr := Args.Contents.Vector
-              (Args.Contents.CurrentArgs + 1)'Address;
-            Memcpy (Buf_Addr, Arg_Addr,
-                   (Nb_Int * Param_Size) - Uncopied_Bytes);
+            Buf_Addr :=
+              Args.Contents.Vector (Args.Contents.CurrentArgs + 1)'Address;
+            Memcpy
+              (Buf_Addr,
+               Arg_Addr,
+               (Nb_Int * Param_Size) - Uncopied_Bytes);
 
          when Stdarg.Machine.Alpha =>
             if Args.Contents.CurrentArgs = 0 then
@@ -175,53 +139,57 @@ package body Stdarg is
                Index := Args.Contents.CurrentArgs + 1;
             end if;
             Buf_Addr := Args.Contents.Vector (Index)'Address;
-            Memcpy (Buf_Addr, Arg_Addr,
-                   (Nb_Int * Param_Size) - Uncopied_Bytes);
+            Memcpy
+              (Buf_Addr,
+               Arg_Addr,
+               (Nb_Int * Param_Size) - Uncopied_Bytes);
 
          when Stdarg.Machine.Sparc | Stdarg.Machine.PowerPC =>
-            Buf_Addr := Args.Contents.Vector
-              (Args.Contents.CurrentArgs + 1)'Address;
-            Memcpy (Buf_Addr + Storage_Offset (Uncopied_Bytes),
-                   Arg_Addr + Storage_Offset (Uncopied_Bytes),
-                   Nb_Int * Param_Size - Uncopied_Bytes);
+            Buf_Addr :=
+              Args.Contents.Vector (Args.Contents.CurrentArgs + 1)'Address;
+            Memcpy
+              (Buf_Addr + Storage_Offset (Uncopied_Bytes),
+               Arg_Addr + Storage_Offset (Uncopied_Bytes),
+               Nb_Int * Param_Size - Uncopied_Bytes);
 
          when Stdarg.Machine.Mips =>
-            Buf_Addr := Args.Contents.Vector
-              (Args.Contents.CurrentArgs + 1)'Address;
+            Buf_Addr :=
+              Args.Contents.Vector (Args.Contents.CurrentArgs + 1)'Address;
             if (Arg_Size in 33 .. 64) then
                if Args.Contents.FirstHole = 0 then
-                  Args.Contents.FirstHole :=
-                    Args.Contents.CurrentArgs + 1;
+                  Args.Contents.FirstHole := Args.Contents.CurrentArgs + 1;
                end if;
                if (Args.Contents.CurrentArgs mod 2 /= 0) then
-                  Args.Contents.CurrentArgs :=
-                    Args.Contents.CurrentArgs + 1;
-                  Buf_Addr := Buf_Addr + Storage_Offset (Param_Size);
+                  Args.Contents.CurrentArgs := Args.Contents.CurrentArgs + 1;
+                  Buf_Addr                  := Buf_Addr +
+                                               Storage_Offset (Param_Size);
                end if;
             end if;
-            Memcpy (Buf_Addr + Storage_Offset (Uncopied_Bytes),
-                   Arg_Addr + Storage_Offset (Uncopied_Bytes),
-                   Nb_Int * Param_Size - Uncopied_Bytes);
+            Memcpy
+              (Buf_Addr + Storage_Offset (Uncopied_Bytes),
+               Arg_Addr + Storage_Offset (Uncopied_Bytes),
+               Nb_Int * Param_Size - Uncopied_Bytes);
 
          when Stdarg.Machine.HP =>
-            Buf_Addr := Args.Contents.Vector
-              (MaxArguments -
-               Args.Contents.CurrentArgs - Nb_Int + 1)'Address;
+            Buf_Addr :=
+              Args.Contents.Vector (MaxArguments -
+                                    Args.Contents.CurrentArgs -
+                                    Nb_Int +
+                                    1)'Address;
             if (Arg_Size in 33 .. 64) then
                if Args.Contents.FirstHole = 0 then
-                  Args.Contents.FirstHole :=
-                    Args.Contents.CurrentArgs + 1;
+                  Args.Contents.FirstHole := Args.Contents.CurrentArgs + 1;
                end if;
                if (Args.Contents.CurrentArgs mod 2 /= 0) then
-                  Args.Contents.CurrentArgs :=
-                    Args.Contents.CurrentArgs + 1;
-                  Buf_Addr := Buf_Addr - Storage_Offset (Param_Size);
+                  Args.Contents.CurrentArgs := Args.Contents.CurrentArgs + 1;
+                  Buf_Addr                  := Buf_Addr -
+                                               Storage_Offset (Param_Size);
                end if;
             end if;
-            --  HP <varargs.h> says args are "right justified" and
-            --  I guess this is what they mean :
-            Memcpy (Buf_Addr + Storage_Offset (Uncopied_Bytes),
-                   Arg_Addr, Nb_Int * Param_Size - Uncopied_Bytes);
+            Memcpy
+              (Buf_Addr + Storage_Offset (Uncopied_Bytes),
+               Arg_Addr,
+               Nb_Int * Param_Size - Uncopied_Bytes);
 
       end case;
 
@@ -240,5 +208,3 @@ package body Stdarg is
    end Empty;
 
 end Stdarg;
-
-

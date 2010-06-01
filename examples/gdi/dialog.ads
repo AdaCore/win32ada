@@ -1,52 +1,48 @@
--- $Source$ 
--- $Revision$ $Date$ $Author$ 
--- $Id$
+-------------------------------------------------------------------------------
 --
---  This package spec is a translation of dialog.c which is part of the 
---  Microsoft gdidemo sample application
-
+--  THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS FURNISHED "AS IS"
+--  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
+--  BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY
+--  AND/OR FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the
+--  entire risk as to the accuracy and the use of this file.
+--
+--  Copyright (C) Intermetrics, Inc. 1995
+--  Royalty-free, unlimited, worldwide, non-exclusive use, modification,
+--  reproduction and further distribution of this file is permitted.
+--
+--  This file is now maintained and made available by AdaCore under
+--  the same terms.
+--
+--  Copyright (C) 2000-2010, AdaCore
+--
+-------------------------------------------------------------------------------
 
 with Win32;
-with Win32.WinDef;
-with Win32.WinUser;
+with Win32.Windef;
+with Win32.Winuser;
 
 package Dialog is
 
-  function AboutDlgProc (hDlg     : Win32.WinDef.HWND;
-                         wMsg     : Win32.UINT;
-                         wParam_p : Win32.WPARAM;
-                         lParam_p : Win32.LPARAM) return Win32.BOOL;
-  pragma convention (Stdcall, AboutDlgProc);
+   function AboutDlgProc
+     (hDlg     : Win32.Windef.HWND;
+      wMsg     : Win32.UINT;
+      wParam_p : Win32.WPARAM;
+      lParam_p : Win32.LPARAM)
+      return Win32.BOOL;
+   pragma Convention (Stdcall, AboutDlgProc);
 
-  function DisplayDialogBox (hWnd_p       : Win32.WinDef.HWND;
-                             lpszTemplate : Win32.LPCSTR;
-                             lpfFunction  : Win32.WinUser.DLGPROC;
-                             lExtra       : Win32.LONG) return Win32.INT;
+   function DisplayDialogBox
+     (hWnd_p       : Win32.Windef.HWND;
+      lpszTemplate : Win32.LPCSTR;
+      lpfFunction  : Win32.Winuser.DLGPROC;
+      lExtra       : Win32.LONG)
+      return Win32.INT;
 
-  procedure PaintWindow (hWnd_p : Win32.WinDef.HWND;
-                         nColor : Win32.INT);
+   procedure PaintWindow (hWnd_p : Win32.Windef.HWND; nColor : Win32.INT);
 
-  function CreateColorScalePalette (hDC_p  : Win32.WinDef.HDC;
-                                    nColor : Win32.INT) 
-                                             return Win32.WinDef.HPALETTE;
-
--------------------------------------------------------------------------------
---
--- THIS FILE AND ANY ASSOCIATED DOCUMENTATION IS PROVIDED WITHOUT CHARGE
--- "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
--- BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR
--- FITNESS FOR A PARTICULAR PURPOSE.  The user assumes the entire risk as to
--- the accuracy and the use of this file.  This file may be used, copied,
--- modified and distributed only by licensees of Microsoft Corporation's
--- WIN32 Software Development Kit in accordance with the terms of the 
--- licensee's End-User License Agreement for Microsoft Software for the
--- WIN32 Development Kit.
---
--- Copyright (c) Intermetrics, Inc. 1995
--- Portions (c) 1985-1994 Microsoft Corporation with permission.
--- Microsoft is a registered trademark and Windows and Windows NT are
--- trademarks of Microsoft Corporation.
---
--------------------------------------------------------------------------------
+   function CreateColorScalePalette
+     (hDC_p  : Win32.Windef.HDC;
+      nColor : Win32.INT)
+      return Win32.Windef.HPALETTE;
 
 end Dialog;
