@@ -152,6 +152,4 @@ package Win32.crt.Largeint is
      (X    : Win32.Winnt.LARGE_INTEGER)
       return Boolean;
 
-private
-
 end Win32.crt.Largeint;

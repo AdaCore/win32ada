@@ -31,25 +31,25 @@ void NDRcopy (void *P1, void *P2, unsigned int c)
 #undef GetWindowLongPtrW
 
 LONG_PTR WINAPI
-SetWindowLongPtrA(HWND hWND,int nIndex,LONG_PTR dwNewLong)
+SetWindowLongPtrA (HWND hWND, int nIndex, LONG_PTR dwNewLong)
 {
-  return SetWindowLongA(hWND, nIndex, dwNewLong);
+  return SetWindowLongA (hWND, nIndex, dwNewLong);
 }
 LONG_PTR WINAPI
-SetWindowLongPtrW(HWND hWND,int nIndex,LONG_PTR dwNewLong)
+SetWindowLongPtrW (HWND hWND, int nIndex, LONG_PTR dwNewLong)
 {
-  return SetWindowLongW(hWND, nIndex, dwNewLong);
+  return SetWindowLongW (hWND, nIndex, dwNewLong);
 }
 
 LONG_PTR WINAPI
-GetWindowLongPtrA(HWND hWND,int nIndex)
+GetWindowLongPtrA (HWND hWND, int nIndex)
 {
-  return GetWindowLongA(hWND, nIndex);
+  return GetWindowLongA (hWND, nIndex);
 }
 LONG_PTR WINAPI
-GetWindowLongPtrW(HWND hWND,int nIndex)
+GetWindowLongPtrW (HWND hWND, int nIndex)
 {
-  return GetWindowLongW(hWND, nIndex);
+  return GetWindowLongW (hWND, nIndex);
 }
 #define LARGEINT_PROTOS
 #include <largeint.h>
