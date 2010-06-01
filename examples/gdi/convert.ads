@@ -26,17 +26,17 @@ with Unchecked_Conversion;
 
 package Convert is
 
-   function HANDLE_TO_LONG is new Unchecked_Conversion (
+   function HANDLE_TO_LONGPTR is new Unchecked_Conversion (
       Win32.Winnt.HANDLE,
-      Win32.LONG);
-   function LONG_TO_HANDLE is new Unchecked_Conversion (
-      Win32.LONG,
+      Win32.LONG_PTR);
+   function HANDLE_TO_ULONGPTR is new Unchecked_Conversion (
+      Win32.Winnt.HANDLE,
+      Win32.ULONG_PTR);
+   function LONGPTR_TO_HANDLE is new Unchecked_Conversion (
+      Win32.LONG_PTR,
       Win32.Winnt.HANDLE);
-   function UNSIGNED_TO_HANDLE is new Unchecked_Conversion (
-      Interfaces.C.unsigned,
-      Win32.Winnt.HANDLE);
-   function DWORD_TO_HANDLE is new Unchecked_Conversion (
-      Win32.DWORD,
+   function ULONGPTR_TO_HANDLE is new Unchecked_Conversion (
+      Win32.ULONG_PTR,
       Win32.Winnt.HANDLE);
    function CHARS_PTR_TO_PCHAR is new Unchecked_Conversion (
       Interfaces.C.Strings.chars_ptr,

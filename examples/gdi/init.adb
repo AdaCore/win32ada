@@ -81,7 +81,7 @@ package body Init is
       wndClass_p.style      := Win32.Winuser.CS_HREDRAW or
                                Win32.Winuser.CS_VREDRAW;
       wndClass_p.cbClsExtra := 0;
-      wndClass_p.cbWndExtra := Win32.LONG'Size / 8;  --sizeof(LONG);
+      wndClass_p.cbWndExtra := Win32.LONG_PTR'Size / 8;
       wndClass_p.hCursor    :=
          Win32.Winuser.LoadCursor
            (System.Null_Address,

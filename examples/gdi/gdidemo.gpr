@@ -7,4 +7,9 @@ project Gdidemo is
    package Builder is
       for Default_Switches ("Ada") use ("-O2");
    end Builder; 
+
+   package Linker is
+      for Default_Switches ("Ada") use ("-lwin32ada", "-llargeint");
+   end Linker;
+
 end Gdidemo;

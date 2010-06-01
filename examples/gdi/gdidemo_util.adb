@@ -44,10 +44,10 @@ package body Gdidemo_Util is
 
    ps : aliased Win32.Winuser.PAINTSTRUCT;
 
-   bResult    : Win32.BOOL;
-   iResult    : Win32.INT;
-   longResult : Win32.LONG;
-   lreturn    : Win32.LRESULT;
+   bResult       : Win32.BOOL;
+   iResult       : Win32.INT;
+   longPtrResult : Win32.LONG_PTR;
+   lreturn       : Win32.LRESULT;
 
    glSeed : Win32.DWORD := Win32.DWORD (365387184);
 
@@ -56,8 +56,8 @@ package body Gdidemo_Util is
       return Win32.Winnt.HANDLE
    is
    begin
-      return Convert.LONG_TO_HANDLE
-               (Win32.Winuser.GetWindowLong
+      return Convert.LONGPTR_TO_HANDLE
+               (Win32.Winuser.GetWindowLongPtr
                    (hWnd_p,
                     Win32.Winuser.GWL_HINSTANCE));
    end GETINSTANCE;
@@ -67,8 +67,8 @@ package body Gdidemo_Util is
       return Win32.Windef.HBRUSH
    is
    begin
-      return Win32.Windef.HBRUSH (Convert.DWORD_TO_HANDLE
-                                     (Win32.Winuser.GetClassLong
+      return Win32.Windef.HBRUSH (Convert.ULONGPTR_TO_HANDLE
+                                     (Win32.Winuser.GetClassLongPtr
                                          (hWnd_p,
                                           Win32.Winuser.GCL_HBRBACKGROUND)));
    end GETCLASSBRUSH;
@@ -120,8 +120,8 @@ package body Gdidemo_Util is
          when Win32.Winuser.WM_COMMAND =>
             bResult    := CommandProc (hWndFrame, wParam_p, lParam_p);
             hWndClient :=
-              Win32.Windef.HWND (Convert.LONG_TO_HANDLE
-                                    (Win32.Winuser.GetWindowLong
+              Win32.Windef.HWND (Convert.LONGPTR_TO_HANDLE
+                                    (Win32.Winuser.GetWindowLongPtr
                                         (hWndFrame,
                                          CLIENTWND)));
             return Win32.Winuser.DefFrameProc
@@ -133,8 +133,8 @@ package body Gdidemo_Util is
 
          when others =>
             hWndClient :=
-              Win32.Windef.HWND (Convert.LONG_TO_HANDLE
-                                    (Win32.Winuser.GetWindowLong
+              Win32.Windef.HWND (Convert.LONGPTR_TO_HANDLE
+                                    (Win32.Winuser.GetWindowLongPtr
                                         (hWndFrame,
                                          CLIENTWND)));
             return Winuser.DefFrameProc
@@ -158,11 +158,11 @@ package body Gdidemo_Util is
    begin
       hWnd_p := Init.CreateMDIClientWindow (hWndFrame);
       if hWnd_p /= System.Null_Address then
-         longResult :=
-            Win32.Winuser.SetWindowLong
+         longPtrResult :=
+            Win32.Winuser.SetWindowLongPtr
               (hWndFrame,
                CLIENTWND,
-               Convert.HANDLE_TO_LONG (Win32.Winnt.HANDLE (hWnd_p)));
+               Convert.HANDLE_TO_LONGPTR (Win32.Winnt.HANDLE (hWnd_p)));
       end if;
 
       hMenu_p :=
@@ -201,8 +201,8 @@ package body Gdidemo_Util is
 
       when IDM_DEMO_POLYBEZIER =>
          hWndClient :=
-           Win32.Windef.HWND (Convert.LONG_TO_HANDLE
-                                 (Win32.Winuser.GetWindowLong
+           Win32.Windef.HWND (Convert.LONGPTR_TO_HANDLE
+                                 (Win32.Winuser.GetWindowLongPtr
                                      (hWndFrame,
                                       CLIENTWND)));
          if hWndClient /= System.Null_Address then
@@ -211,8 +211,8 @@ package body Gdidemo_Util is
 
       when IDM_DEMO_XFORM =>
          hWndClient :=
-           Win32.Windef.HWND (Convert.LONG_TO_HANDLE
-                                 (Win32.Winuser.GetWindowLong
+           Win32.Windef.HWND (Convert.LONGPTR_TO_HANDLE
+                                 (Win32.Winuser.GetWindowLongPtr
                                      (hWndFrame,
                                       CLIENTWND)));
          if hWndClient /= System.Null_Address then
@@ -221,8 +221,8 @@ package body Gdidemo_Util is
 
       when IDM_DEMO_MAZE =>
          hWndClient :=
-           Win32.Windef.HWND (Convert.LONG_TO_HANDLE
-                                 (Win32.Winuser.GetWindowLong
+           Win32.Windef.HWND (Convert.LONGPTR_TO_HANDLE
+                                 (Win32.Winuser.GetWindowLongPtr
                                      (hWndFrame,
                                       CLIENTWND)));
          if hWndClient /= System.Null_Address then
@@ -231,8 +231,8 @@ package body Gdidemo_Util is
 
       when IDM_DEMO_DRAW =>
          hWndClient :=
-           Win32.Windef.HWND (Convert.LONG_TO_HANDLE
-                                 (Win32.Winuser.GetWindowLong
+           Win32.Windef.HWND (Convert.LONGPTR_TO_HANDLE
+                                 (Win32.Winuser.GetWindowLongPtr
                                      (hWndFrame,
                                       CLIENTWND)));
          if hWndClient /= System.Null_Address then
@@ -241,8 +241,8 @@ package body Gdidemo_Util is
 
       when IDM_DEMO_BOUNCE =>
          hWndClient :=
-           Win32.Windef.HWND (Convert.LONG_TO_HANDLE
-                                 (Win32.Winuser.GetWindowLong
+           Win32.Windef.HWND (Convert.LONGPTR_TO_HANDLE
+                                 (Win32.Winuser.GetWindowLongPtr
                                      (hWndFrame,
                                       CLIENTWND)));
          if hWndClient /= System.Null_Address then
@@ -251,8 +251,8 @@ package body Gdidemo_Util is
 
       when IDM_WINDOW_CASCADE =>
          hWndClient :=
-           Win32.Windef.HWND (Convert.LONG_TO_HANDLE
-                                 (Win32.Winuser.GetWindowLong
+           Win32.Windef.HWND (Convert.LONGPTR_TO_HANDLE
+                                 (Win32.Winuser.GetWindowLongPtr
                                      (hWndFrame,
                                       CLIENTWND)));
          if hWndClient /= System.Null_Address then
@@ -266,8 +266,8 @@ package body Gdidemo_Util is
 
       when IDM_WINDOW_TILE =>
          hWndClient :=
-           Win32.Windef.HWND (Convert.LONG_TO_HANDLE
-                                 (Win32.Winuser.GetWindowLong
+           Win32.Windef.HWND (Convert.LONGPTR_TO_HANDLE
+                                 (Win32.Winuser.GetWindowLongPtr
                                      (hWndFrame,
                                       CLIENTWND)));
          if hWndClient /= System.Null_Address then
@@ -281,8 +281,8 @@ package body Gdidemo_Util is
 
       when IDM_WINDOW_ICON =>
          hWndClient :=
-           Win32.Windef.HWND (Convert.LONG_TO_HANDLE
-                                 (Win32.Winuser.GetWindowLong
+           Win32.Windef.HWND (Convert.LONGPTR_TO_HANDLE
+                                 (Win32.Winuser.GetWindowLongPtr
                                      (hWndFrame,
                                       CLIENTWND)));
          if hWndClient /= System.Null_Address then

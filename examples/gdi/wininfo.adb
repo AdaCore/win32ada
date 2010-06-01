@@ -31,7 +31,7 @@ package body Wininfo is
    use type System.Address;
    use type Win32.BOOL;
 
-   lResult : Win32.LONG;
+   lResult : Win32.LONG_PTR;
 
    function AllocWindowInfo
      (hWnd_p : Win32.Windef.HWND;
@@ -46,10 +46,10 @@ package body Wininfo is
                                 Win32.Size_T (wSize)));
       if hsd /= System.Null_Address then
          lResult :=
-            Win32.Winuser.SetWindowLong
+            Win32.Winuser.SetWindowLongPtr
               (hWnd_p,
                0,
-               Convert.HANDLE_TO_LONG (hsd));
+               Convert.HANDLE_TO_LONGPTR (hsd));
          return Win32.TRUE;
       else
          return Win32.FALSE;
@@ -60,25 +60,27 @@ package body Wininfo is
      (hWnd_p : Win32.Windef.HWND)
       return Win32.Winnt.HANDLE
    is
+      use type Win32.LONG_PTR;
       hMem : Win32.Winnt.HANDLE;
       pMem : Win32.LPVOID;
-      lMem : Win32.LONG;
+      lMem : Win32.LONG_PTR;
    begin
-      lMem := Win32.Winuser.GetWindowLong (hWnd_p, 0);
+      lMem := Win32.Winuser.GetWindowLongPtr (hWnd_p, 0);
       if lMem /= 0 then
-         hMem := Convert.LONG_TO_HANDLE (lMem);
+         hMem := Convert.LONGPTR_TO_HANDLE (lMem);
          pMem := Win32.Winbase.LocalLock (Win32.Windef.HLOCAL (hMem));
       end if;
       return Win32.Winnt.HANDLE (pMem);
    end LockWindowInfo;
 
    function UnlockWindowInfo (hwnd_p : Win32.Windef.HWND) return Win32.BOOL is
+      use type Win32.LONG_PTR;
       hMem : Win32.Winnt.HANDLE;
-      lMem : Win32.LONG;
+      lMem : Win32.LONG_PTR;
    begin
-      lMem := Win32.Winuser.GetWindowLong (hwnd_p, 0);
+      lMem := Win32.Winuser.GetWindowLongPtr (hwnd_p, 0);
       if lMem /= 0 then
-         hMem := Convert.LONG_TO_HANDLE (lMem);
+         hMem := Convert.LONGPTR_TO_HANDLE (lMem);
          if Win32.Winbase.LocalUnlock (Win32.Windef.HLOCAL (hMem)) =
             Win32.FALSE
          then
@@ -90,12 +92,13 @@ package body Wininfo is
    end UnlockWindowInfo;
 
    function FreeWindowInfo (hwnd_p : Win32.Windef.HWND) return Win32.BOOL is
+      use type Win32.LONG_PTR;
       hMem : Win32.Windef.HLOCAL;
-      lMem : Win32.LONG;
+      lMem : Win32.LONG_PTR;
    begin
-      lMem := Win32.Winuser.GetWindowLong (hwnd_p, 0);
+      lMem := Win32.Winuser.GetWindowLongPtr (hwnd_p, 0);
       if lMem /= 0 then
-         hMem := Win32.Windef.HLOCAL (Convert.LONG_TO_HANDLE (lMem));
+         hMem := Win32.Windef.HLOCAL (Convert.LONGPTR_TO_HANDLE (lMem));
          hMem := Win32.Winbase.LocalFree (hMem);
       end if;
       return Win32.TRUE;
