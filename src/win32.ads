@@ -369,5 +369,6 @@ private
    type DWORDLONG is record
       A, B : UINT;
    end record;
+   for DWORDLONG'Alignment use 8;
 
 end Win32;
