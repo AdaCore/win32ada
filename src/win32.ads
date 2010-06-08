@@ -207,6 +207,8 @@ package Win32 is
    type PDWORDLONG is access all DWORDLONG;
    type PCDWORDLONG is access constant DWORDLONG;
 
+   type ULONGLONG is mod 2 ** 63;
+
    --  True and False constants.
    --  Warning : when you get a value back from Windows, comparing
    --  Value /= FALSE is safe, comparing Value = TRUE is not safe,

@@ -2184,9 +2184,15 @@ package Win32.Winnt is
    type PPIMAGE_TLS_CALLBACK is access all PIMAGE_TLS_CALLBACK;
 
    type IMAGE_TLS_DIRECTORY is record
+#if HOST = "Win32" then
       StartAddressOfRawData : Win32.DWORD;
       EndAddressOfRawData   : Win32.DWORD;
       AddressOfIndex        : Win32.PDWORD;
+#else
+      StartAddressOfRawData : Win32.ULONGLONG;
+      EndAddressOfRawData   : Win32.ULONGLONG;
+      AddressOfIndex        : Win32.ULONGLONG;
+#end if;
       AddressOfCallBacks    : PPIMAGE_TLS_CALLBACK;
       SizeOfZeroFill        : Win32.DWORD;
       Characteristics       : Win32.DWORD;
