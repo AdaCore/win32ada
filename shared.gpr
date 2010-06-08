@@ -82,6 +82,15 @@ project Shared is
          & " -lang XML -l256";
    end Ide;
 
+   Prep := "";
+
+   case Host is
+      when "i686-pc-mingw32" =>
+         Prep := "-gnateDHOST=Win32";
+      when "x86_64-pc-mingw32" =>
+         Prep := "-gnateDHOST=Win64";
+   end case;
+
    --------------
    -- Compiler --
    --------------
@@ -95,6 +104,9 @@ project Shared is
          when "Release" =>
             for Default_Switches ("Ada") use ("-O2", "-gnatn");
       end case;
+
+      for Default_Switches ("Ada")
+         use Compiler'Default_Switches ("Ada") & (Prep, "-gnateG");
 
    end Compiler;
 

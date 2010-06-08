@@ -75,6 +75,11 @@ ifeq (${ENABLE_SHARED}, true)
 endif
 	$(MKDIR) -p $(prefix)/include/win32ada
 	$(CP) -pr src/*.ad* $(prefix)/include/win32ada/
+	# Copy the preprocessed files
+	for file in $(BDIR)/static/obj/*.prep; do \
+		cp $$file \
+			$(prefix)/include/win32ada/$$(basename $$file .prep);\
+	done
 	$(MKDIR) -p $(prefix)/lib/gnat
 	$(CP) config/projects/win32ada.gpr $(prefix)/lib/gnat/
 
