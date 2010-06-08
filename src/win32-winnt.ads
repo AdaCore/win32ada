@@ -2255,12 +2255,36 @@ package Win32.Winnt is
       GlobalFlagsClear              : Win32.DWORD;
       GlobalFlagsSet                : Win32.DWORD;
       CriticalSectionDefaultTimeout : Win32.DWORD;
+#if HOST = "Win32" then
       DeCommitFreeBlockThreshold    : Win32.DWORD;
       DeCommitTotalFreeThreshold    : Win32.DWORD;
       LockPrefixTable               : Win32.PVOID;
       MaximumAllocationSize         : Win32.DWORD;
       VirtualMemoryThreshold        : Win32.DWORD;
-      Reserved                      : Win32.DWORD_Array (0 .. 4);
+      ProcessHeapFlags              : Win32.DWORD;
+      ProcessAffinityMask           : Win32.DWORD;
+#else
+      DeCommitFreeBlockThreshold    : Win32.ULONGLONG;
+      DeCommitTotalFreeThreshold    : Win32.ULONGLONG;
+      LockPrefixTable               : Win32.ULONGLONG;
+      MaximumAllocationSize         : Win32.ULONGLONG;
+      VirtualMemoryThreshold        : Win32.ULONGLONG;
+      ProcessAffinityMask           : Win32.ULONGLONG;
+      ProcessHeapFlags              : Win32.DWORD;
+#end if;
+      CSDVersion                    : Win32.WORD;
+      Reserved1                     : Win32.WORD;
+#if HOST = "Win32" then
+      EditList                      : Win32.DWORD;
+      SecurityCookie                : Win32.DWORD;
+      SEHandlerTable                : Win32.DWORD;
+      SEHandlerCount                : Win32.DWORD;
+#else
+      EditList                      : Win32.ULONGLONG;
+      SecurityCookie                : Win32.ULONGLONG;
+      SEHandlerTable                : Win32.ULONGLONG;
+      SEHandlerCount                : Win32.ULONGLONG;
+#end if;
    end record;
 
    type IMAGE_RUNTIME_FUNCTION_ENTRY is record
