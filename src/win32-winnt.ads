@@ -1838,6 +1838,7 @@ package Win32.Winnt is
       VirtualAddress : Win32.DWORD;
       Size           : Win32.DWORD;
    end record;
+   for IMAGE_DATA_DIRECTORY'Alignment use 4;
 
    type anonymous18_t is
      array (Integer range 0 .. 15) of IMAGE_DATA_DIRECTORY;
@@ -1851,8 +1852,12 @@ package Win32.Winnt is
       SizeOfUninitializedData     : Win32.DWORD;
       AddressOfEntryPoint         : Win32.DWORD;
       BaseOfCode                  : Win32.DWORD;
+#if HOST = "Win32" then
       BaseOfData                  : Win32.DWORD;
       ImageBase                   : Win32.DWORD;
+#else
+      ImageBase                   : Win32.ULONGLONG;
+#end if;
       SectionAlignment            : Win32.DWORD;
       FileAlignment               : Win32.DWORD;
       MajorOperatingSystemVersion : Win32.WORD;
@@ -1867,14 +1872,22 @@ package Win32.Winnt is
       CheckSum                    : Win32.DWORD;
       Subsystem                   : Win32.WORD;
       DllCharacteristics          : Win32.WORD;
+#if HOST = "Win32" then
       SizeOfStackReserve          : Win32.DWORD;
       SizeOfStackCommit           : Win32.DWORD;
       SizeOfHeapReserve           : Win32.DWORD;
       SizeOfHeapCommit            : Win32.DWORD;
+#else
+      SizeOfStackReserve          : Win32.ULONGLONG;
+      SizeOfStackCommit           : Win32.ULONGLONG;
+      SizeOfHeapReserve           : Win32.ULONGLONG;
+      SizeOfHeapCommit            : Win32.ULONGLONG;
+#end if;
       LoaderFlags                 : Win32.DWORD;
       NumberOfRvaAndSizes         : Win32.DWORD;
       DataDirectory               : anonymous18_t;
    end record;
+   for IMAGE_OPTIONAL_HEADER'Alignment use 4;
 
    type IMAGE_ROM_OPTIONAL_HEADER is record
       Magic                   : Win32.WORD;
