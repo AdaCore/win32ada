@@ -1529,8 +1529,13 @@ package Win32.Winnt is
       ExceptionRecord      : PEXCEPTION_RECORD;
       ExceptionAddress     : Win32.PVOID;
       NumberParameters     : Win32.DWORD;
+#if HOST = "Win32" then
       ExceptionInformation : Win32.DWORD_Array (0 .. 14);
+#else
+      ExceptionInformation : Win32.DWORD64_Array (0 .. 14);
+#end if;
    end record;
+   for EXCEPTION_RECORD'Alignment use System.Word_Size / 8;
 
    type EXCEPTION_POINTERS is record
       ExceptionRecord : PEXCEPTION_RECORD;
