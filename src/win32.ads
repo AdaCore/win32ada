@@ -208,6 +208,9 @@ package Win32 is
    type PCDWORDLONG is access constant DWORDLONG;
 
    type ULONGLONG is mod 2 ** 63;
+   subtype DWORD64 is ULONGLONG;
+   type ULONGLONG_Array is array (Natural range <>) of aliased ULONGLONG;
+   subtype DWORD64_Array is ULONGLONG_Array;
 
    --  True and False constants.
    --  Warning : when you get a value back from Windows, comparing
