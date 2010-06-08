@@ -1866,7 +1866,7 @@ package Win32.Winnt is
       MinorImageVersion           : Win32.WORD;
       MajorSubsystemVersion       : Win32.WORD;
       MinorSubsystemVersion       : Win32.WORD;
-      Reserved1                   : Win32.DWORD;
+      Win32VersionValue           : Win32.DWORD;
       SizeOfImage                 : Win32.DWORD;
       SizeOfHeaders               : Win32.DWORD;
       CheckSum                    : Win32.DWORD;
