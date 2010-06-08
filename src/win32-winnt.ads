@@ -152,7 +152,9 @@ package Win32.Winnt is
    CONTEXT_SEGMENTS                   : constant := 16#10004#;
    CONTEXT_FLOATING_POINT             : constant := 16#10008#;
    CONTEXT_DEBUG_REGISTERS            : constant := 16#10010#;
+   CONTEXT_EXTENDED_REGISTERS         : constant := 16#10020#;
    CONTEXT_FULL                       : constant := 16#10007#;
+   MAXIMUM_SUPPORTED_EXTENSION        : constant := 512;
    EXCEPTION_NONCONTINUABLE           : constant := 16#1#;
    EXCEPTION_MAXIMUM_PARAMETERS       : constant := 15;
    PROCESS_TERMINATE                  : constant := 16#1#;
@@ -1168,7 +1170,6 @@ package Win32.Winnt is
    type ULARGE_INTEGER;
    type LIST_ENTRY;
    type SINGLE_LIST_ENTRY;
-   type FLOATING_SAVE_AREA;
    type CONTEXT;
    type anonymous4_t;
    type union_anonymous6_t;
@@ -1269,7 +1270,6 @@ package Win32.Winnt is
    subtype PLUID is PULARGE_INTEGER;
    type PLIST_ENTRY is access all LIST_ENTRY;
    type PSINGLE_LIST_ENTRY is access all SINGLE_LIST_ENTRY;
-   type PFLOATING_SAVE_AREA is access all FLOATING_SAVE_AREA;
    type PCONTEXT is access all CONTEXT;
    type PLDT_ENTRY is access all LDT_ENTRY;
    type PEXCEPTION_RECORD is access all EXCEPTION_RECORD;
@@ -1430,6 +1430,7 @@ package Win32.Winnt is
       Next : PSINGLE_LIST_ENTRY;
    end record;
 
+#if HOST = "Win32" then
    type FLOATING_SAVE_AREA is record
       ControlWord   : Win32.DWORD;
       StatusWord    : Win32.DWORD;
@@ -1441,33 +1442,159 @@ package Win32.Winnt is
       RegisterArea  : Win32.BYTE_Array (0 .. 79);
       Cr0NpxState   : Win32.DWORD;
    end record;
+   pragma Convention (C, FLOATING_SAVE_AREA);
+
+   type PFLOATING_SAVE_AREA is access all FLOATING_SAVE_AREA;
 
    type CONTEXT is record
-      ContextFlags : Win32.DWORD;
-      Dr0          : Win32.DWORD;
-      Dr1          : Win32.DWORD;
-      Dr2          : Win32.DWORD;
-      Dr3          : Win32.DWORD;
-      Dr6          : Win32.DWORD;
-      Dr7          : Win32.DWORD;
-      FloatSave    : FLOATING_SAVE_AREA;
-      SegGs        : Win32.DWORD;
-      SegFs        : Win32.DWORD;
-      SegEs        : Win32.DWORD;
-      SegDs        : Win32.DWORD;
-      Edi          : Win32.DWORD;
-      Esi          : Win32.DWORD;
-      Ebx          : Win32.DWORD;
-      Edx          : Win32.DWORD;
-      Ecx          : Win32.DWORD;
-      Eax          : Win32.DWORD;
-      Ebp          : Win32.DWORD;
-      Eip          : Win32.DWORD;
-      SegCs        : Win32.DWORD;
-      EFLAGS       : Win32.DWORD;
-      Esp          : Win32.DWORD;
-      SegSs        : Win32.DWORD;
+      ContextFlags      : Win32.DWORD;
+      Dr0               : Win32.DWORD;
+      Dr1               : Win32.DWORD;
+      Dr2               : Win32.DWORD;
+      Dr3               : Win32.DWORD;
+      Dr6               : Win32.DWORD;
+      Dr7               : Win32.DWORD;
+      FloatSave         : FLOATING_SAVE_AREA;
+      SegGs             : Win32.DWORD;
+      SegFs             : Win32.DWORD;
+      SegEs             : Win32.DWORD;
+      SegDs             : Win32.DWORD;
+      Edi               : Win32.DWORD;
+      Esi               : Win32.DWORD;
+      Ebx               : Win32.DWORD;
+      Edx               : Win32.DWORD;
+      Ecx               : Win32.DWORD;
+      Eax               : Win32.DWORD;
+      Ebp               : Win32.DWORD;
+      Eip               : Win32.DWORD;
+      SegCs             : Win32.DWORD;
+      EFLAGS            : Win32.DWORD;
+      Esp               : Win32.DWORD;
+      SegSs             : Win32.DWORD;
+      ExtendedRegisters : Win32.BYTE_Array
+	                    (0 .. MAXIMUM_SUPPORTED_EXTENSION - 1);
    end record;
+#else
+   type M128A is record
+      Low  : ULONGLONG;
+      High : LONGLONG;
+   end record;
+   for M128A'Alignment use 16;
+   pragma Convention (C, M128A);
+
+   type M128A_Array is array (Natural range <>) of M128A;
+   pragma Convention (C, M128A_Array);
+
+   type XMM_SAVE_AREA32 is record
+      ControlWord    : Win32.WORD;
+      StatusWord     : Win32.WORD;
+      TagWord        : Win32.BYTE;
+      Reserved1      : Win32.BYTE;
+      ErrorOpcode    : Win32.WORD;
+      ErrorOffset    : Win32.DWORD;
+      ErrorSelector  : Win32.WORD;
+      Reserved2      : Win32.WORD;
+      DataOffset     : Win32.DWORD;
+      DataSelector   : Win32.WORD;
+      Reserved3      : Win32.WORD;
+      MxCsr          : Win32.DWORD;
+      MxCsr_Mask     : Win32.DWORD;
+      FloatRegisters : M128A_Array (0 .. 7);
+      XmmRegisters   : M128A_Array (0 .. 15);
+      Reserved4      : Win32.BYTE_Array (0 .. 95);
+   end record;
+   pragma Convention (C, XMM_SAVE_AREA32);
+
+   type anonymous35_t is record
+      Header : M128A_Array (0 .. 1);
+      Legacy : M128A_Array (0 .. 7);
+      Xmm0   : M128A;
+      Xmm1   : M128A;
+      Xmm2   : M128A;
+      Xmm3   : M128A;
+      Xmm4   : M128A;
+      Xmm5   : M128A;
+      Xmm6   : M128A;
+      Xmm7   : M128A;
+      Xmm8   : M128A;
+      Xmm9   : M128A;
+      Xmm10  : M128A;
+      Xmm11  : M128A;
+      Xmm12  : M128A;
+      Xmm13  : M128A;
+      Xmm14  : M128A;
+      Xmm15  : M128A;
+   end record;
+   pragma Convention (C, anonymous35_t);
+
+   type union_anonymous35_t_kind is (FltSave_Kind, FloatSave_Kind, Legacy_Kind);
+
+   type union_anonymous35_t
+     (Which : union_anonymous35_t_kind := FltSave_Kind) is
+   record
+      case Which is
+	 when FltSave_Kind =>
+	    FltSave : XMM_SAVE_AREA32;
+	 when FloatSave_Kind =>
+	    FloatSave : XMM_SAVE_AREA32;
+	 when Legacy_Kind =>
+	    Legacy : anonymous35_t;
+      end case;
+   end record;
+
+   pragma Convention (C, union_anonymous35_t);
+   pragma Unchecked_Union (union_anonymous35_t);
+
+   type CONTEXT is record
+      P1Home               : DWORD64;
+      P2Home               : DWORD64;
+      P3Home               : DWORD64;
+      P4Home               : DWORD64;
+      P5Home               : DWORD64;
+      P6Home               : DWORD64;
+      ContextFlags         : DWORD;
+      MxCsr                : DWORD;
+      SegCs                : WORD;
+      SegDs                : WORD;
+      SegEs                : WORD;
+      SegFs                : WORD;
+      SegGs                : WORD;
+      SegSs                : WORD;
+      EFlags               : DWORD;
+      Dr0                  : DWORD64;
+      Dr1                  : DWORD64;
+      Dr2                  : DWORD64;
+      Dr3                  : DWORD64;
+      Dr6                  : DWORD64;
+      Dr7                  : DWORD64;
+      Rax                  : DWORD64;
+      Rcx                  : DWORD64;
+      Rdx                  : DWORD64;
+      Rbx                  : DWORD64;
+      Rsp                  : DWORD64;
+      Rbp                  : DWORD64;
+      Rsi                  : DWORD64;
+      Rdi                  : DWORD64;
+      R8                   : DWORD64;
+      R9                   : DWORD64;
+      R10                  : DWORD64;
+      R11                  : DWORD64;
+      R12                  : DWORD64;
+      R13                  : DWORD64;
+      R14                  : DWORD64;
+      R15                  : DWORD64;
+      Rip                  : DWORD64;
+      Union                : union_anonymous35_t;
+      VectorRegister       : M128A_Array (0 .. 25);
+      VectorControl        : DWORD64;
+      DebugControl         : DWORD64;
+      LastBranchToRip      : DWORD64;
+      LastBranchFromRip    : DWORD64;
+      LastExceptionToRip   : DWORD64;
+      LastExceptionFromRip : DWORD64;
+   end record;
+   for CONTEXT'Alignment use 16;
+#end if;
 
    type anonymous4_t is record
       BaseMid : Win32.BYTE;
@@ -2513,7 +2640,6 @@ private
    pragma Convention (C_Pass_By_Copy, anonymous2_t);
    pragma Convention (C_Pass_By_Copy, LIST_ENTRY);
    pragma Convention (C_Pass_By_Copy, SINGLE_LIST_ENTRY);
-   pragma Convention (C, FLOATING_SAVE_AREA);
    pragma Convention (C, CONTEXT);
    pragma Convention (C_Pass_By_Copy, anonymous4_t);
    pragma Convention (C_Pass_By_Copy, anonymous5_t);
