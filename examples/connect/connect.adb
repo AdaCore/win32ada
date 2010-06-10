@@ -55,7 +55,7 @@ procedure Connect is
       hPrevInstance : Win32.Windef.HINSTANCE;
       lpszCmdLine   : PCSTR;
       nCmdShow      : INT)
-      return UINT
+      return Win32.WPARAM
    is
       szAppName : constant CHAR_Array := "Connect" & Nul;
       szMesLook : constant CHAR_Array :=
