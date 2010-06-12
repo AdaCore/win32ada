@@ -30,6 +30,9 @@ gprbuild -q -p -d -Pwin32ada -XLIBRARY_TYPE=static -XPRJ_BUILD=Release
 if errorlevel 1 goto error
 gprbuild -q -p -d -Pwin32ada -XLIBRARY_TYPE=relocatable -XPRJ_BUILD=Release
 if errorlevel 1 goto error
+rem ---- move sources, rename preprocessed sources, move them
+move src\*.ad? %I_INC% > nul
+ren src\*.prep *. > nul
 move src\*.ad? %I_INC% > nul
 copy .build\release\relocatable\lib\libwin32ada.dll %I_BIN% > nul
 move .build\release\relocatable\lib\* %I_LIB%\relocatable > nul
@@ -39,6 +42,8 @@ move config\projects\win32ada.gpr %I_GPR% > nul
 goto exit
 rem -----------------------------------------------
 :error
+move src\*.ad? %I_INC% > nul
+ren src\*.prep *. > nul
 move src\*.ad? %I_INC% > nul
 if exist %I_GPR%\win32ada.gpr del /F %I_GPR%\win32ada.gpr
 move config\projects\win32ada.gpr %I_GPR% > nul
