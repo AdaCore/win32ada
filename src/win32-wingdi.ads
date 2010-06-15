@@ -2046,15 +2046,19 @@ package Win32.Wingdi is
    pragma Convention (Stdcall, ABORTPROC);
 
    type DOCINFOA is record
-      cbSize      : Win32.INT;
-      lpszDocName : Win32.LPCSTR;
-      lpszOutput  : Win32.LPCSTR;
+      cbSize       : Win32.INT;
+      lpszDocName  : Win32.LPCSTR;
+      lpszOutput   : Win32.LPCSTR;
+      lpszDatatype : Win32.LPCSTR;
+      fwType       : Win32.DWORD;
    end record;
 
    type DOCINFOW is record
-      cbSize      : Win32.INT;
-      lpszDocName : Win32.LPCWSTR;
-      lpszOutput  : Win32.LPCWSTR;
+      cbSize       : Win32.INT;
+      lpszDocName  : Win32.LPCWSTR;
+      lpszOutput   : Win32.LPCWSTR;
+      lpszDatatype : Win32.LPCSTR;
+      fwType       : Win32.DWORD;
    end record;
 
    subtype DOCINFO is DOCINFOA;
