@@ -165,10 +165,10 @@ package Win32.Ddeml is
    MF_CONV                    : constant := 16#40000000#;
    MF_MASK                    : constant := 16#ff000000#;
 
-   type HCONVLIST is new Win32.DWORD;
-   type HCONV is new Win32.DWORD;
-   type HSZ is new Win32.DWORD;
-   type HDDEDATA is new Win32.DWORD;
+   type HCONVLIST is new Win32.LONG_PTR;
+   type HCONV is new Win32.LONG_PTR;
+   type HSZ is new Win32.LONG_PTR;
+   type HDDEDATA is new Win32.LONG_PTR;
 
    type HSZPAIR;
    type CONVCONTEXT;
