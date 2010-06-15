@@ -1561,6 +1561,12 @@ package Win32.Wingdi is
    type LOGBRUSH is record
       lbStyle : Win32.UINT;
       lbColor : Win32.Windef.COLORREF;
+      lbHatch : Win32.ULONG_PTR;
+   end record;
+
+   type LOGBRUSH32 is record
+      lbStyle : Win32.UINT;
+      lbColor : Win32.Windef.COLORREF;
       lbHatch : Win32.LONG;
    end record;
 
@@ -2600,7 +2606,7 @@ package Win32.Wingdi is
    type EMRCREATEBRUSHINDIRECT is record
       emr     : Win32.Wingdi.EMR;
       ihBrush : Win32.DWORD;
-      lb      : LOGBRUSH;
+      lb      : LOGBRUSH32;
    end record;
 
    type EMRCREATEMONOBRUSH is record
@@ -4698,6 +4704,7 @@ private
    pragma Convention (C, NEWTEXTMETRICW);
    pragma Convention (C, PELARRAY);
    pragma Convention (C, LOGBRUSH);
+   pragma Convention (C, LOGBRUSH32);
    pragma Convention (C, LOGPEN);
    pragma Convention (C, EXTLOGPEN);
    pragma Convention (C, PALETTEENTRY);
