@@ -212,7 +212,7 @@ package Win32.Ddeml is
 
    type CONVINFO is record
       cb            : Win32.DWORD;
-      hUser         : Win32.DWORD;
+      hUser         : Win32.ULONG_PTR;
       hConvPartner  : HCONV;
       hszSvcPartner : HSZ;
       hszServiceReq : HSZ;
