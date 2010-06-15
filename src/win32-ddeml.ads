@@ -242,8 +242,8 @@ package Win32.Ddeml is
    pragma Convention (Stdcall, PFNCALLBACK);
 
    type DDEML_MSG_HOOK_DATA is record
-      uiLo   : Win32.UINT;
-      uiHi   : Win32.UINT;
+      uiLo   : Win32.UINT_PTR;
+      uiHi   : Win32.UINT_PTR;
       cbData : Win32.DWORD;
       Data   : Win32.DWORD_Array (0 .. 7);
    end record;
