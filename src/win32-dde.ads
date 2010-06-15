@@ -89,6 +89,13 @@ package Win32.Dde is
       cfFormat  : Win32.SHORT;
       Value     : Win32.BYTE_Array (0 .. Win32.ANYSIZE_ARRAY);
    end record;
+   for DDEPOKE use record
+      unused    at 0 range  0 .. 12;
+      fRelease  at 0 range 13 .. 13;
+      fReserved at 0 range 14 .. 15;
+      cfFormat  at 2 range  0 .. 15;
+      Value     at 4 range  0 .. 7;
+   end record;
 
    type DDELN is record
       unused    : Win32.Bits13;
