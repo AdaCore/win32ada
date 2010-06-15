@@ -374,9 +374,6 @@ package body DdemoPkg is
    end DdeCallBack;
 
 begin
-
    szTitle := CP (szTitle_str);
-
    szApp := CP (szApp_str);
-
 end DdemoPkg;

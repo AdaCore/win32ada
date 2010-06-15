@@ -67,7 +67,6 @@ procedure DDEMO is
       WC_Ptr := wc'Access;
       return Win32.BOOL (Winuser.RegisterClass
                             (Winuser.ac_WNDCLASSA_t (WC_Ptr)));
-
    end InitApplication;
 
 begin
@@ -102,7 +101,7 @@ begin
 
    if hwndMain = System.Null_Address then
       bResult := Ddeml.DdeUninitialize (idInst);
-      return ;
+      return;
    end if;
 
    hdc     := Winuser.GetDC (hwndMain);
@@ -143,8 +142,7 @@ begin
              (MSG,
               System.Null_Address,
               Win32.UINT (0),
-              Win32.UINT (0)) /=
-          0)
+              Win32.UINT (0)) /= 0)
    loop
       bResult := Winuser.TranslateMessage (Winuser.ac_MSG_t (MSG));
       lResult := Winuser.DispatchMessage (Winuser.ac_MSG_t (MSG));
