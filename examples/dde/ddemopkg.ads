@@ -39,8 +39,8 @@ package DdemoPkg is
       hsz_topic : Ddeml.HSZ;
       hsz_item  : Ddeml.HSZ;
       hData     : Ddeml.HDDEDATA;
-      lData1    : Win32.DWORD;
-      lData2    : Win32.DWORD)
+      lData1    : Win32.ULONG_PTR;
+      lData2    : Win32.ULONG_PTR)
       return Ddeml.HDDEDATA;
    pragma Convention (Stdcall, DdeCallBack);
 

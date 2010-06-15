@@ -277,8 +277,8 @@ package body DdemoPkg is
       hsz_topic : Ddeml.HSZ;
       hsz_item  : Ddeml.HSZ;
       hData     : Ddeml.HDDEDATA;
-      lData1    : Win32.DWORD;
-      lData2    : Win32.DWORD)
+      lData1    : Win32.ULONG_PTR;
+      lData2    : Win32.ULONG_PTR)
       return Ddeml.HDDEDATA
    is
       pszExec : Win32.PBYTE;
@@ -349,7 +349,7 @@ package body DdemoPkg is
             hConvList :=
                Ddeml.DdeConnectList
                  (idInst,
-                  hsz_item,
+                  hszAppName,
                   hszAppName,
                   hConvList,
                   null);

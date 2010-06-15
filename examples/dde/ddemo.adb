@@ -107,7 +107,7 @@ begin
    hdc     := Winuser.GetDC (hwndMain);
    bResult := Wingdi.GetTextMetrics (hdc, metrics'Access);
 
-   cyText  := Win32.INT (metrics.tmHeight + metrics.tmExternalLeading);
+   cyText  := Win32.INT (metrics.tmHeight + metrics.tmExternalLeading) * 2;
    cxText  := Win32.INT (metrics.tmMaxCharWidth * 8);
    cyTitle := Winuser.GetSystemMetrics (Winuser.SM_CYCAPTION);
    iResult := Winuser.ReleaseDC (hwndMain, hdc);
@@ -127,7 +127,7 @@ begin
    bResult := Winuser.ShowWindow (hwndMain, Winmain.Get_nCmdShow);
    bResult := Winuser.UpdateWindow (hwndMain);
 
-   hszAppName := Ddeml.DdeCreateStringHandle (idInst, szApp, 0);
+   hszAppName := Ddeml.DdeCreateStringHandle (idInst, szApp, Ddeml.CP_WINANSI);
 
    OurFormat := Winuser.RegisterClipboardFormat (Win32.LPCSTR (szApp));
 
