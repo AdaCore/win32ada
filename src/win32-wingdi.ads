@@ -1440,6 +1440,10 @@ package Win32.Wingdi is
       nPalEntries    : Win32.DWORD;
       szlDevice      : Win32.Windef.SIZEL;
       szlMillimeters : Win32.Windef.SIZEL;
+      cbPixelFormat  : Win32.DWORD;
+      offPixelFormat : Win32.DWORD;
+      bOpenGL        : Win32.DWORD;
+      szlMicrometers : Win32.Windef.SIZEL;
    end record;
 
    type TEXTMETRICA is record
