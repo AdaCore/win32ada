@@ -1685,6 +1685,39 @@ package Win32.Wingdi is
 
    subtype EXTLOGFONT is EXTLOGFONTA;
 
+   type struct_anonymous37_t is record
+      dmOrientation   : Win32.SHORT;
+      dmPaperSize     : Win32.SHORT;
+      dmPaperLength   : Win32.SHORT;
+      dmPaperWidth    : Win32.SHORT;
+      dmScale         : Win32.SHORT;
+      dmCopies        : Win32.SHORT;
+      dmDefaultSource : Win32.SHORT;
+      dmPrintQuality  : Win32.SHORT;
+   end record;
+   pragma Convention (C, struct_anonymous37_t);
+
+   type struct_anonymous38_t is record
+      dmPosition           : Win32.Windef.POINTL;
+      dmDisplayOrientation : Win32.DWORD;
+      dmDisplayFixedOutput : Win32.DWORD;
+   end record;
+   pragma Convention (C, struct_anonymous38_t);
+
+   type union_anonymous43_t_kind is (Short_Kind, Pointl_Kind);
+
+   type union_anonymous43_t
+     (Which : union_anonymous43_t_kind := Short_Kind)
+   is record
+      case Which is
+         when Short_Kind =>
+            Short : struct_anonymous37_t;
+         when Pointl_Kind =>
+            Pointl : struct_anonymous38_t;
+      end case;
+   end record;
+   pragma Unchecked_Union (union_anonymous43_t);
+
    type DEVMODEA is record
       dmDeviceName       : Win32.BYTE_Array (0 .. 31);
       dmSpecVersion      : Win32.WORD;
@@ -1692,14 +1725,7 @@ package Win32.Wingdi is
       dmSize             : Win32.WORD;
       dmDriverExtra      : Win32.WORD;
       dmFields           : Win32.DWORD;
-      dmOrientation      : Win32.SHORT;
-      dmPaperSize        : Win32.SHORT;
-      dmPaperLength      : Win32.SHORT;
-      dmPaperWidth       : Win32.SHORT;
-      dmScale            : Win32.SHORT;
-      dmCopies           : Win32.SHORT;
-      dmDefaultSource    : Win32.SHORT;
-      dmPrintQuality     : Win32.SHORT;
+      dmPaper            : union_anonymous43_t;
       dmColor            : Win32.SHORT;
       dmDuplex           : Win32.SHORT;
       dmYResolution      : Win32.SHORT;
@@ -1712,6 +1738,14 @@ package Win32.Wingdi is
       dmPelsHeight       : Win32.DWORD;
       dmDisplayFlags     : Win32.DWORD;
       dmDisplayFrequency : Win32.DWORD;
+      dmICMMethod        : Win32.DWORD;
+      dmICMIntent        : Win32.DWORD;
+      dmMediaType        : Win32.DWORD;
+      dmDitherType       : Win32.DWORD;
+      dmReserved1        : Win32.DWORD;
+      dmReserved2        : Win32.DWORD;
+      dmPanningWidth     : Win32.DWORD;
+      dmPanningHeight    : Win32.DWORD;
    end record;
 
    type DEVMODEW is record
@@ -1721,14 +1755,7 @@ package Win32.Wingdi is
       dmSize             : Win32.WORD;
       dmDriverExtra      : Win32.WORD;
       dmFields           : Win32.DWORD;
-      dmOrientation      : Win32.SHORT;
-      dmPaperSize        : Win32.SHORT;
-      dmPaperLength      : Win32.SHORT;
-      dmPaperWidth       : Win32.SHORT;
-      dmScale            : Win32.SHORT;
-      dmCopies           : Win32.SHORT;
-      dmDefaultSource    : Win32.SHORT;
-      dmPrintQuality     : Win32.SHORT;
+      dmPaper            : union_anonymous43_t;
       dmColor            : Win32.SHORT;
       dmDuplex           : Win32.SHORT;
       dmYResolution      : Win32.SHORT;
@@ -1741,6 +1768,14 @@ package Win32.Wingdi is
       dmPelsHeight       : Win32.DWORD;
       dmDisplayFlags     : Win32.DWORD;
       dmDisplayFrequency : Win32.DWORD;
+      dmICMMethod        : Win32.DWORD;
+      dmICMIntent        : Win32.DWORD;
+      dmMediaType        : Win32.DWORD;
+      dmDitherType       : Win32.DWORD;
+      dmReserved1        : Win32.DWORD;
+      dmReserved2        : Win32.DWORD;
+      dmPanningWidth     : Win32.DWORD;
+      dmPanningHeight    : Win32.DWORD;
    end record;
 
    subtype DEVMODE is DEVMODEA;
