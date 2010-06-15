@@ -1583,7 +1583,7 @@ package Win32.Wingdi is
       elpWidth      : Win32.DWORD;
       elpBrushStyle : Win32.UINT;
       elpColor      : Win32.Windef.COLORREF;
-      elpHatch      : Win32.LONG;
+      elpHatch      : Win32.ULONG_PTR;
       elpNumEntries : Win32.DWORD;
       elpStyleEntry : Win32.DWORD_Array (0 .. Win32.ANYSIZE_ARRAY);
    end record;
