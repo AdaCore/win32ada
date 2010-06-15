@@ -101,6 +101,9 @@ procedure Driver is
       Text_IO.Put_Line (A_File, "with Win32.Winnt;");
       Text_IO.Put_Line (A_File, "with Win32.Winuser;");
       Text_IO.Put_Line (A_File, "with Win32.Rpcndr;");
+      Text_IO.Put_Line (A_File, "with Win32.Wingdi;");
+      Text_IO.Put_Line (A_File, "with Win32.Ddeml;");
+      Text_IO.Put_Line (A_File, "with Win32.Dde;");
       Text_IO.Put_Line (A_File, "procedure RunCheck is");
       Text_IO.Put_Line (A_File, "   use Ada;");
       Text_IO.Put_Line (A_File, "   use Ada.Strings.Unbounded;");
@@ -110,6 +113,9 @@ procedure Driver is
       Text_IO.Put_Line (A_File, "   use Win32.Winnt;");
       Text_IO.Put_Line (A_File, "   use Win32.Winuser;");
       Text_IO.Put_Line (A_File, "   use Win32.Rpcndr;");
+      Text_IO.Put_Line (A_File, "   use Win32.Wingdi;");
+      Text_IO.Put_Line (A_File, "   use Win32.Ddeml;");
+      Text_IO.Put_Line (A_File, "   use Win32.Dde;");
       Text_IO.Put_Line (A_File, "   Errors : Natural := 0;");
       Text_IO.Put_Line (A_File, "   Checks : Natural := 0;");
       Text_IO.Put_Line (A_File, "   Xfail  : Unbounded_String;");
