@@ -121,6 +121,15 @@ package Win32.Dde is
       cfFormat  : Win32.SHORT;
       rgb       : Win32.BYTE_Array (0 .. Win32.ANYSIZE_ARRAY);
    end record;
+   for DDEUP use record
+      unused    at 0 range  0 .. 11;
+      fAck      at 0 range 12 .. 12;
+      fRelease  at 0 range 13 .. 13;
+      fReserved at 0 range 14 .. 14;
+      fAckReq   at 0 range 15 .. 15;
+      cfFormat  at 2 range  0 .. 15;
+      rgb       at 4 range  0 .. 7;
+   end record;
 
    function DdeSetQualityOfService
      (hwndClient : Win32.Windef.HWND;
