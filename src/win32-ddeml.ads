@@ -270,8 +270,8 @@ package Win32.Ddeml is
       hsz1    : HSZ;
       hsz2    : HSZ;
       hData   : HDDEDATA;
-      dwData1 : Win32.DWORD;
-      dwData2 : Win32.DWORD;
+      dwData1 : Win32.ULONG_PTR;
+      dwData2 : Win32.ULONG_PTR;
       cc      : CONVCONTEXT;
       cbData  : Win32.DWORD;
       Data    : Win32.DWORD_Array (0 .. 7);
