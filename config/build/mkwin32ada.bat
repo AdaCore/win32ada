@@ -5,6 +5,7 @@ set I_INC=%1\include\win32ada
 set I_LIB=%1\lib\win32ada
 set I_GPR=%1\lib\gnat
 set I_EXP=%1\share\examples\win32ada
+set BUILD=.build\i686-pc-mingw32\release
 rem -----------------------------------------------
 if .%1==. goto error
 if exist %I_INC% rmdir /S /Q %I_INC%
@@ -34,9 +35,9 @@ rem ---- move sources, rename preprocessed sources, move them
 move src\*.ad? %I_INC% > nul
 ren src\*.prep *. > nul
 move src\*.ad? %I_INC% > nul
-copy .build\release\relocatable\lib\libwin32ada.dll %I_BIN% > nul
-move .build\release\relocatable\lib\* %I_LIB%\relocatable > nul
-move .build\release\static\lib\* %I_LIB%\static > nul
+copy %BUILD%\relocatable\lib\libwin32ada.dll %I_BIN% > nul
+move %BUILD%\relocatable\lib\* %I_LIB%\relocatable > nul
+move %BUILD%\static\lib\* %I_LIB%\static > nul
 if exist %I_GPR%\win32ada.gpr del /F %I_GPR%\win32ada.gpr
 move config\projects\win32ada.gpr %I_GPR% > nul
 goto exit
