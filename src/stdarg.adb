@@ -27,7 +27,6 @@ package body Stdarg is
    Param_Size          : Positive renames Int_Param_Alignment;
 
    function RoundUp (Siz : Natural) return Natural;
-   procedure put (s : String; a : System.Address);
 
    function RoundUp (Siz : Natural) return Natural is
       Slop : constant Natural := Siz mod Int_Param_Alignment;
@@ -63,11 +62,6 @@ package body Stdarg is
          end if;
       end if;
    end Finalize;
-
-   procedure put (s : String; a : System.Address) is
-   begin
-      null;
-   end put;
 
    function Concat (Args : ArgList; Arg : T) return ArgList is
       Nb_Int         : Natural := RoundUp (T'Size / System.Storage_Unit);
@@ -124,9 +118,6 @@ package body Stdarg is
          (Nb_Int * Param_Size) - Uncopied_Bytes);
 
       Args.Contents.CurrentArgs := Args.Contents.CurrentArgs + Nb_Int;
-      put ("arg_addr", Arg_Addr);
-      put ("buf_addr", Buf_Addr);
-      put ("param addr", Arg'Address);
       return Args;
    end Concat;
 
