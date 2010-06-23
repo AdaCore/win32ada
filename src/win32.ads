@@ -164,7 +164,7 @@ package Win32 is
 
    subtype LONG is Interfaces.C.long;
    subtype LPARAM is LONG_PTR;
-   subtype LRESULT is LONG;
+   subtype LRESULT is LONG_PTR;
    type PLONG is access all LONG;
    subtype LPLONG is PLONG;
    type PCLONG is access constant LONG;

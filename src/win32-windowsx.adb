@@ -529,7 +529,7 @@ package body Win32.Windowsx is
       wParam : Win32.WPARAM;
       lParam : Win32.LPARAM;
       fn     : LPCOMPACTINGPROC)
-      return Win32.LONG
+      return Win32.LRESULT
    is
    begin
       fn (hwnd, Win32.UINT (wParam));
@@ -888,13 +888,18 @@ package body Win32.Windowsx is
       fn     : LPCREATEFN)
       return Win32.LRESULT
    is
+      use type Interfaces.C.ptrdiff_t;
+      function To_LRESULT is new Ada.Unchecked_Conversion (
+         Interfaces.C.ptrdiff_t,
+         LRESULT);
       res : Win32.BOOL;
+      mone : constant Interfaces.C.ptrdiff_t := -1;
    begin
       res := fn (hwnd, To_LPCREATESTRUCT (lParam));
       if (res = 0) then
          return 0;
       else
-         return LRESULT (-1);
+         return To_LRESULT (mone);
       end if;
    end HANDLE_WM_CREATE;
 

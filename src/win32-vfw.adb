@@ -503,7 +503,7 @@ package body Win32.Vfw is
 
    function MCIWndSaveDialog (hwnd : Win32.Windef.HWND) return Win32.LONG is
       function To_LPVOID is new Ada.Unchecked_Conversion (
-         Integer,
+         LONG_PTR,
          Win32.LPVOID);
    begin
       return MCIWndSave (hwnd, To_LPVOID (-1));
@@ -539,7 +539,7 @@ package body Win32.Vfw is
 
    function MCIWndOpenDialog (hwnd : Win32.Windef.HWND) return Win32.LONG is
       function To_LPVOID is new Ada.Unchecked_Conversion (
-         Integer,
+         LONG_PTR,
          Win32.LPVOID);
    begin
       return MCIWndOpen (hwnd, To_LPVOID (-1), 0);
