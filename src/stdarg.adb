@@ -57,7 +57,7 @@ package body Stdarg is
          null;
       else
          A.Contents.RefCount := A.Contents.RefCount - 1;
-         if A.Contents.RefCount <= 0 then
+         if A.Contents.RefCount = 0 then
             Free (A.Contents);
          end if;
       end if;
