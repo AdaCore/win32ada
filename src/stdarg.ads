@@ -47,16 +47,6 @@ private
       FirstHole   : Natural                       := 0;
    end record;
 
-   AS : constant := MaxArguments * C_Param'Size;
-   NS : constant := Natural'Size;
-
-   for ArgBlock use record at mod 4;
-      Vector      at 0 range 0 .. AS - 1;
-      RefCount    at AS range 0 .. NS - 1;
-      CurrentArgs at AS + NS range 0 .. NS - 1;
-      FirstHole   at AS + NS + NS range 0 .. NS - 1;
-   end record;
-
    type ArgBlockP is access ArgBlock;
 
    type ArgList is new Ada.Finalization.Controlled with record
