@@ -2073,12 +2073,12 @@ package Win32.Ole2 is
       pdwStubPhase      : Win32.PDWORD);
 
    procedure DISCARDCACHE_to_xmit
-     (pEnum  : in PDISCARDCACHE;
-      ppLong : out Win32.PLONG);
+     (pEnum  : PDISCARDCACHE;
+      ppLong : Win32.PLONG);
 
    procedure DISCARDCACHE_from_xmit
-     (pLong : in Win32.PLONG;
-      pEnum : out PDISCARDCACHE);
+     (pLong : Win32.PLONG;
+      pEnum : PDISCARDCACHE);
 
    function IOleCache2_UpdateCache_Proxy
      (This        : access IOleCache2;

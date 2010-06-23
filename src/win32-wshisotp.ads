@@ -55,11 +55,11 @@ package Win32.Wshisotp is
    end record;
 
    procedure ISO_SET_TP_ADDR
-     (sa_tp   : out PSOCKADDR_TP;
-      port    : in Win32.PUCHAR;
-      portlen : in Win32.Winsock.u_short;
-      node    : in Win32.PUCHAR;
-      nodelen : in Win32.Winsock.u_short);
+     (sa_tp   : PSOCKADDR_TP;
+      port    : Win32.PUCHAR;
+      portlen : Win32.Winsock.u_short;
+      node    : Win32.PUCHAR;
+      nodelen : Win32.Winsock.u_short);
 private
 
    pragma Convention (C, SOCKADDR_TP);

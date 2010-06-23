@@ -1682,60 +1682,60 @@ package Win32.Oleauto is
    type PPLONG is access Win32.PLONG;
 
    procedure TYPEKIND_to_xmit
-     (pEnum  : in PTYPEKIND;
-      ppLong : out Win32.Oleauto.PPLONG);
+     (pEnum  : PTYPEKIND;
+      ppLong : Win32.Oleauto.PPLONG);
 
    procedure TYPEKIND_from_xmit
-     (pLong : in Win32.PLONG;
-      pEnum : out PTYPEKIND);
+     (pLong : Win32.PLONG;
+      pEnum : PTYPEKIND);
 
    procedure CALLCONV_to_xmit
-     (pEnum  : in PCALLCONV;
-      ppLong : out Win32.Oleauto.PPLONG);
+     (pEnum  : PCALLCONV;
+      ppLong : Win32.Oleauto.PPLONG);
 
    procedure CALLCONV_from_xmit
-     (pLong : in Win32.PLONG;
-      pEnum : out PCALLCONV);
+     (pLong : Win32.PLONG;
+      pEnum : PCALLCONV);
 
    procedure FUNCKIND_to_xmit
-     (pEnum  : in PFUNCKIND;
-      ppLong : out Win32.Oleauto.PPLONG);
+     (pEnum  : PFUNCKIND;
+      ppLong : Win32.Oleauto.PPLONG);
 
    procedure FUNCKIND_from_xmit
-     (pLong : in Win32.PLONG;
-      pEnum : out PFUNCKIND);
+     (pLong : Win32.PLONG;
+      pEnum : PFUNCKIND);
 
    procedure INVOKEKIND_to_xmit
-     (pEnum  : in PINVOKEKIND;
-      ppLong : out Win32.Oleauto.PPLONG);
+     (pEnum  : PINVOKEKIND;
+      ppLong : Win32.Oleauto.PPLONG);
 
    procedure INVOKEKIND_from_xmit
-     (pLong : in Win32.PLONG;
-      pEnum : out PINVOKEKIND);
+     (pLong : Win32.PLONG;
+      pEnum : PINVOKEKIND);
 
    procedure VARKIND_to_xmit
-     (pEnum  : in PVARKIND;
-      ppLong : out Win32.Oleauto.PPLONG);
+     (pEnum  : PVARKIND;
+      ppLong : Win32.Oleauto.PPLONG);
 
    procedure VARKIND_from_xmit
-     (pLong : in Win32.PLONG;
-      pEnum : out PVARKIND);
+     (pLong : Win32.PLONG;
+      pEnum : PVARKIND);
 
    procedure DESCKIND_to_xmit
-     (pEnum  : in PDESCKIND;
-      ppLong : out Win32.Oleauto.PPLONG);
+     (pEnum  : PDESCKIND;
+      ppLong : Win32.Oleauto.PPLONG);
 
    procedure DESCKIND_from_xmit
-     (pLong : in Win32.PLONG;
-      pEnum : out PDESCKIND);
+     (pLong : Win32.PLONG;
+      pEnum : PDESCKIND);
 
    procedure SYSKIND_to_xmit
-     (pEnum  : in PSYSKIND;
-      ppLong : out Win32.Oleauto.PPLONG);
+     (pEnum  : PSYSKIND;
+      ppLong : Win32.Oleauto.PPLONG);
 
    procedure SYSKIND_from_xmit
-     (pLong : in Win32.PLONG;
-      pEnum : out PSYSKIND);
+     (pLong : Win32.PLONG;
+      pEnum : PSYSKIND);
 
    function ICreateTypeInfo_SetGuid_Proxy
      (This : access ICreateTypeInfo;

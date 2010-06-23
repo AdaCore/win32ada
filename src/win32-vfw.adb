@@ -25,8 +25,6 @@ with Win32.Utils;
 
 package body Win32.Vfw is
 
-   pragma Warnings (Off);
-
    use type Interfaces.C.unsigned_char;
 
    function To_BYTE is new Ada.Unchecked_Conversion (Win32.CHAR, Win32.BYTE);
@@ -388,7 +386,7 @@ package body Win32.Vfw is
       Args          : Stdarg.ArgList := Stdarg.Empty)
       return Win32.Objbase.HRESULT
    is
-      Complete_Args : Stdarg.ArgList :=
+      Complete_Args : constant Stdarg.ArgList :=
          Stdarg.Empty &
          szFile &
          Win32.Objbase.LPCLSID (pclsidHandler) &
@@ -418,7 +416,7 @@ package body Win32.Vfw is
       Args          : Stdarg.ArgList := Stdarg.Empty)
       return Win32.Objbase.HRESULT
    is
-      Complete_Args : Stdarg.ArgList :=
+      Complete_Args : constant Stdarg.ArgList :=
          Stdarg.Empty &
          szFile &
          Win32.Objbase.LPCLSID (pclsidHandler) &
@@ -686,6 +684,7 @@ package body Win32.Vfw is
       return Win32.LONG
    is
       garbage : Win32.LONG;
+      pragma Unreferenced (garbage);
    begin
       garbage := MCIWndSeek (hwnd, lStart);
       return MCIWndPlayTo (hwnd, lEnd);
@@ -768,12 +767,14 @@ package body Win32.Vfw is
 
    procedure MCIWndDestroy (hwnd : Win32.Windef.HWND) is
       garbage : Win32.LRESULT;
+      pragma Unreferenced (garbage);
    begin
       garbage := MCIWndSM (hwnd, Win32.Winuser.WM_CLOSE, 0, 0);
    end MCIWndDestroy;
 
    procedure MCIWndSetZoom (hwnd : Win32.Windef.HWND; iZoom : Win32.UINT) is
       garbage : Win32.LRESULT;
+      pragma Unreferenced (garbage);
    begin
       garbage := MCIWndSM (hwnd, MCIWNDM_SETZOOM, 0, LPARAM (iZoom));
    end MCIWndSetZoom;
@@ -848,12 +849,14 @@ package body Win32.Vfw is
 
    procedure MCIWndValidateMedia (hwnd : Win32.Windef.HWND) is
       garbage : Win32.LRESULT;
+      pragma Unreferenced (garbage);
    begin
       garbage := MCIWndSM (hwnd, MCIWNDM_VALIDATEMEDIA, 0, 0);
    end MCIWndValidateMedia;
 
    procedure MCIWndSetRepeat (hwnd : Win32.Windef.HWND; f : Win32.BOOL) is
       garbage : Win32.LRESULT;
+      pragma Unreferenced (garbage);
    begin
       garbage := MCIWndSM (hwnd, MCIWNDM_SETREPEAT, 0, Win32.LPARAM (f));
    end MCIWndSetRepeat;
@@ -868,6 +871,7 @@ package body Win32.Vfw is
       active : Win32.UINT)
    is
       garbage : Win32.LRESULT;
+      pragma Unreferenced (garbage);
    begin
       garbage :=
          MCIWndSM (hwnd, MCIWNDM_SETACTIVETIMER, Win32.WPARAM (active), 0);
@@ -878,6 +882,7 @@ package body Win32.Vfw is
       inactive : Win32.UINT)
    is
       garbage : Win32.LRESULT;
+      pragma Unreferenced (garbage);
    begin
       garbage :=
          MCIWndSM
@@ -893,6 +898,7 @@ package body Win32.Vfw is
       inactive : Win32.UINT)
    is
       garbage : Win32.LRESULT;
+      pragma Unreferenced (garbage);
    begin
       garbage :=
          MCIWndSM

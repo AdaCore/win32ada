@@ -20,14 +20,13 @@
 with Ada.Unchecked_Conversion;
 with Interfaces.C;
 
-pragma Warnings (Off);
 package body Win32.Oleauto is
 
    use type Interfaces.C.unsigned_long;
 
    procedure TYPEKIND_to_xmit
-     (pEnum  : in PTYPEKIND;
-      ppLong : out Win32.Oleauto.PPLONG)
+     (pEnum  : PTYPEKIND;
+      ppLong : Win32.Oleauto.PPLONG)
    is
 
       function To_PLONG is new Ada.Unchecked_Conversion (
@@ -38,8 +37,8 @@ package body Win32.Oleauto is
    end TYPEKIND_to_xmit;
 
    procedure TYPEKIND_from_xmit
-     (pLong : in Win32.PLONG;
-      pEnum : out PTYPEKIND)
+     (pLong : Win32.PLONG;
+      pEnum : PTYPEKIND)
    is
 
       function To_TYPEKIND is new Ada.Unchecked_Conversion (
@@ -50,8 +49,8 @@ package body Win32.Oleauto is
    end TYPEKIND_from_xmit;
 
    procedure CALLCONV_to_xmit
-     (pEnum  : in PCALLCONV;
-      ppLong : out Win32.Oleauto.PPLONG)
+     (pEnum  : PCALLCONV;
+      ppLong : Win32.Oleauto.PPLONG)
    is
 
       function To_PLONG is new Ada.Unchecked_Conversion (
@@ -62,8 +61,8 @@ package body Win32.Oleauto is
    end CALLCONV_to_xmit;
 
    procedure CALLCONV_from_xmit
-     (pLong : in Win32.PLONG;
-      pEnum : out PCALLCONV)
+     (pLong : Win32.PLONG;
+      pEnum : PCALLCONV)
    is
 
       function To_CALLCONV is new Ada.Unchecked_Conversion (
@@ -74,8 +73,8 @@ package body Win32.Oleauto is
    end CALLCONV_from_xmit;
 
    procedure FUNCKIND_to_xmit
-     (pEnum  : in PFUNCKIND;
-      ppLong : out Win32.Oleauto.PPLONG)
+     (pEnum  : PFUNCKIND;
+      ppLong : Win32.Oleauto.PPLONG)
    is
 
       function To_PLONG is new Ada.Unchecked_Conversion (
@@ -86,8 +85,8 @@ package body Win32.Oleauto is
    end FUNCKIND_to_xmit;
 
    procedure FUNCKIND_from_xmit
-     (pLong : in Win32.PLONG;
-      pEnum : out PFUNCKIND)
+     (pLong : Win32.PLONG;
+      pEnum : PFUNCKIND)
    is
 
       function To_FUNCKIND is new Ada.Unchecked_Conversion (
@@ -98,8 +97,8 @@ package body Win32.Oleauto is
    end FUNCKIND_from_xmit;
 
    procedure INVOKEKIND_to_xmit
-     (pEnum  : in PINVOKEKIND;
-      ppLong : out Win32.Oleauto.PPLONG)
+     (pEnum  : PINVOKEKIND;
+      ppLong : Win32.Oleauto.PPLONG)
    is
 
       function To_PLONG is new Ada.Unchecked_Conversion (
@@ -110,8 +109,8 @@ package body Win32.Oleauto is
    end INVOKEKIND_to_xmit;
 
    procedure INVOKEKIND_from_xmit
-     (pLong : in Win32.PLONG;
-      pEnum : out PINVOKEKIND)
+     (pLong : Win32.PLONG;
+      pEnum : PINVOKEKIND)
    is
 
       function To_INVOKEKIND is new Ada.Unchecked_Conversion (
@@ -122,8 +121,8 @@ package body Win32.Oleauto is
    end INVOKEKIND_from_xmit;
 
    procedure VARKIND_to_xmit
-     (pEnum  : in PVARKIND;
-      ppLong : out Win32.Oleauto.PPLONG)
+     (pEnum  : PVARKIND;
+      ppLong : Win32.Oleauto.PPLONG)
    is
 
       function To_PLONG is new Ada.Unchecked_Conversion (
@@ -134,8 +133,8 @@ package body Win32.Oleauto is
    end VARKIND_to_xmit;
 
    procedure VARKIND_from_xmit
-     (pLong : in Win32.PLONG;
-      pEnum : out PVARKIND)
+     (pLong : Win32.PLONG;
+      pEnum : PVARKIND)
    is
 
       function To_VARKIND is new Ada.Unchecked_Conversion (
@@ -146,8 +145,8 @@ package body Win32.Oleauto is
    end VARKIND_from_xmit;
 
    procedure DESCKIND_to_xmit
-     (pEnum  : in PDESCKIND;
-      ppLong : out Win32.Oleauto.PPLONG)
+     (pEnum  : PDESCKIND;
+      ppLong : Win32.Oleauto.PPLONG)
    is
 
       function To_PLONG is new Ada.Unchecked_Conversion (
@@ -158,8 +157,8 @@ package body Win32.Oleauto is
    end DESCKIND_to_xmit;
 
    procedure DESCKIND_from_xmit
-     (pLong : in Win32.PLONG;
-      pEnum : out PDESCKIND)
+     (pLong : Win32.PLONG;
+      pEnum : PDESCKIND)
    is
 
       function To_DESCKIND is new Ada.Unchecked_Conversion (
@@ -170,8 +169,8 @@ package body Win32.Oleauto is
    end DESCKIND_from_xmit;
 
    procedure SYSKIND_to_xmit
-     (pEnum  : in PSYSKIND;
-      ppLong : out Win32.Oleauto.PPLONG)
+     (pEnum  : PSYSKIND;
+      ppLong : Win32.Oleauto.PPLONG)
    is
 
       function To_PLONG is new Ada.Unchecked_Conversion (
@@ -182,8 +181,8 @@ package body Win32.Oleauto is
    end SYSKIND_to_xmit;
 
    procedure SYSKIND_from_xmit
-     (pLong : in Win32.PLONG;
-      pEnum : out PSYSKIND)
+     (pLong : Win32.PLONG;
+      pEnum : PSYSKIND)
    is
 
       function To_SYSKIND is new Ada.Unchecked_Conversion (
@@ -390,4 +389,3 @@ package body Win32.Oleauto is
    end V_BYREF;
 
 end Win32.Oleauto;
-pragma Warnings (On);

@@ -67,9 +67,8 @@ package body Win32.Winnt is
      (NTHeader : PIMAGE_NT_HEADERS)
       return PIMAGE_DATA_DIRECTORY
    is
-      pragma Warnings (Off);
       Dummy : IMAGE_NT_HEADERS;
-      pragma Warnings (On);
+      pragma Warnings (Off, Dummy);
 
    begin
       return To_PIMAGE

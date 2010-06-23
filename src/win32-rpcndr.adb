@@ -154,14 +154,13 @@ package body Win32.Rpcndr is
       P_Void.Increment (source.all.Buffer, +bp);
    end small_from_ndr;
 
-   pragma Warnings (Off);
    procedure small_array_from_ndr
      (Source     : Win32.Rpcdcep.PRPC_MESSAGE;
       LowerIndex : Win32.UINT;
       UpperIndex : Win32.UINT;
       Target     : out psmall)
    is
-      pragma Warnings (On);
+      pragma Unmodified (Target);
    begin
       NDRcopy
         (P_Small.Incr_Void (Target, C.ptrdiff_t (LowerIndex)),

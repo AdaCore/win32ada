@@ -39,7 +39,7 @@ package body Win32.crt.Tchar is
       return 1;
    end tclen;
 
-   procedure tccpy (pc1 : in out Win32.PCHAR; cpc2 : Win32.PCCH) is
+   procedure tccpy (pc1 : Win32.PCHAR; cpc2 : Win32.PCCH) is
    begin
       pc1.all := cpc2.all;
    end tccpy;
@@ -89,7 +89,7 @@ package body Win32.crt.Tchar is
 
    procedure strspnp
      (cpc1 : in out Win32.PCCH;
-      cpc2 : in Win32.PCCH;
+      cpc2 : Win32.PCCH;
       crv  : out Win32.PCCH)
    is
 

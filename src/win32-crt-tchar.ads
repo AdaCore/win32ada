@@ -226,20 +226,20 @@ package Win32.crt.Tchar is
       args   : Stdarg.ArgList := Stdarg.Empty)
       return Win32.INT renames Win32.crt.Stdio.sscanf;
 
-   function fgettc (f : in Win32.crt.Stdio.FILE_Access) return Win32.INT
+   function fgettc (f : Win32.crt.Stdio.FILE_Access) return Win32.INT
       renames Win32.crt.Stdio.fgetc;
 
    function fgettchar return Win32.INT renames Win32.crt.Stdio.fgetchar;
 
    function fgetts
-     (s    : in Win32.PSTR;
-      i    : in Win32.INT;
-      f    : in Win32.crt.Stdio.FILE_Access)
+     (s    : Win32.PSTR;
+      i    : Win32.INT;
+      f    : Win32.crt.Stdio.FILE_Access)
       return Win32.PSTR renames Win32.crt.Stdio.fgets;
 
    function fputtc
-     (i    : in Win32.INT;
-      f    : in Win32.crt.Stdio.FILE_Access)
+     (i    : Win32.INT;
+      f    : Win32.crt.Stdio.FILE_Access)
       return Win32.INT renames Win32.crt.Stdio.fputc;
 
    function fputtchar (i : in Win32.INT) return Win32.INT renames
@@ -247,7 +247,7 @@ package Win32.crt.Tchar is
 
    function fputts
      (s    : Win32.PCSTR;
-      f    : in Win32.crt.Stdio.FILE_Access)
+      f    : Win32.crt.Stdio.FILE_Access)
       return Win32.INT renames Win32.crt.Stdio.fputs;
 
    function gettc (f : in Win32.crt.Stdio.FILE_Access) return Win32.INT renames
@@ -256,16 +256,16 @@ package Win32.crt.Tchar is
    function gettchar return Win32.INT renames Win32.crt.Stdio.getchar;
 
    function puttc
-     (i    : in Win32.INT;
-      f    : in Win32.crt.Stdio.FILE_Access)
+     (i    : Win32.INT;
+      f    : Win32.crt.Stdio.FILE_Access)
       return Win32.INT renames Win32.crt.Stdio.putc;
 
    function puttchar (i : in Win32.INT) return Win32.INT renames
      Win32.crt.Stdio.putchar;
 
    function ungettc
-     (i    : in Win32.INT;
-      f    : in Win32.crt.Stdio.FILE_Access)
+     (i    : Win32.INT;
+      f    : Win32.crt.Stdio.FILE_Access)
       return Win32.INT renames Win32.crt.Stdio.ungetc;
 
    function tcstod
@@ -437,44 +437,44 @@ package Win32.crt.Tchar is
 
    function tclen (cpc : Win32.PCCH) return Win32.Size_T;
 
-   procedure tccpy (pc1 : in out Win32.PCHAR; cpc2 : Win32.PCCH);
+   procedure tccpy (pc1 : Win32.PCHAR; cpc2 : Win32.PCCH);
 
    function tccmp (cpc1 : Win32.PCCH; cpc2 : Win32.PCCH) return Win32.INT;
 
-   function istalpha (c : in Win32.crt.Ctype.char) return Win32.INT renames
+   function istalpha (c : Win32.crt.Ctype.char) return Win32.INT renames
      Win32.crt.Ctype.isalpha;
 
-   function istupper (c : in Win32.crt.Ctype.char) return Win32.INT renames
+   function istupper (c : Win32.crt.Ctype.char) return Win32.INT renames
      Win32.crt.Ctype.isupper;
 
-   function istlower (c : in Win32.crt.Ctype.char) return Win32.INT renames
+   function istlower (c : Win32.crt.Ctype.char) return Win32.INT renames
      Win32.crt.Ctype.islower;
 
-   function istdigit (c : in Win32.crt.Ctype.char) return Win32.INT renames
+   function istdigit (c : Win32.crt.Ctype.char) return Win32.INT renames
      Win32.crt.Ctype.isdigit;
 
-   function istxdigit (c : in Win32.crt.Ctype.char) return Win32.INT renames
+   function istxdigit (c : Win32.crt.Ctype.char) return Win32.INT renames
      Win32.crt.Ctype.isxdigit;
 
-   function istspace (c : in Win32.crt.Ctype.char) return Win32.INT renames
+   function istspace (c : Win32.crt.Ctype.char) return Win32.INT renames
      Win32.crt.Ctype.isspace;
 
-   function istpunct (c : in Win32.crt.Ctype.char) return Win32.INT renames
+   function istpunct (c : Win32.crt.Ctype.char) return Win32.INT renames
      Win32.crt.Ctype.ispunct;
 
-   function istalnum (c : in Win32.crt.Ctype.char) return Win32.INT renames
+   function istalnum (c : Win32.crt.Ctype.char) return Win32.INT renames
      Win32.crt.Ctype.isalnum;
 
-   function istprint (c : in Win32.crt.Ctype.char) return Win32.INT renames
+   function istprint (c : Win32.crt.Ctype.char) return Win32.INT renames
      Win32.crt.Ctype.isprint;
 
-   function istgraph (c : in Win32.crt.Ctype.char) return Win32.INT renames
+   function istgraph (c : Win32.crt.Ctype.char) return Win32.INT renames
      Win32.crt.Ctype.isgraph;
 
-   function istcntrl (c : in Win32.crt.Ctype.char) return Win32.INT renames
+   function istcntrl (c : Win32.crt.Ctype.char) return Win32.INT renames
      Win32.crt.Ctype.iscntrl;
 
-   function istascii (c : in Win32.crt.Ctype.char) return Win32.INT renames
+   function istascii (c : Win32.crt.Ctype.char) return Win32.INT renames
      Win32.crt.Ctype.isascii;
 
    function totupper (c : Win32.crt.Ctype.char) return Win32.crt.Ctype.char
@@ -498,7 +498,7 @@ package Win32.crt.Tchar is
 
    procedure strspnp
      (cpc1 : in out Win32.PCCH;
-      cpc2 : in Win32.PCCH;
+      cpc2 : Win32.PCCH;
       crv  : out Win32.PCCH);
 
    function tcsdec (cpc : Win32.PCCH; pc : Win32.PCCH) return Win32.PCHAR
@@ -523,7 +523,7 @@ package Win32.crt.Tchar is
 
    procedure tcsspnp
      (cpc1 : in out Win32.PCCH;
-      cpc2 : in Win32.PCCH;
+      cpc2 : Win32.PCCH;
       crv  : out Win32.PCCH) renames strspnp;
 
    function ftcsdec (cpc : Win32.PCCH; pc : Win32.PCCH) return Win32.PCHAR
@@ -550,7 +550,7 @@ package Win32.crt.Tchar is
 
    procedure ftcsspnp
      (cpc1 : in out Win32.PCCH;
-      cpc2 : in Win32.PCCH;
+      cpc2 : Win32.PCCH;
       crv  : out Win32.PCCH) renames strspnp;
 
    function ftcslwr (string1 : Win32.PSTR) return Win32.PSTR renames tcslwr;
@@ -559,7 +559,7 @@ package Win32.crt.Tchar is
 
    function ftclen (cpc : Win32.PCCH) return Win32.Size_T renames tclen;
 
-   procedure ftccpy (pc1 : in out Win32.PCHAR; cpc2 : Win32.PCCH) renames
+   procedure ftccpy (pc1 : Win32.PCHAR; cpc2 : Win32.PCCH) renames
      tccpy;
 
    function ftccmp (cpc1 : Win32.PCCH; cpc2 : Win32.PCCH) return Win32.INT

@@ -21,12 +21,10 @@ with Ada.Unchecked_Conversion;
 
 package body Win32.Ole2 is
 
-   pragma Warnings (Off);
    procedure DISCARDCACHE_to_xmit
-     (pEnum  : in PDISCARDCACHE;
-      ppLong : out Win32.PLONG)
+     (pEnum  : PDISCARDCACHE;
+      ppLong : Win32.PLONG)
    is
-
       function To_LONG is new Ada.Unchecked_Conversion (
          DISCARDCACHE,
          Win32.LONG);
@@ -35,8 +33,8 @@ package body Win32.Ole2 is
    end DISCARDCACHE_to_xmit;
 
    procedure DISCARDCACHE_from_xmit
-     (pLong : in Win32.PLONG;
-      pEnum : out PDISCARDCACHE)
+     (pLong : Win32.PLONG;
+      pEnum : PDISCARDCACHE)
    is
       function To_DISCARDCACHE is new Ada.Unchecked_Conversion (
          Win32.LONG,
@@ -44,6 +42,5 @@ package body Win32.Ole2 is
    begin
       pEnum.all := To_DISCARDCACHE (pLong.all);
    end DISCARDCACHE_from_xmit;
-   pragma Warnings (On);
 
 end Win32.Ole2;

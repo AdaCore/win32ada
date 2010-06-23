@@ -21,8 +21,6 @@ with Interfaces.C; use Interfaces.C;
 
 package body Win32.Glaux is
 
-   pragma Warnings (Off);
-
    function AUX_WIND_IS_RGB (x : Win32.INT) return Win32.BOOL is
    begin
       if ((Win32.UINT (x) and AUX_INDEX) = 0) then
