@@ -17,7 +17,6 @@
 --
 -------------------------------------------------------------------------------
 
-with Ada.Unchecked_Conversion;
 with Stdarg.Impl;
 with Stdarg.Inst;
 
@@ -40,11 +39,8 @@ package body Win32.crt.Process is
       procedure C_Execl;
       pragma Import (C, C_Execl, "_execl");
 
-      function To_INT is new Ada.Unchecked_Conversion (
-         Stdarg.C_Param,
-         Win32.INT);
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_Execl'Address,
                     ArgCount (Complete_Args),
@@ -63,11 +59,8 @@ package body Win32.crt.Process is
       procedure C_execle;
       pragma Import (C, C_execle, "_execle");
 
-      function To_INT is new Ada.Unchecked_Conversion (
-         Stdarg.C_Param,
-         Win32.INT);
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_execle'Address,
                     ArgCount (Complete_Args),
@@ -85,11 +78,8 @@ package body Win32.crt.Process is
       procedure C_execlp;
       pragma Import (C, C_execlp, "_execlp");
 
-      function To_INT is new Ada.Unchecked_Conversion (
-         Stdarg.C_Param,
-         Win32.INT);
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_execlp'Address,
                     ArgCount (Complete_Args),
@@ -108,11 +98,8 @@ package body Win32.crt.Process is
       procedure C_execlpe;
       pragma Import (C, C_execlpe, "_execlpe");
 
-      function To_INT is new Ada.Unchecked_Conversion (
-         Stdarg.C_Param,
-         Win32.INT);
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_execlpe'Address,
                     ArgCount (Complete_Args),
@@ -131,11 +118,8 @@ package body Win32.crt.Process is
       procedure C_spawnl;
       pragma Import (C, C_spawnl, "_spawnl");
 
-      function To_INT is new Ada.Unchecked_Conversion (
-         Stdarg.C_Param,
-         Win32.INT);
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_spawnl'Address,
                     ArgCount (Complete_Args),
@@ -156,11 +140,8 @@ package body Win32.crt.Process is
       procedure C_spawnle;
       pragma Import (C, C_spawnle, "_spawnle");
 
-      function To_INT is new Ada.Unchecked_Conversion (
-         Stdarg.C_Param,
-         Win32.INT);
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_spawnle'Address,
                     ArgCount (Complete_Args),
@@ -180,11 +161,8 @@ package body Win32.crt.Process is
       procedure C_spawnlp;
       pragma Import (C, C_spawnlp, "_spawnlp");
 
-      function To_INT is new Ada.Unchecked_Conversion (
-         Stdarg.C_Param,
-         Win32.INT);
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_spawnlp'Address,
                     ArgCount (Complete_Args),
@@ -205,11 +183,8 @@ package body Win32.crt.Process is
       procedure C_spawnlpe;
       pragma Import (C, C_spawnlpe, "_spawnlpe");
 
-      function To_INT is new Ada.Unchecked_Conversion (
-         Stdarg.C_Param,
-         Win32.INT);
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_spawnlpe'Address,
                     ArgCount (Complete_Args),

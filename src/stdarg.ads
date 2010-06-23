@@ -19,7 +19,6 @@
 
 with Ada.Finalization, Interfaces.C;
 
-pragma Warnings (Off);
 package Stdarg is
 
    MaxArguments : constant := 50;
@@ -34,7 +33,7 @@ package Stdarg is
       T_Is_Float : Boolean := False;
    function Concat (Args : ArgList; Arg : T) return ArgList;
 
-   subtype C_Param is Interfaces.C.long;
+   subtype C_Param is Interfaces.C.size_t;
 
 private
 

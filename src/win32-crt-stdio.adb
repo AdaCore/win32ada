@@ -17,7 +17,6 @@
 --
 -------------------------------------------------------------------------------
 
-with Ada.Unchecked_Conversion;
 with Stdarg.Impl;
 with Stdarg.Inst;
 
@@ -60,11 +59,8 @@ package body Win32.crt.Stdio is
       function C_Fprintf return Win32.INT;
       pragma Import (C, C_Fprintf, "fprintf");
 
-      function To_INT is new Ada.Unchecked_Conversion (
-         Stdarg.C_Param,
-         Win32.INT);
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_Fprintf'Address,
                     ArgCount (Complete_Args),
@@ -85,11 +81,8 @@ package body Win32.crt.Stdio is
       function C_fscanf return Win32.INT;
       pragma Import (C, C_fscanf, "fscanf");
 
-      function To_INT is new Ada.Unchecked_Conversion (
-         Stdarg.C_Param,
-         Win32.INT);
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_fscanf'Address,
                     ArgCount (Complete_Args),
@@ -106,11 +99,8 @@ package body Win32.crt.Stdio is
       function C_printf return Win32.INT;
       pragma Import (C, C_printf, "printf");
 
-      function To_INT is new Ada.Unchecked_Conversion (
-         Stdarg.C_Param,
-         Win32.INT);
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_printf'Address,
                     ArgCount (Complete_Args),
@@ -127,11 +117,8 @@ package body Win32.crt.Stdio is
       function C_scanf return Win32.INT;
       pragma Import (C, C_scanf, "scanf");
 
-      function To_INT is new Ada.Unchecked_Conversion (
-         Stdarg.C_Param,
-         Win32.INT);
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_scanf'Address,
                     ArgCount (Complete_Args),
@@ -151,11 +138,8 @@ package body Win32.crt.Stdio is
       function C_snprintf return Win32.INT;
       pragma Import (C, C_snprintf, "_snprintf");
 
-      function To_INT is new Ada.Unchecked_Conversion (
-         Stdarg.C_Param,
-         Win32.INT);
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_snprintf'Address,
                     ArgCount (Complete_Args),
@@ -176,11 +160,8 @@ package body Win32.crt.Stdio is
       function C_sprintf return Win32.INT;
       pragma Import (C, C_sprintf, "sprintf");
 
-      function To_INT is new Ada.Unchecked_Conversion (
-         Stdarg.C_Param,
-         Win32.INT);
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_sprintf'Address,
                     ArgCount (Complete_Args),
@@ -201,11 +182,8 @@ package body Win32.crt.Stdio is
       function C_sscanf return Win32.INT;
       pragma Import (C, C_sscanf, "sscanf");
 
-      function To_INT is new Ada.Unchecked_Conversion (
-         Stdarg.C_Param,
-         Win32.INT);
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_sscanf'Address,
                     ArgCount (Complete_Args),

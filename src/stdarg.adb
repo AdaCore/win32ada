@@ -91,12 +91,12 @@ package body Stdarg is
          return Interfaces.C.double;
       pragma Import (C, To_Double, "to_double");
 
-      function To_Long
+      function To_Param_T
         (Arg_Addr   : System.Address;
          Arg_Size   : Interfaces.C.int;
          Is_Modular : Interfaces.C.int)
          return C_Param;
-      pragma Import (C, To_Long, "to_long");
+      pragma Import (C, To_Param_T, "to_param_t");
 
    begin
       if T_Is_Float then
@@ -106,7 +106,7 @@ package body Stdarg is
          Uncopied_Bytes := 0;
       elsif T'Size < C_Param'Size then
          Long_Arg       :=
-            To_Long (Arg'Address, Arg'Size, Boolean'Pos (T_Is_Modular));
+            To_Param_T (Arg'Address, Arg'Size, Boolean'Pos (T_Is_Modular));
          Arg_Addr       := Long_Arg'Address;
          Nb_Int         := RoundUp (Long_Arg'Size / System.Storage_Unit);
          Uncopied_Bytes := 0;

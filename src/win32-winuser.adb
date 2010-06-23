@@ -319,11 +319,8 @@ package body Win32.Winuser is
       function C_wsprintfA return Win32.INT;
       pragma Import (C, C_wsprintfA, "wsprintfA");
 
-      function To_INT is new Ada.Unchecked_Conversion (
-         Stdarg.C_Param,
-         Win32.INT);
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_wsprintfA'Address,
                     ArgCount (Complete_Args),
@@ -348,11 +345,8 @@ package body Win32.Winuser is
       function C_wsprintfW return Win32.INT;
       pragma Import (C, C_wsprintfW, "wsprintfW");
 
-      function To_INT is new Ada.Unchecked_Conversion (
-         Stdarg.C_Param,
-         Win32.INT);
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_wsprintfW'Address,
                     ArgCount (Complete_Args),

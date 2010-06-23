@@ -17,7 +17,6 @@
 --
 -------------------------------------------------------------------------------
 
-with Ada.Unchecked_Conversion;
 with Stdarg.Impl;
 with Stdarg.Inst;
 
@@ -38,9 +37,6 @@ package body Win32.crt.WcharPkg is
    function "&" is new Stdarg.Concat (Win32.crt.Stdio.FILE_Access);
    function "&" is new Stdarg.Concat (Win32.PCWSTR);
    function "&" is new Stdarg.Concat (Win32.PWSTR);
-   function To_INT is new Ada.Unchecked_Conversion (
-      Stdarg.C_Param,
-      Win32.INT);
 
    function fwprintf
      (stream : Win32.crt.Stdio.FILE_Access;
@@ -57,7 +53,7 @@ package body Win32.crt.WcharPkg is
       pragma Import (C, C_fwprintf, "fwprintf");
 
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_fwprintf'Address,
                     ArgCount (Complete_Args),
@@ -79,7 +75,7 @@ package body Win32.crt.WcharPkg is
       pragma Import (C, C_fwscanf, "fwscanf");
 
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_fwscanf'Address,
                     ArgCount (Complete_Args),
@@ -97,7 +93,7 @@ package body Win32.crt.WcharPkg is
       pragma Import (C, C_wprintf, "wprintf");
 
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_wprintf'Address,
                     ArgCount (Complete_Args),
@@ -115,7 +111,7 @@ package body Win32.crt.WcharPkg is
       pragma Import (C, C_wscanf, "wscanf");
 
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_wscanf'Address,
                     ArgCount (Complete_Args),
@@ -136,7 +132,7 @@ package body Win32.crt.WcharPkg is
       pragma Import (C, C_snwprintf, "_snwprintf");
 
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_snwprintf'Address,
                     ArgCount (Complete_Args),
@@ -158,7 +154,7 @@ package body Win32.crt.WcharPkg is
       pragma Import (C, C_swprintf, "swprintf");
 
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_swprintf'Address,
                     ArgCount (Complete_Args),
@@ -180,7 +176,7 @@ package body Win32.crt.WcharPkg is
       pragma Import (C, C_swscanf, "swscanf");
 
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_swscanf'Address,
                     ArgCount (Complete_Args),

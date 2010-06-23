@@ -17,7 +17,6 @@
 --
 -------------------------------------------------------------------------------
 
-with Ada.Unchecked_Conversion;
 with Stdarg.Impl;
 
 package body Win32.crt.Conio is
@@ -36,11 +35,8 @@ package body Win32.crt.Conio is
       function C_cprintf return Win32.INT;
       pragma Import (C, C_cprintf, "_cprintf");
 
-      function To_INT is new Ada.Unchecked_Conversion (
-         Stdarg.C_Param,
-         Win32.INT);
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_cprintf'Address,
                     ArgCount (Complete_Args),
@@ -59,11 +55,8 @@ package body Win32.crt.Conio is
       function C_cscanf return Win32.INT;
       pragma Import (C, C_cscanf, "_cscanf");
 
-      function To_INT is new Ada.Unchecked_Conversion (
-         Stdarg.C_Param,
-         Win32.INT);
    begin
-      return To_INT
+      return Win32.INT
                (F_Varargs
                    (C_cscanf'Address,
                     ArgCount (Complete_Args),
