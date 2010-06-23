@@ -18,7 +18,6 @@
 -------------------------------------------------------------------------------
 
 pragma Warnings (Off);
-
 with Win32.Lmcons;
 with Win32.Lmerr;
 with Win32.Lmaccess;
@@ -40,6 +39,5 @@ with Win32.Lmaudit;
 pragma Warnings (On);
 
 package Win32.Lm is
-
 
 end Win32.Lm;

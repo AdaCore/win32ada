@@ -21,7 +21,7 @@ with Interfaces.C.Pointers, System;
 
 package Stdarg.Impl is
 
-   subtype Int is Interfaces.C.int;
+   subtype int is Interfaces.C.int;
 
    type Param_Access is private;
 
@@ -29,28 +29,24 @@ package Stdarg.Impl is
 
    function Address_of_Vararg_List (Args : ArgList) return Param_Access;
 
-   function ArgCount (Args : ArgList) return Int;
+   function ArgCount (Args : ArgList) return int;
 
    function "&" (Left, Right : ArgList) return ArgList;
 
    procedure Do_Varargs
-     (Proc     : in System.Address;
-      Nb_Args  : Int;
+     (Proc     : System.Address;
+      Nb_Args  : int;
       Arg_Addr : Param_Access);
 
    function F_Varargs
-     (Func     : in System.Address;
-      Nb_Args  : Int;
-      Arg_Addr : Param_Access)
-      return Stdarg.C_Param;
+     (Func     : System.Address;
+      Nb_Args  : int;
+      Arg_Addr : Param_Access) return int;
 
 private
 
-   package Arith is new Interfaces.C.Pointers (
-      Integer,
-      C_Param,
-      Stdarg.ArgVector,
-      0);
+   package Arith is
+     new Interfaces.C.Pointers (Integer, C_Param, Stdarg.ArgVector, 0);
 
    type Param_Access is new Arith.Pointer;
 

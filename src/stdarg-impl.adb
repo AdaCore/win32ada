@@ -59,6 +59,7 @@ package body Stdarg.Impl is
       begin
          Index := Index + Incr;
       end Do_Incr;
+
    begin
       if Left.Contents = null or else Left.Contents.CurrentArgs = 0 then
          return Right;
