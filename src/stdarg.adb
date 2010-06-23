@@ -17,14 +17,14 @@
 --
 -------------------------------------------------------------------------------
 
-with Ada.Unchecked_Deallocation, Stdarg.Machine, System,
-  System.Storage_Elements;
-
-pragma Warnings (Off);
+with Ada.Unchecked_Deallocation;
+with System.Storage_Elements;
 
 package body Stdarg is
 
-   use Stdarg.Machine;
+   Int_Param_Alignment : constant Positive :=
+                           C_Param'Size / System.Storage_Unit;
+   Param_Size          : Positive renames Int_Param_Alignment;
 
    function RoundUp (Siz : Natural) return Natural;
    procedure put (s : String; a : System.Address);
@@ -38,7 +38,7 @@ package body Stdarg is
       else
          Res := Siz + (Int_Param_Alignment - Slop);
       end if;
-      return Res / Stdarg.Machine.Param_Size;
+      return Res / Param_Size;
    end RoundUp;
 
    procedure Initialize (A : in out ArgList) is
@@ -78,8 +78,6 @@ package body Stdarg is
          Arg'Address -
          (Arg'Address mod Storage_Offset (Int_Param_Alignment));
       Buf_Addr       : System.Address;
-      Arg_Size       : Integer := Arg'Size;
-      Index          : Integer;
 
       procedure Memcpy (To, From : System.Address; Nbytes : Natural);
       pragma Import (C, Memcpy, "memcpy");
@@ -106,92 +104,24 @@ package body Stdarg is
          Arg_Addr       := Double_Arg'Address;
          Nb_Int         := RoundUp (Double_Arg'Size / System.Storage_Unit);
          Uncopied_Bytes := 0;
-         Arg_Size       := Double_Arg'Size;
       elsif T'Size < C_Param'Size then
          Long_Arg       :=
             To_Long (Arg'Address, Arg'Size, Boolean'Pos (T_Is_Modular));
          Arg_Addr       := Long_Arg'Address;
          Nb_Int         := RoundUp (Long_Arg'Size / System.Storage_Unit);
          Uncopied_Bytes := 0;
-         Arg_Size       := Long_Arg'Size;
       end if;
 
       if (Nb_Int + Args.Contents.CurrentArgs > MaxArguments) then
          raise Constraint_Error;
       end if;
 
-      case This_Arch is
-         when Stdarg.Machine.I386 =>
-            Buf_Addr :=
-              Args.Contents.Vector (Args.Contents.CurrentArgs + 1)'Address;
-            Memcpy
-              (Buf_Addr,
-               Arg_Addr,
-               (Nb_Int * Param_Size) - Uncopied_Bytes);
-
-         when Stdarg.Machine.Alpha =>
-            if Args.Contents.CurrentArgs = 0 then
-               Args.Contents.CurrentArgs := 6;
-            end if;
-            if T_Is_Float then
-               Index := Args.Contents.CurrentArgs - 6 + 1;
-            else
-               Index := Args.Contents.CurrentArgs + 1;
-            end if;
-            Buf_Addr := Args.Contents.Vector (Index)'Address;
-            Memcpy
-              (Buf_Addr,
-               Arg_Addr,
-               (Nb_Int * Param_Size) - Uncopied_Bytes);
-
-         when Stdarg.Machine.Sparc | Stdarg.Machine.PowerPC =>
-            Buf_Addr :=
-              Args.Contents.Vector (Args.Contents.CurrentArgs + 1)'Address;
-            Memcpy
-              (Buf_Addr + Storage_Offset (Uncopied_Bytes),
-               Arg_Addr + Storage_Offset (Uncopied_Bytes),
-               Nb_Int * Param_Size - Uncopied_Bytes);
-
-         when Stdarg.Machine.Mips =>
-            Buf_Addr :=
-              Args.Contents.Vector (Args.Contents.CurrentArgs + 1)'Address;
-            if (Arg_Size in 33 .. 64) then
-               if Args.Contents.FirstHole = 0 then
-                  Args.Contents.FirstHole := Args.Contents.CurrentArgs + 1;
-               end if;
-               if (Args.Contents.CurrentArgs mod 2 /= 0) then
-                  Args.Contents.CurrentArgs := Args.Contents.CurrentArgs + 1;
-                  Buf_Addr                  := Buf_Addr +
-                                               Storage_Offset (Param_Size);
-               end if;
-            end if;
-            Memcpy
-              (Buf_Addr + Storage_Offset (Uncopied_Bytes),
-               Arg_Addr + Storage_Offset (Uncopied_Bytes),
-               Nb_Int * Param_Size - Uncopied_Bytes);
-
-         when Stdarg.Machine.HP =>
-            Buf_Addr :=
-              Args.Contents.Vector (MaxArguments -
-                                    Args.Contents.CurrentArgs -
-                                    Nb_Int +
-                                    1)'Address;
-            if (Arg_Size in 33 .. 64) then
-               if Args.Contents.FirstHole = 0 then
-                  Args.Contents.FirstHole := Args.Contents.CurrentArgs + 1;
-               end if;
-               if (Args.Contents.CurrentArgs mod 2 /= 0) then
-                  Args.Contents.CurrentArgs := Args.Contents.CurrentArgs + 1;
-                  Buf_Addr                  := Buf_Addr -
-                                               Storage_Offset (Param_Size);
-               end if;
-            end if;
-            Memcpy
-              (Buf_Addr + Storage_Offset (Uncopied_Bytes),
-               Arg_Addr,
-               Nb_Int * Param_Size - Uncopied_Bytes);
-
-      end case;
+      Buf_Addr :=
+        Args.Contents.Vector (Args.Contents.CurrentArgs + 1)'Address;
+      Memcpy
+        (Buf_Addr,
+         Arg_Addr,
+         (Nb_Int * Param_Size) - Uncopied_Bytes);
 
       Args.Contents.CurrentArgs := Args.Contents.CurrentArgs + Nb_Int;
       put ("arg_addr", Arg_Addr);

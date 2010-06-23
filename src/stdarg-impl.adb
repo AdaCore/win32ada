@@ -17,55 +17,30 @@
 --
 -------------------------------------------------------------------------------
 
-with Stdarg.Machine;
-
 package body Stdarg.Impl is
 
-   use Stdarg.Machine;
-
-   type Which_Arg is (Ellipsis, VA_List);
    function Address_of_Arg
-     (Args  : ArgList;
-      Which : Which_Arg)
-      return Param_Access;
+     (Args  : ArgList) return Param_Access;
 
    function Address_of_Arg
-     (Args  : ArgList;
-      Which : Which_Arg)
-      return Param_Access
+     (Args  : ArgList) return Param_Access
    is
-      pragma Warnings (Off);
    begin
       if Args.Contents.CurrentArgs = 0 then
          return null;
       end if;
 
-      if This_Arch = Stdarg.Machine.Alpha then
-         return Args.Contents.Vector (7)'Access;
-      elsif Stack_Growth = Up then
-         return Args.Contents.Vector (1)'Access;
-      elsif Which = Ellipsis then
-         return Args.Contents.Vector (MaxArguments -
-                                      Args.Contents.CurrentArgs +
-                                      1)'Access;
-      else
-         declare
-            use Arith;
-            P : Pointer := Args.Contents.Vector (MaxArguments)'Access;
-         begin
-            return Param_Access (P + 1);
-         end;
-      end if;
+      return Args.Contents.Vector (1)'Access;
    end Address_of_Arg;
 
    function Address_of_First_Arg (Args : ArgList) return Param_Access is
    begin
-      return Address_of_Arg (Args, Ellipsis);
+      return Address_of_Arg (Args);
    end Address_of_First_Arg;
 
    function Address_of_Vararg_List (Args : ArgList) return Param_Access is
    begin
-      return Address_of_Arg (Args, VA_List);
+      return Address_of_Arg (Args);
    end Address_of_Vararg_List;
 
    function ArgCount (Args : ArgList) return Int is
@@ -74,7 +49,6 @@ package body Stdarg.Impl is
    end ArgCount;
 
    function "&" (Left, Right : ArgList) return ArgList is
-      Hole_Change             : Integer := 0;
       Incr                    : Integer;
       Left_Index, Right_Index : Positive;
 
@@ -94,47 +68,11 @@ package body Stdarg.Impl is
          return Left;
       end if;
 
-      if This_Arch = Alpha then
-         for Right_Index in 7 .. Right.Contents.CurrentArgs loop
-            Left_Index := Left.Contents.CurrentArgs + Right_Index - 6;
-            if Left_Index <= 12 then
-               Left.Contents.Vector (Left_Index - 6) :=
-                 Right.Contents.Vector (Right_Index - 6);
-            end if;
-            Left.Contents.Vector (Left_Index) :=
-              Right.Contents.Vector (Right_Index);
-         end loop;
-         Left.Contents.CurrentArgs := Left.Contents.CurrentArgs +
-                                      Right.Contents.CurrentArgs -
-                                      6;
-
-         return Left;
-      elsif Stack_Growth = Up then
-         Left_Index  := Left.Contents.CurrentArgs + 1;
-         Right_Index := 1;
-         Incr        := 1;
-      else
-         Left_Index  := MaxArguments - Left.Contents.CurrentArgs;
-         Right_Index := MaxArguments;
-         Incr        := -1;
-      end if;
+      Left_Index  := Left.Contents.CurrentArgs + 1;
+      Right_Index := 1;
+      Incr        := 1;
 
       for I in 1 .. Right.Contents.CurrentArgs loop
-         if Right.Contents.FirstHole = I
-           and then Left.Contents.CurrentArgs mod 2 /= 0
-         then
-            if Stdarg.Machine.Float_Param_Alignment >
-               Stdarg.Machine.Int_Param_Alignment
-            then
-               if I mod 2 = 0 then
-                  Do_Incr (Right_Index);
-                  Hole_Change := -1;
-               else
-                  Do_Incr (Left_Index);
-                  Hole_Change := 1;
-               end if;
-            end if;
-         end if;
          Left.Contents.Vector (Left_Index) :=
            Right.Contents.Vector (Right_Index);
          Do_Incr (Left_Index);
@@ -142,9 +80,7 @@ package body Stdarg.Impl is
       end loop;
 
       Left.Contents.CurrentArgs := Left.Contents.CurrentArgs +
-                                   Right.Contents.CurrentArgs +
-                                   Hole_Change;
-
+                                   Right.Contents.CurrentArgs;
       return Left;
    end "&";
 
