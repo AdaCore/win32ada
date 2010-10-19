@@ -26,7 +26,7 @@ rem -----------------------------------------------
 :build
 echo Building Win32Ada for GNAT installation in %1
 path %1\bin;%path%
-for /f "tokens=1* delims=" %a in ('gcc -dumpmachine') do set HOST=%a
+for /f "tokens=1* delims=" %%a in ('gcc -dumpmachine') do set HOST=%%a
 set BUILD=.build\%HOST%\release
 if %HOST%==x86_64-pc-mingw32 ( set PREP_HOST="Win64" ) else ( set PREP_HOST="Win32" )
 rem ---- preprocess win32-winnt.ads
@@ -37,22 +37,24 @@ if errorlevel 1 goto error
 gprbuild -q -j2 -p -d -Pwin32ada -XLIBRARY_TYPE=relocatable -XPRJ_BUILD=Release -XPRJ_HOST=%HOST%
 if errorlevel 1 goto error
 rem ---- move sources
+del src\win32-winnt.ads-prep > nul
 move src\*.ad? %I_INC% > nul
-move %BUILD%\static\obj\*.ad? %I_INC% > nul
 copy %BUILD%\relocatable\lib\libwin32ada.dll %I_BIN% > nul
 move %BUILD%\relocatable\lib\* %I_LIB%\relocatable > nul
 move %BUILD%\static\lib\* %I_LIB%\static > nul
 if exist %I_GPR%\win32ada.gpr del /F %I_GPR%\win32ada.gpr
 move config\projects\win32ada.gpr %I_GPR% > nul
+rmdir /s /q .build
 goto exit
 rem -----------------------------------------------
 :error
+del src\win32-winnt.ads-prep > nul
 move src\*.ad? %I_INC% > nul
 move src\*.ad? %I_INC% > nul
 if exist %I_GPR%\win32ada.gpr del /F %I_GPR%\win32ada.gpr
 move config\projects\win32ada.gpr %I_GPR% > nul
+rmdir /s /q .build
 echo Couldn't build Win32Ada
-pause
 cd c:\
 exit /b 1
 rem -----------------------------------------------
