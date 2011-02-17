@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2011, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -46,16 +46,28 @@ package Win32.crt.Time is
    type TZ_Array is array (0 .. 1) of Win32.PSTR;
 
    type AI is access Win32.INT;
+   type AL is access Win32.LONG;
+   type ATZ is access all TZ_Array;
+
+#if HOST = "Win32" then
    function daylight_Addr return AI;
    pragma Import (C, daylight_Addr, "__p__daylight");
 
-   type AL is access Win32.LONG;
    function timezone_Addr return AL;
    pragma Import (C, timezone_Addr, "__p__timezone");
 
-   type ATZ is access all TZ_Array;
    function tzname_Addr return ATZ;
    pragma Import (C, tzname_Addr, "__p__tzname");
+#else
+   daylight_Addr : constant AI;
+   pragma Import (C, daylight_Addr, "__imp__daylight");
+
+   timezone_Addr : constant AL;
+   pragma Import (C, timezone_Addr, "__imp__timezone");
+
+   tzname_Addr : constant ATZ;
+   pragma Import (C, tzname_Addr, "__imp__tzname");
+#end if;
 
    daylight : Win32.INT renames daylight_Addr.all;
 

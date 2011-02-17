@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2011, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -63,37 +63,30 @@ package Win32.crt.Stdlib is
      array (0 .. Win32.ANYSIZE_ARRAY) of aliased Win32.PSTR;
 
    type USA is access Win32.USHORT;
-   function mb_cur_max_addr return USA;
-   pragma Import (C, mb_cur_max_addr, "__p___mb_cur_max");
-
    type SAP is access String_Array;
+   type AI is access Win32.INT;
+   type SAPP is access SAP;
+   type SP is access Win32.PSTR;
+
+#if HOST = "Win32" then
    sys_errlist_addr : constant SAP;
    pragma Import (C, sys_errlist_addr, "_imp___sys_errlist");
    pragma Suppress (Index_Check, sys_errlist_addr);
 
-   type AI is access Win32.INT;
    sys_nerr_addr : constant AI;
    pragma Import (C, sys_nerr_addr, "_imp___sys_nerr");
+
+   function mb_cur_max_addr return USA;
+   pragma Import (C, mb_cur_max_addr, "__p___mb_cur_max");
 
    function argc_addr return AI;
    pragma Import (C, argc_addr, "__p___argc");
 
-   type SAPP is access SAP;
    function argv_addr return SAPP;
    pragma Import (C, argv_addr, "__p___argv");
 
    function environ_addr return SAPP;
    pragma Import (C, environ_addr, "__p__environ");
-
-   function fmode_addr return AI;
-   pragma Import (C, fmode_addr, "__p__fmode");
-
-   fileinfo_addr : constant AI;
-   pragma Import (C, fileinfo_addr, "_imp___fileinfo");
-
-   type SP is access Win32.PSTR;
-   function pgmptr_addr return SP;
-   pragma Import (C, pgmptr_addr, "__p__pgmptr");
 
    function osver_addr return AI;
    pragma Import (C, osver_addr, "__p__osver");
@@ -106,6 +99,56 @@ package Win32.crt.Stdlib is
 
    function winminor_addr return AI;
    pragma Import (C, winminor_addr, "__p__winminor");
+
+   function fmode_addr return AI;
+   pragma Import (C, fmode_addr, "__p__fmode");
+
+   fileinfo_addr : constant AI;
+   pragma Import (C, fileinfo_addr, "_imp___fileinfo");
+
+   function pgmptr_addr return SP;
+   pragma Import (C, pgmptr_addr, "__p__pgmptr");
+#else
+   sys_errlist_addr : constant SAP;
+   pragma Import (C, sys_errlist_addr, "__imp__sys_errlist");
+   pragma Suppress (Index_Check, sys_errlist_addr);
+
+   sys_nerr_addr : constant AI;
+   pragma Import (C, sys_nerr_addr, "__imp__sys_nerr");
+
+   mb_cur_max_addr : constant USA;
+   pragma Import (C, mb_cur_max_addr, "__imp___mb_cur_max");
+
+   argc_addr : constant AI;
+   pragma Import (C, argc_addr, "__imp___argc");
+
+   argv_addr : constant SAPP;
+   pragma Import (C, argv_addr, "__imp___argv");
+
+   environ_addr : constant SAPP;
+   pragma Import (C, environ_addr, "__imp__environ");
+
+   osver_addr : constant AI;
+   pragma Import (C, osver_addr, "__imp__osver");
+
+   winver_addr : constant AI;
+   pragma Import (C, winver_addr, "__imp__winver");
+
+   winmajor_addr : constant AI;
+   pragma Import (C, winmajor_addr, "__imp__winmajor");
+
+   winminor_addr : constant AI;
+   pragma Import (C, winminor_addr, "__imp__winminor");
+
+   fmode_addr : constant AI;
+   pragma Import (C, fmode_addr, "__imp__fmode");
+
+   fileinfo_addr : constant AI;
+   pragma Import (C, fileinfo_addr, "__imp__fileinfo");
+
+   pgmptr_addr : constant SP;
+   pragma Import (C, pgmptr_addr, "__imp__pgmptr");
+#end if;
 
    MB_CUR_MAX : Win32.USHORT renames mb_cur_max_addr.all;
 
