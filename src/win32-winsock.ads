@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2011, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -258,7 +258,7 @@ package Win32.Winsock is
    subtype u_char is Win32.UCHAR;
    subtype u_short is Win32.USHORT;
    subtype u_int is Win32.UINT;
-   type SOCKET is new u_int;
+   type SOCKET is mod 2 ** Standard'Address_Size;
 
    type SOCKET_Array is array (Integer range 0 .. FD_SETSIZE - 1) of SOCKET;
 
