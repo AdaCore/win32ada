@@ -53,7 +53,7 @@ project Win32Ada is
                   & ("-llargeint", "-lvfw32");
             when "x86_64-pc-mingw32" =>
                for Library_Options use Project'Library_Options
-                  & ("-lmsvfw32", "-lavifil32", "-lwrpcrt4", "-lwmsvcrt");
+                  & ("-lmsvfw32", "-lavifil32", "-lrpcrt4", "-lmsvcrt");
          end case;
    end case;
 
