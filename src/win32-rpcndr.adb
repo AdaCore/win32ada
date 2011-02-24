@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2011, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -200,7 +200,7 @@ package body Win32.Rpcndr is
             16#fffffff8#);
    end midl_fa8;
 
-   procedure midl_addp (p : in out Win32.PVOID; n : in Win32.ULONG) is
+   procedure midl_addp (p : in out Win32.PVOID; n : Win32.ULONG) is
    begin
       P_Void.Increment
         (p,
@@ -222,8 +222,8 @@ package body Win32.Rpcndr is
 
    procedure NdrMarshConfStringHdr
      (p : in out Win32.PVOID;
-      s : in Win32.PUCHAR;
-      l : in Win32.ULONG)
+      s : Win32.PUCHAR;
+      l : Win32.ULONG)
    is
       function PUCHAR_To_PVOID is new Ada.Unchecked_Conversion (
          Win32.PUCHAR,
