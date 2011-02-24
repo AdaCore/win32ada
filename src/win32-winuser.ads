@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2011, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -1992,7 +1992,7 @@ package Win32.Winuser is
 
    procedure POINTSTOPOINT
      (PT  : out Win32.Windef.POINT;
-      PTS : in Win32.Windef.POINTS);
+      PTS : Win32.Windef.POINTS);
 
    function POINTTOPOINTS
      (PT   : Win32.Windef.POINT)
