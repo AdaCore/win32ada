@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2011, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -633,14 +633,14 @@ package Win32.Rpcndr is
    procedure midl_fa4 (p : in out RPC_BUFPTR);
    procedure midl_fa8 (p : in out RPC_BUFPTR);
 
-   procedure midl_addp (p : in out Win32.PVOID; n : in Win32.ULONG);
+   procedure midl_addp (p : in out Win32.PVOID; n : Win32.ULONG);
 
    procedure midl_unmarsh_up (p : in out Win32.PVOID);
 
    procedure NdrMarshConfStringHdr
      (p : in out Win32.PVOID;
-      s : in Win32.PUCHAR;
-      l : in Win32.ULONG);
+      s : Win32.PUCHAR;
+      l : Win32.ULONG);
 
    procedure NdrUnMarshConfStringHdr
      (p : in out Win32.PVOID;
