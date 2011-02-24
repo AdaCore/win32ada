@@ -179,25 +179,25 @@ package body Win32.Rpcndr is
    procedure midl_fa2 (p : in out RPC_BUFPTR) is
    begin
       p :=
-         To_BUFPTR
-           ((To_ULONG (p) + LONG_PTR (Win32.ULONG'Size / su)) and
-            16#fffffffe#);
+        To_BUFPTR
+          ((To_ULONG (P) + ULONG_PTR (Win32.ULONG'Size / Su))
+           and 16#fffffffe#);
    end midl_fa2;
 
    procedure midl_fa4 (p : in out RPC_BUFPTR) is
    begin
       p :=
-         To_BUFPTR
-           ((To_ULONG (p) + 3 * LONG_PTR (Win32.ULONG'Size / su)) and
-            16#fffffffc#);
+        To_BUFPTR
+          ((To_ULONG (P) + 3 * ULONG_PTR (Win32.ULONG'Size / Su))
+           and 16#fffffffc#);
    end midl_fa4;
 
    procedure midl_fa8 (p : in out RPC_BUFPTR) is
    begin
       p :=
-         To_BUFPTR
-           ((To_ULONG (p) + 7 * LONG_PTR (Win32.ULONG'Size / su)) and
-            16#fffffff8#);
+        To_BUFPTR
+          ((To_ULONG (P) + 7 * ULONG_PTR (Win32.ULONG'Size / Su))
+           and 16#fffffff8#);
    end midl_fa8;
 
    procedure midl_addp (p : in out Win32.PVOID; n : Win32.ULONG) is
