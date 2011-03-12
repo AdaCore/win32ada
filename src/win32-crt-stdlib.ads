@@ -59,8 +59,7 @@ package Win32.crt.Stdlib is
    type atexit_t is access procedure;
    pragma Convention (C, atexit_t);
 
-   type String_Array is
-     array (0 .. Win32.ANYSIZE_ARRAY) of aliased Win32.PSTR;
+   type String_Array is array (0 .. Integer'Last) of aliased Win32.PSTR;
 
    type USA is access Win32.USHORT;
    type SAP is access String_Array;
