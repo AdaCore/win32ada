@@ -2039,12 +2039,12 @@ package Win32.Winuser is
 
    function TranslateMessage (lpMsg : ac_MSG_t) return Win32.BOOL;
 
-   function DispatchMessageA (lpMsg : ac_MSG_t) return Win32.LONG;
+   function DispatchMessageA (lpMsg : ac_MSG_t) return Win32.LRESULT;
 
-   function DispatchMessage (lpMsg : ac_MSG_t) return Win32.LONG renames
+   function DispatchMessage (lpMsg : ac_MSG_t) return Win32.LRESULT renames
      DispatchMessageA;
 
-   function DispatchMessageW (lpMsg : ac_MSG_t) return Win32.LONG;
+   function DispatchMessageW (lpMsg : ac_MSG_t) return Win32.LRESULT;
 
    function SetMessageQueue (cMessagesMax : Win32.INT) return Win32.BOOL;
 
