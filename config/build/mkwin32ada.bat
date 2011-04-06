@@ -29,15 +29,16 @@ path %1\bin;%path%
 for /f "tokens=1* delims=" %%a in ('gcc -dumpmachine') do set HOST=%%a
 set BUILD=.build\%HOST%\release
 if %HOST%==x86_64-pc-mingw32 ( set PREP_HOST="Win64" ) else ( set PREP_HOST="Win32" )
-rem ---- preprocess win32-winnt.ads
-move src\win32-winnt.ads src\win32-winnt.ads-prep > nul
-gnatprep -DHOST=%PREP_HOST% src/win32-winnt.ads-prep src/win32-winnt.ads
+rem ---- preprocess the sources that need it
+set PREP_FILES=win32-crt-math.adb win32-crt-stdio.ads win32-crt-stdlib.ads win32-crt-time.ads win32-winnt.ads
+for %%f in (%PREP_FILES%) do move src\%%f src\%%f-prep > nul
+for %%f in (%PREP_FILES%) do gnatprep -DHOST=%PREP_HOST% src/%%f-prep src/%%f
 gprbuild -q -j2 -p -d -Pwin32ada -XLIBRARY_TYPE=static -XPRJ_BUILD=Release -XPRJ_HOST=%HOST%
 if errorlevel 1 goto error
 gprbuild -q -j2 -p -d -Pwin32ada -XLIBRARY_TYPE=relocatable -XPRJ_BUILD=Release -XPRJ_HOST=%HOST%
 if errorlevel 1 goto error
 rem ---- move sources
-del src\win32-winnt.ads-prep > nul
+del src\*.*-prep > nul
 move src\*.ad? %I_INC% > nul
 copy %BUILD%\relocatable\lib\libwin32ada.dll %I_BIN% > nul
 move %BUILD%\relocatable\lib\* %I_LIB%\relocatable > nul
