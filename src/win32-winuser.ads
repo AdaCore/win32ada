@@ -3501,7 +3501,7 @@ package Win32.Winuser is
      (hMenu      : Win32.Windef.HMENU;
       uPosition  : Win32.UINT;
       uFlags     : Win32.UINT;
-      uIDNewItem : Win32.UINT;
+      uIDNewItem : Win32.UINT_PTR;
       lpNewItem  : Win32.LPCSTR)
       return Win32.BOOL;
 
@@ -3509,7 +3509,7 @@ package Win32.Winuser is
      (hMenu      : Win32.Windef.HMENU;
       uPosition  : Win32.UINT;
       uFlags     : Win32.UINT;
-      uIDNewItem : Win32.UINT;
+      uIDNewItem : Win32.UINT_PTR;
       lpNewItem  : Win32.LPCSTR)
       return Win32.BOOL renames InsertMenuA;
 
@@ -3517,28 +3517,28 @@ package Win32.Winuser is
      (hMenu      : Win32.Windef.HMENU;
       uPosition  : Win32.UINT;
       uFlags     : Win32.UINT;
-      uIDNewItem : Win32.UINT;
+      uIDNewItem : Win32.UINT_PTR;
       lpNewItem  : Win32.LPCWSTR)
       return Win32.BOOL;
 
    function AppendMenuA
      (hMenu      : Win32.Windef.HMENU;
       uFlags     : Win32.UINT;
-      uIDNewItem : Win32.UINT;
+      uIDNewItem : Win32.UINT_PTR;
       lpNewItem  : Win32.LPCSTR)
       return Win32.BOOL;
 
    function AppendMenu
      (hMenu      : Win32.Windef.HMENU;
       uFlags     : Win32.UINT;
-      uIDNewItem : Win32.UINT;
+      uIDNewItem : Win32.UINT_PTR;
       lpNewItem  : Win32.LPCSTR)
       return Win32.BOOL renames AppendMenuA;
 
    function AppendMenuW
      (hMenu      : Win32.Windef.HMENU;
       uFlags     : Win32.UINT;
-      uIDNewItem : Win32.UINT;
+      uIDNewItem : Win32.UINT_PTR;
       lpNewItem  : Win32.LPCWSTR)
       return Win32.BOOL;
 
@@ -3546,7 +3546,7 @@ package Win32.Winuser is
      (hMnu       : Win32.Windef.HMENU;
       uPosition  : Win32.UINT;
       uFlags     : Win32.UINT;
-      uIDNewItem : Win32.UINT;
+      uIDNewItem : Win32.UINT_PTR;
       lpNewItem  : Win32.LPCSTR)
       return Win32.BOOL;
 
@@ -3554,7 +3554,7 @@ package Win32.Winuser is
      (hMnu       : Win32.Windef.HMENU;
       uPosition  : Win32.UINT;
       uFlags     : Win32.UINT;
-      uIDNewItem : Win32.UINT;
+      uIDNewItem : Win32.UINT_PTR;
       lpNewItem  : Win32.LPCSTR)
       return Win32.BOOL renames ModifyMenuA;
 
@@ -3562,7 +3562,7 @@ package Win32.Winuser is
      (hMnu       : Win32.Windef.HMENU;
       uPosition  : Win32.UINT;
       uFlags     : Win32.UINT;
-      uIDNewItem : Win32.UINT;
+      uIDNewItem : Win32.UINT_PTR;
       lpNewItem  : Win32.LPCWSTR)
       return Win32.BOOL;
 
