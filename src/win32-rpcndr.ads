@@ -67,8 +67,8 @@ package Win32.Rpcndr is
    type PMIDL_XMIT_TYPE is new Win32.PVOID;
    subtype RPC_SS_THREAD_HANDLE is Win32.Winnt.HANDLE;
 
-   function To_BUFPTR is new Ada.Unchecked_Conversion (LONG_PTR, RPC_BUFPTR);
-   function To_ULONG is new Ada.Unchecked_Conversion (RPC_BUFPTR, LONG_PTR);
+   function To_BUFPTR is new Ada.Unchecked_Conversion (ULONG_PTR, RPC_BUFPTR);
+   function To_ULONG is new Ada.Unchecked_Conversion (RPC_BUFPTR, ULONG_PTR);
 
    type struct_anonymous1_t;
    type SCONTEXT_QUEUE;
