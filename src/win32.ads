@@ -51,6 +51,7 @@ package Win32 is
 
    type ULONG_PTR is mod 2 ** Standard'Address_Size;
    type UINT_PTR is new ULONG_PTR;
+   type DWORD_PTR is new ULONG_PTR;
 
    type LONG_PTR is
      range -(2 ** (Standard'Address_Size - 1))
