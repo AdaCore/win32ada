@@ -1410,7 +1410,7 @@ package Win32.Winuser is
    type TIMERPROC is access procedure
      (hwnd    : Win32.Windef.HWND;
       uMsg    : Win32.UINT;
-      idEvent : Win32.UINT;
+      idEvent : Win32.UINT_PTR;
       dwTime  : Win32.DWORD);
    pragma Convention (Stdcall, TIMERPROC);
    type GRAYSTRINGPROC is access function
@@ -1452,14 +1452,14 @@ package Win32.Winuser is
      (hwnd       : Win32.Windef.HWND;
       lpszString : Win32.LPSTR;
       hData      : Win32.Winnt.HANDLE;
-      dwData     : Win32.DWORD)
+      dwData     : Win32.ULONG_PTR)
       return Win32.BOOL;
    pragma Convention (Stdcall, PROPENUMPROCEXA);
    type PROPENUMPROCEXW is access function
      (hwnd       : Win32.Windef.HWND;
       lpszString : Win32.LPWSTR;
       hData      : Win32.Winnt.HANDLE;
-      dwData     : Win32.DWORD)
+      dwData     : Win32.ULONG_PTR)
       return Win32.BOOL;
    pragma Convention (Stdcall, PROPENUMPROCEXW);
    type EDITWORDBREAKPROCA is access function
@@ -1557,7 +1557,7 @@ package Win32.Winuser is
       pt           : Win32.Windef.POINT;
       hwnd         : Win32.Windef.HWND;
       wHitTestCode : Win32.UINT;
-      dwExtraInfo  : Win32.DWORD;
+      dwExtraInfo  : Win32.ULONG_PTR;
    end record;
 
    type WNDCLASSA is record
@@ -3230,14 +3230,14 @@ package Win32.Winuser is
      (bVk         : Win32.BYTE;
       bScan       : Win32.BYTE;
       dwFlags     : Win32.DWORD;
-      dwExtraInfo : Win32.DWORD);
+      dwExtraInfo : Win32.ULONG_PTR);
 
    procedure mouse_event
      (dwFlags     : Win32.DWORD;
       dx          : Win32.DWORD;
       dy          : Win32.DWORD;
       cButtons    : Win32.DWORD;
-      dwExtraInfo : Win32.DWORD);
+      dwExtraInfo : Win32.ULONG_PTR);
 
    function MapVirtualKeyA
      (uCode    : Win32.UINT;
@@ -3274,14 +3274,14 @@ package Win32.Winuser is
 
    function SetTimer
      (hWnd        : Win32.Windef.HWND;
-      nIDEvent    : Win32.UINT;
+      nIDEvent    : Win32.UINT_PTR;
       uElapse     : Win32.UINT;
       lpTimerFunc : TIMERPROC)
       return Win32.UINT;
 
    function KillTimer
      (hWnd     : Win32.Windef.HWND;
-      uIDEvent : Win32.UINT)
+      uIDEvent : Win32.UINT_PTR)
       return Win32.BOOL;
 
    function IsWindowUnicode (hWnd : Win32.Windef.HWND) return Win32.BOOL;

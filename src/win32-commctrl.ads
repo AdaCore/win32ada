@@ -264,8 +264,13 @@ package Win32.Commctrl is
       idCommand : Win32.INT;
       fsState   : Win32.BYTE;
       fsStyle   : Win32.BYTE;
-      dwData    : Win32.DWORD;
-      iString   : Win32.INT;
+#if HOST = "Win32" then
+      bReserved : Win32.BYTE_Array (1 .. 2);
+#else
+      bReserved : Win32.BYTE_Array (1 .. 6);
+#end if;
+      dwData    : Win32.DWORD_PTR;
+      iString   : Win32.INT_PTR;
    end record;
 
    type ADJUSTINFO is record
