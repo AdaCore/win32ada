@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2011, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -42,7 +42,7 @@ begin
 
    if Win32.Winmain.Get_hPrevInstance = System.Null_Address then
       if Init.RegisterAppClass (hInst) = Win32.FALSE then
-         return ;
+         return;
       end if;
    end if;
 
@@ -52,8 +52,8 @@ begin
    bResult   := Win32.Winuser.UpdateWindow (hWndFrame);
 
    msg_p := new Win32.Winuser.MSG;
-   while (Win32.Winuser.GetMessage (msg_p, System.Null_Address, 0, 0) /=
-          Win32.FALSE)
+   while Win32.Winuser.GetMessage (msg_p, System.Null_Address, 0, 0) /=
+         Win32.FALSE
    loop
       bResult    :=
          Win32.Winuser.TranslateMessage (Win32.Winuser.ac_MSG_t (msg_p));
