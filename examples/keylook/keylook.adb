@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2011, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -32,7 +32,7 @@ with Win32.Winuser;
 
 procedure KeyLook is
 
-   IgnoredL : Win32.LONG;
+   IgnoredL : Win32.LONG_PTR;
    IgnoredA : Win32.Windef.ATOM;
 
    function WinMain

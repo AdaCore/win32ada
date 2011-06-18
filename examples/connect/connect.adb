@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2011, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -42,7 +42,7 @@ procedure Connect is
    package Pkg renames ConnectPkg;
 
    IgnoredA : ATOM;
-   IgnoredL : LONG;
+   IgnoredL : LONG_PTR;
 
    function CP (a : CHAR_Array) return LPCSTR is
       function UC1 is new Ada.Unchecked_Conversion (System.Address, LPCSTR);
