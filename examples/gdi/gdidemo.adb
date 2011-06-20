@@ -35,7 +35,7 @@ procedure Gdidemo is
    msg_p      : Win32.Winuser.LPMSG;
    hInst      : Win32.Windef.HINSTANCE;
    bResult    : Win32.BOOL;
-   longResult : Win32.LONG;
+   longResult : Win32.LONG_PTR;
 
 begin
    hInst := Win32.Winmain.Get_hInstance;

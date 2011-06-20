@@ -36,7 +36,7 @@ use type Win32.Windef.HWND;
 
 procedure DDEMO is
 
-   lResult : Win32.LONG;
+   lResult : Win32.LONG_PTR;
 
    hdc   : Windef.HDC;
    hInst : Windef.HINSTANCE;
