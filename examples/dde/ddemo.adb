@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2011, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -138,11 +138,11 @@ begin
       Ddeml.DdeNameService (idInst, hszAppName, 0, Ddeml.DNS_REGISTER);
 
    MSG := new Winuser.MSG;
-   while (Winuser.GetMessage
+   while Winuser.GetMessage
              (MSG,
               System.Null_Address,
               Win32.UINT (0),
-              Win32.UINT (0)) /= 0)
+              Win32.UINT (0)) /= 0
    loop
       bResult := Winuser.TranslateMessage (Winuser.ac_MSG_t (MSG));
       lResult := Winuser.DispatchMessage (Winuser.ac_MSG_t (MSG));
