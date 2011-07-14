@@ -49,8 +49,7 @@ rmdir /s /q .build
 goto exit
 rem -----------------------------------------------
 :error
-del src\win32-winnt.ads-prep > nul
-move src\*.ad? %I_INC% > nul
+del src\*.*-prep > nul
 move src\*.ad? %I_INC% > nul
 if exist %I_GPR%\win32ada.gpr del /F %I_GPR%\win32ada.gpr
 move config\projects\win32ada.gpr %I_GPR% > nul
