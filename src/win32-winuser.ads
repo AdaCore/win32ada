@@ -5397,20 +5397,34 @@ private
    pragma Import (Stdcall, GetWindowLongW, "GetWindowLongW");
    pragma Import (Stdcall, SetWindowLongA, "SetWindowLongA");
    pragma Import (Stdcall, SetWindowLongW, "SetWindowLongW");
+#if HOST = "Win32" then
+   pragma Import (Stdcall, GetWindowLongPtrA, "GetWindowLongA");
+   pragma Import (Stdcall, GetWindowLongPtrW, "GetWindowLongW");
+   pragma Import (Stdcall, SetWindowLongPtrA, "SetWindowLongA");
+   pragma Import (Stdcall, SetWindowLongPtrW, "SetWindowLongW");
+#else
    pragma Import (Stdcall, GetWindowLongPtrA, "GetWindowLongPtrA");
    pragma Import (Stdcall, GetWindowLongPtrW, "GetWindowLongPtrW");
    pragma Import (Stdcall, SetWindowLongPtrA, "SetWindowLongPtrA");
    pragma Import (Stdcall, SetWindowLongPtrW, "SetWindowLongPtrW");
+#end if;
    pragma Import (Stdcall, GetClassWord, "GetClassWord");
    pragma Import (Stdcall, SetClassWord, "SetClassWord");
    pragma Import (Stdcall, GetClassLongA, "GetClassLongA");
    pragma Import (Stdcall, GetClassLongW, "GetClassLongW");
    pragma Import (Stdcall, SetClassLongA, "SetClassLongA");
    pragma Import (Stdcall, SetClassLongW, "SetClassLongW");
+#if HOST = "Win32" then
+   pragma Import (Stdcall, GetClassLongPtrA, "GetClassLongA");
+   pragma Import (Stdcall, GetClassLongPtrW, "GetClassLongW");
+   pragma Import (Stdcall, SetClassLongPtrA, "SetClassLongA");
+   pragma Import (Stdcall, SetClassLongPtrW, "SetClassLongW");
+#else
    pragma Import (Stdcall, GetClassLongPtrA, "GetClassLongPtrA");
    pragma Import (Stdcall, GetClassLongPtrW, "GetClassLongPtrW");
    pragma Import (Stdcall, SetClassLongPtrA, "SetClassLongPtrA");
    pragma Import (Stdcall, SetClassLongPtrW, "SetClassLongPtrW");
+#end if;
    pragma Import (Stdcall, GetDesktopWindow, "GetDesktopWindow");
    pragma Import (Stdcall, GetParent, "GetParent");
    pragma Import (Stdcall, SetParent, "SetParent");

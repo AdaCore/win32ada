@@ -4,7 +4,7 @@
 /* This file is now maintained and made available by AdaCore under       */
 /* the same terms.                                                       */
 /*                                                                       */
-/* Copyright (C) 2000-2010, AdaCore                                      */
+/* Copyright (C) 2000-2011, AdaCore                                      */
 /*************************************************************************/
 
 #include <windows.h>
@@ -23,62 +23,6 @@ void NDRcopy (void *P1, void *P2, unsigned int c)
 
 #else
 
-/* On Win32 the [S/G]et[Window/Class]LongPtr and [S/G]et[Window/Class]Long
-   are aliases */
-
-#undef SetWindowLongPtrA
-#undef SetWindowLongPtrW
-#undef GetWindowLongPtrA
-#undef GetWindowLongPtrW
-
-LONG_PTR WINAPI
-SetWindowLongPtrA (HWND hWND, int nIndex, LONG_PTR dwNewLong)
-{
-  return SetWindowLongA (hWND, nIndex, dwNewLong);
-}
-LONG_PTR WINAPI
-SetWindowLongPtrW (HWND hWND, int nIndex, LONG_PTR dwNewLong)
-{
-  return SetWindowLongW (hWND, nIndex, dwNewLong);
-}
-
-LONG_PTR WINAPI
-GetWindowLongPtrA (HWND hWND, int nIndex)
-{
-  return GetWindowLongA (hWND, nIndex);
-}
-LONG_PTR WINAPI
-GetWindowLongPtrW (HWND hWND, int nIndex)
-{
-  return GetWindowLongW (hWND, nIndex);
-}
-
-#undef SetClassLongPtrA
-#undef SetClassLongPtrW
-#undef GetClassLongPtrA
-#undef GetClassLongPtrW
-
-LONG_PTR WINAPI
-SetClassLongPtrA (HWND hWND, int nIndex, LONG_PTR dwNewLong)
-{
-  return SetClassLongA (hWND, nIndex, dwNewLong);
-}
-LONG_PTR WINAPI
-SetClassLongPtrW (HWND hWND, int nIndex, LONG_PTR dwNewLong)
-{
-  return SetClassLongW (hWND, nIndex, dwNewLong);
-}
-
-LONG_PTR WINAPI
-GetClassLongPtrA (HWND hWND, int nIndex)
-{
-  return GetClassLongA (hWND, nIndex);
-}
-LONG_PTR WINAPI
-GetClassLongPtrW (HWND hWND, int nIndex)
-{
-  return GetClassLongW (hWND, nIndex);
-}
 #define LARGEINT_PROTOS
 #include <largeint.h>
 #endif
