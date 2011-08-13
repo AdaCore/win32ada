@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2011, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -65,7 +65,7 @@ package body Keylook_Pkg is
 
       szBuffer : Win32.CHAR_Array (0 .. 79);
       hdc      : Win32.Windef.HDC;
-      dwLparam : constant Win32.DWORD := Win32.DWORD (lParam);
+      dwLparam : constant Win32.DWORD := To_DWORD (lParam);
 
       function charparam return Win32.CHAR is
       begin
