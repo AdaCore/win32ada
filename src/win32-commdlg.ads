@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2011, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -414,8 +414,6 @@ package Win32.Commdlg is
       hPrintTemplate      : Win32.Windef.HGLOBAL;
       hSetupTemplate      : Win32.Windef.HGLOBAL;
    end record;
-   for PRINTDLGA'Alignment use 2;
-   pragma Pack (PRINTDLGA);
 
    subtype PRINTDLG is PRINTDLGA;
 
@@ -440,8 +438,6 @@ package Win32.Commdlg is
       hPrintTemplate      : Win32.Windef.HGLOBAL;
       hSetupTemplate      : Win32.Windef.HGLOBAL;
    end record;
-   for PRINTDLGW'Alignment use 2;
-   pragma Pack (PRINTDLGW);
 
    type DEVNAMES is record
       wDriverOffset : Win32.WORD;
