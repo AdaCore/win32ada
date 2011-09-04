@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2011, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -3474,7 +3474,7 @@ package Win32.Oleauto is
       return Win32.Objbase.HRESULT;
 
    function CreateErrorInfo
-     (pperrinfo : access LPERRORINFO)
+     (pperrinfo : access LPCREATEERRORINFO)
       return Win32.Objbase.HRESULT;
 
    function OaBuildVersion return Win32.ULONG;
