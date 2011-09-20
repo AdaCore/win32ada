@@ -30,7 +30,7 @@ for /f "tokens=1* delims=" %%a in ('gcc -dumpmachine') do set HOST=%%a
 set BUILD=.build\%HOST%\release
 if %HOST%==x86_64-pc-mingw32 ( set PREP_HOST="Win64" ) else ( set PREP_HOST="Win32" )
 rem ---- preprocess the sources that need it
-set PREP_FILES=win32-crt-math.adb win32-crt-stdio.ads win32-crt-stdlib.ads win32-crt-time.ads win32-winnt.ads
+set PREP_FILES=win32-crt-math.adb win32-crt-stdio.ads win32-crt-stdlib.ads win32-crt-time.ads win32-winnt.ads win32-commctrl.ads win32-winuser.ads
 for %%f in (%PREP_FILES%) do move src\%%f src\%%f-prep > nul
 for %%f in (%PREP_FILES%) do gnatprep -DHOST=%PREP_HOST% src/%%f-prep src/%%f
 gprbuild -q -j2 -p -d -Pwin32ada -XLIBRARY_TYPE=static -XPRJ_BUILD=Release -XPRJ_HOST=%HOST%
