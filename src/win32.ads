@@ -185,9 +185,7 @@ package Win32 is
    type ULONG_Array is array (Natural range <>) of aliased ULONG;
    subtype DWORD_Array is ULONG_Array;
 
-   function To_PULONG is new Ada.Unchecked_Conversion (
-      System.Address,
-      PULONG);
+   function To_PULONG is new Ada.Unchecked_Conversion (System.Address, PULONG);
 
    --  builtin C "float", 32 bits on Intel
 
@@ -228,9 +226,7 @@ package Win32 is
 
    function To_Chars_Ptr (STR : PSTR) return Interfaces.C.Strings.chars_ptr;
 
-   function To_Chars_Ptr
-     (STR  : PCSTR)
-      return Interfaces.C.Strings.chars_ptr;
+   function To_Chars_Ptr (STR : PCSTR) return Interfaces.C.Strings.chars_ptr;
 
    function To_PSTR (CP : Interfaces.C.Strings.chars_ptr) return PSTR;
 
