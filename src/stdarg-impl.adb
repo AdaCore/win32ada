@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2011, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -43,9 +43,9 @@ package body Stdarg.Impl is
       return Address_of_Arg (Args);
    end Address_of_Vararg_List;
 
-   function ArgCount (Args : ArgList) return Int is
+   function ArgCount (Args : ArgList) return int is
    begin
-      return Int (Args.Contents.CurrentArgs);
+      return int (Args.Contents.CurrentArgs);
    end ArgCount;
 
    function "&" (Left, Right : ArgList) return ArgList is

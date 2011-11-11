@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2011, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -49,8 +49,8 @@ package body Win32.crt.Stdlib is
    function errno return Win32.INT is
    begin
       return To_PINT
-	        (Win32.crt.PerThread.Get_Address 
-	           (Win32.crt.PerThread.Errno)).all;
+                (Win32.crt.PerThread.Get_Address
+                   (Win32.crt.PerThread.Errno)).all;
    end errno;
 
    function doserrno return Win32.ULONG is

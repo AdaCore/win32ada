@@ -180,7 +180,7 @@ package body Win32.Rpcndr is
    begin
       p :=
         To_BUFPTR
-          ((To_ULONG (P) + ULONG_PTR (Win32.ULONG'Size / Su))
+          ((To_ULONG (p) + ULONG_PTR (Win32.ULONG'Size / su))
            and 16#fffffffe#);
    end midl_fa2;
 
@@ -188,7 +188,7 @@ package body Win32.Rpcndr is
    begin
       p :=
         To_BUFPTR
-          ((To_ULONG (P) + 3 * ULONG_PTR (Win32.ULONG'Size / Su))
+          ((To_ULONG (p) + 3 * ULONG_PTR (Win32.ULONG'Size / su))
            and 16#fffffffc#);
    end midl_fa4;
 
@@ -196,7 +196,7 @@ package body Win32.Rpcndr is
    begin
       p :=
         To_BUFPTR
-          ((To_ULONG (P) + 7 * ULONG_PTR (Win32.ULONG'Size / Su))
+          ((To_ULONG (p) + 7 * ULONG_PTR (Win32.ULONG'Size / su))
            and 16#fffffff8#);
    end midl_fa8;
 

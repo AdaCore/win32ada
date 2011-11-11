@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2011, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -24,6 +24,12 @@ with Ada.Unchecked_Conversion;
 package body Win32.Winsock is
 
    pragma Warnings (Off);
+
+   function IORW
+     (IOC : Win32.ULONG;
+      x   : Win32.CHAR;
+      y   : Win32.BYTE)
+      return Win32.LONG;
 
    procedure FD_CLR (fd : SOCKET; set : access FD_SET) is
       i : Integer := 0;
@@ -44,10 +50,9 @@ package body Win32.Winsock is
 
    procedure FD_SET_PROC (fd : SOCKET; set : access FD_SET) is
    begin
-      if (set.all.fd_count < FD_SETSIZE) then
-         set.all.fd_array (Integer (set.all.fd_count))  := fd;
-         set.all.fd_count                               := set.all.fd_count +
-                                                           1;
+      if set.all.fd_count < FD_SETSIZE then
+         set.all.fd_array (Integer (set.all.fd_count)) := fd;
+         set.all.fd_count                              := set.all.fd_count + 1;
       end if;
    end FD_SET_PROC;
 

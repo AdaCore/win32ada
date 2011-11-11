@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2011, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -1472,7 +1472,7 @@ package Win32.Winnt is
       Esp               : Win32.DWORD;
       SegSs             : Win32.DWORD;
       ExtendedRegisters : Win32.BYTE_Array
-	                    (0 .. MAXIMUM_SUPPORTED_EXTENSION - 1);
+                            (0 .. MAXIMUM_SUPPORTED_EXTENSION - 1);
    end record;
 #else
    type M128A is record
@@ -1527,18 +1527,19 @@ package Win32.Winnt is
    end record;
    pragma Convention (C, anonymous35_t);
 
-   type union_anonymous35_t_kind is (FltSave_Kind, FloatSave_Kind, Legacy_Kind);
+   type union_anonymous35_t_kind
+     is (FltSave_Kind, FloatSave_Kind, Legacy_Kind);
 
    type union_anonymous35_t
      (Which : union_anonymous35_t_kind := FltSave_Kind) is
    record
       case Which is
-	 when FltSave_Kind =>
-	    FltSave : XMM_SAVE_AREA32;
-	 when FloatSave_Kind =>
-	    FloatSave : XMM_SAVE_AREA32;
-	 when Legacy_Kind =>
-	    Legacy : anonymous35_t;
+         when FltSave_Kind =>
+            FltSave : XMM_SAVE_AREA32;
+         when FloatSave_Kind =>
+            FloatSave : XMM_SAVE_AREA32;
+         when Legacy_Kind =>
+            Legacy : anonymous35_t;
       end case;
    end record;
 

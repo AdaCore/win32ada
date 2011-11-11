@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2011, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -76,8 +76,8 @@ package body Stdarg is
       procedure Memcpy (To, From : System.Address; Nbytes : Natural);
       pragma Import (C, Memcpy, "memcpy");
 
-      Double_Arg: Interfaces.C.double;
-      Long_Arg : C_Param;
+      Double_Arg : Interfaces.C.double;
+      Long_Arg   : C_Param;
 
       function To_Double
         (Arg_Addr : System.Address;
@@ -106,7 +106,7 @@ package body Stdarg is
          Uncopied_Bytes := 0;
       end if;
 
-      if (Nb_Int + Args.Contents.CurrentArgs > MaxArguments) then
+      if Nb_Int + Args.Contents.CurrentArgs > MaxArguments then
          raise Constraint_Error;
       end if;
 
