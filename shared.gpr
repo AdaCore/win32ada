@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                               Win32Ada                                   --
 --                                                                          --
---                    Copyright (C) 2008-2010, AdaCore                      --
+--                    Copyright (C) 2008-2011, AdaCore                      --
 --                                                                          --
 --  This library is free software; you can redistribute it and/or modify    --
 --  it under the terms of the GNU General Public License as published by    --
@@ -70,7 +70,7 @@ project Shared is
    ---------
 
    type VCS_Type is ("Subversion", "Git");
-   VCS_Kind : VCS_Type := external ("PRJ_VCS", "Subversion");
+   VCS_Kind : VCS_Type := external ("PRJ_VCS", "Git");
 
    package Ide is
       for VCS_Kind use VCS_Kind;
