@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2011, AdaCore
+--  Copyright (C) 2000-2012, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -124,7 +124,6 @@ package body Stdarg is
    function Empty return ArgList is
       Res : ArgList;
    begin
-      Res.Contents.RefCount := 2;
       return Res;
    end Empty;
 
