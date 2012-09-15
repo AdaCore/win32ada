@@ -30,7 +30,7 @@ package body Win32.Winerror is
      new Ada.Unchecked_Conversion (Interfaces.Unsigned_32, HRESULT);
 
    function To_HRESULT is
-     new Ada.Unchecked_Conversion (Interfaces.C.Unsigned_Long, HRESULT);
+     new Ada.Unchecked_Conversion (Interfaces.C.unsigned_long, HRESULT);
 
    function SUCCEEDED (Status : HRESULT) return Standard.Boolean is
       use Win32.Utils;
