@@ -365,6 +365,7 @@ package Win32.Winnt is
    SE_SELF_RELATIVE                   : constant := 16#8000#;
    SE_PRIVILEGE_ENABLED_BY_DEFAULT    : constant := 16#1#;
    SE_PRIVILEGE_ENABLED               : constant := 16#2#;
+   SE_PRIVILEGE_REMOVED               : constant := 16#4#;
    SE_PRIVILEGE_USED_FOR_ACCESS       : constant := 16#80000000#;
    PRIVILEGE_SET_ALL_NECESSARY        : constant := 1;
    SECURITY_DYNAMIC_TRACKING          : constant := 1;
@@ -377,7 +378,8 @@ package Win32.Winnt is
    TOKEN_ADJUST_PRIVILEGES            : constant := 16#20#;
    TOKEN_ADJUST_GROUPS                : constant := 16#40#;
    TOKEN_ADJUST_DEFAULT               : constant := 16#80#;
-   TOKEN_ALL_ACCESS                   : constant := 16#f00ff#;
+   TOKEN_ADJUST_SESSIONID             : constant := 16#100#;
+   TOKEN_ALL_ACCESS                   : constant := 16#f01ff#;
    TOKEN_READ                         : constant := 16#20008#;
    TOKEN_WRITE                        : constant := 16#200e0#;
    TOKEN_EXECUTE                      : constant := 16#20000#;
@@ -856,6 +858,27 @@ package Win32.Winnt is
       "SeChangeNotifyPrivilege" & Nul;
    SE_REMOTE_SHUTDOWN_NAME     : constant TEXT :=
       "SeRemoteShutdownPrivilege" & Nul;
+   SE_UNDOCK_NAME                 : constant TEXT := "SeUndockPrivilege" & Nul;
+   SE_SYNC_AGENT_NAME             : constant TEXT :=
+     "SeSyncAgentPrivilege" & Nul;
+   SE_ENABLE_DELEGATION_NAME      : constant TEXT :=
+     "SeEnableDelegationPrivilege" & Nul;
+   SE_MANAGE_VOLUME_NAME          : constant TEXT :=
+     "SeManageVolumePrivilege" & Nul;
+   SE_IMPERSONATE_NAME            : constant TEXT :=
+     "SeImpersonatePrivilege" & Nul;
+   SE_CREATE_GLOBAL_NAME          : constant TEXT :=
+     "SeCreateGlobalPrivilege" & Nul;
+   SE_TRUSTED_CREDMAN_ACCESS_NAME : constant TEXT :=
+     "SeTrustedCredManAccessPrivilege" & Nul;
+   SE_RELABEL_NAME                : constant TEXT :=
+     "SeRelabelPrivilege" & Nul;
+   SE_INC_WORKING_SET_NAME        : constant TEXT :=
+     "SeIncreaseWorkingSetPrivilege" & Nul;
+   SE_TIME_ZONE_NAME              : constant TEXT :=
+     "SeTimeZonePrivilege" & Nul;
+   SE_CREATE_SYMBOLIC_LINK_NAME   : constant TEXT :=
+     "SeCreateSymbolicLinkPrivilege" & Nul;
 
    type TCHAR is new Win32.CHAR;
    type TBYTE is new Win32.BYTE;
@@ -1087,18 +1110,57 @@ package Win32.Winnt is
       TokenSource,
       TokenType,
       TokenImpersonationLevel,
-      TokenStatistics);
+      TokenStatistics,
+      TokenRestrictedSids,
+      TokenSessionId,
+      TokenGroupsAndPrivileges,
+      TokenSessionReference,
+      TokenSandBoxInert,
+      TokenAuditPolicy,
+      TokenOrigin,
+      TokenElevationType,
+      TokenLinkedToken,
+      TokenElevation,
+      TokenHasRestrictions,
+      TokenAccessInformation,
+      TokenVirtualizationAllowed,
+      TokenVirtualizationEnabled,
+      TokenIntegrityLevel,
+      TokenUIAccess,
+      TokenMandatoryPolicy,
+      TokenLogonSid,
+      MaxTokenInfoClass);
+
    for TOKEN_INFORMATION_CLASS use
-     (TokenUser               => 1,
-      TokenGroups             => 2,
-      TokenPrivileges         => 3,
-      TokenOwner              => 4,
-      TokenPrimaryGroup       => 5,
-      TokenDefaultDacl        => 6,
-      TokenSource             => 7,
-      TokenType               => 8,
-      TokenImpersonationLevel => 9,
-      TokenStatistics         => 10);
+     (TokenUser                  => 1,
+      TokenGroups                => 2,
+      TokenPrivileges            => 3,
+      TokenOwner                 => 4,
+      TokenPrimaryGroup          => 5,
+      TokenDefaultDacl           => 6,
+      TokenSource                => 7,
+      TokenType                  => 8,
+      TokenImpersonationLevel    => 9,
+      TokenStatistics            => 10,
+      TokenRestrictedSids        => 11,
+      TokenSessionId             => 12,
+      TokenGroupsAndPrivileges   => 13,
+      TokenSessionReference      => 14,
+      TokenSandBoxInert          => 15,
+      TokenAuditPolicy           => 16,
+      TokenOrigin                => 17,
+      TokenElevationType         => 18,
+      TokenLinkedToken           => 19,
+      TokenElevation             => 20,
+      TokenHasRestrictions       => 21,
+      TokenAccessInformation     => 22,
+      TokenVirtualizationAllowed => 23,
+      TokenVirtualizationEnabled => 24,
+      TokenIntegrityLevel        => 25,
+      TokenUIAccess              => 26,
+      TokenMandatoryPolicy       => 27,
+      TokenLogonSid              => 28,
+      MaxTokenInfoClass          => 29);
    for TOKEN_INFORMATION_CLASS'Size use 32;
 
    type SECURITY_INFORMATION is new Win32.DWORD;
