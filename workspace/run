@@ -1,16 +1,41 @@
 #!/bin/sh
-gnatmake driver
-./driver -e types.lst
-gcc -c csupport.c
+
+# This is the script to run the Win32Ada binding definitions check.
+# See driver.adb for more information.
+#
+# It can be used with a cross-compiler. In this case the last step
+# is to run the executable using either wine if 32bits executable, or
+# a virtual machine otherwise.
+#
 
 HOST=$(gcc -dumpmachine)
 
-if [ "$HOST" = "i686-pc-mingw32" ]; then
-    PHOST=Win32
+if [ -z $1 ]; then
+TARGET=$(gcc -dumpmachine)
 else
-    PHOST=Win64
+TARGET=$1
 fi
 
-gnatmake -j6 -XPRJ_HOST=$HOST -gnateDHOST=$PHOST \
+if [ "$TARGET" = "i686-pc-mingw32" ]; then
+    PTARGET=Win32
+else
+    PTARGET=Win64
+fi
+
+#  Build the driver generator, will generate csupport.c and runcheck.adb
+
+gnatmake driver
+./driver -e types.lst
+
+#  Build the test driver
+
+if [ $HOST = $TARGET ]; then
+gcc -c csupport.c
+gnatmake -j6 -XPRJ_TARGET=$PTARGET -gnateDTARGET=$PTARGET \
     -P runcheck.gpr -largs csupport.o
 ./runcheck
+else
+$TARGET-gcc -c csupport.c
+$TARGET-gnatmake -j0 -XTARGET=$TARGET -XPRJ_TARGET=$PTARGET \
+    -gnateDTARGET=$PTARGET -P runcheck.gpr -largs csupport.o
+fi

@@ -1,7 +1,7 @@
 ############################################################################
 #                                 Win32Ada                                 #
 #                                                                          #
-#                    Copyright (C) 2008-2010, AdaCore                      #
+#                    Copyright (C) 2008-2012, AdaCore                      #
 #                                                                          #
 #  This library is free software; you can redistribute it and/or modify    #
 #  it under the terms of the GNU General Public License as published by    #
@@ -33,6 +33,7 @@ prefix	 	= $(dir $(shell which gnatls))..
 ENABLE_SHARED 	= true
 PROCESSORS	= 2
 DEBUG		= false
+TARGET		= $(shell gcc -dumpmachine)
 
 -include makefile.setup
 
@@ -44,16 +45,34 @@ RM		= rm -f
 
 HOST		= $(shell gcc -dumpmachine)
 
-GMOPTS		= -j$(PROCESSORS) -XPRJ_HOST=$(HOST)
+GCLOPTS		= -XPRJ_TARGET=$(PRJ_TARGET) -XTARGET=$(TARGET)
+GPROPTS		= -j$(PROCESSORS) $(GCLOPTS)
 
-BUILD   	= .build/$(HOST)
+BUILD   	= .build/$(TARGET)
+
+ifeq ($(HOST), $(TARGET))
+TPREFIX=$(prefix)
+else
+GPROPTS		+= --target=$(TARGET)
+TPREFIX=$(prefix)/$(TARGET)
+endif
+
+ifeq ($(strip $(findstring x86_64, $(TARGET))),x86_64)
+   PRJ_TARGET=Win64
+else
+ifeq ($(strip $(findstring i686, $(TARGET))),i686)
+   PRJ_TARGET=Win32
+else
+@error Unrecognized target
+endif
+endif
 
 ifeq ($(DEBUG), true)
 BDIR		= $(BUILD)/debug
-GMOPTS		:= $(GMOPTS) -XPRJ_BUILD=Debug
+GPROPTS		+= -XPRJ_BUILD=Debug
 else
 BDIR		= $(BUILD)/release
-GMOPTS		:= $(GMOPTS) -XPRJ_BUILD=Release
+GPROPTS		+= -XPRJ_BUILD=Release
 endif
 
 ############################################################################
@@ -65,33 +84,34 @@ setup:
 	echo "ENABLE_SHARED=$(ENABLE_SHARED)" >> makefile.setup
 	echo "DEBUG=$(DEBUG)" >> makefile.setup
 	echo "PROCESSORS=$(PROCESSORS)" >> makefile.setup
+	echo "TARGET=$(TARGET)" >> makefile.setup
 
 install:
-	$(MKDIR) -p $(prefix)/lib/win32ada/static
-	$(CP) -pr $(BDIR)/static/lib/* $(prefix)/lib/win32ada/static/
+	$(MKDIR) -p $(TPREFIX)/lib/win32ada/static
+	$(CP) -pr $(BDIR)/static/lib/* $(TPREFIX)/lib/win32ada/static/
 ifeq (${ENABLE_SHARED}, true)
-	$(MKDIR) -p $(prefix)/lib/win32ada/relocatable
-	$(CP) -pr $(BDIR)/relocatable/lib/* $(prefix)/lib/win32ada/relocatable/
+	$(MKDIR) -p $(TPREFIX)/lib/win32ada/relocatable
+	$(CP) -pr $(BDIR)/relocatable/lib/* $(TPREFIX)/lib/win32ada/relocatable/
 endif
-	$(MKDIR) -p $(prefix)/include/win32ada
-	$(CP) -pr src/*.ad* $(prefix)/include/win32ada/
+	$(MKDIR) -p $(TPREFIX)/include/win32ada
+	$(CP) -pr src/*.ad* $(TPREFIX)/include/win32ada/
 	# Copy the preprocessed files
 	for file in $(BDIR)/static/obj/*.prep; do \
 		cp $$file \
-			$(prefix)/include/win32ada/$$(basename $$file .prep);\
+			$(TPREFIX)/include/win32ada/$$(basename $$file .prep);\
 	done
-	$(MKDIR) -p $(prefix)/lib/gnat
-	$(CP) config/projects/win32ada.gpr $(prefix)/lib/gnat/
+	$(MKDIR) -p $(TPREFIX)/lib/gnat
+	$(CP) config/projects/win32ada.gpr $(TPREFIX)/lib/gnat/
 
 build:
-	$(GPRBUILD) -p $(GMOPTS) -XLIBRARY_TYPE=static -P win32ada
+	$(GPRBUILD) -p $(GPROPTS) -XLIBRARY_TYPE=static -P win32ada
 ifeq (${ENABLE_SHARED}, true)
-	$(GPRBUILD) -p $(GMOPTS) -XLIBRARY_TYPE=relocatable -P win32ada
+	$(GPRBUILD) -p $(GPROPTS) -XLIBRARY_TYPE=relocatable -P win32ada
 endif
 
 clean:
-	$(GPRCLEAN) -XPRJ_HOST=$(HOST) -XLIBRARY_TYPE=static -P win32ada
+	$(GPRCLEAN) $(GCLOPTS) -XLIBRARY_TYPE=static -P win32ada
 ifeq (${ENABLE_SHARED}, true)
-	$(GPRCLEAN) -XPRJ_HOST=$(HOST) -XLIBRARY_TYPE=relocatable -P win32ada
+	$(GPRCLEAN) $(GCLOPTS) -XLIBRARY_TYPE=relocatable -P win32ada
 endif
-	$(RM) -r $(BUILD)
+	$(RM) -fr $(BUILD) makefile.setup

@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2011, AdaCore
+--  Copyright (C) 2000-2012, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -67,7 +67,7 @@ package Win32.crt.Stdlib is
    type SAPP is access SAP;
    type SP is access Win32.PSTR;
 
-#if HOST = "Win32" then
+#if TARGET = "Win32" then
    sys_errlist_addr : constant SAP;
    pragma Import (C, sys_errlist_addr, "_imp___sys_errlist");
    pragma Suppress (Index_Check, sys_errlist_addr);

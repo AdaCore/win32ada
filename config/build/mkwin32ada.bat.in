@@ -26,16 +26,16 @@ rem -----------------------------------------------
 :build
 echo Building Win32Ada for GNAT installation in %1
 path %1\bin;%path%
-for /f "tokens=1* delims=" %%a in ('gcc -dumpmachine') do set HOST=%%a
-set BUILD=.build\%HOST%\release
-if %HOST%==x86_64-pc-mingw32 ( set PREP_HOST="Win64" ) else ( set PREP_HOST="Win32" )
+for /f "tokens=1* delims=" %%a in ('gcc -dumpmachine') do set TARGET=%%a
+set BUILD=.build\%TARGET%\release
+if %TARGET%==x86_64-pc-mingw32 ( set PREP_TARGET="Win64" ) else ( set PREP_TARGET="Win32" )
 rem ---- preprocess the sources that need it
 set PREP_FILES=@PREPFILES@
 for %%f in (%PREP_FILES%) do move src\%%f src\%%f-prep > nul
-for %%f in (%PREP_FILES%) do gnatprep -DHOST=%PREP_HOST% src/%%f-prep src/%%f
-gprbuild -q -j2 -p -d -Pwin32ada -XLIBRARY_TYPE=static -XPRJ_BUILD=Release -XPRJ_HOST=%HOST%
+for %%f in (%PREP_FILES%) do gnatprep -DTARGET=%PREP_TARGET% src/%%f-prep src/%%f
+gprbuild -q -j0 -p -d -Pwin32ada -XLIBRARY_TYPE=static -XPRJ_BUILD=Release -XTARGET=%TARGET% -XPRJ_TARGET=%PREP_TARGET%
 if errorlevel 1 goto error
-gprbuild -q -j2 -p -d -Pwin32ada -XLIBRARY_TYPE=relocatable -XPRJ_BUILD=Release -XPRJ_HOST=%HOST%
+gprbuild -q -j0 -p -d -Pwin32ada -XLIBRARY_TYPE=relocatable -XPRJ_BUILD=Release -XTARGET=%TARGET% -XPRJ_TARGET=%PREP_TARGET%
 if errorlevel 1 goto error
 rem ---- move sources
 del src\*.*-prep > nul

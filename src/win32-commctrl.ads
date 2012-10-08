@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2012, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -264,7 +264,7 @@ package Win32.Commctrl is
       idCommand : Win32.INT;
       fsState   : Win32.BYTE;
       fsStyle   : Win32.BYTE;
-#if HOST = "Win32" then
+#if TARGET = "Win32" then
       bReserved : Win32.BYTE_Array (1 .. 2);
 #else
       bReserved : Win32.BYTE_Array (1 .. 6);
