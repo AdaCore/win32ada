@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                               Win32Ada                                   --
 --                                                                          --
---                    Copyright (C) 2008-2011, AdaCore                      --
+--                    Copyright (C) 2008-2012, AdaCore                      --
 --                                                                          --
 --  This library is free software; you can redistribute it and/or modify    --
 --  it under the terms of the GNU General Public License as published by    --
@@ -25,12 +25,14 @@
 --  covered by the  GNU Public License.                                     --
 ------------------------------------------------------------------------------
 
-project Shared is
+abstract project Shared is
 
    for Source_Dirs use ();
 
-   type Host_Type is ("i686-pc-mingw32", "x86_64-pc-mingw32");
-   Host : Host_Type := external ("PRJ_HOST", "i686-pc-mingw32");
+   Target := external ("TARGET");
+
+   type Win_Type is ("Win32", "Win64");
+   Win_Target : Win_Type := external ("PRJ_TARGET", "Win32");
 
    type Build_Type is ("Debug", "Release");
    Build : Build_Type := external ("PRJ_BUILD", "Debug");
@@ -46,7 +48,7 @@ project Shared is
    -- Build directories --
    -----------------------
 
-   for Exec_Dir use ".build/" & Host;
+   for Exec_Dir use ".build/" & Target;
 
    case Build is
       when "Debug" =>
@@ -82,14 +84,7 @@ project Shared is
          & " -lang XML -l256";
    end Ide;
 
-   Prep := "";
-
-   case Host is
-      when "i686-pc-mingw32" =>
-         Prep := "-gnateDHOST=Win32";
-      when "x86_64-pc-mingw32" =>
-         Prep := "-gnateDHOST=Win64";
-   end case;
+   Prep := "-gnateDTARGET=" & Win_Target;
 
    --------------
    -- Compiler --

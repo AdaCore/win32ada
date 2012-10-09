@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                                 Win32Ada                                 --
 --                                                                          --
---                        Copyright (C) 2008, AdaCore                       --
+--                     Copyright (C) 2008-2012, AdaCore                     --
 --                                                                          --
 --  This library is free software; you can redistribute it and/or modify    --
 --  it under the terms of the GNU General Public License as published by    --
@@ -25,7 +25,7 @@
 --  covered by the  GNU Public License.                                     --
 ------------------------------------------------------------------------------
 
-project Win32Ada is
+library project Win32Ada is
 
    for Languages use ("ada");
 

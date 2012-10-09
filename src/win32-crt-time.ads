@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2011, AdaCore
+--  Copyright (C) 2000-2012, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -49,7 +49,7 @@ package Win32.crt.Time is
    type AL is access Win32.LONG;
    type ATZ is access all TZ_Array;
 
-#if HOST = "Win32" then
+#if TARGET = "Win32" then
    function daylight_Addr return AI;
    pragma Import (C, daylight_Addr, "__p__daylight");
 

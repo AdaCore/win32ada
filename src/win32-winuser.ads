@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2011, AdaCore
+--  Copyright (C) 2000-2012, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -5397,7 +5397,7 @@ private
    pragma Import (Stdcall, GetWindowLongW, "GetWindowLongW");
    pragma Import (Stdcall, SetWindowLongA, "SetWindowLongA");
    pragma Import (Stdcall, SetWindowLongW, "SetWindowLongW");
-#if HOST = "Win32" then
+#if TARGET = "Win32" then
    pragma Import (Stdcall, GetWindowLongPtrA, "GetWindowLongA");
    pragma Import (Stdcall, GetWindowLongPtrW, "GetWindowLongW");
    pragma Import (Stdcall, SetWindowLongPtrA, "SetWindowLongA");
@@ -5414,7 +5414,7 @@ private
    pragma Import (Stdcall, GetClassLongW, "GetClassLongW");
    pragma Import (Stdcall, SetClassLongA, "SetClassLongA");
    pragma Import (Stdcall, SetClassLongW, "SetClassLongW");
-#if HOST = "Win32" then
+#if TARGET = "Win32" then
    pragma Import (Stdcall, GetClassLongPtrA, "GetClassLongA");
    pragma Import (Stdcall, GetClassLongPtrW, "GetClassLongW");
    pragma Import (Stdcall, SetClassLongPtrA, "SetClassLongA");

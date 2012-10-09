@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2011, AdaCore
+--  Copyright (C) 2000-2012, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -1492,7 +1492,7 @@ package Win32.Winnt is
       Next : PSINGLE_LIST_ENTRY;
    end record;
 
-#if HOST = "Win32" then
+#if TARGET = "Win32" then
    type FLOATING_SAVE_AREA is record
       ControlWord   : Win32.DWORD;
       StatusWord    : Win32.DWORD;
@@ -1719,7 +1719,7 @@ package Win32.Winnt is
       ExceptionRecord      : PEXCEPTION_RECORD;
       ExceptionAddress     : Win32.PVOID;
       NumberParameters     : Win32.DWORD;
-#if HOST = "Win32" then
+#if TARGET = "Win32" then
       ExceptionInformation : Win32.DWORD_Array (0 .. 14);
 #else
       ExceptionInformation : Win32.DWORD64_Array (0 .. 14);
@@ -2047,7 +2047,7 @@ package Win32.Winnt is
       SizeOfUninitializedData     : Win32.DWORD;
       AddressOfEntryPoint         : Win32.DWORD;
       BaseOfCode                  : Win32.DWORD;
-#if HOST = "Win32" then
+#if TARGET = "Win32" then
       BaseOfData                  : Win32.DWORD;
       ImageBase                   : Win32.DWORD;
 #else
@@ -2067,7 +2067,7 @@ package Win32.Winnt is
       CheckSum                    : Win32.DWORD;
       Subsystem                   : Win32.WORD;
       DllCharacteristics          : Win32.WORD;
-#if HOST = "Win32" then
+#if TARGET = "Win32" then
       SizeOfStackReserve          : Win32.DWORD;
       SizeOfStackCommit           : Win32.DWORD;
       SizeOfHeapReserve           : Win32.DWORD;
@@ -2392,7 +2392,7 @@ package Win32.Winnt is
    type PPIMAGE_TLS_CALLBACK is access all PIMAGE_TLS_CALLBACK;
 
    type IMAGE_TLS_DIRECTORY is record
-#if HOST = "Win32" then
+#if TARGET = "Win32" then
       StartAddressOfRawData : Win32.DWORD;
       EndAddressOfRawData   : Win32.DWORD;
       AddressOfIndex        : Win32.PDWORD;
@@ -2445,7 +2445,7 @@ package Win32.Winnt is
       GlobalFlagsClear              : Win32.DWORD;
       GlobalFlagsSet                : Win32.DWORD;
       CriticalSectionDefaultTimeout : Win32.DWORD;
-#if HOST = "Win32" then
+#if TARGET = "Win32" then
       DeCommitFreeBlockThreshold    : Win32.DWORD;
       DeCommitTotalFreeThreshold    : Win32.DWORD;
       LockPrefixTable               : Win32.PVOID;
@@ -2464,7 +2464,7 @@ package Win32.Winnt is
 #end if;
       CSDVersion                    : Win32.WORD;
       Reserved1                     : Win32.WORD;
-#if HOST = "Win32" then
+#if TARGET = "Win32" then
       EditList                      : Win32.DWORD;
       SecurityCookie                : Win32.DWORD;
       SEHandlerTable                : Win32.DWORD;

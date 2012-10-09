@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2011, AdaCore
+--  Copyright (C) 2000-2012, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ package body Win32.crt.Math is
 
    package HUGE_Constant is
       huge_addr : constant AD;
-#if HOST = "Win32" then
+#if TARGET = "Win32" then
       pragma Import (C, huge_addr, "_imp___HUGE");
 #else
       pragma Import (C, huge_addr, "__imp__HUGE");

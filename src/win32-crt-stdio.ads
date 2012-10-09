@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2011, AdaCore
+--  Copyright (C) 2000-2012, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -91,7 +91,7 @@ package Win32.crt.Stdio is
 
    type Access_File_Array is access FILE_array;
 
-#if HOST = "Win32" then
+#if TARGET = "Win32" then
    function IOB_Addr return Access_File_Array;
    pragma Import (C, IOB_Addr, "__p__iob");
 #else
