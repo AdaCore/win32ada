@@ -25,7 +25,7 @@
 --  covered by the  GNU Public License.                                     --
 ------------------------------------------------------------------------------
 
-project Shared is
+abstract project Shared is
 
    for Source_Dirs use ();
 

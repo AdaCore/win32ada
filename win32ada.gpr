@@ -29,7 +29,7 @@
 
 with "shared";
 
-project Win32Ada is
+library project Win32Ada is
 
    for Languages use ("Ada", "C");
 
