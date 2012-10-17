@@ -45,8 +45,7 @@ RM		= rm -f
 
 HOST		= $(shell gcc -dumpmachine)
 
-GCLOPTS		= -XPRJ_TARGET=$(PRJ_TARGET) -XTARGET=$(TARGET)
-GPROPTS		= -j$(PROCESSORS) $(GCLOPTS)
+GPROPTS		= -XPRJ_TARGET=$(PRJ_TARGET) -XTARGET=$(TARGET)
 
 BUILD   	= .build/$(TARGET)
 
@@ -104,14 +103,16 @@ endif
 	$(CP) config/projects/win32ada.gpr $(TPREFIX)/lib/gnat/
 
 build:
-	$(GPRBUILD) -p $(GPROPTS) -XLIBRARY_TYPE=static -P win32ada
+	$(GPRBUILD) -p $(GPROPTS) -j$(PROCESSORS) \
+		-XLIBRARY_TYPE=static -P win32ada
 ifeq (${ENABLE_SHARED}, true)
-	$(GPRBUILD) -p $(GPROPTS) -XLIBRARY_TYPE=relocatable -P win32ada
+	$(GPRBUILD) -p $(GPROPTS) -j$(PROCESSORS) \
+		-XLIBRARY_TYPE=relocatable -P win32ada
 endif
 
 clean:
-	$(GPRCLEAN) $(GCLOPTS) -XLIBRARY_TYPE=static -P win32ada
+	$(GPRCLEAN) $(GPROPTS) -XLIBRARY_TYPE=static -P win32ada
 ifeq (${ENABLE_SHARED}, true)
-	$(GPRCLEAN) $(GCLOPTS) -XLIBRARY_TYPE=relocatable -P win32ada
+	$(GPRCLEAN) $(GPROPTS) -XLIBRARY_TYPE=relocatable -P win32ada
 endif
 	$(RM) -fr $(BUILD) makefile.setup
