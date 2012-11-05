@@ -798,7 +798,7 @@ package Win32.Winbase is
       dwPageSize                  : Win32.DWORD;
       lpMinimumApplicationAddress : Win32.LPVOID;
       lpMaximumApplicationAddress : Win32.LPVOID;
-      dwActiveProcessorMask       : Win32.DWORD;
+      dwActiveProcessorMask       : Win32.DWORD_PTR;
       dwNumberOfProcessors        : Win32.DWORD;
       dwProcessorType             : Win32.DWORD;
       dwAllocationGranularity     : Win32.DWORD;
@@ -1394,8 +1394,8 @@ package Win32.Winbase is
 
    function GetProcessAffinityMask
      (hProcess              : Win32.Winnt.HANDLE;
-      lpProcessAffinityMask : Win32.LPDWORD;
-      lpSystemAffinityMask  : Win32.LPDWORD)
+      lpProcessAffinityMask : Win32.PDWORD_PTR;
+      lpSystemAffinityMask  : Win32.PDWORD_PTR)
       return Win32.BOOL;
 
    function GetProcessTimes
