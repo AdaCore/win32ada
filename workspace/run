@@ -7,6 +7,8 @@
 # is to run the executable using either wine if 32bits executable, or
 # a virtual machine otherwise.
 #
+# On native: ./run
+# On cross:  ./run i686-pc-mingw32
 
 HOST=$(gcc -dumpmachine)
 
