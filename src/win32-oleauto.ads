@@ -1261,7 +1261,8 @@ package Win32.Oleauto is
       ppdispVal_kind,
       pparray_kind,
       pvarVal_kind,
-      byref_kind);
+      byref_kind,
+      brecVal_kind);
 
    type a_a_IUnknown is access all Win32.Objbase.LPUNKNOWN;
 
@@ -1324,6 +1325,11 @@ package Win32.Oleauto is
             pvarVal : LPVARIANT;
          when byref_kind =>
             byref : Win32.PVOID;
+         when brecVal_kind =>
+            pvRecord : Win32.PVOID;
+            pRecInfo : Win32.Objbase.LPUNKNOWN;
+            --  Should be IRecordInfo*
+            --  LPUNKNOWN used only to fix size of record.
          end case;
       end record;
 

@@ -793,8 +793,25 @@ package Win32.Winbase is
       wcProviderData    : Win32.WCHAR_Array (0 .. Win32.ANYSIZE_ARRAY);
    end record;
 
+   type union_anonymous5_t_kind is (OEM_Kind, Archi_Kind);
+
+   type union_anonymous5_t (Which : union_anonymous5_t_kind := OEM_Kind) is
+      record
+         case Which is
+            when OEM_Kind =>
+               dwOemId                : Win32.DWORD;
+            when Archi_Kind =>
+               wProcessorArchitecture : Win32.WORD;
+               wReserved              : Win32.WORD;
+         end case;
+      end record;
+
+   pragma Convention (C_Pass_By_Copy, union_anonymous5_t);
+
+   pragma Unchecked_Union (union_anonymous5_t);
+
    type SYSTEM_INFO is record
-      dwOemId                     : Win32.DWORD;
+      u                           : union_anonymous5_t;
       dwPageSize                  : Win32.DWORD;
       lpMinimumApplicationAddress : Win32.LPVOID;
       lpMaximumApplicationAddress : Win32.LPVOID;

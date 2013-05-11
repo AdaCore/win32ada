@@ -3277,7 +3277,7 @@ package Win32.Winuser is
       nIDEvent    : Win32.UINT_PTR;
       uElapse     : Win32.UINT;
       lpTimerFunc : TIMERPROC)
-      return Win32.UINT;
+      return Win32.UINT_PTR;
 
    function KillTimer
      (hWnd     : Win32.Windef.HWND;
