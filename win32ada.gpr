@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                                Win32Ada                                  --
 --                                                                          --
---                    Copyright (C) 2008-2012, AdaCore                      --
+--                    Copyright (C) 2008-2013, AdaCore                      --
 --                                                                          --
 --  This library is free software; you can redistribute it and/or modify    --
 --  it under the terms of the GNU General Public License as published by    --
@@ -40,22 +40,9 @@ library project Win32Ada is
    for Library_Name use "win32ada";
    for Library_Kind use Shared.Library_Type;
 
-   case Shared.Library_Type is
-      when "static" =>
-         null;
-      when "relocatable" =>
-         for Library_Options use
-            ("-lgdi32", "-lnetapi32", "-lrpcrt4", "-loleaut32", "-lglu32");
-
-         case Shared.Win_Target is
-            when "Win32" =>
-               for Library_Options use Project'Library_Options
-                  & ("-llargeint", "-lvfw32");
-            when "Win64" =>
-               for Library_Options use Project'Library_Options
-                  & ("-lmsvfw32", "-lavifil32", "-lrpcrt4", "-lmsvcrt");
-         end case;
-   end case;
+   for Library_Options use
+     ("-lgdi32", "-lnetapi32", "-lrpcrt4", "-loleaut32", "-lglu32",
+      "-lmsvfw32", "-lavifil32", "-lrpcrt4", "-lmsvcrt");
 
    package Builder renames Shared.Builder;
    package Compiler renames Shared.Compiler;
