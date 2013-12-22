@@ -1,7 +1,7 @@
 ############################################################################
 #                                 Win32Ada                                 #
 #                                                                          #
-#                    Copyright (C) 2008-2012, AdaCore                      #
+#                    Copyright (C) 2008-2014, AdaCore                      #
 #                                                                          #
 #  This library is free software; you can redistribute it and/or modify    #
 #  it under the terms of the GNU General Public License as published by    #
@@ -41,6 +41,7 @@ MKDIR		= mkdir
 CP		= cp -p
 GPRBUILD	= gprbuild
 GPRCLEAN	= gprclean
+GPRINSTALL	= gprinstall
 RM		= rm -f
 
 HOST		= $(shell gcc -dumpmachine)
@@ -85,22 +86,18 @@ setup:
 	echo "PROCESSORS=$(PROCESSORS)" >> makefile.setup
 	echo "TARGET=$(TARGET)" >> makefile.setup
 
-install:
-	$(MKDIR) -p $(TPREFIX)/lib/win32ada/static
-	$(CP) -pr $(BDIR)/static/lib/* $(TPREFIX)/lib/win32ada/static/
-ifeq (${ENABLE_SHARED}, true)
-	$(MKDIR) -p $(TPREFIX)/lib/win32ada/relocatable
-	$(CP) -pr $(BDIR)/relocatable/lib/* $(TPREFIX)/lib/win32ada/relocatable/
+install-clean:
+ifneq (,$(wildcard $(TPREFIX)/share/gpr/manifests/win32ada))
+	-$(GPRINSTALL) $(GPROPTS) --uninstall --prefix=$(TPREFIX) win32ada
 endif
-	$(MKDIR) -p $(TPREFIX)/include/win32ada
-	$(CP) -pr src/*.ad* $(TPREFIX)/include/win32ada/
-	# Copy the preprocessed files
-	for file in $(BDIR)/static/obj/*.prep; do \
-		cp $$file \
-			$(TPREFIX)/include/win32ada/$$(basename $$file .prep);\
-	done
-	$(MKDIR) -p $(TPREFIX)/lib/gnat
-	$(CP) config/projects/win32ada.gpr $(TPREFIX)/lib/gnat/
+
+install: install-clean
+	$(GPRINSTALL) $(GPROPTS) -p -f --prefix=$(TPREFIX) \
+		-XLIBRARY_TYPE=static -P win32ada
+ifeq (${ENABLE_SHARED}, true)
+	$(GPRINSTALL) $(GPROPTS) -p -f --prefix=$(TPREFIX) \
+		-XLIBRARY_TYPE=relocatable --build-name=relocatable -P win32ada
+endif
 
 build:
 	$(GPRBUILD) -p $(GPROPTS) -j$(PROCESSORS) \
