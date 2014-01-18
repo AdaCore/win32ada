@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2014, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -37,7 +37,7 @@ package body Xform is
    use type Win32.BOOL;
 
    bResult : Win32.BOOL;
-   uResult : Win32.UINT;
+   uResult : Win32.UINT_PTR;
    iResult : Win32.INT;
    lReturn : Win32.LRESULT;
 
@@ -45,9 +45,9 @@ package body Xform is
    rect_p    : aliased Win32.Windef.RECT;
    rect2_p   : aliased Win32.Windef.RECT;
    old_point : aliased Win32.Windef.POINT;
-   poly_pts  : aliased pt_array;  --Win32.WinDef.POINT_A;
+   poly_pts  : aliased pt_array;  -- Win32.WinDef.POINT_A;
    old_pt    : aliased Win32.Windef.POINT;
-   poly2_pts : aliased pt_array;  --WinDef.POINT_A;
+   poly2_pts : aliased pt_array;  -- WinDef.POINT_A;
    xForm_p   : aliased Win32.Wingdi.XFORM;
    rect3_p   : aliased Win32.Windef.RECT;
    ps        : aliased Win32.Winuser.PAINTSTRUCT;
@@ -242,7 +242,7 @@ package body Xform is
             end loop;
             bResult :=
                Win32.Wingdi.Polyline
-                 (hDC_p, --poly_pts'Access, pxd.nObject);
+                 (hDC_p, -- poly_pts'Access, pxd.nObject);
                   PT_ARRAY_TO_PT (poly_pts),
                   pxd.nObject);
             bResult :=
@@ -287,7 +287,7 @@ package body Xform is
             end loop;
             bResult :=
                Win32.Wingdi.Polyline
-                 (hDC_p, --poly2_pts'Access, pxd.nObject);
+                 (hDC_p, -- poly2_pts'Access, pxd.nObject);
                   PT_ARRAY_TO_PT (poly2_pts),
                   pxd.nObject);
 
@@ -302,7 +302,7 @@ package body Xform is
             end loop;
             bResult :=
                Win32.Wingdi.Polyline
-                 (hDC_p,  --poly2_pts'Access, pxd.nObject);
+                 (hDC_p,  -- poly2_pts'Access, pxd.nObject);
                   PT_ARRAY_TO_PT (poly2_pts),
                   pxd.nObject);
 

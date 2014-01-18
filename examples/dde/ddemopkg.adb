@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2014, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -236,7 +236,7 @@ package body DdemoPkg is
                BroadcastTransaction (szResume_Ptr, 1, 0, Ddeml.XTYP_EXECUTE);
                bResult := Winuser.MessageBeep (0);
             end if;
-            uResult := Winuser.SetTimer (hwndMain, 1, BASE_TIMEOUT, null);
+            upResult := Winuser.SetTimer (hwndMain, 1, BASE_TIMEOUT, null);
             fActive := True;
             bResult := Winuser.InvalidateRect (HWND, null, Win32.TRUE);
             bResult := Winuser.UpdateWindow (HWND);
@@ -332,7 +332,7 @@ package body DdemoPkg is
                      Winuser.InvalidateRect (hwndMain, null, Win32.TRUE);
                   bResult := Winuser.UpdateWindow (hwndMain);
                elsif not fActive and (szResume = pszExec.all) then
-                  uResult :=
+                  upResult :=
                      Winuser.SetTimer (hwndMain, 1, BASE_TIMEOUT, null);
                   fActive := True;
                   bResult :=

@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2014, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -42,7 +42,7 @@ package body Draw is
 
    bResult : Win32.BOOL;
    iResult : Win32.INT;
-   uResult : Win32.UINT;
+   uResult : Win32.UINT_PTR;
    lReturn : Win32.LRESULT;
 
    function HANDLE_TO_PDRAWDATA is new Ada.Unchecked_Conversion (
