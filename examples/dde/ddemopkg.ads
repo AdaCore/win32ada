@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2014, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -73,6 +73,7 @@ package DdemoPkg is
    iResult    : Win32.INT;
    bResult    : Win32.BOOL;
    uResult    : Win32.UINT;
+   upResult   : Win32.UINT_PTR;
    hddeResult : Ddeml.HDDEDATA;
 
    cyText  : Win32.INT;

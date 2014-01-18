@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2014, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -37,7 +37,7 @@ package body Poly is
    use type System.Address;
 
    bResult  : Win32.BOOL := Win32.TRUE;
-   uResult  : Win32.UINT;
+   uResult  : Win32.UINT_PTR;
    iResult  : Win32.INT;
    lReturn  : Win32.LRESULT;
    hGResult : Win32.Windef.HGLOBAL;
@@ -363,7 +363,7 @@ package body Poly is
                   gdi_obj     := Win32.Wingdi.SelectObject (hDC_p, hPen_p);
                end if;
 
-               for idx in 0 .. 3 loop --BEZ_PTS - 1 loop
+               for idx in 0 .. 3 loop -- BEZ_PTS - 1 loop
                   x := lpPrev.pPts (idx).x + ppd.pVel (idx).x;
                   y := lpPrev.pPts (idx).y + ppd.pVel (idx).y;
 
