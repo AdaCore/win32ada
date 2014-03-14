@@ -24,12 +24,12 @@ package Win32.Winternl is
    pragma Linker_Options ("-lntdll");
 
    type PROCESS_BASIC_INFORMATION is record
-      ExitStatus                   : DWORD;
-      PebBaseAddress               : DWORD;
-      AffinityMask                 : DWORD;
-      BasePriority                 : DWORD;
-      UniqueProcessId              : DWORD;
-      InheritedFromUniqueProcessId : DWORD;
+      ExitStatus                   : PVOID;
+      PebBaseAddress               : PVOID;
+      AffinityMask                 : PVOID;
+      BasePriority                 : PVOID;
+      UniqueProcessId              : ULONG_PTR;
+      InheritedFromUniqueProcessId : ULONG_PTR;
    end record;
 
    type PROCESSINFOCLASS is new DWORD;
@@ -43,8 +43,8 @@ package Win32.Winternl is
      (ProcessHandle            : Win32.Winnt.HANDLE;
       ProcessInformationClass  : PROCESSINFOCLASS;
       ProcessInformation       : access PROCESS_BASIC_INFORMATION;
-      ProcessInformationLength : DWORD;
-      ReturnLength             : access DWORD)
+      ProcessInformationLength : ULONG;
+      ReturnLength             : access ULONG)
       return DWORD;
 
    type THREADINFOCLASS is (
