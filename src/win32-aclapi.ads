@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2014, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -30,7 +30,7 @@ package Win32.Aclapi is
       ppsidGroup           : access Winnt.PSID;
       ppDacl               : access Winnt.PACL;
       ppSacl               : access Winnt.PACL;
-      ppSecurityDescriptor : Winnt.PSECURITY_DESCRIPTOR)
+      ppSecurityDescriptor : access Winnt.PSECURITY_DESCRIPTOR)
       return DWORD;
 
    function GetNamedSecurityInfo
@@ -41,7 +41,7 @@ package Win32.Aclapi is
       ppsidGroup           : access Winnt.PSID;
       ppDacl               : access Winnt.PACL;
       ppSacl               : access Winnt.PACL;
-      ppSecurityDescriptor : Winnt.PSECURITY_DESCRIPTOR)
+      ppSecurityDescriptor : access Winnt.PSECURITY_DESCRIPTOR)
       return DWORD;
 
    function SetNamedSecurityInfo
