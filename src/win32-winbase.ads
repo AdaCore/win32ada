@@ -494,12 +494,29 @@ package Win32.Winbase is
    MOVEFILE_COPY_ALLOWED          : constant := 16#2#;
    MOVEFILE_DELAY_UNTIL_REBOOT    : constant := 16#4#;
    MAX_COMPUTERNAME_LENGTH        : constant := 15;
-   VER_PLATFORM_WIN32S            : constant := 0;
-   VER_PLATFORM_WIN32_NT          : constant := 2;
    TC_NORMAL                      : constant := 0;
    TC_HARDERR                     : constant := 1;
    TC_GP_TRAP                     : constant := 2;
    TC_SIGNAL                      : constant := 3;
+
+   VER_PLATFORM_WIN32S                : constant := 0;
+   VER_PLATFORM_WIN32_NT              : constant := 2;
+   VER_SUITE_BACKOFFICE               : constant := 16#00000004#;
+   VER_SUITE_BLADE                    : constant := 16#00000400#;
+   VER_SUITE_COMPUTE_SERVER           : constant := 16#00004000#;
+   VER_SUITE_DATACENTER               : constant := 16#00000080#;
+   VER_SUITE_ENTERPRISE               : constant := 16#00000002#;
+   VER_SUITE_EMBEDDEDNT               : constant := 16#00000040#;
+   VER_SUITE_PERSONAL                 : constant := 16#00000200#;
+   VER_SUITE_SINGLEUSERTS             : constant := 16#00000100#;
+   VER_SUITE_SMALLBUSINESS            : constant := 16#00000001#;
+   VER_SUITE_SMALLBUSINESS_RESTRICTED : constant := 16#00000020#;
+   VER_SUITE_STORAGE_SERVER           : constant := 16#00002000#;
+   VER_SUITE_TERMINAL                 : constant := 16#00000010#;
+   VER_SUITE_WH_SERVER                : constant := 16#00008000#;
+   VER_NT_DOMAIN_CONTROLLER           : constant := 16#00000002#;
+   VER_NT_SERVER                      : constant := 16#00000003#;
+   VER_NT_WORKSTATION                 : constant := 16#00000001#;
 
    type OVERLAPPED;
    type SECURITY_ATTRIBUTES;
@@ -536,6 +553,8 @@ package Win32.Winbase is
    type WIN32_FIND_DATAW;
    type OSVERSIONINFOA;
    type OSVERSIONINFOW;
+   type OSVERSIONINFOEXA;
+   type OSVERSIONINFOEXW;
 
    type LPOVERLAPPED is access all OVERLAPPED;
    type PSECURITY_ATTRIBUTES is access all SECURITY_ATTRIBUTES;
@@ -686,6 +705,12 @@ package Win32.Winbase is
    type LPOSVERSIONINFOW is access all OSVERSIONINFOW;
    type POSVERSIONINFO is access all OSVERSIONINFOA;
    type LPOSVERSIONINFO is access all OSVERSIONINFOA;
+   type POSVERSIONINFOEXA is access all OSVERSIONINFOEXA;
+   type LPOSVERSIONINFOEXA is access all OSVERSIONINFOEXA;
+   type POSVERSIONINFOEXW is access all OSVERSIONINFOEXW;
+   type LPOSVERSIONINFOEXW is access all OSVERSIONINFOEXW;
+   type POSVERSIONINFOEX is access all OSVERSIONINFOEXA;
+   type LPOSVERSIONINFOEX is access all OSVERSIONINFOEXA;
 
    type ac_CONTEXT_t is access all Win32.Winnt.CONTEXT;
    type ac_SYSTEMTIME_t is access all SYSTEMTIME;
@@ -1137,7 +1162,35 @@ package Win32.Winbase is
       szCSDVersion        : Win32.WCHAR_Array (0 .. 127);
    end record;
 
-   subtype OSVERSIONINFO is OSVERSIONINFOA;
+   type OSVERSIONINFOEXA is record
+      dwOSVersionInfoSize : Win32.DWORD;
+      dwMajorVersion      : Win32.DWORD;
+      dwMinorVersion      : Win32.DWORD;
+      dwBuildNumber       : Win32.DWORD;
+      dwPlatformId        : Win32.DWORD;
+      szCSDVersion        : Win32.CHAR_Array (0 .. 127);
+      wServicePackMajor   : Win32.WORD;
+      wServicePackMinor   : Win32.WORD;
+      wSuiteMask          : Win32.WORD;
+      wProductType        : Win32.BYTE;
+      wReserved           : Win32.BYTE;
+   end record;
+
+   type OSVERSIONINFOEXW is record
+      dwOSVersionInfoSize : Win32.DWORD;
+      dwMajorVersion      : Win32.DWORD;
+      dwMinorVersion      : Win32.DWORD;
+      dwBuildNumber       : Win32.DWORD;
+      dwPlatformId        : Win32.DWORD;
+      szCSDVersion        : Win32.WCHAR_Array (0 .. 127);
+      wServicePackMajor   : Win32.WORD;
+      wServicePackMinor   : Win32.WORD;
+      wSuiteMask          : Win32.WORD;
+      wProductType        : Win32.BYTE;
+      wReserved           : Win32.BYTE;
+   end record;
+
+   subtype OSVERSIONINFOEX is OSVERSIONINFOEXA;
 
    function InterlockedIncrement
      (lpAddend : access Win32.LONG)
@@ -4961,6 +5014,18 @@ package Win32.Winbase is
 
    function GetVersionExW
      (lpVersionInformation : LPOSVERSIONINFOW)
+      return Win32.BOOL;
+
+   function GetVersionExA
+     (lpVersionInformation : LPOSVERSIONINFOEXA)
+      return Win32.BOOL;
+
+   function GetVersionEx
+     (lpVersionInformation : LPOSVERSIONINFOEXA)
+      return Win32.BOOL renames GetVersionExA;
+
+   function GetVersionExW
+     (lpVersionInformation : LPOSVERSIONINFOEXW)
       return Win32.BOOL;
 
 private
