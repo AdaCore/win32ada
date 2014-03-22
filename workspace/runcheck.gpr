@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                               Win32Ada                                   --
 --                                                                          --
---                      Copyright (C) 2010, AdaCore                         --
+--                   Copyright (C) 2010-2014, AdaCore                       --
 --                                                                          --
 --  This library is free software; you can redistribute it and/or modify    --
 --  it under the terms of the GNU General Public License as published by    --
@@ -25,25 +25,18 @@
 --  covered by the  GNU Public License.                                     --
 ------------------------------------------------------------------------------
 
-with "../win32ada";
-with "../shared";
+with "win32ada";
 
 project RunCheck is
 
+   for Languages use ("Ada");
    for Source_Dirs use (".");
    for Main use ("runcheck.adb");
 
-   package Compiler is
-      for Default_Switches ("Ada") use ("-gnat05");
-   end Compiler;
-
    package Linker is
-      case Shared.Win_Target is
-         when "Win32" =>
-            for Default_Switches ("Ada") use ("-lwin32ada", "-lrpcrt4");
-         when "Win64" =>
-            for Default_Switches ("Ada") use ("-lwin32ada", "-lrpcrt4");
-      end case;
-   end Linker;
+      for Default_Switches ("Ada") use
+        ("-lwin32ada", "-lgdi32", "-lnetapi32", "-loleaut32", "-lglu32",
+         "-lmsvfw32", "-lavifil32", "-lrpcrt4", "-lmsvcrt", "-lrpcrt4");
+  end Linker;
 
 end RunCheck;

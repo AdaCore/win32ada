@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --                               Win32Ada                                   --
 --                                                                          --
---                      Copyright (C) 2010, AdaCore                         --
+--                    Copyright (C) 2010-2014, AdaCore                      --
 --                                                                          --
 --  This library is free software; you can redistribute it and/or modify    --
 --  it under the terms of the GNU General Public License as published by    --
@@ -104,6 +104,7 @@ procedure Driver is
       Text_IO.Put_Line (A_File, "with Win32.Wingdi;");
       Text_IO.Put_Line (A_File, "with Win32.Ddeml;");
       Text_IO.Put_Line (A_File, "with Win32.Dde;");
+      Text_IO.Put_Line (A_File, "with Win32.Accctrl;");
       Text_IO.Put_Line (A_File, "procedure RunCheck is");
       Text_IO.Put_Line (A_File, "   use Ada;");
       Text_IO.Put_Line (A_File, "   use Ada.Strings.Unbounded;");
@@ -116,6 +117,7 @@ procedure Driver is
       Text_IO.Put_Line (A_File, "   use Win32.Wingdi;");
       Text_IO.Put_Line (A_File, "   use Win32.Ddeml;");
       Text_IO.Put_Line (A_File, "   use Win32.Dde;");
+      Text_IO.Put_Line (A_File, "   use Win32.Accctrl;");
       Text_IO.Put_Line (A_File, "   Errors : Natural := 0;");
       Text_IO.Put_Line (A_File, "   Checks : Natural := 0;");
       Text_IO.Put_Line (A_File, "   Xfail  : Unbounded_String;");
@@ -124,6 +126,7 @@ procedure Driver is
       --  C
 
       Text_IO.Put_Line (C_File, "#include <windows.h>");
+      Text_IO.Put_Line (C_File, "#include <aclapi.h>");
    end Gen_Init;
 
    ---------------
