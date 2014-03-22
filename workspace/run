@@ -10,12 +10,15 @@
 # On native: ./run
 # On cross:  ./run i686-pc-mingw32
 
+PREFIX=$(dirname $(which gcc))
 HOST=$(gcc -dumpmachine)
 
 if [ -z $1 ]; then
 TARGET=$(gcc -dumpmachine)
 else
 TARGET=$1
+export C_INCLUDE_PATH=$PREFIX/../$TARGET/include
+export LIBRARY_PATH=$PREFIX/../$TARGET/lib
 fi
 
 if [ "$TARGET" = "i686-pc-mingw32" ]; then
@@ -38,6 +41,6 @@ gnatmake -j6 -XPRJ_TARGET=$PTARGET -gnateDTARGET=$PTARGET \
 ./runcheck
 else
 $TARGET-gcc -c csupport.c
-$TARGET-gnatmake -j0 -XTARGET=$TARGET -XPRJ_TARGET=$PTARGET \
+$TARGET-gnatmake -p -j0 -XTARGET=$TARGET -XPRJ_TARGET=$PTARGET \
     -gnateDTARGET=$PTARGET -P runcheck.gpr -largs csupport.o
 fi
