@@ -14,6 +14,7 @@ mkdir %I_LIB% 2> nul
 mkdir %I_LIB%\relocatable 2> nul
 mkdir %I_LIB%\static 2> nul
 mkdir %I_GPR% 2> nul
+mkdir %I_BIN% 2> nul
 if exist %I_EXP% rmdir /S /Q %I_EXP%
 move win32ada %I_EXP% > nul
 if not .%2==.nobuild goto build
