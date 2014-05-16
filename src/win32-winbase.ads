@@ -1429,6 +1429,21 @@ package Win32.Winbase is
       lpEntry : LPPROCESS_HEAP_ENTRY)
       return Win32.BOOL;
 
+   function HeapSetInformation
+      (HeapHandle            : Win32.Winnt.HANDLE;
+       HeapInformationClass  : Win32.Winnt.HEAP_INFORMATION_CLASS;
+       HeapInformation       : Win32.PVOID;
+       HeapInformationLength : Win32.Size_T)
+       return Win32.BOOL;
+
+   function HeapQueryInformation
+      (HeapHandle            : Win32.Winnt.HANDLE;
+       HeapInformationClass  : Win32.Winnt.HEAP_INFORMATION_CLASS;
+       HeapInformation       : Win32.PVOID;
+       HeapInformationLength : Win32.Size_T;
+       ReturnLength          : Win32.Psize_T)
+       return Win32.BOOL;
+
    function GetBinaryTypeA
      (lpApplicationName : Win32.LPCSTR;
       lpBinaryType      : Win32.LPDWORD)
@@ -5139,6 +5154,8 @@ private
    pragma Import (Stdcall, HeapLock, "HeapLock");
    pragma Import (Stdcall, HeapUnlock, "HeapUnlock");
    pragma Import (Stdcall, HeapWalk, "HeapWalk");
+   pragma Import (Stdcall, HeapSetInformation, "HeapSetInformation");
+   pragma Import (Stdcall, HeapQueryInformation, "HeapQueryInformation");
    pragma Import (Stdcall, GetBinaryTypeA, "GetBinaryTypeA");
    pragma Import (Stdcall, GetBinaryTypeW, "GetBinaryTypeW");
    pragma Import (Stdcall, GetShortPathNameA, "GetShortPathNameA");

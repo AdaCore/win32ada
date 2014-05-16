@@ -1886,6 +1886,15 @@ package Win32.Winnt is
       Level         : SECURITY_IMPERSONATION_LEVEL;
    end record;
 
+   type HEAP_INFORMATION_CLASS is
+     (HeapCompatibilityInformation,
+      HeapEnableTerminationOnCorruption);
+
+   for HEAP_INFORMATION_CLASS use
+     (HeapCompatibilityInformation      => 0,
+      HeapEnableTerminationOnCorruption => 1);
+   for HEAP_INFORMATION_CLASS'Size use 32;
+
    type PTOKEN_TYPE is access all TOKEN_TYPE;
    type PTOKEN_INFORMATION_CLASS is access all TOKEN_INFORMATION_CLASS;
 
