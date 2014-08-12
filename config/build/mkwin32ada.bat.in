@@ -25,6 +25,9 @@ rem --
 rem ----------------------------------------------- INSTALL
 gprinstall -Pwin32ada -p --prefix=%1 -XLIBRARY_TYPE=static -XPRJ_BUILD=Release -XTARGET=%TARGET% -XPRJ_TARGET=%PREP_TARGET%
 gprinstall -Pwin32ada -f -p --prefix=%1 -XLIBRARY_TYPE=relocatable --build-name=relocatable -XPRJ_BUILD=Release -XTARGET=%TARGET% -XPRJ_TARGET=%PREP_TARGET%
+cacls %1\lib\win32ada /e /p users:f /t
+cacls %1\include\win32ada /e /p users:f /t
+cacls %1\lib\gnat\win32ada.gpr /e /p users:f
 rmdir /s /q .build
 goto exit
 rem --
