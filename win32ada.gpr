@@ -49,7 +49,7 @@ library project Win32Ada is
    package Ide renames Shared.Ide;
 
    package Install is
-      for Artifacts ("share/examples") use ("examples/*");
+      for Artifacts ("share/examples/win32ada") use ("examples/*");
    end Install;
 
 end Win32Ada;
