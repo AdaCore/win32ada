@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2011, AdaCore
+--  Copyright (C) 2000-2015, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -49,17 +49,7 @@ package body Stdarg.Impl is
    end ArgCount;
 
    function "&" (Left, Right : ArgList) return ArgList is
-      Incr                    : Integer;
       Left_Index, Right_Index : Positive;
-
-      procedure Do_Incr (Index : in out Natural);
-      pragma Inline (Do_Incr);
-
-      procedure Do_Incr (Index : in out Natural) is
-      begin
-         Index := Index + Incr;
-      end Do_Incr;
-
    begin
       if Left.Contents = null or else Left.Contents.CurrentArgs = 0 then
          return Right;
@@ -71,13 +61,12 @@ package body Stdarg.Impl is
 
       Left_Index  := Left.Contents.CurrentArgs + 1;
       Right_Index := 1;
-      Incr        := 1;
 
       for I in 1 .. Right.Contents.CurrentArgs loop
          Left.Contents.Vector (Left_Index) :=
            Right.Contents.Vector (Right_Index);
-         Do_Incr (Left_Index);
-         Do_Incr (Right_Index);
+         Left_Index := Left_Index + 1;
+         Right_Index := Right_Index + 1;
       end loop;
 
       Left.Contents.CurrentArgs := Left.Contents.CurrentArgs +
