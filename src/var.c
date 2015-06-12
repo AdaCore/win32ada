@@ -205,27 +205,27 @@ to_param_t(void *ip, int siz, int is_unsigned)
     switch(siz/8) {
         case sizeof(char):
             if(is_unsigned)
-                return (param_t) *(unsigned char *)ip;
+                return (param_t) (uintptr_t) *(unsigned char *)ip;
             else
-                return (param_t) *(signed char *)ip;
+                return (param_t) (uintptr_t) *(signed char *)ip;
 
         case sizeof(short):
             if(is_unsigned)
-                return (param_t) *(unsigned short *)ip;
+                return (param_t) (uintptr_t) *(unsigned short *)ip;
             else
-                return (param_t) *(signed short *)ip;
+                return (param_t) (uintptr_t) *(signed short *)ip;
 
         case sizeof(int):
             if(is_unsigned)
-                return (param_t) *(unsigned int *)ip;
+                return (param_t) (uintptr_t) *(unsigned int *)ip;
             else
-                return (param_t) *(signed int *)ip;
+                return (param_t) (uintptr_t) *(signed int *)ip;
 
         case sizeof(long long):
             if(is_unsigned)
-                return (param_t) *(unsigned long long *)ip;
+                return (param_t) (uintptr_t) *(unsigned long long *)ip;
             else
-                return (param_t) *(signed long long *)ip;
+                return (param_t) (uintptr_t) *(signed long long *)ip;
         default:
           _assert(0);
     }

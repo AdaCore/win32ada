@@ -170,6 +170,7 @@ package Win32 is
    subtype LPARAM is LONG_PTR;
    subtype LRESULT is LONG_PTR;
    type PLONG is access all LONG;
+   pragma No_Strict_Aliasing (PLONG);
    subtype LPLONG is PLONG;
    type PCLONG is access constant LONG;
    type LONG_Array is array (Natural range <>) of aliased LONG;
