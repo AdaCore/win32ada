@@ -1,0 +1,6 @@
+[gerrit]
+host = git.adacore.com
+port = 22
+project = win32ada
+defaultbranch = master
+defaultremote = origin
