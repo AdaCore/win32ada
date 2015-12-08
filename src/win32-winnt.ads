@@ -1329,7 +1329,7 @@ package Win32.Winnt is
 
    type PLARGE_INTEGER is access all LARGE_INTEGER;
    type PULARGE_INTEGER is access all ULARGE_INTEGER;
-   subtype PLUID is PULARGE_INTEGER;
+   subtype PLUID is PLARGE_INTEGER;
    type PLIST_ENTRY is access all LIST_ENTRY;
    type PSINGLE_LIST_ENTRY is access all SINGLE_LIST_ENTRY;
    type PCONTEXT is access all CONTEXT;
