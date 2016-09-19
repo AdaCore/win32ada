@@ -40,9 +40,14 @@ library project Win32Ada is
    for Library_Name use "win32ada";
    for Library_Kind use Shared.Library_Type;
 
-   for Library_Options use
-     ("-lgdi32", "-lnetapi32", "-lrpcrt4", "-loleaut32", "-lglu32",
-      "-lmsvfw32", "-lavifil32", "-lrpcrt4", "-lmsvcrt");
+   case Shared.Library_Type is
+      when "relocatable" =>
+         for Library_Options use
+           ("-lgdi32", "-lnetapi32", "-lrpcrt4", "-loleaut32", "-lglu32",
+            "-lmsvfw32", "-lavifil32", "-lrpcrt4", "-lmsvcrt");
+      when others =>
+         null;
+   end case;
 
    package Builder renames Shared.Builder;
    package Compiler renames Shared.Compiler;
