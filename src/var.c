@@ -48,6 +48,7 @@
  */
 
 #include <stdio.h>
+#include <assert.h>
 
 #define list0(p)
 #define list1(p) p[0]
@@ -195,7 +196,7 @@ to_double(void *fp, int siz)
         case sizeof(double):
             return (double) *(double *)fp;
         default:
-          _assert(0);
+          assert(0);
     }
 }
 
@@ -227,6 +228,6 @@ to_param_t(void *ip, int siz, int is_unsigned)
             else
                 return (param_t) (uintptr_t) *(signed long long *)ip;
         default:
-          _assert(0);
+          assert(0);
     }
 }
