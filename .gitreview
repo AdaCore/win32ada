@@ -2,5 +2,5 @@
 host = git.adacore.com
 port = 22
 project = win32ada
-defaultbranch = 18.0
+defaultbranch = 18.1
 defaultremote = origin
