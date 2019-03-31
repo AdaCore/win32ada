@@ -3470,6 +3470,27 @@ package Win32.Winbase is
       lpTotalNumberOfClusters : Win32.LPDWORD)
       return Win32.BOOL;
 
+   function GetDiskFreeSpaceExA
+     (lpDirectoryName              : Win32.LPCSTR;
+      lpFreeBytesAvailableToCaller : Win32.LPDWORD;
+      lpTotalNumberOfBytes         : Win32.LPDWORD;
+      lpTotalNumberOfFreeBytes     : Win32.LPDWORD)
+      return Win32.BOOL;
+
+   function GetDiskFreeSpaceEx
+     (lpDirectoryName              : Win32.LPCSTR;
+      lpFreeBytesAvailableToCaller : Win32.LPDWORD;
+      lpTotalNumberOfBytes         : Win32.LPDWORD;
+      lpTotalNumberOfFreeBytes     : Win32.LPDWORD)
+      return Win32.BOOL renames GetDiskFreeSpaceExA;
+
+   function GetDiskFreeSpaceExW
+     (lpDirectoryName              : Win32.LPCWSTR;
+      lpFreeBytesAvailableToCaller : Win32.LPDWORD;
+      lpTotalNumberOfBytes         : Win32.LPDWORD;
+      lpTotalNumberOfFreeBytes     : Win32.LPDWORD)
+      return Win32.BOOL;
+
    function CreateDirectoryA
      (lpPathName           : Win32.LPCSTR;
       lpSecurityAttributes : LPSECURITY_ATTRIBUTES)
@@ -5576,6 +5597,8 @@ private
    pragma Import (Stdcall, GetCurrentDirectoryW, "GetCurrentDirectoryW");
    pragma Import (Stdcall, GetDiskFreeSpaceA, "GetDiskFreeSpaceA");
    pragma Import (Stdcall, GetDiskFreeSpaceW, "GetDiskFreeSpaceW");
+   pragma Import (Stdcall, GetDiskFreeSpaceExA, "GetDiskFreeSpaceExA");
+   pragma Import (Stdcall, GetDiskFreeSpaceExW, "GetDiskFreeSpaceExW");
    pragma Import (Stdcall, CreateDirectoryA, "CreateDirectoryA");
    pragma Import (Stdcall, CreateDirectoryW, "CreateDirectoryW");
    pragma Import (Stdcall, CreateDirectoryExA, "CreateDirectoryExA");
