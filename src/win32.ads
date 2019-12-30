@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2014, AdaCore
+--  Copyright (C) 2000-2019, AdaCore
 --
 -------------------------------------------------------------------------------
 --
@@ -210,7 +210,7 @@ package Win32 is
    type PDWORDLONG is access all DWORDLONG;
    type PCDWORDLONG is access constant DWORDLONG;
 
-   type ULONGLONG is mod 2 ** 63;
+   type ULONGLONG is mod 2 ** 64;
    subtype DWORD64 is ULONGLONG;
    type ULONGLONG_Array is array (Natural range <>) of aliased ULONGLONG;
    subtype DWORD64_Array is ULONGLONG_Array;
