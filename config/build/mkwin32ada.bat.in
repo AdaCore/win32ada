@@ -16,7 +16,7 @@ echo Building Win32Ada for GNAT installation in %1
 path %1\bin;%path%
 for /f "tokens=1* delims=" %%a in ('gcc -dumpmachine') do set TARGET=%%a
 set BUILD=.build\%TARGET%\release
-if %TARGET%==x86_64-pc-mingw32 ( set PREP_TARGET="Win64" ) else ( set PREP_TARGET="Win32" )
+if %TARGET:w64=pc%==x86_64-pc-mingw32 ( set PREP_TARGET="Win64" ) else ( set PREP_TARGET="Win32" )
 gprbuild -q -j0 -p -d -Pwin32ada -XLIBRARY_TYPE=static -XPRJ_BUILD=Release -XTARGET=%TARGET% -XPRJ_TARGET=%PREP_TARGET%
 if errorlevel 1 goto error
 gprbuild -q -j0 -p -d -Pwin32ada -XLIBRARY_TYPE=relocatable -XPRJ_BUILD=Release -XTARGET=%TARGET% -XPRJ_TARGET=%PREP_TARGET%
