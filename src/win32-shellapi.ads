@@ -128,9 +128,9 @@ package Win32.Shellapi is
       return Win32.Windef.HINSTANCE;
 
    function CommandLineToArgvW
-     (lpCmdLine : Win32.Winnt.PTCHAR;
+     (lpCmdLine : Win32.LPCWSTR;
       pNumArgs  : access Win32.INT)
-      return PPTCHAR;
+      return access LPWSTR;
 
    function ShellAboutA
      (hWnd         : Win32.Windef.HWND;
