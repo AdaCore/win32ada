@@ -33,19 +33,16 @@ package body Win32.Winerror is
      new Ada.Unchecked_Conversion (Interfaces.C.unsigned_long, HRESULT);
 
    function SUCCEEDED (Status : HRESULT) return Standard.Boolean is
-      use Win32.Utils;
    begin
       return (Status >= 0);
    end SUCCEEDED;
 
    function FAILED (Status : HRESULT) return Standard.Boolean is
-      use Win32.Utils;
    begin
       return not SUCCEEDED (Status);
    end FAILED;
 
    function HRESULT_CODE (H : HRESULT) return WORD is
-      use Win32.Utils;
    begin
       return Win32.Utils.LOWORD (Win32.Utils.DWORD (H));
    end HRESULT_CODE;
@@ -66,7 +63,6 @@ package body Win32.Winerror is
    end HRESULT_SEVERITY;
 
    function MAKE_HRESULT (sev, fac, code : WORD) return HRESULT is
-      use Win32.Utils;
       use Interfaces;
    begin
       return To_HRESULT (Shift_Left (Unsigned_32 (sev), 31) or

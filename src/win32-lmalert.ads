@@ -22,8 +22,6 @@ with Win32.Winnt;
 
 package Win32.Lmalert is
 
-   use type Interfaces.C.char_array;
-
    ALERTER_MAILSLOT     : constant Win32.Winnt.TEXT :=
       "\\.\MAILSLOT\Alerter" & Nul;
    ALERT_PRINT_EVENT    : constant Win32.Winnt.TEXT := "PRINTING" & Nul;

@@ -23,7 +23,6 @@ with Win32.Winnt;
 package Win32.Commctrl is
 
    use Interfaces;
-   use type Interfaces.C.char_array;
 
    TOOLBARCLASSNAMEW  : constant WCHAR_Array :=
       To_Win (C.To_C ("ToolbarWindow32")) & Wide_Nul;

@@ -22,8 +22,6 @@ with Win32.Windef;
 
 package Win32.Sqlext is
 
-   use type Interfaces.C.char_array;
-
    SQL_MAX_OPTION_STRING_LENGTH    : constant := 256;
    SQL_STILL_EXECUTING             : constant := 2;
    SQL_NEED_DATA                   : constant := 99;

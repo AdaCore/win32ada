@@ -22,8 +22,6 @@ with Win32;
 
 package Win32.crt.Stdio is
 
-   use type Interfaces.C.char_array;
-
    BUFSIZ  : constant := 512;
    NSTREAM : constant := 40;
    NFILE   : constant := NSTREAM;

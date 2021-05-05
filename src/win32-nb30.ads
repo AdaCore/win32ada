@@ -21,8 +21,6 @@ with Win32.Winnt;
 
 package Win32.Nb30 is
 
-   use type Interfaces.C.char_array;
-
    NCBNAMSZ            : constant := 16;
    MAX_LANA            : constant := 254;
    NAME_FLAGS_MASK     : constant := 16#87#;

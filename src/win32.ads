@@ -52,6 +52,7 @@ package Win32 is
    type UINT_PTR is new ULONG_PTR;
    type DWORD_PTR is new ULONG_PTR;
    type PDWORD_PTR is access DWORD_PTR;
+   type PULONG_PTR is access ULONG_PTR;
 
    type LONG_PTR is
      range -(2 ** (Standard'Address_Size - 1))
@@ -167,6 +168,7 @@ package Win32 is
    --  "long" 32 bit signed integers
 
    subtype LONG is Interfaces.C.long;
+   subtype NTSTATUS is LONG;
    subtype LPARAM is LONG_PTR;
    subtype LRESULT is LONG_PTR;
    type PLONG is access all LONG;

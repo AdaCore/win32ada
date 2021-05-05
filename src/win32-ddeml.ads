@@ -22,8 +22,6 @@ with Win32.Winnt;
 
 package Win32.Ddeml is
 
-   use type Interfaces.C.char_array;
-
    XST_NULL                   : constant := 0;
    XST_INCOMPLETE             : constant := 1;
    XST_CONNECTED              : constant := 2;

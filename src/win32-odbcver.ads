@@ -19,8 +19,6 @@
 
 package Win32.Odbcver is
 
-   use type Interfaces.C.char_array;
-
    VER_FILEVERSION_STR    : constant CHAR_Array := " 2.00.15100" & Nul;
    VER_PRODUCTVERSION_STR : constant CHAR_Array := " 2.00.15100" & Nul;
    VER_FILEFLAGSMASK      : constant := 16#3#;

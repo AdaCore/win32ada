@@ -22,8 +22,6 @@ with Win32.Winnt;
 
 package Win32.Lmcons is
 
-   use type Interfaces.C.char_array;
-
    CNLEN                  : constant := 15;
    LM20_CNLEN             : constant := 15;
    DNLEN                  : constant := 15;

@@ -25,8 +25,6 @@ with Win32.Utils;
 
 package body Win32.Vfw is
 
-   use type Interfaces.C.unsigned_char;
-
    function To_BYTE is new Ada.Unchecked_Conversion (Win32.CHAR, Win32.BYTE);
 
    function MKFOURCC
