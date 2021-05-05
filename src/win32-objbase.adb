@@ -22,7 +22,6 @@ with Ada.Unchecked_Conversion;
 package body Win32.Objbase is
 
    use type Interfaces.C.unsigned_long;
-   use type Interfaces.C.int;
 
    procedure LISet32
      (li : in out Win32.Winnt.anonymous1_t;

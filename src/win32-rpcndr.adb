@@ -81,15 +81,9 @@ package body Win32.Rpcndr is
    function To_PVOID is new Ada.Unchecked_Conversion (LONG_PTR, Win32.PVOID);
 
    package P_Void is new P_Arith (Win32.PVOID);
-   use P_Void;
    package P_Byte is new P_Arith (Win32.PBYTE);
-   use P_Byte;
    package P_Bool is new P_Arith (Win32.PBOOL);
-   use P_Bool;
    package P_Small is new P_Arith (psmall);
-   use P_Small;
-   package P_RPCB is new P_Arith (RPC_BUFPTR);
-   use P_RPCB;
 
    procedure byte_from_ndr
      (source : Win32.Rpcdcep.PRPC_MESSAGE;

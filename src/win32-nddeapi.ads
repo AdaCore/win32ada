@@ -22,7 +22,6 @@ with Win32.Winnt;
 package Win32.Nddeapi is
 
    use Interfaces;
-   use type Interfaces.C.char_array;
 
    SEP_CHAR                     : constant := 44;
    BAR_CHAR                     : constant CHAR_Array  := "|" & Nul;

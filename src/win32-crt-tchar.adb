@@ -22,9 +22,7 @@ with Win32.Utils;
 
 package body Win32.crt.Tchar is
 
-   use type Interfaces.C.unsigned_char;
    use type Interfaces.C.size_t;
-   use type Interfaces.C.char_array;
 
    function To_LONG_PTR is new Ada.Unchecked_Conversion (Win32.PCCH, LONG_PTR);
    function To_PCHAR is new Ada.Unchecked_Conversion (LONG_PTR, Win32.PCHAR);

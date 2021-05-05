@@ -21,8 +21,6 @@ with Interfaces.C;
 
 package Win32.Sql is
 
-   use type Interfaces.C.char_array;
-
    ODBCVER                    : constant := 16#201#;
    SQL_SPEC_MAJOR             : constant := 2;
    SQL_SPEC_MINOR             : constant := 1;

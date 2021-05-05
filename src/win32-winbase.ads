@@ -1644,7 +1644,7 @@ package Win32.Winbase is
    function GetQueuedCompletionStatus
      (CompletionPort             : Win32.Winnt.HANDLE;
       lpNumberOfBytesTransferred : Win32.LPDWORD;
-      lpCompletionKey            : Win32.LPDWORD;
+      lpCompletionKey            : Win32.PULONG_PTR;
       lpOverlapped               : access Win32.Winbase.LPOVERLAPPED;
       dwMilliseconds             : Win32.DWORD)
       return Win32.BOOL;
@@ -1805,6 +1805,11 @@ package Win32.Winbase is
      (hFile          : Win32.Winnt.HANDLE;
       lpFileSizeHigh : Win32.LPDWORD)
       return Win32.DWORD;
+
+   function GetFileSizeEx
+      (hFile      : Win32.Winnt.HANDLE;
+       lpFileSize : Win32.Winnt.PLARGE_INTEGER)
+       return Win32.BOOL;
 
    function GetStdHandle
      (nStdHandle : Win32.DWORD)
@@ -3472,23 +3477,23 @@ package Win32.Winbase is
 
    function GetDiskFreeSpaceExA
      (lpDirectoryName              : Win32.LPCSTR;
-      lpFreeBytesAvailableToCaller : Win32.LPDWORD;
-      lpTotalNumberOfBytes         : Win32.LPDWORD;
-      lpTotalNumberOfFreeBytes     : Win32.LPDWORD)
+      lpFreeBytesAvailableToCaller : Win32.Winnt.PULARGE_INTEGER;
+      lpTotalNumberOfBytes         : Win32.Winnt.PULARGE_INTEGER;
+      lpTotalNumberOfFreeBytes     : Win32.Winnt.PULARGE_INTEGER)
       return Win32.BOOL;
 
    function GetDiskFreeSpaceEx
      (lpDirectoryName              : Win32.LPCSTR;
-      lpFreeBytesAvailableToCaller : Win32.LPDWORD;
-      lpTotalNumberOfBytes         : Win32.LPDWORD;
-      lpTotalNumberOfFreeBytes     : Win32.LPDWORD)
+      lpFreeBytesAvailableToCaller : Win32.Winnt.PULARGE_INTEGER;
+      lpTotalNumberOfBytes         : Win32.Winnt.PULARGE_INTEGER;
+      lpTotalNumberOfFreeBytes     : Win32.Winnt.PULARGE_INTEGER)
       return Win32.BOOL renames GetDiskFreeSpaceExA;
 
    function GetDiskFreeSpaceExW
      (lpDirectoryName              : Win32.LPCWSTR;
-      lpFreeBytesAvailableToCaller : Win32.LPDWORD;
-      lpTotalNumberOfBytes         : Win32.LPDWORD;
-      lpTotalNumberOfFreeBytes     : Win32.LPDWORD)
+      lpFreeBytesAvailableToCaller : Win32.Winnt.PULARGE_INTEGER;
+      lpTotalNumberOfBytes         : Win32.Winnt.PULARGE_INTEGER;
+      lpTotalNumberOfFreeBytes     : Win32.Winnt.PULARGE_INTEGER)
       return Win32.BOOL;
 
    function CreateDirectoryA
@@ -5286,6 +5291,7 @@ private
 
    pragma Import (Stdcall, GetFileType, "GetFileType");
    pragma Import (Stdcall, GetFileSize, "GetFileSize");
+   pragma Import (Stdcall, GetFileSizeEx, "GetFileSizeEx");
    pragma Import (Stdcall, GetStdHandle, "GetStdHandle");
    pragma Import (Stdcall, SetStdHandle, "SetStdHandle");
    pragma Import (Stdcall, WriteFile, "WriteFile");

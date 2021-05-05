@@ -21,8 +21,6 @@ with Win32.Winnt;
 
 package Win32.Lmsname is
 
-   use type Interfaces.C.char_array;
-
    subtype TEXT is Win32.Winnt.TEXT;
 
    SERVICE_WORKSTATION      : constant TEXT := "LanmanWorkstation" & Nul;

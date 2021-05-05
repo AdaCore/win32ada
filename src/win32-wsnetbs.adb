@@ -19,8 +19,6 @@
 
 package body Win32.Wsnetbs is
 
-   use type Interfaces.C.size_t;
-
    procedure SET_NETBIOS_SOCKADDR
      (snb      : PSOCKADDR_NB;
       the_type : Win32.Winsock.u_short;

@@ -23,8 +23,6 @@ with Win32.Winnt;
 
 package Win32.Ras is
 
-   use type Interfaces.C.char_array;
-
    RAS_MaxEntryName                 : constant := 20;
    RAS_MaxDeviceName                : constant := 32;
    RAS_MaxDeviceType                : constant := 16;

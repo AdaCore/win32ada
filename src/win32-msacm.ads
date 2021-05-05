@@ -25,7 +25,6 @@ with Win32.Winnt;
 package Win32.Msacm is
 
    use Interfaces;
-   use type Interfaces.C.char_array;
 
    DRV_MAPPER_PREFERRED_INPUT_GET    : constant := 16#4000#;
    DRV_MAPPER_PREFERRED_OUTPUT_GET   : constant := 16#4002#;

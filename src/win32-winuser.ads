@@ -4957,7 +4957,6 @@ private
    RT_RCDATA       : constant LPSTR := L (10);
    RT_MESSAGETABLE : constant LPSTR := L (11);
    DIFFERENCE      : constant := 11;
-   use type Win32.WORD;
    RT_GROUP_CURSOR : constant LPSTR := L (RT_CURSOR_NB + DIFFERENCE);
    RT_GROUP_ICON   : constant LPSTR := L (RT_ICON_NB + DIFFERENCE);
    RT_VERSION      : constant LPSTR := L (20);
@@ -4990,7 +4989,6 @@ private
    HWND_DESKTOP    : constant Win32.Windef.HWND := To_Hwnd (8#0#);
    HWND_TOP        : constant Win32.Windef.HWND := To_Hwnd (8#0#);
    HWND_BOTTOM     : constant Win32.Windef.HWND := To_Hwnd (1);
-   use type Win32.LONG;
    HWND_TOPMOST    : constant Win32.Windef.HWND := To_Hwnd (-1);
    HWND_NOTOPMOST  : constant Win32.Windef.HWND := To_Hwnd (-2);
 

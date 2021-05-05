@@ -23,7 +23,6 @@ with Win32.Winnt;
 package Win32.Lmaccess is
 
    use Interfaces;
-   use type Interfaces.C.char_array;
 
    UF_SCRIPT                                 : constant := 16#1#;
    UF_ACCOUNTDISABLE                         : constant := 16#2#;

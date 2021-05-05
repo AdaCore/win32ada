@@ -26,7 +26,6 @@ with Win32.Winsock;
 package Win32.Nspapi is
 
    use Interfaces;
-   use type Interfaces.C.char_array;
 
    SERVICE_RESOURCE            : constant := 16#1#;
    SERVICE_SERVICE             : constant := 16#2#;

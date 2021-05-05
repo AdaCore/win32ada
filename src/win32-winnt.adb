@@ -105,7 +105,6 @@ package body Win32.Winnt is
    end ISARY;
 
    function ISTAG (X : BYTE) return Standard.Boolean is
-      use Interfaces;
    begin
       return X = IMAGE_SYM_CLASS_STRUCT_TAG or
              X = IMAGE_SYM_CLASS_UNION_TAG or

@@ -22,7 +22,6 @@ with Win32.Winnt;
 package Win32.Winsvc is
 
    use Interfaces;
-   use type Interfaces.C.char_array;
 
    SERVICES_ACTIVE_DATABASEA     : constant CHAR_Array     :=
       "ServicesActive" & Nul;
