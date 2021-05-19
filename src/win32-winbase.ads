@@ -1807,8 +1807,8 @@ package Win32.Winbase is
       return Win32.DWORD;
 
    function GetFileSizeEx
-      (hFile          : Win32.Winnt.HANDLE;
-       lpFileSize     : Win32.Winnt.PLARGE_INTEGER)
+      (hFile      : Win32.Winnt.HANDLE;
+       lpFileSize : Win32.Winnt.PLARGE_INTEGER)
        return Win32.BOOL;
 
    function GetStdHandle

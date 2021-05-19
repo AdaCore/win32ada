@@ -15,7 +15,6 @@ package Win32.Iphlpapi is
          OptionsSize : UCHAR;
          OptionsData : PUCHAR;
       end record;
-   pragma Convention (C, IP_OPTION_INFORMATION);
 
    type PIP_OPTION_INFORMATION is access all IP_OPTION_INFORMATION;
 
@@ -29,15 +28,11 @@ package Win32.Iphlpapi is
          Data          : PVOID;
          Options       : IP_OPTION_INFORMATION;
       end record;
-   pragma Convention (C, ICMP_ECHO_REPLY);
 
    type PICMP_ECHO_REPLY is access all ICMP_ECHO_REPLY;
 
    function IcmpCreateFile
-      return HANDLE with
-      Import,
-      Convention => Stdcall,
-      Link_Name  => "IcmpCreateFile";
+      return HANDLE;
 
    function IcmpSendEcho
      (IcmpHandle         : HANDLE;
@@ -48,25 +43,25 @@ package Win32.Iphlpapi is
       ReplyBuffer        : LPVOID;
       ReplySize          : DWORD;
       Timeout            : DWORD)
-      return DWORD with
-      Import,
-      Convention => Stdcall,
-      Link_Name  => "IcmpSendEcho";
+      return DWORD;
 
    function IcmpCloseHandle
      (IcmpHandle : HANDLE)
-      return BOOL with
-      Import,
-      Convention => Stdcall,
-      Link_Name  => "IcmpCloseHandle";
+      return BOOL;
 
    function GetIpErrorString
      (ErrorCode : IP_STATUS;
       Buffer    : PWSTR;
       Size      : PDWORD)
-      return DWORD with
-      Import,
-      Convention => Stdcall,
-      Link_Name  => "GetIpErrorString";
+      return DWORD;
+
+private
+   pragma Convention (C, IP_OPTION_INFORMATION);
+   pragma Convention (C, ICMP_ECHO_REPLY);
+
+   pragma Import (Stdcall, IcmpCreateFile, "IcmpCreateFile");
+   pragma Import (Stdcall, IcmpSendEcho, "IcmpSendEcho");
+   pragma Import (Stdcall, IcmpCloseHandle, "IcmpCloseHandle");
+   pragma Import (Stdcall, GetIpErrorString, "GetIpErrorString");
 
 end Win32.Iphlpapi;
