@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2022, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -22,6 +22,8 @@ with Win32.Windef;
 with Win32.Winnt;
 
 package Win32.Mmsystem is
+
+   pragma Linker_Options ("-lwinmm");
 
    MAXPNAMELEN                             : constant := 32;
    MAXERRORLENGTH                          : constant := 128;
