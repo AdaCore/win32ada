@@ -28,3 +28,11 @@ project Proj is
    ...
 end Proj;
 ```
+
+License
+-------
+Royalty-free, unlimited, worldwide, non-exclusive use, modification,
+reproduction and further distribution of this file is permitted.
+
+`SPDX-License-Identifier: NOASSERTION`
+
