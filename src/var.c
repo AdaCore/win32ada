@@ -11,7 +11,7 @@
  * number of arguments (args...).  See gcc.info-7.  There are
  * some nasty special cases for 0 args that don't work right.
  *
- * Automatically generated with the followinf program.
+ * Automatically generated with the following program.
  * To change the max number of arguments, re-run this program
  * with MAX redefined, it's easier than editing the macros by hand.
  *
