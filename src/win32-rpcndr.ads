@@ -1481,7 +1481,17 @@ private
      (Stdcall,
       RpcSsDestroyClientContext,
       "RpcSsDestroyClientContext");
+
+#if TARGET = "Win32" then
    pragma Import (Stdcall, NDRcopy, "NDRcopy");
+#else
+   --  This is missing from Win64 platform
+   procedure NDRcopy
+     (pTarget : Win32.PVOID;
+      pSource : Win32.PVOID;
+      size    : Win32.UINT) is null;
+#end if;
+
    pragma Import (Stdcall, MIDL_wchar_strlen, "MIDL_wchar_strlen");
    pragma Import (Stdcall, MIDL_wchar_strcpy, "MIDL_wchar_strcpy");
    pragma Import (Stdcall, char_from_ndr, "char_from_ndr");

@@ -52,8 +52,8 @@ package Win32.crt.Stdlib is
    end record;
 
    type ldiv_t is record
-      quot  : Win32.INT;
-      c_rem : Win32.INT;
+      quot  : Win32.LONG;
+      c_rem : Win32.LONG;
    end record;
 
    type atexit_t is access procedure;
@@ -195,7 +195,7 @@ package Win32.crt.Stdlib is
       radix   : Win32.INT)
       return Win32.PSTR;
 
-   function ldiv (numer : Win32.INT; denom : Win32.INT) return ldiv_t;
+   function ldiv (numer : Win32.LONG; denom : Win32.LONG) return ldiv_t;
 
    function ltoa
      (value   : Win32.INT;

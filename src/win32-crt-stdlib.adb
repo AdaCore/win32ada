@@ -60,22 +60,20 @@ package body Win32.crt.Stdlib is
                     (Win32.crt.PerThread.Doserrno)).all;
    end doserrno;
 
-   function ldiv (numer : Win32.INT; denom : Win32.INT) return ldiv_t is
-      procedure ldiv_wrapper (numer, denom : Win32.INT; res : out ldiv_t);
-      pragma Import (C, ldiv_wrapper, "ldiv_wrapper");
+   function ldiv (numer : Win32.LONG; denom : Win32.LONG) return ldiv_t is
+      function w_ldiv (numer, denom : Win32.LONG) return access ldiv_t;
+      pragma Import (C, w_ldiv, "ldiv");
       Res : ldiv_t;
    begin
-      ldiv_wrapper (numer, denom, Res);
-      return Res;
+      return w_ldiv (numer, denom).all;
    end ldiv;
 
    function div (numer : Win32.INT; denom : Win32.INT) return div_t is
-      procedure div_wrapper (numer, denom : Win32.INT; res : out div_t);
-      pragma Import (C, div_wrapper, "div_wrapper");
+      function w_div (numer, denom : Win32.INT) return access div_t;
+      pragma Import (C, w_div, "div");
       Res : div_t;
    begin
-      div_wrapper (numer, denom, Res);
-      return Res;
+      return w_div (numer, denom).all;
    end div;
 
 end Win32.crt.Stdlib;
