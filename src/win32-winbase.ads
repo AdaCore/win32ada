@@ -5119,9 +5119,27 @@ private
    pragma Inline (LocalDiscard);
    pragma Inline (MAKEINTATOM);
 
-   pragma Import (Stdcall, InterlockedIncrement, "InterlockedIncrement");
-   pragma Import (Stdcall, InterlockedDecrement, "InterlockedDecrement");
-   pragma Import (Stdcall, InterlockedExchange, "InterlockedExchange");
+   function Intrinsic_Sync_Add_And_Fetch
+     (Ptr   : access Win32.LONG;
+      Value : Win32.LONG) return Win32.LONG;
+   pragma Import (Intrinsic, Intrinsic_Sync_Add_And_Fetch,
+                  External_Name => "__sync_add_and_fetch_4");
+   function Intrinsic_Sync_Sub_And_Fetch
+     (Ptr   : access Win32.LONG;
+      Value : Win32.LONG) return Win32.Long;
+   pragma Import (Intrinsic, Intrinsic_Sync_Sub_And_Fetch,
+                  External_Name => "__sync_sub_and_fetch_4");
+
+   function InterlockedIncrement
+     (lpAddend : access Win32.LONG) return Win32.LONG
+     is (Intrinsic_Sync_Add_And_Fetch (Lpaddend, 1));
+
+   function InterlockedDecrement
+     (lpAddend : access Win32.LONG) return Win32.LONG
+     is (Intrinsic_Sync_Sub_And_Fetch (Lpaddend, 1));
+
+   pragma Import (Intrinsic, InterlockedExchange, "__sync_lock_test_and_set_4");
+
    pragma Import (Stdcall, FreeResource, "FreeResource");
    pragma Import (Stdcall, LockResource, "LockResource");
    pragma Import (Stdcall, WinMain, "WinMain");
