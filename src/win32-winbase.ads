@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2025, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -1203,6 +1203,12 @@ package Win32.Winbase is
    function InterlockedExchange
      (Target : access Win32.LONG;
       Value  : Win32.LONG)
+      return Win32.LONG;
+
+   function InterlockedCompareExchange
+     (Target    : access Win32.LONG;
+      ExChange  : Win32.LONG;
+      Comperand : Win32.LONG)
       return Win32.LONG;
 
    function FreeResource
@@ -5124,11 +5130,19 @@ private
       Value : Win32.LONG) return Win32.LONG;
    pragma Import (Intrinsic, Intrinsic_Sync_Add_And_Fetch,
                   External_Name => "__sync_add_and_fetch_4");
+
    function Intrinsic_Sync_Sub_And_Fetch
      (Ptr   : access Win32.LONG;
       Value : Win32.LONG) return Win32.Long;
    pragma Import (Intrinsic, Intrinsic_Sync_Sub_And_Fetch,
                   External_Name => "__sync_sub_and_fetch_4");
+
+   function Intrinsic_Sync_Val_Comprare_And_Swap
+     (Ptr    : access Win32.LONG;
+      Oldval : Win32.LONG;
+      Newval : Win32.LONG) return Win32.LONG;
+   pragma Import (Intrinsic, Intrinsic_Sync_Val_Comprare_And_Swap,
+                  External_Name => "__sync_val_compare_and_swap_4");
 
    function InterlockedIncrement
      (lpAddend : access Win32.LONG) return Win32.LONG
@@ -5137,6 +5151,14 @@ private
    function InterlockedDecrement
      (lpAddend : access Win32.LONG) return Win32.LONG
      is (Intrinsic_Sync_Sub_And_Fetch (Lpaddend, 1));
+
+   function InterlockedCompareExchange
+     (Target    : access Win32.LONG;
+      ExChange  : Win32.LONG;
+      Comperand : Win32.LONG) return Win32.LONG
+     is (Intrinsic_Sync_Val_Comprare_And_Swap (Target, Comperand, ExChange));
+   --  Note the swapped parameters Comperand & ExChange
+
 
    pragma Import (Intrinsic, InterlockedExchange, "__sync_lock_test_and_set_4");
 
