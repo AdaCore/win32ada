@@ -257,6 +257,11 @@ package Win32.Winbase is
    CREATE_NEW_PROCESS_GROUP      : constant := 16#200#;
    CREATE_UNICODE_ENVIRONMENT    : constant := 16#400#;
    CREATE_SEPARATE_WOW_VDM       : constant := 16#800#;
+   CREATE_SHARED_WOW_VDM         : constant := 16#0001000#;
+   CREATE_FORCEDOS               : constant := 16#0002000#;
+   BELOW_NORMAL_PRIORITY_CLASS   : constant := 16#0004000#;
+   ABOVE_NORMAL_PRIORITY_CLASS   : constant := 16#0008000#;
+   CREATE_BREAKAWAY_FROM_JOB     : constant := 16#1000000#;
    CREATE_DEFAULT_ERROR_MODE     : constant := 16#4000000#;
    CREATE_NO_WINDOW              : constant := 16#8000000#;
    THREAD_PRIORITY_LOWEST        : constant := -2;
@@ -1164,6 +1169,8 @@ package Win32.Winbase is
       szCSDVersion        : Win32.WCHAR_Array (0 .. 127);
    end record;
 
+   subtype OSVERSIONINFO is OSVERSIONINFOA;
+
    type OSVERSIONINFOEXA is record
       dwOSVersionInfoSize : Win32.DWORD;
       dwMajorVersion      : Win32.DWORD;
@@ -1602,6 +1609,12 @@ package Win32.Winbase is
       lpThreadId         : Win32.LPDWORD)
       return Win32.Winnt.HANDLE;
 
+   function OpenThread
+     (dwDesiredAccess : Win32.DWORD;
+      bInheritHandle  : Win32.BOOL;
+      dwThreadId      : Win32.DWORD)
+      return Win32.Winnt.HANDLE;
+
    function GetCurrentThread return Win32.Winnt.HANDLE;
 
    function GetCurrentThreadId return Win32.DWORD;
@@ -1626,6 +1639,11 @@ package Win32.Winbase is
       lpExitTime     : LPFILETIME;
       lpKernelTime   : LPFILETIME;
       lpUserTime     : LPFILETIME)
+      return Win32.BOOL;
+
+   function QueryThreadCycleTime
+     (ThreadHandle : Win32.Winnt.HANDLE;
+      CycleTime    : PDWORDLONG)
       return Win32.BOOL;
 
    procedure ExitThread (dwExitCode : Win32.DWORD);
@@ -1833,6 +1851,13 @@ package Win32.Winbase is
       (hFile      : Win32.Winnt.HANDLE;
        lpFileSize : Win32.Winnt.PLARGE_INTEGER)
        return Win32.BOOL;
+
+   function SetFilePointerEx
+     (hFile            : Win32.Winnt.HANDLE;
+      liDistanceToMove : Win32.Winnt.LARGE_INTEGER;
+      lpNewFilePointer : Win32.Winnt.PLARGE_INTEGER;
+      dwMoveMethod     : Win32.DWORD)
+      return Win32.BOOL;
 
    function GetStdHandle
      (nStdHandle : Win32.DWORD)
@@ -2157,6 +2182,9 @@ package Win32.Winbase is
    procedure GetLocalTime (lpSystemTime : Win32.Winbase.LPSYSTEMTIME);
 
    function SetLocalTime (lpSystemTime : ac_SYSTEMTIME_t) return Win32.BOOL;
+
+   procedure GetSystemTimeAsFileTime
+     (lpSystemTimeAsFileTime: Win32.Winbase.LPFILETIME);
 
    procedure GetSystemInfo (lpSystemInfo : LPSYSTEM_INFO);
 
@@ -5092,6 +5120,23 @@ package Win32.Winbase is
      (lpVersionInformation : LPOSVERSIONINFOEXW)
       return Win32.BOOL;
 
+   function ReadDirectoryChangesW
+     (hDirectory          : Win32.Winnt.HANDLE;
+      lpBuffer            : Win32.LPVOID;
+      nBufferLength       : Win32.DWORD;
+      bWatchSubtree       : Win32.BOOL;
+      dwNotifyFilter      : Win32.DWORD;
+      lpBytesReturned     : Win32.LPDWORD;
+      lpOverlapped        : Win32.Winbase.LPOVERLAPPED;
+      lpCompletionRoutine : Win32.Winbase.LPOVERLAPPED_COMPLETION_ROUTINE)
+      return Win32.BOOL;
+
+   function CancelIo (hFile: Win32.Winnt.HANDLE) return Win32.BOOL;
+
+   function HasOverlappedIoCompleted
+     (lpOverlapped: Win32.Winbase.LPOVERLAPPED)
+      return Win32.BOOL;
+
 private
 
    pragma Convention (C_Pass_By_Copy, COMSTAT);
@@ -5291,12 +5336,14 @@ private
       "SetUnhandledExceptionFilter");
    pragma Import (Stdcall, CreateThread, "CreateThread");
    pragma Import (Stdcall, CreateRemoteThread, "CreateRemoteThread");
+   pragma Import (Stdcall, OpenThread, "OpenThread");
    pragma Import (Stdcall, GetCurrentThread, "GetCurrentThread");
    pragma Import (Stdcall, GetCurrentThreadId, "GetCurrentThreadId");
    pragma Import (Stdcall, SetThreadAffinityMask, "SetThreadAffinityMask");
    pragma Import (Stdcall, SetThreadPriority, "SetThreadPriority");
    pragma Import (Stdcall, GetThreadPriority, "GetThreadPriority");
    pragma Import (Stdcall, GetThreadTimes, "GetThreadTimes");
+   pragma Import (Stdcall, QueryThreadCycleTime, "QueryThreadCycleTime");
    pragma Import (Stdcall, ExitThread, "ExitThread");
    pragma Import (Stdcall, TerminateThread, "TerminateThread");
    pragma Import (Stdcall, GetExitCodeThread, "GetExitCodeThread");
@@ -5359,6 +5406,7 @@ private
    pragma Import (Stdcall, GetFileType, "GetFileType");
    pragma Import (Stdcall, GetFileSize, "GetFileSize");
    pragma Import (Stdcall, GetFileSizeEx, "GetFileSizeEx");
+   pragma Import (Stdcall, SetFilePointerEx, "SetFilePointerEx");
    pragma Import (Stdcall, GetStdHandle, "GetStdHandle");
    pragma Import (Stdcall, SetStdHandle, "SetStdHandle");
    pragma Import (Stdcall, WriteFile, "WriteFile");
@@ -5425,6 +5473,7 @@ private
    pragma Import (Stdcall, SetSystemTime, "SetSystemTime");
    pragma Import (Stdcall, GetLocalTime, "GetLocalTime");
    pragma Import (Stdcall, SetLocalTime, "SetLocalTime");
+   pragma Import(Stdcall, GetSystemTimeAsFileTime, "GetSystemTimeAsFileTime");
    pragma Import (Stdcall, GetSystemInfo, "GetSystemInfo");
    pragma Import
      (Stdcall,
@@ -5999,5 +6048,7 @@ private
       "QueryPerformanceFrequency");
    pragma Import (Stdcall, GetVersionExA, "GetVersionExA");
    pragma Import (Stdcall, GetVersionExW, "GetVersionExW");
+   pragma Import(Stdcall, ReadDirectoryChangesW, "ReadDirectoryChangesW");
+   pragma Import(Stdcall, CancelIo, "CancelIo");
 
 end Win32.Winbase;

@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2012, AdaCore
+--  Copyright (C) 2000-2025, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -256,6 +256,7 @@ package Win32.Winnt is
    FILE_GENERIC_EXECUTE               : constant := 16#1200a0#;
    FILE_SHARE_READ                    : constant := 16#1#;
    FILE_SHARE_WRITE                   : constant := 16#2#;
+   FILE_SHARE_DELETE                  : constant := 16#4#;
    FILE_ATTRIBUTE_READONLY            : constant := 16#1#;
    FILE_ATTRIBUTE_HIDDEN              : constant := 16#2#;
    FILE_ATTRIBUTE_SYSTEM              : constant := 16#4#;
@@ -2704,6 +2705,13 @@ package Win32.Winnt is
    function IMAGE_SNAP_BY_ORDINAL (Ordinal : DWORD) return Standard.Boolean;
 
    function IMAGE_ORDINAL (Ordinal : DWORD) return WORD;
+
+   type FILE_NOTIFY_INFORMATION is record
+      NextEntryOffset : Win32.DWORD;
+      Action          : Win32.DWORD;
+      FileNameLength  : Win32.DWORD;
+      FileName        : Win32.WCHAR_Array(0..Win32.ANYSIZE_ARRAY);
+   end record;
 
 private
 

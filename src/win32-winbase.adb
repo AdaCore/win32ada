@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2010, AdaCore
+--  Copyright (C) 2000-2025, AdaCore
 --
 -------------------------------------------------------------------------------
 
@@ -179,5 +179,18 @@ package body Win32.Winbase is
                 nSize,
                 Param_Addr'Access);
    end FormatMessageW;
+
+   function HasOverlappedIoCompleted
+     (lpOverlapped: Win32.Winbase.LPOVERLAPPED)
+      return Win32.BOOL
+   is
+      use type Win32.DWORD;
+   begin
+      if DWORD (lpOverlapped.Internal) = Win32.Winnt.STATUS_PENDING then
+         return Win32.FALSE;
+      else
+         return Win32.TRUE;
+      end if;
+   end HasOverlappedIoCompleted;
 
 end Win32.Winbase;
