@@ -13,7 +13,7 @@
 --  This file is now maintained and made available by AdaCore under
 --  the same terms.
 --
---  Copyright (C) 2000-2019, AdaCore
+--  Copyright (C) 2000-2025, AdaCore
 --
 -------------------------------------------------------------------------------
 --
@@ -26,6 +26,8 @@
 --  Also some common types, e.g. CHAR_Array, are put here so they
 --  will not be replicated in many other packages.
 --
+
+pragma Ada_2012;
 
 with Ada.Unchecked_Conversion;
 with Interfaces;

@@ -21,6 +21,32 @@ with Stdarg.Impl;
 
 package body Win32.Winbase is
 
+   function Intrinsic_Sync_Add_And_Fetch
+     (Ptr   : access Win32.DWORD;
+      Value : Win32.DWORD) return Win32.DWORD;
+   pragma Import (Intrinsic, Intrinsic_Sync_Add_And_Fetch,
+                  External_Name => "__sync_add_and_fetch_4");
+
+   function Intrinsic_Sync_Sub_And_Fetch
+     (Ptr   : access Win32.DWORD;
+      Value : Win32.DWORD) return Win32.DWORD;
+   pragma Import (Intrinsic, Intrinsic_Sync_Sub_And_Fetch,
+                  External_Name => "__sync_sub_and_fetch_4");
+
+   function Intrinsic_Sync_Val_Comprare_And_Swap
+     (Ptr    : access Win32.DWORD;
+      Oldval : Win32.DWORD;
+      Newval : Win32.DWORD) return Win32.DWORD;
+   pragma Import (Intrinsic, Intrinsic_Sync_Val_Comprare_And_Swap,
+                  External_Name => "__sync_val_compare_and_swap_4");
+
+   function Intrinsic_Sync_Lock_Test_And_Set
+     (Target : access Win32.DWORD;
+      Value  : Win32.DWORD)
+      return Win32.DWORD;
+   pragma Import (Intrinsic, Intrinsic_Sync_Lock_Test_And_Set,
+                  "__sync_lock_test_and_set_4");
+
    function GlobalDiscard
      (hglbMem : Win32.Windef.HGLOBAL)
       return Win32.Windef.HGLOBAL
@@ -28,6 +54,46 @@ package body Win32.Winbase is
    begin
       return GlobalReAlloc (hglbMem, 0, GMEM_MOVEABLE);
    end GlobalDiscard;
+
+   function InterlockedCompareExchange
+     (Target    : access Win32.LONG;
+      ExChange  : Win32.LONG;
+      Comperand : Win32.LONG) return Win32.LONG
+   is
+      lpInternal : access Win32.DWORD with Import, Address => Target'Address;
+   begin
+      --  Note the swapped parameters Comperand & ExChange
+     return Win32.LONG
+       (Intrinsic_Sync_Val_Comprare_And_Swap
+         (lpInternal, Win32.DWORD (Comperand), Win32.DWORD (ExChange)));
+   end InterlockedCompareExchange;
+
+   function InterlockedDecrement
+     (lpAddend : access Win32.LONG) return Win32.LONG
+   is
+      lpInternal : access Win32.DWORD with Import, Address => lpAddend'Address;
+   begin
+      return Win32.LONG (Intrinsic_Sync_Sub_And_Fetch (lpInternal, 1));
+   end InterlockedDecrement;
+
+   function InterlockedExchange
+     (Target : access Win32.LONG;
+      Value  : Win32.LONG)
+      return Win32.LONG
+   is
+      lpInternal : access Win32.DWORD with Import, Address => Target'Address;
+   begin
+      return Win32.LONG
+        (Intrinsic_Sync_Lock_Test_And_Set (lpInternal, Win32.DWORD (Value)));
+   end InterlockedExchange;
+
+   function InterlockedIncrement
+     (lpAddend : access Win32.LONG) return Win32.LONG
+   is
+      lpInternal : access Win32.DWORD with Import, Address => lpAddend'Address;
+   begin
+      return Win32.LONG (Intrinsic_Sync_Add_And_Fetch (lpInternal, 1));
+   end InterlockedIncrement;
 
    function LocalDiscard
      (hlocMem : Win32.Windef.HLOCAL)
