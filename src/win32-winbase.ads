@@ -17,6 +17,8 @@
 --
 -------------------------------------------------------------------------------
 
+pragma Ada_2012;
+
 with Ada.Unchecked_Conversion;
 with Stdarg;
 with Win32.Windef;
@@ -1193,33 +1195,33 @@ package Win32.Winbase is
    subtype OSVERSIONINFOEX is OSVERSIONINFOEXA;
 
    function InterlockedIncrement
-     (lpAddend : access Win32.DWORD)
-      return Win32.DWORD;
+     (lpAddend : access Win32.LONG)
+      return Win32.LONG;
    function InterlockedIncrement
      (lpAddend : access Win32.DWORD64)
       return Win32.DWORD64;
 
    function InterlockedDecrement
-     (lpAddend : access Win32.DWORD)
-      return Win32.DWORD;
+     (lpAddend : access Win32.LONG)
+      return Win32.LONG;
    function InterlockedDecrement
      (lpAddend : access Win32.DWORD64)
       return Win32.DWORD64;
 
    function InterlockedExchange
-     (Target : access Win32.DWORD;
-      Value  : Win32.DWORD)
-      return Win32.DWORD;
+     (Target : access Win32.LONG;
+      Value  : Win32.LONG)
+      return Win32.LONG;
    function InterlockedExchange
      (Target : access Win32.DWORD64;
       Value  : Win32.DWORD64)
       return Win32.DWORD64;
 
    function InterlockedCompareExchange
-     (Target    : access Win32.DWORD;
-      ExChange  : Win32.DWORD;
-      Comperand : Win32.DWORD)
-      return Win32.DWORD;
+     (Target    : access Win32.LONG;
+      ExChange  : Win32.LONG;
+      Comperand : Win32.LONG)
+      return Win32.LONG;
    function InterlockedCompareExchange
      (Target    : access Win32.DWORD64;
       ExChange  : Win32.DWORD64;
@@ -5140,34 +5142,18 @@ private
    pragma Inline (LocalDiscard);
    pragma Inline (MAKEINTATOM);
 
-   function Intrinsic_Sync_Add_And_Fetch
-     (Ptr   : access Win32.DWORD;
-      Value : Win32.DWORD) return Win32.DWORD;
-   pragma Import (Intrinsic, Intrinsic_Sync_Add_And_Fetch,
-                  External_Name => "__sync_add_and_fetch_4");
    function Intrinsic_Sync_Add_And_Fetch_64
      (Ptr   : access Win32.DWORD64;
       Value : Win32.DWORD64) return Win32.DWORD64;
    pragma Import (Intrinsic, Intrinsic_Sync_Add_And_Fetch_64,
                   External_Name => "__sync_add_and_fetch_8");
 
-   function Intrinsic_Sync_Sub_And_Fetch
-     (Ptr   : access Win32.DWORD;
-      Value : Win32.DWORD) return Win32.DWORD;
-   pragma Import (Intrinsic, Intrinsic_Sync_Sub_And_Fetch,
-                  External_Name => "__sync_sub_and_fetch_4");
    function Intrinsic_Sync_Sub_And_Fetch_64
      (Ptr   : access Win32.DWORD64;
       Value : Win32.DWORD64) return Win32.DWORD64;
    pragma Import (Intrinsic, Intrinsic_Sync_Sub_And_Fetch_64,
                   External_Name => "__sync_sub_and_fetch_8");
 
-   function Intrinsic_Sync_Val_Comprare_And_Swap
-     (Ptr    : access Win32.DWORD;
-      Oldval : Win32.DWORD;
-      Newval : Win32.DWORD) return Win32.DWORD;
-   pragma Import (Intrinsic, Intrinsic_Sync_Val_Comprare_And_Swap,
-                  External_Name => "__sync_val_compare_and_swap_4");
    function Intrinsic_Sync_Val_Comprare_And_Swap_64
      (Ptr    : access Win32.DWORD64;
       Oldval : Win32.DWORD64;
@@ -5175,12 +5161,6 @@ private
    pragma Import (Intrinsic, Intrinsic_Sync_Val_Comprare_And_Swap_64,
                   External_Name => "__sync_val_compare_and_swap_8");
 
-   function Intrinsic_Sync_Lock_Test_And_Set
-     (Target : access Win32.DWORD;
-      Value  : Win32.DWORD)
-      return Win32.DWORD;
-   pragma Import (Intrinsic, Intrinsic_Sync_Lock_Test_And_Set,
-                  "__sync_lock_test_and_set_4");
    function Intrinsic_Sync_Lock_Test_And_Set_64
      (Target : access Win32.DWORD64;
       Value  : Win32.DWORD64)
@@ -5189,25 +5169,12 @@ private
                   "__sync_lock_test_and_set_8");
 
    function InterlockedIncrement
-     (lpAddend : access Win32.DWORD) return Win32.DWORD
-     is (Intrinsic_Sync_Add_And_Fetch (Lpaddend, 1));
-   function InterlockedIncrement
      (lpAddend : access Win32.DWORD64) return Win32.DWORD64
      is (Intrinsic_Sync_Add_And_Fetch_64 (Lpaddend, 1));
 
    function InterlockedDecrement
-     (lpAddend : access Win32.DWORD) return Win32.DWORD
-     is (Intrinsic_Sync_Sub_And_Fetch (Lpaddend, 1));
-   function InterlockedDecrement
      (lpAddend : access Win32.DWORD64) return Win32.DWORD64
      is (Intrinsic_Sync_Sub_And_Fetch_64 (Lpaddend, 1));
-
-   function InterlockedCompareExchange
-     (Target    : access Win32.DWORD;
-      ExChange  : Win32.DWORD;
-      Comperand : Win32.DWORD) return Win32.DWORD
-     is (Intrinsic_Sync_Val_Comprare_And_Swap (Target, Comperand, ExChange));
-   --  Note the swapped parameters Comperand & ExChange
 
    function InterlockedCompareExchange
      (Target    : access Win32.DWORD64;
@@ -5216,11 +5183,6 @@ private
      is (Intrinsic_Sync_Val_Comprare_And_Swap_64 (Target, Comperand, ExChange));
    --  Note the swapped parameters Comperand & ExChange
 
-   function InterlockedExchange
-     (Target : access Win32.DWORD;
-      Value  : Win32.DWORD)
-      return Win32.DWORD
-      is (Intrinsic_Sync_Lock_Test_And_Set (Target, Value));
    function InterlockedExchange
      (Target : access Win32.DWORD64;
       Value  : Win32.DWORD64)
