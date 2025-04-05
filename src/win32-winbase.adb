@@ -31,8 +31,7 @@ package body Win32.Winbase is
 
    function LocalDiscard
      (hlocMem : Win32.Windef.HLOCAL)
-      return Win32.Windef.HLOCAL
-   is
+      return Win32.Windef.HLOCAL is
    begin
       return LocalReAlloc (hlocMem, 0, LMEM_MOVEABLE);
    end LocalDiscard;
@@ -41,9 +40,8 @@ package body Win32.Winbase is
       type Int is range
          -(2 ** (Standard'Address_Size - 1)) ..
          +(2 ** (Standard'Address_Size - 1) - 1);
-      function To_LPTSTR is new Ada.Unchecked_Conversion (
-         Int,
-         Win32.Winnt.LPTSTR);
+      function To_LPTSTR is new Ada.Unchecked_Conversion
+        (Int, Win32.Winnt.LPTSTR);
    begin
       return To_LPTSTR (Int (wInteger));
    end MAKEINTATOM;
@@ -70,7 +68,7 @@ package body Win32.Winbase is
       pragma Import (Stdcall, Doit, "FormatMessageA");
 
       Param_Addr : aliased Stdarg.Impl.Param_Access :=
-         Stdarg.Impl.Address_of_First_Arg (Arguments);
+                     Stdarg.Impl.Address_of_First_Arg (Arguments);
    begin
       return Doit
                (dwFlags,
@@ -104,7 +102,7 @@ package body Win32.Winbase is
       pragma Import (Stdcall, Doit, "FormatMessageW");
 
       Param_Addr : aliased Stdarg.Impl.Param_Access :=
-         Stdarg.Impl.Address_of_First_Arg (Arguments);
+                     Stdarg.Impl.Address_of_First_Arg (Arguments);
    begin
       return Doit
                (dwFlags,
