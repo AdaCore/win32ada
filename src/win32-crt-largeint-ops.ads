@@ -72,9 +72,11 @@ package Win32.crt.Largeint.Ops is
    function "/" (Left, Right : LONGLONG) return LONGLONG;
    function "/" (Left : LONGLONG; Right : ULONG) return LONGLONG;
    function "/" (Left : DWORDLONG; Right : ULONG) return ULONG;
+   function "/" (Left : ULONGLONG; Right : ULONG) return ULONG;
    function "mod" (Left, Right : LONGLONG) return LONGLONG;
    function "mod" (Left : LONGLONG; Right : ULONG) return ULONG;
    function "mod" (Left : DWORDLONG; Right : ULONG) return ULONG;
+   function "mod" (Left : ULONGLONG; Right : ULONG) return ULONG;
 
    function ">" (Left, Right : LONGLONG) return Boolean;
    function ">=" (Left, Right : LONGLONG) return Boolean;

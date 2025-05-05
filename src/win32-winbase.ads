@@ -5137,6 +5137,11 @@ package Win32.Winbase is
      (lpOverlapped: Win32.Winbase.LPOVERLAPPED)
       return Win32.BOOL;
 
+   function IsWow64Process
+     (hProcess     : Win32.Winnt.HANDLE;
+      Wow64Process : PBOOL)
+      return BOOL;
+
 private
 
    pragma Convention (C_Pass_By_Copy, COMSTAT);
@@ -6050,5 +6055,6 @@ private
    pragma Import (Stdcall, GetVersionExW, "GetVersionExW");
    pragma Import(Stdcall, ReadDirectoryChangesW, "ReadDirectoryChangesW");
    pragma Import(Stdcall, CancelIo, "CancelIo");
+   pragma Import(Stdcall, IsWow64Process, "IsWow64Process");
 
 end Win32.Winbase;

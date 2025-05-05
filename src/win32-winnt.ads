@@ -1476,7 +1476,7 @@ package Win32.Winnt is
          when u_kind =>
             u : anonymous2_t;
          when QuadPart_kind =>
-            QuadPart : Win32.DWORDLONG;
+            QuadPart : Win32.ULONGLONG;
       end case;
    end record;
 

@@ -72,6 +72,7 @@ package body Win32.crt.Largeint.Ops is
    subtype uns64 is Interfaces.Unsigned_64;
    function ToInt is new Ada.Unchecked_Conversion (LONGLONG, int64);
    function ToUns is new Ada.Unchecked_Conversion (DWORDLONG, uns64);
+   function ToUns is new Ada.Unchecked_Conversion (ULONGLONG, uns64);
    function ToPriv is new Ada.Unchecked_Conversion (int64, LONGLONG);
    function ToPriv is new Ada.Unchecked_Conversion (uns64, DWORDLONG);
 
@@ -141,6 +142,11 @@ package body Win32.crt.Largeint.Ops is
       return ULONG (ToUns (Left) / uns64 (Right));
    end "/";
 
+   function "/" (Left : ULONGLONG; Right : ULONG) return ULONG is
+   begin
+      return ULONG (ToUns (Left) / uns64 (Right));
+   end "/";
+
    function "mod" (Left, Right : LONGLONG) return LONGLONG is
    begin
       return ToPriv (ToInt (Left) mod ToInt (Right));
@@ -152,6 +158,11 @@ package body Win32.crt.Largeint.Ops is
    end "mod";
 
    function "mod" (Left : DWORDLONG; Right : ULONG) return ULONG is
+   begin
+      return ULONG (ToUns (Left) mod uns64 (Right));
+   end "mod";
+
+   function "mod" (Left : ULONGLONG; Right : ULONG) return ULONG is
    begin
       return ULONG (ToUns (Left) mod uns64 (Right));
    end "mod";
