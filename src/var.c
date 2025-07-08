@@ -48,6 +48,7 @@
  */
 
 #include <stdio.h>
+#include <stdint.h>
 #include <assert.h>
 
 #define list0(p)
