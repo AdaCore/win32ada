@@ -178,6 +178,14 @@
 
 typedef void* param_t;
 
+/* Note that the declaration of "func" below relies on the ANSI
+   meaning of an empty parameter list, to convey that the list of
+   parameters is unknown, rather than expected to actually be empty.
+
+   Exposing the variadic'ness explicitly instead is tricky as it
+   would require either a C23 compiler to support (...) or a mandatory
+   named first arg.  */
+
 int
 do_varargs(int (*func)(),       /* function to be called */
            int nb_args,         /* number of int arguments */
