@@ -50,7 +50,16 @@ library project Win32Ada is
    end case;
 
    package Builder renames Shared.Builder;
-   package Compiler renames Shared.Compiler;
+
+   --  var.c relies on an empty arg list in a function declarator to
+   --  convey an unknown list of parameters rather than an expected
+   --  absence of parameters.
+
+   package Compiler extends Shared.Compiler is
+      for Switches("var.c") use
+         Shared.Compiler'Default_Switches("C") & "-std=c89";
+   end Compiler;
+
    package Ide renames Shared.Ide;
 
    package Install is
