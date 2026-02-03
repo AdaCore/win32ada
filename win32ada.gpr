@@ -44,7 +44,7 @@ library project Win32Ada is
       when "relocatable" =>
          for Library_Options use
            ("-lgdi32", "-lnetapi32", "-lrpcrt4", "-loleaut32", "-lglu32",
-            "-lmsvfw32", "-lavifil32", "-lrpcrt4", "-lmsvcrt");
+            "-lmsvfw32", "-lavifil32", "-lrpcrt4", "-lmsvcrt-os");
       when others =>
          null;
    end case;
