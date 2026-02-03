@@ -19,4 +19,6 @@
 
 package Win32.crt is
 
+   pragma Linker_Options ("-lmsvcrt-os");
+
 end Win32.crt;
