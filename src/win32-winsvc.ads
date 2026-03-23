@@ -75,7 +75,7 @@ package Win32.Winsvc is
    SERVICE_USER_DEFINED_CONTROL  : constant := 16#100#;
    SERVICE_ALL_ACCESS            : constant := 16#f01ff#;
 
-   type SERVICE_STATUS_HANDLE is new Win32.DWORD;
+   subtype SERVICE_STATUS_HANDLE is Win32.Winnt.HANDLE;
 
    subtype SC_HANDLE is Win32.Winnt.HANDLE;
    subtype LPSC_HANDLE is Win32.Winnt.PHANDLE;
