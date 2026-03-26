@@ -1,0 +1,15 @@
+with "win32ada.gpr";
+
+project Service is
+
+   for Main use ("service-driver.adb");
+
+   package Builder is
+      for Executable ("service-driver.adb") use "adaservice";
+   end Builder;
+
+   package Compiler is
+      for Switches ("Ada") use ("-g", "-O2");
+   end Compiler;
+
+end Service;
